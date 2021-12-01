@@ -4,79 +4,79 @@ const warnModel = require("../../models/Punishments.js")
 
 
 module.exports = {
-    name: "ban",
-    description : `Actions on a ban!`,
-    userPermissions: ["BAN_MEMBERS"],
-    cooldown: 3000,
-    options: [
+  name: "ban",
+  description: `Actions on a ban!`,
+  userPermissions: ["BAN_MEMBERS"],
+  cooldown: 3000,
+  options: [
+    {
+      name: "add",
+      description: "Bans a member from the server!",
+      type: "SUB_COMMAND",
+      options: [
         {
-          name: "add",
-          description: "Bans a member from the server!",
-          type: "SUB_COMMAND",
-          options: [
-            {
-              name: "user",
-              description: "The user you want to ban!",
-              required: true,
-              type: "USER",
-            },
-            {
-              name: "reason",
-              description: "The reason of this ban!",
-              required: true,
-              type: "STRING",
-            }
-          ]
-
+          name: "user",
+          description: "The user you want to ban!",
+          required: true,
+          type: "USER",
         },
         {
-          name: "remove",
-          description: "Unbans a member from the server!",
-          type: "SUB_COMMAND",
-          options: [
-            {
-              name: "user-id",
-              description: "The user you want to unban!",
-              required: true,
-              type: "STRING",
-            },
-            {
-              name: "reason",
-              description: "The reason of the unban",
-              required: false,
-              type: "STRING",
-            }
-          ]
-
-        },
-        {
-          name: "list",
-          description: "Lists all the banned members in the guild!",
-          type: "SUB_COMMAND",
+          name: "reason",
+          description: "The reason of this ban!",
+          required: true,
+          type: "STRING",
         }
-      ],
+      ]
 
-    /**
-     *
-     * @param {Client} client
-     * @param {CommandInteraction} interaction
-     * @param {String[]} args
-     */
-    run: async (client, interaction, args, modlog) => {
+    },
+    {
+      name: "remove",
+      description: "Unbans a member from the server!",
+      type: "SUB_COMMAND",
+      options: [
+        {
+          name: "user-id",
+          description: "The user you want to unban!",
+          required: true,
+          type: "STRING",
+        },
+        {
+          name: "reason",
+          description: "The reason of the unban",
+          required: false,
+          type: "STRING",
+        }
+      ]
 
-      const subs = interaction.options.getSubcommand(["add", "remove", 'list'])
+    },
+    {
+      name: "list",
+      description: "Lists all the banned members in the guild!",
+      type: "SUB_COMMAND",
+    }
+  ],
 
-      if(subs == "add") {
+  /**
+   *
+   * @param {Client} client
+   * @param {CommandInteraction} interaction
+   * @param {String[]} args
+   */
+  run: async (client, interaction, args, modlog) => {
 
-        let user = interaction.options.getMember("user")
-        var reason = interaction.options.getString("reason") || "No reason provided"
+    const subs = interaction.options.getSubcommand(["add", "remove", 'list'])
 
-        let xxpermuser = new MessageEmbed().setDescription(`${client.botEmoji.failed} You can't ban that user as they are mod/admin.`).setColor(`${client.embedColor.failed}`)
-        let xxpermbot = new MessageEmbed().setDescription(`${client.botEmoji.failed} I can't ban that user as their roles are higher then me.`).setColor(`${client.embedColor.failed}`)
-        if(user.roles.highest.position >= interaction.guild.me.roles.highest.position) return interaction.followUp({ embeds: [xxpermbot]})
-        if (user.roles.highest.position >= interaction.member.roles.highest.position) return interaction.followUp({ embeds: [xxpermuser] })
-      
-                
+    if (subs == "add") {
+
+      let user = interaction.options.getMember("user")
+      var reason = interaction.options.getString("reason") || "No reason provided"
+
+      let xxpermuser = new MessageEmbed().setDescription(`${client.botEmoji.failed} You can't ban that user as they are mod/admin.`).setColor(`${client.embedColor.failed}`)
+      let xxpermbot = new MessageEmbed().setDescription(`${client.botEmoji.failed} I can't ban that user as their roles are higher then me.`).setColor(`${client.embedColor.failed}`)
+      if (user.roles.highest.position >= interaction.guild.me.roles.highest.position) return interaction.followUp({ embeds: [xxpermbot] })
+      if (user.roles.highest.position >= interaction.member.roles.highest.position) return interaction.followUp({ embeds: [xxpermuser] })
+
+
       const data = new warnModel({
         type: "Ban",
         userId: user.user.id,
@@ -84,48 +84,48 @@ module.exports = {
         moderatorId: interaction.user.id,
         reason,
         timestamp: Date.now(),
-    })
-    data.save()
+      })
+      data.save()
 
       var hmm = new MessageEmbed()
-      .setDescription(`${user.user} has been **banned** | \`${data._id}\``).setColor(`${client.embedColor.moderation}`)
-      interaction.followUp({ embeds: [hmm]})
+        .setDescription(`${user.user} has been **banned** | \`${data._id}\``).setColor(`${client.embedColor.moderationRed}`)
+      interaction.followUp({ embeds: [hmm] })
 
       var dmyes = new MessageEmbed()
-      .setAuthor(client.user.username, client.user.displayAvatarURL( { dynamic:true } ))
-      .setTitle(`You've been banned from ${interaction.guild.name}`)
-      .setColor(`${client.embedColor.modDm}`)
-      .setDescription(`You can appeal this ban by clicking [here](https://forms.gle/dW8RGLA65ycC4vcM7).`)
-      .setTimestamp()
-      .setFooter(`Server ID: ${interaction.guild.id}`)
-      .addField("Punishment ID", `${data._id}`, true)
-      .addField("Reason", reason, false)
-      user.send({ embeds: [dmyes]}).catch(e => { return })
+        .setAuthor(client.user.username, client.user.displayAvatarURL({ dynamic: true }))
+        .setTitle(`You've been banned from ${interaction.guild.name}`)
+        .setColor(`${client.embedColor.modDm}`)
+        .setDescription(`You can appeal this ban by clicking [here](https://forms.gle/dW8RGLA65ycC4vcM7).`)
+        .setTimestamp()
+        .setFooter(`Server ID: ${interaction.guild.id}`)
+        .addField("Punishment ID", `${data._id}`, true)
+        .addField("Reason", reason, false)
+      user.send({ embeds: [dmyes] }).catch(e => { return })
 
       user.ban({
         reason: reason,
       })
 
       let log = new MessageEmbed()
-      .setAuthor(`Action: Ban`, interaction.guild.iconURL({ dynamic: true }))
-      .setDescription(`[**Click here to jump to the interaction**](https://discord.com/channels/${interaction.guild.id}/${interaction.channel.id}/${interaction.id})`)
-      .setColor(`${client.embedColor.logRed}`)
-      .addField('Member Info', `● ${user.user}\n> __Tag:__ ${user.user.tag}\n> __ID:__ ${user.user.id}`, true)
-      .addField("Mod Info", `● ${interaction.member.user}\n> __Tag:__ ${interaction.member.user.tag}\n> __ID:__ ${interaction.member.user.id}`, true)
-      .addField("● Ban Info", `> Reason: ${reason}\n> Punishment ID: ${data._id}`, false)
-      .setTimestamp()
+        .setAuthor(`Action: Ban`, interaction.guild.iconURL({ dynamic: true }))
+        .setDescription(`[**Click here to jump to the interaction**](https://discord.com/channels/${interaction.guild.id}/${interaction.channel.id}/${interaction.id})`)
+        .setColor(`${client.embedColor.logRed}`)
+        .addField('Member Info', `● ${user.user}\n> __Tag:__ ${user.user.tag}\n> __ID:__ ${user.user.id}`, true)
+        .addField("Mod Info", `● ${interaction.member.user}\n> __Tag:__ ${interaction.member.user.tag}\n> __ID:__ ${interaction.member.user.id}`, true)
+        .addField("● Ban Info", `> Reason: ${reason}\n> Punishment ID: ${data._id}`, false)
+        .setTimestamp()
 
-      modlog.send({ embeds: [log]})
+      modlog.send({ embeds: [log] })
 
-      } else if(subs == "remove") {
+    } else if (subs == "remove") {
 
-        let userID = interaction.options.getString("user-id")
-        let reason = interaction.options.getString("reason") || "No reason provided"
-       
-        interaction.guild.bans.fetch().then(bans=> {
+      let userID = interaction.options.getString("user-id")
+      let reason = interaction.options.getString("reason") || "No reason provided"
+
+      interaction.guild.bans.fetch().then(bans => {
         let BannedUser = bans.find(b => b.user.id == userID)
 
-        if(!BannedUser) return interaction.followUp("Couldn't find that user in server's banned members!")
+        if (!BannedUser) return interaction.followUp("Couldn't find that user in server's banned members!")
         interaction.guild.members.unban(BannedUser.user)
 
         const data = new warnModel({
@@ -135,54 +135,54 @@ module.exports = {
           moderatorId: interaction.user.id,
           reason,
           timestamp: Date.now(),
-      })
+        })
         data.save()
 
         var pop = new MessageEmbed()
           .setDescription(`**${BannedUser.user.tag}** has been **unbanned** | \`${data._id}\``)
           .setColor(`${client.embedColor.moderation}`)
-        interaction.followUp({ embeds: [pop]})
+        interaction.followUp({ embeds: [pop] })
 
 
 
         let log = new MessageEmbed()
-        .setAuthor(`Action: Unban`, interaction.guild.iconURL({ dynamic: true }))
-        .setDescription(`[**Click here to jump to the interaction**](https://discord.com/channels/${interaction.guild.id}/${interaction.channel.id}/${interaction.id})`)
-        .setColor("#BFFF00")
-        .addField('Unbanned Member Info', `● ${BannedUser.user}\n> __Tag:__ ${BannedUser.user.tag}\n> __ID:__ ${BannedUser.user.id}`, true)
-        .addField("Mod Info", `● ${interaction.member.user}\n> __Tag:__ ${interaction.member.user.tag}\n> __ID:__ ${interaction.member.user.id}`, true)
-        .setTimestamp()
-        modlog.send({ embeds: [log]})
+          .setAuthor(`Action: Unban`, interaction.guild.iconURL({ dynamic: true }))
+          .setDescription(`[**Click here to jump to the interaction**](https://discord.com/channels/${interaction.guild.id}/${interaction.channel.id}/${interaction.id})`)
+          .setColor("#BFFF00")
+          .addField('Unbanned Member Info', `● ${BannedUser.user}\n> __Tag:__ ${BannedUser.user.tag}\n> __ID:__ ${BannedUser.user.id}`, true)
+          .addField("Mod Info", `● ${interaction.member.user}\n> __Tag:__ ${interaction.member.user.tag}\n> __ID:__ ${interaction.member.user.id}`, true)
+          .setTimestamp()
+        modlog.send({ embeds: [log] })
 
-        })
+      })
 
-      } else if(subs == "list") {
+    } else if (subs == "list") {
 
-        try {
-        
+      try {
+
 
         var amount = 1;
         const fetchBans = interaction.guild.bans.fetch()
         const bannedMembers = (await fetchBans)
-        .map((member) => `> ${amount++}. **${member.user.tag}** | \`${member.user.id}\``)
-        .join("\n");
+          .map((member) => `> ${amount++}. **${member.user.tag}** | \`${member.user.id}\``)
+          .join("\n");
         const bansEmbed = new MessageEmbed()
-        .setAuthor(`Banned Members in ${interaction.guild.name}`, interaction.guild.iconURL({ dynamic: true }))
-        .setDescription(`${bannedMembers}`)
-        .setFooter(`Amount: ${amount - 1}`)
-        .setTimestamp()
-        .setThumbnail(interaction.guild.iconURL({ dynamic: true}))
-        .setColor("RED")
+          .setAuthor(`Banned Members in ${interaction.guild.name}`, interaction.guild.iconURL({ dynamic: true }))
+          .setDescription(`${bannedMembers}`)
+          .setFooter(`Amount: ${amount - 1}`)
+          .setTimestamp()
+          .setThumbnail(interaction.guild.iconURL({ dynamic: true }))
+          .setColor("RED")
 
 
-        interaction.followUp({ embeds: [bansEmbed]})
+        interaction.followUp({ embeds: [bansEmbed] })
 
       } catch (error) {
-          interaction.followUp("Something went wrong!")
+        interaction.followUp("Something went wrong!")
       }
-        
-      }
-
 
     }
+
+
+  }
 }
