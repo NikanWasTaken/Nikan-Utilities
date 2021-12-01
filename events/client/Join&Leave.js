@@ -29,7 +29,7 @@ client.on("guildMemberAdd", member => {
                 `Everyone welcome back ${member.user}.`,
                 `A wild ${member.user} re-appeared.`,
                 `${member.user} just slid into the server... not for the first time!`,
-                `${member.user}, Welcome back to ${interaction.guild.name}.`,
+                `${member.user}, Welcome back to ${member.guild.name}.`,
                 `${member.user} just showed up! Welcome back!`,
                 `Welcome back, ${member.user}. We hope you brought pizza.`,
                 `Yay you made it back, ${member.user}!`,
