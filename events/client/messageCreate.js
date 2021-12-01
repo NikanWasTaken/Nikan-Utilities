@@ -33,8 +33,8 @@ client.on("messageCreate", async (message) => {
     )
         return;
 
-        const eemebd = new MessageEmbed().setDescription(`You may only use this command in [${client.guilds.cache.get(client.server.id).name}](${client.server.invite})`).setColor(`${client.embedColor.moderationRed}`)
-        if(message.guildId !== client.server.id && !client.config.developers.includes(message.author.id)) return message.reply({ embeds: [eemebd] })
+    const eemebd = new MessageEmbed().setDescription(`You may only use this command in [${client.guilds.cache.get(client.server.id).name}](${client.server.invite})`).setColor(`${client.embedColor.moderationRed}`)
+    if (message.guildId !== client.server.id && !client.config.developers.includes(message.author.id)) return message.reply({ embeds: [eemebd] })
 
     var [cmd, ...args] = message.content
         .slice(client.config.prefix.length)
@@ -46,7 +46,7 @@ client.on("messageCreate", async (message) => {
 
     var devonly = new MessageEmbed().setDescription(`Only developers for ${client.user.username} can use this command!`).setColor(`${client.embedColor.moderationRed}`)
 
-    if(command.developerOnly && !client.config.developers.includes(message.author.id)) return message.reply({ embeds: [devonly] }).then((msg) => {
+    if (command.developerOnly && !client.config.developers.includes(message.author.id)) return message.reply({ embeds: [devonly] }).then((msg) => {
         setTimeout(() => {
             msg.delete()
             message.delete()
@@ -80,7 +80,7 @@ client.on("messageCreate", async (message) => {
             var modlog = new WebhookClient({
                 id: `910100385501433887`,
                 token: `WDxlbcSouTKN5dKX65UaNvajh64Wb2OsXiKtDdmZgyS6Y9VtO22kD3E6YxrpgYMkVi5y`,
-              }); // https://discord.com/api/webhooks/910100385501433887/WDxlbcSouTKN5dKX65UaNvajh64Wb2OsXiKtDdmZgyS6Y9VtO22kD3E6YxrpgYMkVi5y
+            }); // https://discord.com/api/webhooks/910100385501433887/WDxlbcSouTKN5dKX65UaNvajh64Wb2OsXiKtDdmZgyS6Y9VtO22kD3E6YxrpgYMkVi5y
 
             let lek = `${~~(Timeout.get(`${command.name}${message.author.id}`) - Date.now())}`
             let cooldownembed = new MessageEmbed().setColor(`${client.embedColor.noColor}`).setDescription(`You need to wait \`${ms(parseInt(lek), { long: true })}\` to use the \`${command.name}\` command again.`)
@@ -100,7 +100,7 @@ client.on("messageCreate", async (message) => {
             var modlog = new WebhookClient({
                 id: `910100385501433887`,
                 token: `WDxlbcSouTKN5dKX65UaNvajh64Wb2OsXiKtDdmZgyS6Y9VtO22kD3E6YxrpgYMkVi5y`,
-              }); // https://discord.com/api/webhooks/910100385501433887/WDxlbcSouTKN5dKX65UaNvajh64Wb2OsXiKtDdmZgyS6Y9VtO22kD3E6YxrpgYMkVi5y
+            }); // https://discord.com/api/webhooks/910100385501433887/WDxlbcSouTKN5dKX65UaNvajh64Wb2OsXiKtDdmZgyS6Y9VtO22kD3E6YxrpgYMkVi5y
 
             await command.run(client, message, args, missingpartembed, modlog);
 

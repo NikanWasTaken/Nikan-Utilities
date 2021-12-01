@@ -1,10 +1,13 @@
-const { MessageEmbed, MessageAttachment, MessageActionRow, MessageButton, WebhookClient } = require("discord.js");
+const { MessageEmbed, MessageAttachment, MessageActionRow, MessageButton, WebhookClient, Collection } = require("discord.js");
 const client = require("../../index.js");
 const prefix = client.config.prefix;
 const modmailconfig = require("../../json/modmail.json");
 const categoryId = modmailconfig.category;
 const blacklist = require("../../models/modmail-blacklist.js")
+const GuessTheNumber = require("../../models/guessTheN.js")
 const serverId = client.server.id
+const ms = require("ms")
+const cooldown = new Collection()
 let loghook = new WebhookClient({
     id: `${modmailconfig.hookId}`,
     token: `${modmailconfig.hookToken}`,
@@ -25,7 +28,7 @@ client.on("channelDelete", (channel) => {
             .setFooter(`Thread has been closed`)
             .setTimestamp()
 
-        return person.send({ embeds: [embed] })
+        return person.send({ embeds: [embed] }).catch(e => { return })
     }
 
 
@@ -39,7 +42,7 @@ client.on("messageCreate", async (message) => {
     if (message.author.bot) return;
 
     const args = message.content.slice(prefix.length).trim().split(/ +/g);
-    let command = args.shift().toLowerCase();
+    // let command = args.shift().toLowerCase();
 
 
     if (message.channel.parentId) {
@@ -89,7 +92,14 @@ client.on("messageCreate", async (message) => {
 
         if (!personticket) {
 
-            if(!client.guilds.cache.get(serverId).members.cache.get(`${message.author.id}`).roles.cache.get("793410990535999508")) return
+            let lek = `${~~(cooldown.get(`Modmail${message.author.id}`) - Date.now())}`
+
+            if (cooldown.has(`Modmail${message.author.id}`)) return message.channel.send(`You need to wait **${ms(parseInt(lek), { long: true })}** to open a thread again!`)
+
+            if (!client.guilds.cache.get(serverId).members.cache.get(`${message.author.id}`).roles.cache.get("793410990535999508")) return
+            const gtn = await GuessTheNumber.findOne({ hostId: message.author.id, guildId: serverId, status: "In process..." })
+            if (gtn) return
+
 
             const dmbuttons = new MessageActionRow().addComponents(
 
@@ -114,6 +124,14 @@ client.on("messageCreate", async (message) => {
 
             const comsg = await message.channel.send({ embeds: [areusure], components: [dmbuttons] })
 
+            cooldown.set(
+                `Modmail${message.author.id}`,
+                Date.now() + 20000
+            );
+            setTimeout(() => {
+                cooldown.delete(`Modmail${message.author.id}`);
+            }, 20000);
+
             const collector = comsg.createMessageComponentCollector({
                 componentType: "BUTTON",
                 time: 20000,
@@ -131,6 +149,7 @@ client.on("messageCreate", async (message) => {
                         .setFooter(`${client.user.username}`, `${client.user.displayAvatarURL()}`)
                         .setTimestamp()
 
+                    collector.stop()
                     await collected.update({ embeds: [embed], components: [] })
 
                 } else if (collected.customId === "create-ticket") {
@@ -143,6 +162,7 @@ client.on("messageCreate", async (message) => {
                         .setFooter(`${client.user.username}`, `${client.user.displayAvatarURL()}`)
                         .setTimestamp()
 
+                    collector.stop()
                     await collected.update({ embeds: [createdembed], components: [] })
 
                     const ticketchannel = client.guilds.cache.get(serverId).channels.create(message.author.id, {
@@ -162,16 +182,16 @@ client.on("messageCreate", async (message) => {
                         .setFooter(`${client.user.username}`, client.user.displayAvatarURL())
                         .setTimestamp()
 
-                        ; (await ticketchannel).send({ content: "<@&867685674496950272> Looks like there is someone here!", embeds: [infoinchannel], allowedMentions: { parse: ["roles"] }  })
+                        ; (await ticketchannel).send({ content: "<@&867685674496950272> Looks like there is someone here!", embeds: [infoinchannel], allowedMentions: { parse: ["roles"] } })
 
-                        let log = new MessageEmbed()
+                    let log = new MessageEmbed()
                         .setAuthor(`Ticket Created`, client.guilds.cache.get(serverId).iconURL({ dynamic: true }))
                         .setThumbnail(`${message.author.displayAvatarURL({ dynamic: true })}`)
                         .setColor(`${client.embedColor.botBlue}`)
                         .addField('Member Info', `● ${message.author}\n> __Tag:__ ${message.author.tag}\n> __ID:__ ${message.author.id}`, true)
                         .setTimestamp()
-        
-                        loghook.send({ embeds: [log] })
+
+                    loghook.send({ embeds: [log] })
 
 
                 }
@@ -180,15 +200,15 @@ client.on("messageCreate", async (message) => {
 
             })
 
-            collector.on("end", async (collected) => { 
+            collector.on("end", async (collected) => {
 
                 const emobed = new MessageEmbed()
-                .setAuthor(`${client.guilds.cache.get(serverId).name}`, `${client.guilds.cache.get(serverId).iconURL({ dynamic: true })}`)
-                .setTitle("Thread Creation Timed Out!").setURL(`${client.server.invite}`)
-                .setDescription("Your ticket creation proccess timed out due to your late respond! If you want to create another thread, please message the bot again!")
-                .setColor("RED")
-                .setTimestamp()
-                 
+                    .setAuthor(`${client.guilds.cache.get(serverId).name}`, `${client.guilds.cache.get(serverId).iconURL({ dynamic: true })}`)
+                    .setTitle("Thread Creation Timed Out!").setURL(`${client.server.invite}`)
+                    .setDescription("Your ticket creation proccess timed out due to your late respond! If you want to create another thread, please message the bot again!")
+                    .setColor("RED")
+                    .setTimestamp()
+
 
                 await comsg.edit({ embeds: [emobed], components: [] })
             })
