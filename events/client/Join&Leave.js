@@ -75,6 +75,7 @@ client.on("guildMemberAdd", member => {
 
     })
 
+    
 })
 
 
