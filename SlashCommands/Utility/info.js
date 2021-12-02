@@ -1,6 +1,5 @@
 const { Client, CommandInteraction, interaction, MessageEmbed, MessageActionRow, MessageButton } = require("discord.js");
 const moment = require("moment")
-const weather = require("weather-js");
 const fetch = require("node-fetch")
 const cap = require("capitalize-first-letter")
 
