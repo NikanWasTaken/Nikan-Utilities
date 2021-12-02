@@ -3,6 +3,7 @@ const moment = require("moment")
 const fetch = require("node-fetch")
 const cap = require("capitalize-first-letter")
 
+
 module.exports = {
   name: "info",
   description: `Checks the information about a channel.`,
