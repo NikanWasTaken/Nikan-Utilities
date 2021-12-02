@@ -18,16 +18,13 @@ module.exports = {
     run: async (client, message, args, missingpartembed) => {
 
         const code = args.join(' ');
-        const anythingelseforu = "You are now demoted!"
+        const anythingelseforu = "OK maybe dont do that?"
 
 
         if(code?.includes(".destroy")) return message.channel.send({ content: anythingelseforu })
         if(code?.includes(".exit")) return message.channel.send({ content: anythingelseforu })
         if(code?.includes(".token")) return message.channel.send({ content: anythingelseforu })
         if(code?.includes(".env")) return message.channel.send({ content: anythingelseforu })
-        if(code?.includes(".ban")) return message.channel.send({ content: anythingelseforu })
-        if(code?.includes(".kick")) return message.channel.send({ content: anythingelseforu })
-        if(code?.includes(".delete")) return message.channel.send({ content: anythingelseforu })
 
 
 
