@@ -49,11 +49,6 @@ module.exports = {
       ]
 
     },
-    {
-      name: "list",
-      description: "Lists all the banned members in the guild!",
-      type: "SUB_COMMAND",
-    }
   ],
 
   /**
@@ -155,31 +150,6 @@ module.exports = {
         modlog.send({ embeds: [log] })
 
       })
-
-    } else if (subs == "list") {
-
-      try {
-
-
-        var amount = 1;
-        const fetchBans = interaction.guild.bans.fetch()
-        const bannedMembers = (await fetchBans)
-          .map((member) => `> ${amount++}. **${member.user.tag}** | \`${member.user.id}\``)
-          .join("\n");
-        const bansEmbed = new MessageEmbed()
-          .setAuthor(`Banned Members in ${interaction.guild.name}`, interaction.guild.iconURL({ dynamic: true }))
-          .setDescription(`${bannedMembers}`)
-          .setFooter(`Amount: ${amount - 1}`)
-          .setTimestamp()
-          .setThumbnail(interaction.guild.iconURL({ dynamic: true }))
-          .setColor("RED")
-
-
-        interaction.followUp({ embeds: [bansEmbed] })
-
-      } catch (error) {
-        interaction.followUp("Something went wrong!")
-      }
 
     }
 
