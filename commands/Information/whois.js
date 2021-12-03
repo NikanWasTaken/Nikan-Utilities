@@ -228,7 +228,6 @@ module.exports = {
 
     } else if (!member) {
 
-
       const user = await client.users.fetch(`${args[0]}`).catch(e => { return message.reply("This user doesnt exist!") })
       const flags = user?.flags?.toArray()
 
