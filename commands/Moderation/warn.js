@@ -102,6 +102,7 @@ module.exports = {
         moderatorId: `${client.user.id}`,
         reason: "Reaching 2 Strikes",
         timestamp: Date.now(),
+        expires: Date.now() + ms('4 weeks')
       })
 
       data2.save()
@@ -172,6 +173,7 @@ module.exports = {
         moderatorId: `${client.user.id}`,
         reason: "Reaching 4 Strikes",
         timestamp: Date.now(),
+        expires: Date.now() + ms('4 weeks')
       })
 
       data2.save()
