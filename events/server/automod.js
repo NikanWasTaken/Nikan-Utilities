@@ -4,6 +4,7 @@ const warnModel = require("../../models/Punishments.js")
 const automodModel = require("../../models/automod.js")
 const MemberRoles = require("../../models/MemberRoles.js")
 const prohibitedwords = require("../../json/bad-words.json")
+const ms = require("ms")
 const logschannel = new WebhookClient({
   id: `910104675716571136`,
   token: `mJQ3F73THOBgvp4E5QHQhJfL28k581qM1IDW88ctLyGLgozKF9U26ygQ_ahwIq4tHwpG`,
@@ -18,24 +19,24 @@ function isValidInvite(string) {
 };
 
 
- function isValidURL(string) {
+function isValidURL(string) {
   var res = string.match(/((?:(http|https|Http|Https|rtsp|Rtsp):\/\/(?:(?:[a-zA-Z0-9\$\-\_\.\+\!\*\'\(\)\,\;\?\&\=]|(?:\%[a-fA-F0-9]{2})){1,64}(?:\:(?:[a-zA-Z0-9\$\-\_\.\+\!\*\'\(\)\,\;\?\&\=]|(?:\%[a-fA-F0-9]{2})){1,25})?\@)?)?((?:(?:[a-zA-Z0-9][a-zA-Z0-9\-]{0,64}\.)+(?:(?:aero|arpa|asia|a[cdefgilmnoqrstuwxz])|(?:biz|b[abdefghijmnorstvwyz])|(?:cat|com|coop|c[acdfghiklmnoruvxyz])|d[ejkmoz]|(?:edu|e[cegrstu])|f[ijkmor]|(?:gov|g[abdefghilmnpqrstuwy])|h[kmnrtu]|(?:info|int|i[delmnoqrst])|(?:jobs|j[emop])|k[eghimnrwyz]|l[abcikrstuvy]|(?:mil|mobi|museum|m[acdghklmnopqrstuvwxyz])|(?:name|net|n[acefgilopruz])|(?:org|om)|(?:pro|p[aefghklmnrstwy])|qa|r[eouw]|s[abcdeghijklmnortuvyz]|(?:tel|travel|t[cdfghjklmnoprtvwz])|u[agkmsyz]|v[aceginu]|w[fs]|y[etu]|z[amw]))|(?:(?:25[0-5]|2[0-4][0-9]|[0-1][0-9]{2}|[1-9][0-9]|[1-9])\.(?:25[0-5]|2[0-4][0-9]|[0-1][0-9]{2}|[1-9][0-9]|[1-9]|0)\.(?:25[0-5]|2[0-4][0-9]|[0-1][0-9]{2}|[1-9][0-9]|[1-9]|0)\.(?:25[0-5]|2[0-4][0-9]|[0-1][0-9]{2}|[1-9][0-9]|[0-9])))(?:\:\d{1,5})?)(\/(?:(?:[a-zA-Z0-9\;\/\?\:\@\&\=\#\~\-\.\+\!\*\'\(\)\,\_])|(?:\%[a-fA-F0-9]{2}))*)?(?:\b|$)/gi)
-  
+
   return (res !== null)
- };
+};
 
 // edit
 
 client.on('messageUpdate', async (oldMessage, newMessage) => {
 
-    if (newMessage?.author?.bot) return
+  if (newMessage?.author?.bot) return
   if (!newMessage?.content?.length) return
-  if (prohibitedwords.includes(newMessage?.content.toLowerCase()) || isValidInvite(newMessage?.content) /* || isValidURL(newMessage?.content) */|| newMessage?.content?.length > 999 || newMessage?.mentions.users.size >= 4) {
+  if (prohibitedwords.includes(newMessage?.content.toLowerCase()) || isValidInvite(newMessage?.content) /* || isValidURL(newMessage?.content) */ || newMessage?.content?.length > 999 || newMessage?.mentions.users.size >= 4) {
 
-  client.emit('messageCreate', newMessage)
+    client.emit('messageCreate', newMessage)
 
   } else return;
-  
+
 });
 
 
@@ -53,7 +54,7 @@ client.on("messageCreate", async (message) => {
       if (message.channel.name.includes("friend") || message.channel.name.includes("staff")) { return }
 
       message.delete()
-      message.channel.send({ content: `${message.author}, you may not use that word in the chat.`, allowedMentions: { parse: ["users"]}  }).then((msg) => { setTimeout(() => { msg.delete() }, 5000) })
+      message.channel.send({ content: `${message.author}, you may not use that word in the chat.`, allowedMentions: { parse: ["users"] } }).then((msg) => { setTimeout(() => { msg.delete() }, 5000) })
 
       const automod = new automodModel({
         type: "Prohibited Word",
@@ -61,6 +62,7 @@ client.on("messageCreate", async (message) => {
         guildId: message.guildId,
         reason: `Sending a message that contains prohibited words, swear words or filtered words.`,
         date: Date.now(),
+        expires: Date.now() + ms('2 days')
       })
       automod.save()
 
@@ -103,7 +105,7 @@ client.on("messageCreate", async (message) => {
       if (message.channel.name.includes("ad") || message.channel.name.includes("partner") || message.channel.name.includes("advertise") || message.channel.name.includes("staff") || message.channel.name.includes("friend") || message.channel.name.includes("admin") || message.channel.name.includes("mod")) { return } // channel permissions
 
       message.delete()
-      message.channel.send({ content: `${message.author}, you may not send discord invite links in the chat.`, allowedMentions: { parse: ["users"]}  }).then((msg) => { setTimeout(() => { msg.delete() }, 5000) })
+      message.channel.send({ content: `${message.author}, you may not send discord invite links in the chat.`, allowedMentions: { parse: ["users"] } }).then((msg) => { setTimeout(() => { msg.delete() }, 5000) })
 
       const automod = new automodModel({
         type: "Discord Invite",
@@ -111,6 +113,7 @@ client.on("messageCreate", async (message) => {
         guildId: message.guildId,
         reason: `Sending discord server invite links in the chat.`,
         date: Date.now(),
+        expires: Date.now() + ms('2 days')
       })
       automod.save()
 
@@ -157,6 +160,7 @@ client.on("messageCreate", async (message) => {
     //       guildId: message.guildId,
     //       reason: `Sending website or other links in the chat.`,
     //       date: Date.now(),
+    //       expires: Date.now() + ms('2 days')
     //     })
     //     automod.save()
 
@@ -197,7 +201,7 @@ client.on("messageCreate", async (message) => {
 
 
     message.delete()
-    message.channel.send({ content: `${message.author}, you may not send very big messages in the chat!`, allowedMentions: { parse: ["users"]}  }).then((msg) => { setTimeout(() => { msg.delete() }, 5000) })
+    message.channel.send({ content: `${message.author}, you may not send very big messages in the chat!`, allowedMentions: { parse: ["users"] } }).then((msg) => { setTimeout(() => { msg.delete() }, 5000) })
 
     const automod = new automodModel({
       type: "Large Messages",
@@ -205,6 +209,7 @@ client.on("messageCreate", async (message) => {
       guildId: message.guildId,
       reason: `Sending a huge amount of characters/large messages in the chat.`,
       date: Date.now(),
+      expires: Date.now() + ms('2 days')
     })
     automod.save()
 
@@ -240,7 +245,7 @@ client.on("messageCreate", async (message) => {
       if (message.channel.name.includes("staff") || message.channel.name.includes("friend") || message.channel.name.includes("admin")) { return } // channel permissions
 
       message.delete()
-      message.channel.send({ content: `${message.author}, you may not mention more then 4 users in the chat!`, allowedMentions: { parse: ["users"]}  }).then((msg) => { setTimeout(() => { msg.delete() }, 5000) })
+      message.channel.send({ content: `${message.author}, you may not mention more then 4 users in the chat!`, allowedMentions: { parse: ["users"] } }).then((msg) => { setTimeout(() => { msg.delete() }, 5000) })
 
       const automod = new automodModel({
         type: "Mass Mentioning",
@@ -248,6 +253,7 @@ client.on("messageCreate", async (message) => {
         guildId: message.guildId,
         reason: `Mentions more than 4 users in the chat!`,
         date: Date.now(),
+        expires: Date.now() + ms('2 days')
       })
       automod.save()
 
@@ -319,7 +325,7 @@ client.on("messageCreate", async (message) => {
 //             ++msgCount;
 
 //             if(parseInt(msgCount) === LIMIT) {
-                
+
 
 //               const messages = message.channel.messages.fetch({ limit: LIMIT })
 //               const usermsgs = (await messages).filter(m => m.author.id === message.author.id)
@@ -334,10 +340,11 @@ client.on("messageCreate", async (message) => {
 //                 guildId: message.guildId,
 //                 reason: `Sending messages too fast!`,
 //                 date: Date.now(),
+//                 expires: Date.now() + ms('2 days')
 
 //               })
 //               automod.save()
-        
+
 //               let dm = new MessageEmbed()
 //                 .setAuthor(client.user.username, client.user.displayAvatarURL({ dynamic: true }))
 //                 .setTitle(`You've been Warned in ${message.guild.name}`)
@@ -356,7 +363,7 @@ client.on("messageCreate", async (message) => {
 //               .addField("● User Information", `> ${message.author}\n> Tag: ${message.author.tag}\n> ID: ${message.author.id}`, true)
 //               .addField("● Other Information", `> Channel: ${message.channel}\n> Date: <t:${~~(Date.now() / 1000)}:f>\n`, true)
 //               .setTimestamp()
-      
+
 //             logschannel.send({ embeds: [log] })
 
 

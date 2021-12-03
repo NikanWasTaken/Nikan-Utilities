@@ -31,20 +31,20 @@ module.exports = {
 
         const components = (state) => [
 
-        new MessageActionRow().addComponents(
+            new MessageActionRow().addComponents(
 
-            new MessageButton()
-                .setLabel("Normal Strikes")
-                .setStyle("SECONDARY")
-                .setDisabled(state)
-                .setCustomId("normal"),
+                new MessageButton()
+                    .setLabel("Normal Strikes")
+                    .setStyle("SECONDARY")
+                    .setDisabled(state)
+                    .setCustomId("normal"),
 
-            new MessageButton()
-                .setLabel("Automod Stikes")
-                .setStyle("SECONDARY")
-                .setDisabled(state)
-                .setCustomId("automod"),
-        )
+                new MessageButton()
+                    .setLabel("Automod Stikes")
+                    .setStyle("SECONDARY")
+                    .setDisabled(state)
+                    .setCustomId("automod"),
+            )
         ]
 
         const first = new MessageEmbed().setDescription("Please select the type of your warnings here.").setColor("BLUE").setFooter("You have 2 minutes to use this message")
@@ -154,7 +154,7 @@ module.exports = {
 
                         return [
                             `\`${i + 1}\`. **${warn.type}** | \`${warn._id}\``,
-                            `> Date: <t:${~~(warn.timestamp / 1000)}:f>`,
+                            `> Date: <t:${~~(warn.date / 1000)}:f>`,
                             `> Moderator: Auto Moderation`,
                             `> Reason: ${warn.reason}`,
                         ].join("\n");
@@ -187,7 +187,7 @@ module.exports = {
 
                         return [
                             `\`${i + 1}\`. **${warn.type}** | \`${warn._id}\``,
-                            `> Date: <t:${~~(warn.timestamp / 1000)}:f>`,
+                            `> Date: <t:${~~(warn.date / 1000)}:f>`,
                             `> Moderator: Auto Moderation`,
                             `> Reason: ${warn.reason}`,
                         ].join("\n");
@@ -209,7 +209,7 @@ module.exports = {
 
         })
 
-        collector.on("end", async (collected) => { msg.edit({ components: components(true)})})
+        collector.on("end", async (collected) => { msg.edit({ components: components(true) }) })
 
 
     }

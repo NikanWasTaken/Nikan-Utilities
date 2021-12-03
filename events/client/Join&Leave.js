@@ -5,7 +5,7 @@ const memberRoles = require("../../models/LeftMembers.js")
 
 client.on("guildMemberAdd", member => {
 
-    if(member.guild.id !== "757268973674037315") return
+    if (member.guild.id !== "757268973674037315") return
     const welcomechannel = client.channels.cache.get('791152934045614121');
     const allmembersvc = client.channels.cache.get("874721718319603743");
     const humansvc = client.channels.cache.get("874721721930878997");
@@ -34,7 +34,7 @@ client.on("guildMemberAdd", member => {
                 `Welcome back, ${member.user}. We hope you brought pizza.`,
                 `Yay you made it back, ${member.user}!`,
             ];
-    
+
             const emojiarray = [
                 `<:welcome1:905792468765786152>`,
                 `<:welcome2:906109766068207656>`,
@@ -49,7 +49,7 @@ client.on("guildMemberAdd", member => {
                 `<a:welcome11:906150315684950016>`,
                 `<a:welcome12:906150349960790026>`,
             ];
-    
+
             const randomtexts = textarray[~~(Math.random() * textarray.length)];
             const randomemojis = emojiarray[~~(Math.random() * emojiarray.length)];
 
@@ -69,32 +69,34 @@ client.on("guildMemberAdd", member => {
             .setFooter(`${member.guild.name} | +1 member :D`)
             .setTimestamp()
         welcomechannel.send({ embeds: [embed] })
-         allmembersvc.edit({ name: `All Members • ${member.guild.members.cache.size}`})
-         humansvc.edit({ name: `Humans • ${member.guild.members.cache.filter(member => !member.user.bot).size}`})
+        allmembersvc.edit({ name: `All Members • ${member.guild.members.cache.size}` })
+        humansvc.edit({ name: `Humans • ${member.guild.members.cache.filter(member => !member.user.bot).size}` })
 
 
     })
 
-    
+
 })
 
 
 client.on("guildMemberRemove", async member => {
 
-    if(member.guild.id !== "757268973674037315") return
+    if (member.guild.id !== "757268973674037315") return
     const allmembersvc = client.channels.cache.get("874721718319603743");
     const humansvc = client.channels.cache.get("874721721930878997");
 
-    if(member.roles.cache.filter(r => r.id !== member.guild.id).size > 1) {
+    if (member.roles.cache.filter(r => r.id !== member.guild.id).size > 1) {
 
         const data = new memberRoles({
             guildid: member.guild.id,
             user: member.user.id,
-            content: [{ roles: member.roles.cache.sort((a, b) => b.position - a.position).filter(r => r.id !== member.guild.id).map(role => role.id) }]
+            content: [{ roles: member.roles.cache.sort((a, b) => b.position - a.position).filter(r => r.id !== member.guild.id).map(role => role.id) }],
+            expires: Date.now() + ms('2 weeks')
         })
+
         data.save()
-    
-      }
+
+    }
 
     const welcomechannel = member.guild.channels.cache.get('791152934045614121')
 
@@ -111,8 +113,8 @@ client.on("guildMemberRemove", async member => {
         .setTimestamp()
 
     welcomechannel.send({ embeds: [embed] })
-     allmembersvc.edit({ name: `All Members • ${member.guild.members.cache.size}`})
-     humansvc.edit({ name: `Humans • ${member.guild.members.cache.filter(member => !member.user.bot).size}`})
+    allmembersvc.edit({ name: `All Members • ${member.guild.members.cache.size}` })
+    humansvc.edit({ name: `Humans • ${member.guild.members.cache.filter(member => !member.user.bot).size}` })
 
 
 

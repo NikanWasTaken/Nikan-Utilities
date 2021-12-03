@@ -3,6 +3,7 @@ const warnModel = require("../../models/Punishments.js")
 const automodModel = require("../../models/automod.js")
 const moment = require("moment")
 const db = require("../../models/MemberRoles.js");
+const ms = require("ms")
 
 
 module.exports = {
@@ -121,6 +122,7 @@ module.exports = {
                 moderatorId: interaction.user.id,
                 reason,
                 timestamp: Date.now(),
+                expires: Date.now() + ms('4 weeks')
             })
             data.save();
 
@@ -140,6 +142,7 @@ module.exports = {
                 .setAuthor(client.user.username, client.user.displayAvatarURL({ dynamic: true }))
                 .setTitle(`You've been warned in ${interaction.guild.name}.`)
                 .addField("Punishment ID", `${data._id}`, true)
+                .addField("Expires in", `4 weeks`, true)
                 .addField("Reason", reason, false)
                 .setColor(`${client.embedColor.modDm}`)
             user.send({ embeds: [warndm] }).catch(e => { return })
@@ -186,9 +189,9 @@ module.exports = {
 
                 user.roles.set(null).then(
                     setTimeout(() => {
-                      user.roles.add("795353284042293319")
+                        user.roles.add("795353284042293319")
                     }, 3000)
-                  )
+                )
 
 
                 let warndm = new MessageEmbed()
@@ -256,9 +259,9 @@ module.exports = {
 
                 user.roles.set(null).then(
                     setTimeout(() => {
-                      user.roles.add("795353284042293319")
+                        user.roles.add("795353284042293319")
                     }, 3000)
-                  )
+                )
 
 
                 let warndm = new MessageEmbed()
@@ -453,70 +456,70 @@ module.exports = {
 
                 }
 
-            } else if(type === "automod") {
+            } else if (type === "automod") {
 
                 if (user) {
 
                     let no = new MessageEmbed().setDescription('You can only check your own warnings').setColor(`${client.embedColor.moderationRed}`)
                     if (!interaction.member.permissions.has("MANAGE_MESSAGES")) return interaction.followUp({ embeds: [no] })
-    
+
                     const userWarnings = await automodModel.find({
                         userId: user.user.id,
                         guildId: interaction.guildId,
                     });
-    
+
                     if (!userWarnings?.length) return interaction.followUp({ content: "That user doesn't have any automod warnings." })
-    
+
                     const embedDescription = userWarnings.map((warn, i) => {
 
                         return [
                             `\`${i + 1}\`. **${warn.type}** | \`${warn._id}\``,
-                            `> Date: <t:${~~(warn.timestamp / 1000)}:f>`,
+                            `> Date: <t:${~~(warn.date / 1000)}:f>`,
                             `> Moderator: Auto Moderation`,
                             `> Reason: ${warn.reason}`,
                         ].join("\n");
                     }).join("\n\n");
-    
+
                     const embed = new MessageEmbed()
                         .setAuthor(`${user.user.tag}`, user.user.displayAvatarURL({ dynamic: true }))
                         .setThumbnail(user.user.displayAvatarURL({ dynamic: true }))
                         .setDescription(`These are all the punishments for ${user.user}.\n\n${embedDescription}`)
                         .setColor("BLURPLE")
-    
-    
+
+
                     interaction.followUp({ embeds: [embed] })
-    
+
                 } else {
-    
+
                     var botcmd = new MessageEmbed().setDescription('You may only use this command in bot command channels!').setColor(`${client.embedColor.moderationRed}`)
                     if (!interaction.channel.name.includes("command")) return interaction.followUp({ embeds: [botcmd] })
-    
+
                     const userWarnings = await automodModel.find({
                         userId: interaction.user.id,
                         guildId: interaction.guildId,
                     });
-    
+
                     if (!userWarnings?.length) return interaction.followUp({ content: "You don't have any automod punishments, completely clean!" })
-    
+
                     const embedDescription = userWarnings.map((warn, i) => {
 
                         return [
                             `\`${i + 1}\`. **${warn.type}** | \`${warn._id}\``,
-                            `> Date: <t:${~~(warn.timestamp / 1000)}:f>`,
+                            `> Date: <t:${~~(warn.date / 1000)}:f>`,
                             `> Moderator: Auto Moderation`,
                             `> Reason: ${warn.reason}`,
                         ].join("\n");
                     }).join("\n\n");
-    
+
                     const embed = new MessageEmbed()
                         .setAuthor(`${interaction.user.tag}`, interaction.user.displayAvatarURL({ dynamic: true }))
                         .setThumbnail(interaction.user.displayAvatarURL({ dynamic: true }))
                         .setDescription(`These are all the punishments for ${interaction.user}.\n\n${embedDescription}`)
                         .setColor("BLURPLE")
-    
-    
+
+
                     interaction.followUp({ embeds: [embed] })
-    
+
                 }
 
             }
