@@ -85,18 +85,14 @@ client.on("guildMemberRemove", async member => {
     const allmembersvc = client.channels.cache.get("874721718319603743");
     const humansvc = client.channels.cache.get("874721721930878997");
 
-    if (member.roles.cache.filter(r => r.id !== member.guild.id).size > 1) {
+    const data = new memberRoles({
+        guildid: member.guild.id,
+        user: member.user.id,
+        content: [{ roles: member.roles.cache.sort((a, b) => b.position - a.position).filter(r => r.id !== member.guild.id).map(role => role.id) }],
+        expires: Date.now() + ms('2 weeks')
+    })
 
-        const data = new memberRoles({
-            guildid: member.guild.id,
-            user: member.user.id,
-            content: [{ roles: member.roles.cache.sort((a, b) => b.position - a.position).filter(r => r.id !== member.guild.id).map(role => role.id) }],
-            expires: Date.now() + ms('2 weeks')
-        })
-
-        data.save()
-
-    }
+    data.save()
 
     const welcomechannel = member.guild.channels.cache.get('791152934045614121')
 
