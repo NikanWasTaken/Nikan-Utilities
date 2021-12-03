@@ -28,7 +28,7 @@ module.exports = {
     if (args[1]) {
 
       const nouser = new MessageEmbed().setDescription(`Unable to find the user: \`${args[1]}\``).setColor(`${client.embedColor.moderationRed}`)
-      if(!user) return message.reply({ embeds: [nouser] })
+      if (!user) return message.reply({ embeds: [nouser] })
 
       const messages = message.channel.messages.fetch({ limit: clear })
       const filtered = (await messages).filter(m => m.author.id === user.user.id)
@@ -41,21 +41,23 @@ module.exports = {
 
       let msglink = await message.channel.send({ embeds: [embeda] }).then((msg) => { setTimeout(() => { msg.delete(), message.delete() }, 5000) })
 
-        let log = new MessageEmbed()
-          .setAuthor(`Action: Purge`, message.guild.iconURL({ dynamic: true }))
-          .setColor(`${client.embedColor.logAqua}`)
-          .addField('Channel Info', `● ${msglink.channel}\n> __Name:__ ${msglink.channel.name}\n> __ID:__ ${msglink.channel.id}`, true)
-          .addField("Mod Info", `● ${message.author}\n> __Tag:__ ${message.author.tag}\n> __ID:__ ${message.author.id}`, true)
-          .addField("● Purge Info", `> Number of messages: **${clear}**\n> From the user: ${user.user}`)
-          .setTimestamp()
+      let log = new MessageEmbed()
+        .setAuthor(`Action: Purge`, message.guild.iconURL({ dynamic: true }))
+        .setColor(`${client.embedColor.logAqua}`)
+        .addField('Channel Info', `● ${msglink.channel}\n> __Name:__ ${msglink.channel.name}\n> __ID:__ ${msglink.channel.id}`, true)
+        .addField("Mod Info", `● ${message.author}\n> __Tag:__ ${message.author.tag}\n> __ID:__ ${message.author.id}`, true)
+        .addField("● Purge Info", `> Number of messages: **${clear}**\n> From the user: ${user.user}`)
+        .setTimestamp()
 
-        modlog.send({ embeds: [log] })
+      modlog.send({ embeds: [log] })
 
 
     } else if (!args[1]) {
 
 
-      message.channel.bulkDelete(parseInt(clear + 1))
+
+      let msgs = message.channel.messages.fetch({ limit: clear })
+      message.channel.bulkDelete((await msgs))
 
       let embeda = new MessageEmbed()
         .setDescription(`Cleared ${clear} messages in ${message.channel}.`)
@@ -63,15 +65,15 @@ module.exports = {
 
       let msglink = await message.channel.send({ embeds: [embeda] }).then((msg) => { setTimeout(() => { msg.delete(), message.delete() }, 5000) })
 
-        let log = new MessageEmbed()
-          .setAuthor(`Action: Purge`, message.guild.iconURL({ dynamic: true }))
-          .setColor(`${client.embedColor.logAqua}`)
-          .addField('Channel Info', `● ${msglink.channel}\n> __Name:__ ${msglink.channel.name}\n> __ID:__ ${msglink.channel.id}`, true)
-          .addField("Mod Info", `● ${message.author}\n> __Tag:__ ${message.author.tag}\n> __ID:__ ${message.author.id}`, true)
-          .addField("● Purge Info", `> Number of messages: **${clear}**`)
-          .setTimestamp()
+      let log = new MessageEmbed()
+        .setAuthor(`Action: Purge`, message.guild.iconURL({ dynamic: true }))
+        .setColor(`${client.embedColor.logAqua}`)
+        .addField('Channel Info', `● ${msglink.channel}\n> __Name:__ ${msglink.channel.name}\n> __ID:__ ${msglink.channel.id}`, true)
+        .addField("Mod Info", `● ${message.author}\n> __Tag:__ ${message.author.tag}\n> __ID:__ ${message.author.id}`, true)
+        .addField("● Purge Info", `> Number of messages: **${clear}**`)
+        .setTimestamp()
 
-        modlog.send({ embeds: [log] })
+      modlog.send({ embeds: [log] })
 
     }
 

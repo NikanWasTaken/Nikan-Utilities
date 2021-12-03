@@ -66,10 +66,8 @@ module.exports = {
 
     } else if (!user) {
 
-      const messages = interaction.channel.messages.fetch({ limit: clear })
-
-
-      await interaction.channel.bulkDelete(parseInt(clear + 1))
+      let msgs = message.channel.messages.fetch({ limit: clear })
+      message.channel.bulkDelete((await msgs))
 
       let embeda = new MessageEmbed()
         .setDescription(`Cleared ${clear} messages in ${interaction.channel}`)
