@@ -22,8 +22,8 @@ module.exports = {
 
     if (!clear) return message.reply({ embeds: [missingpartembed] })
 
-    let heh = new MessageEmbed().setDescription(`${client.botEmoji.failed} You need to provide a number between 1 and 50 to purge.`).setColor(`${client.embedColor.failed}`)
-    if (isNaN(clear) || clear > 50 || clear < 1) return message.reply({ embeds: [heh] })
+    let heh = new MessageEmbed().setDescription(`${client.botEmoji.failed} You need to provide a number between 1 and 100 to purge.`).setColor(`${client.embedColor.failed}`)
+    if (isNaN(clear) || clear > 100 || clear < 1) return message.reply({ embeds: [heh] })
 
     if (args[1]) {
 

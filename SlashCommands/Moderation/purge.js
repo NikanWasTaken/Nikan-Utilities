@@ -35,8 +35,8 @@ module.exports = {
     var user = interaction.options.getMember("user")
 
 
-    let heh = new MessageEmbed().setDescription("You need to provide a number between 1 and 50 to purge.").setColor("RED")
-    if (!clear || isNaN(clear) || clear > 50 || clear < 1) return interaction.followUp({ embeds: [heh] })
+    let heh = new MessageEmbed().setDescription("You need to provide a number between 1 and 100 to purge.").setColor("RED")
+    if (!clear || isNaN(clear) || clear > 100 || clear < 1) return interaction.followUp({ embeds: [heh] })
 
 
     if (user) {
