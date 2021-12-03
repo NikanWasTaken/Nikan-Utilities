@@ -1,4 +1,4 @@
-const { MessageEmbed, MessageActionRow, MessageButton, MessageCollector } = require('discord.js')
+const { MessageEmbed, MessageActionRow, MessageButton, MessageCollector, MessageFlags } = require('discord.js')
 const cap = require("capitalize-first-letter")
 
 module.exports = {
@@ -22,85 +22,9 @@ module.exports = {
 
     var permissions = [];
     var know = "None"
-    let member = message.mentions.members.first() || message.guild.members.cache.get(args[0]) || message.member;
-
-    if (member.permissions.has("ADMINISTRATOR")) {
-      permissions.push("Administrator");
-    }
-
-    if (member.permissions.has("MANAGE_ROLES")) {
-      permissions.push("Manage Roles");
-    }
-
-    if (member.permissions.has("MANAGE_CHANNELS")) {
-      permissions.push("Manage Channels");
-    }
-
-    if (member.permissions.has("MANAGE_MESSAGES")) {
-      permissions.push("Manage Messages");
-    }
-
-    if (member.permissions.has("MANAGE_WEBHOOKS")) {
-      permissions.push("Manage Webhooks");
-    }
-
-    if (member.permissions.has("MANAGE_NICKNAMES")) {
-      permissions.push("Manage Nicknames");
-    }
-
-    if (member.permissions.has("MANAGE_EMOJIS_AND_STICKERS")) {
-      permissions.push("Manage Emojis And Stickers");
-    }
-
-    if (member.permissions.has("KICK_MEMBERS")) {
-      permissions.push("Kick Members");
-    }
-
-    if (member.permissions.has("BAN_MEMBERS")) {
-      permissions.push("Ban Members");
-    }
-
-    if (member.permissions.has("MENTION_EVERYONE")) {
-      permissions.push("Mention Everyone");
-    }
-
-
-    if (permissions.length == 0) {
-      permissions.push("No Key Permissions Found");
-    }
-
-
-    //---------------------------------------------------------------
-
-    if (member.permissions.has("VIEW_AUDIT_LOG")) {
-      know = "Server Bot Developer";
-    }
-
-    if (member.permissions.has("MANAGE_MESSAGES")) {
-      know = "Server Trainee Moderator";
-    }
-
-    if (member.permissions.has("BAN_MEMBERS")) {
-      know = "Server Moderator";
-    }
-
-    if (member.permissions.has("MANAGE_ROLES")) {
-      know = "Server Head Moderator";
-    }
-
-    if (member.permissions.has("ADMINISTRATOR")) {
-      know = "Server Admin";
-    }
-
-
-    if (member.user.id == (await message.guild.fetchOwner()).id) {
-      know = 'Server Owner';
-    }
-
-
-    // --------------------------------- 
-
-    const flags = member.user.flags?.toArray()
+    let member = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
+    if (!args[0])
+      member = message.member;
 
     const badges = {
       "EARLY_SUPPORTER": "<:EARLY_SUPPORTER:899171458297774160> ",
@@ -118,106 +42,205 @@ module.exports = {
       "DISCORD_CERTIFIED_MODERATOR": "<:DISCORD_CERTIFIED_MODERATOR:899171456779419669> "
     };
 
-    const components = (state) => [
-
-     new MessageActionRow().addComponents(
-
-      new MessageButton()
-        .setLabel("More Information")
-        .setStyle("SECONDARY")
-        .setDisabled(state)
-        .setCustomId("whois"),
-    )
-     ]
+    if (member) {
 
 
-    if (member.presence == null) {
+      if (member.permissions.has("ADMINISTRATOR")) {
+        permissions.push("Administrator");
+      }
+
+      if (member.permissions.has("MANAGE_ROLES")) {
+        permissions.push("Manage Roles");
+      }
+
+      if (member.permissions.has("MANAGE_CHANNELS")) {
+        permissions.push("Manage Channels");
+      }
+
+      if (member.permissions.has("MANAGE_MESSAGES")) {
+        permissions.push("Manage Messages");
+      }
+
+      if (member.permissions.has("MANAGE_WEBHOOKS")) {
+        permissions.push("Manage Webhooks");
+      }
+
+      if (member.permissions.has("MANAGE_NICKNAMES")) {
+        permissions.push("Manage Nicknames");
+      }
+
+      if (member.permissions.has("MANAGE_EMOJIS_AND_STICKERS")) {
+        permissions.push("Manage Emojis And Stickers");
+      }
+
+      if (member.permissions.has("KICK_MEMBERS")) {
+        permissions.push("Kick Members");
+      }
+
+      if (member.permissions.has("BAN_MEMBERS")) {
+        permissions.push("Ban Members");
+      }
+
+      if (member.permissions.has("MENTION_EVERYONE")) {
+        permissions.push("Mention Everyone");
+      }
 
 
-      const eyes = new MessageEmbed()
-        .setAuthor(`${member.user.tag}`, member.user.displayAvatarURL({ dynamic: true }))
+      if (permissions.length == 0) {
+        permissions.push("No Key Permissions Found");
+      }
+
+
+      //---------------------------------------------------------------
+
+      if (member.permissions.has("VIEW_AUDIT_LOG")) {
+        know = "Server Bot Developer";
+      }
+
+      if (member.permissions.has("MANAGE_MESSAGES")) {
+        know = "Server Trainee Moderator";
+      }
+
+      if (member.permissions.has("BAN_MEMBERS")) {
+        know = "Server Moderator";
+      }
+
+      if (member.permissions.has("MANAGE_ROLES")) {
+        know = "Server Head Moderator";
+      }
+
+      if (member.permissions.has("ADMINISTRATOR")) {
+        know = "Server Admin";
+      }
+
+
+      if (member.user.id == (await message.guild.fetchOwner()).id) {
+        know = 'Server Owner';
+      }
+
+
+      // --------------------------------- 
+
+      const flags = member.user.flags?.toArray()
+
+      const components = (state) => [
+
+        new MessageActionRow().addComponents(
+
+          new MessageButton()
+            .setLabel("More Information")
+            .setStyle("SECONDARY")
+            .setDisabled(state)
+            .setCustomId("whois"),
+        )
+      ]
+
+
+      if (member.presence == null) {
+
+
+        const eyes = new MessageEmbed()
+          .setAuthor(`${member.user.tag}`, member.user.displayAvatarURL({ dynamic: true }))
+          .setColor("RANDOM")
+          .setThumbnail(`${member.user.displayAvatarURL({ dynamic: true })}`)
+          .setTimestamp()
+          .addField("__Account Information__", `**ID:** ${member.user.id}\n**Username:** ${member.user.username} • **Discriminator:** #${member.user.discriminator}\n**Registered:** <t:${Math.floor(member.user.createdAt / 1000)}:f> [<t:${Math.floor(member.user.createdAt / 1000)}:R>]\n**Avatar:** [JPG](${member.user.displayAvatarURL({ format: 'jpg' })}) • [PNG](${member.user.displayAvatarURL({ format: 'png' })}) • [WEBP](${member.user.displayAvatarURL()}) • [GIF](${member.user.displayAvatarURL({ format: 'gif', dynamic: true })})\n**Badges:** ${flags?.length ? `${flags.map(flag => badges[flag]).join(' ')}` : 'No Badges!'}`)
+          .addField("__Server Member Info__", `**Joined:** <t:${~~(member.joinedAt / 1000)}:f> [<t:${~~(member.joinedAt / 1000)}:R>]\n**Booting since:** ${member.premiumSinceTimestamp ? `<t:${Math.floor(member.premiumSinceTimestamp / 1000)}:D>` : 'Not a server booster!'}\n**Nickname:** ${member.displayName === member.user.username ? "No Nickname" : `${member.displayName}`}\n**Highest Role:** ${member.roles.highest.id === message.guild.id ? "Doesn't have any role!" : member.roles.highest}\n**Acknowledgements:** ${know}\n\n\n`)
+
+        const msg = await message.reply({ embeds: [eyes], components: components(false) })
+
+        const collector = msg.createMessageComponentCollector({
+          componentType: "BUTTON",
+          time: 60000,
+        })
+
+        collector.on("collect", async (collected) => {
+
+          if (collected.customId === "whois") {
+
+            if (collected.user.id !== message.author.id) return collected.reply({ content: "This menu is not for you!", ephemeral: true })
+
+            const moreinfoembed = new MessageEmbed()
+              .setAuthor(`${member.user.tag}`, member.user.displayAvatarURL({ dynamic: true }))
+              .setColor("RANDOM")
+              .setThumbnail(`${member.user.displayAvatarURL({ dynamic: true })}`)
+              .setTimestamp()
+              .addField(`Roles [${Math.floor(member.roles.cache.size - 1)}]`, `${member.roles.cache.sort((a, b) => b.position - a.position).filter(r => r.id !== message.guild.id).map(role => role.toString()).join(" ") || "Doesn't have any role!"}`, true)
+              .addField(`Key Permissions [${permissions.length}]`, `${permissions.join(`, `)}`, false)
+
+
+            collected.reply({ embeds: [moreinfoembed], ephemeral: true })
+
+          }
+
+        })
+
+        collector.on("end", async (i) => { msg.edit({ components: components(true) }) })
+
+
+      } else {
+
+
+        const devices = member.presence.clientStatus || {}
+
+        const eyes = new MessageEmbed()
+          .setAuthor(`${member.user.tag}`, member.user.displayAvatarURL({ dynamic: true }))
+          .setColor("RANDOM")
+          .setThumbnail(`${member.user.displayAvatarURL({ dynamic: true })}`)
+          .setTimestamp()
+          .addField("__Account Information__", `**ID:** ${member.user.id}\n**Username:** ${member.user.username} • **Discriminator:** #${member.user.discriminator}\n**Registered:** <t:${Math.floor(member.user.createdAt / 1000)}:f> [<t:${Math.floor(member.user.createdAt / 1000)}:R>]\n**Avatar:** [JPG](${member.user.displayAvatarURL({ format: 'jpg' })}) • [PNG](${member.user.displayAvatarURL({ format: 'png' })}) • [WEBP](${member.user.displayAvatarURL()}) • [GIF](${member.user.displayAvatarURL({ format: 'gif', dynamic: true })})\n**Badges:** ${flags?.length ? `${flags.map(flag => badges[flag]).join(' ')}` : 'No Badges!'}`)
+          .addField("__Server Member Info__", `**Joined:** <t:${~~(member.joinedAt / 1000)}:f> [<t:${~~(member.joinedAt / 1000)}:R>]\n**Booting since:** ${member.premiumSinceTimestamp ? `<t:${Math.floor(member.premiumSinceTimestamp / 1000)}:D>` : 'Not a server booster!'}\n**Nickname:** ${member.displayName === member.user.username ? "No Nickname" : `${member.displayName}`}\n**Highest Role:** ${member.roles.highest.id === message.guild.id ? "Doesn't have any role!" : member.roles.highest}\n**Acknowledgements:** ${know}\n\n\n`)
+          .addField("__Presence Information__", `**Status:** ${cap(member.presence.status)}\n**Devices [${Object.entries(devices).length}]:** ${Object.entries(devices).map((value) => `${value[0][0].toUpperCase()}${value[0].slice(1)}`).join(", ")}`)
+
+        const msg = await message.reply({ embeds: [eyes], components: components(false) })
+
+
+        const collector = msg.createMessageComponentCollector({
+          componentType: "BUTTON",
+          time: 60000,
+        })
+
+        collector.on("collect", async (collected) => {
+
+          if (collected.customId === "whois") {
+
+            if (collected.user.id !== message.author.id) return collected.reply({ content: "This menu is not for you!", ephemeral: true })
+
+            const moreinfoembed = new MessageEmbed()
+              .setAuthor(`${member.user.tag}`, member.user.displayAvatarURL({ dynamic: true }))
+              .setColor("RANDOM")
+              .setThumbnail(`${member.user.displayAvatarURL({ dynamic: true })}`)
+              .setTimestamp()
+              .addField(`Roles [${Math.floor(member.roles.cache.size - 1)}]`, `${member.roles.cache.sort((a, b) => b.position - a.position).filter(r => r.id !== message.guild.id).map(role => role.toString()).join(" ") || "Doesn't have any role!"}`, true)
+              .addField(`Key Permissions [${permissions.length}]`, `${permissions.join(`, `)}`, false)
+
+
+            collected.reply({ embeds: [moreinfoembed], ephemeral: true })
+
+          }
+
+        })
+
+        collector.on("end", async (i) => { msg.edit({ components: components(true) }) })
+
+
+      }
+
+    } else if (!member) {
+
+
+      const user = await client.users.fetch(`${args[0]}`).catch(e => { return message.reply("This user doesnt exist!") })
+      const flags = user?.flags?.toArray()
+
+
+      const embed = new MessageEmbed()
+        .setAuthor(`${user?.tag}`, user?.displayAvatarURL({ dynamic: true }))
         .setColor("RANDOM")
-        .setThumbnail(`${member.user.displayAvatarURL({ dynamic: true })}`)
+        .setThumbnail(`${user?.displayAvatarURL({ dynamic: true })}`)
         .setTimestamp()
-        .addField("__Account Information__", `**ID:** ${member.user.id}\n**Username:** ${member.user.username} • **Discriminator:** #${member.user.discriminator}\n**Registered:** <t:${Math.floor(member.user.createdAt / 1000)}:f> [<t:${Math.floor(member.user.createdAt / 1000)}:R>]\n**Avatar:** [JPG](${member.user.displayAvatarURL({ format: 'jpg' })}) • [PNG](${member.user.displayAvatarURL({ format: 'png' })}) • [WEBP](${member.user.displayAvatarURL()}) • [GIF](${member.user.displayAvatarURL({ format: 'gif', dynamic: true })})\n**Badges:** ${flags?.length ? `${flags.map(flag => badges[flag]).join(' ')}` : 'No Badges!'}`)
-        .addField("__Server Member Info__", `**Joined:** <t:${~~(member.joinedAt / 1000)}:f> [<t:${~~(member.joinedAt / 1000)}:R>]\n**Booting since:** ${member.premiumSinceTimestamp ? `<t:${Math.floor(member.premiumSinceTimestamp / 1000)}:D>` : 'Not a server booster!'}\n**Nickname:** ${member.displayName === member.user.username ? "No Nickname" : `${member.displayName}`}\n**Highest Role:** ${member.roles.highest.id === message.guild.id ? "Doesn't have any role!" : member.roles.highest}\n**Acknowledgements:** ${know}\n\n\n`)
+        .addField("__Account Information__", `**ID:** ${user?.id}\n**Username:** ${user?.username} • **Discriminator:** #${user?.discriminator}\n**Registered:** <t:${Math.floor(user?.createdAt / 1000)}:f> [<t:${Math.floor(user?.createdAt / 1000)}:R>]\n**Avatar:** [JPG](${user?.displayAvatarURL({ format: 'jpg' })}) • [PNG](${user?.displayAvatarURL({ format: 'png' })}) • [WEBP](${user?.displayAvatarURL()}) • [GIF](${user?.displayAvatarURL({ format: 'gif', dynamic: true })})\n**Badges:** ${flags?.length ? `${flags.map(flag => badges[flag]).join(' ')}` : 'No Badges!'}`)
 
-      const msg = await message.reply({ embeds: [eyes], components: components(false) })
-
-      const collector = msg.createMessageComponentCollector({
-        componentType: "BUTTON",
-        time: 60000,
-      })
-
-      collector.on("collect", async (collected) => {
-
-        if (collected.customId === "whois") {
-
-          if (collected.user.id !== message.author.id) return collected.reply({ content: "This menu is not for you!", ephemeral: true })
-
-          const moreinfoembed = new MessageEmbed()
-            .setAuthor(`${member.user.tag}`, member.user.displayAvatarURL({ dynamic: true }))
-            .setColor("RANDOM")
-            .setThumbnail(`${member.user.displayAvatarURL({ dynamic: true })}`)
-            .setTimestamp()
-            .addField(`Roles [${Math.floor(member.roles.cache.size - 1)}]`, `${member.roles.cache.sort((a, b) => b.position - a.position).filter(r => r.id !== message.guild.id).map(role => role.toString()).join(" ") || "Doesn't have any role!"}`, true)
-            .addField(`Key Permissions [${permissions.length}]`, `${permissions.join(`, `)}`, false)
-
-
-          collected.reply({ embeds: [moreinfoembed], ephemeral: true })
-
-        }
-
-      })
-
-      collector.on("end", async (i) => { msg.edit({ components: components(true)})})
-
-
-    } else {
-
-
-      const devices = member.presence.clientStatus || {}
-
-      const eyes = new MessageEmbed()
-        .setAuthor(`${member.user.tag}`, member.user.displayAvatarURL({ dynamic: true }))
-        .setColor("RANDOM")
-        .setThumbnail(`${member.user.displayAvatarURL({ dynamic: true })}`)
-        .setTimestamp()
-        .addField("__Account Information__", `**ID:** ${member.user.id}\n**Username:** ${member.user.username} • **Discriminator:** #${member.user.discriminator}\n**Registered:** <t:${Math.floor(member.user.createdAt / 1000)}:f> [<t:${Math.floor(member.user.createdAt / 1000)}:R>]\n**Avatar:** [JPG](${member.user.displayAvatarURL({ format: 'jpg' })}) • [PNG](${member.user.displayAvatarURL({ format: 'png' })}) • [WEBP](${member.user.displayAvatarURL()}) • [GIF](${member.user.displayAvatarURL({ format: 'gif', dynamic: true })})\n**Badges:** ${flags?.length ? `${flags.map(flag => badges[flag]).join(' ')}` : 'No Badges!'}`)
-        .addField("__Server Member Info__", `**Joined:** <t:${~~(member.joinedAt / 1000)}:f> [<t:${~~(member.joinedAt / 1000)}:R>]\n**Booting since:** ${member.premiumSinceTimestamp ? `<t:${Math.floor(member.premiumSinceTimestamp / 1000)}:D>` : 'Not a server booster!'}\n**Nickname:** ${member.displayName === member.user.username ? "No Nickname" : `${member.displayName}`}\n**Highest Role:** ${member.roles.highest.id === message.guild.id ? "Doesn't have any role!" : member.roles.highest}\n**Acknowledgements:** ${know}\n\n\n`)
-        .addField("__Presence Information__", `**Status:** ${cap(member.presence.status)}\n**Devices [${Object.entries(devices).length}]:** ${Object.entries(devices).map((value) => `${value[0][0].toUpperCase()}${value[0].slice(1)}`).join(", ")}`)
-
-      const msg = await message.reply({ embeds: [eyes], components: components(false) })
-
-
-      const collector = msg.createMessageComponentCollector({
-        componentType: "BUTTON",
-        time: 60000,
-      })
-
-      collector.on("collect", async (collected) => {
-
-        if (collected.customId === "whois") {
-
-          if (collected.user.id !== message.author.id) return collected.reply({ content: "This menu is not for you!", ephemeral: true })
-
-          const moreinfoembed = new MessageEmbed()
-            .setAuthor(`${member.user.tag}`, member.user.displayAvatarURL({ dynamic: true }))
-            .setColor("RANDOM")
-            .setThumbnail(`${member.user.displayAvatarURL({ dynamic: true })}`)
-            .setTimestamp()
-            .addField(`Roles [${Math.floor(member.roles.cache.size - 1)}]`, `${member.roles.cache.sort((a, b) => b.position - a.position).filter(r => r.id !== message.guild.id).map(role => role.toString()).join(" ") || "Doesn't have any role!"}`, true)
-            .addField(`Key Permissions [${permissions.length}]`, `${permissions.join(`, `)}`, false)
-
-
-          collected.reply({ embeds: [moreinfoembed], ephemeral: true })
-
-        }
-
-      })
-
-      collector.on("end", async (i) => { msg.edit({ components: components(true)})})
-
+      message.reply({ embeds: [embed] })
 
     }
 

@@ -84,7 +84,7 @@ module.exports = {
             switch (val) {
                 case 0: status = `Disconnected`
                     break;
-                case 1: status = `Connceted`
+                case 1: status = `Connected`
                     break;
                 case 2: status = `Connecting`
                     break;
