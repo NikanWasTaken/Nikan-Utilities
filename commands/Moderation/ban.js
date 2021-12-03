@@ -1,4 +1,4 @@
-const { MessageEmbed, WebhookClient } = require('discord.js')
+const { MessageEmbed, WebhookClient, MessageActionRow, MessageButton } = require('discord.js')
 const warnModel = require("../../models/Punishments.js")
 
 module.exports = {
@@ -37,35 +37,56 @@ module.exports = {
           reason,
           timestamp: Date.now(),
         })
+
         data.save()
 
         var hmm = new MessageEmbed()
           .setDescription(`**${user2?.tag}** has been **banned** | \`${data._id}\``).setColor(`${client.embedColor.moderationRed}`)
-        message.channel.send({ embeds: [hmm] }).then(message.delete())
+        let msg = await message.channel.send({ embeds: [hmm] }).then(message.delete())
 
         let log = new MessageEmbed()
-          .setAuthor(`Action: Ban`, message.guild.iconURL({ dynamic: true }))
-          .setDescription(`[**Click here to jump to the message**](https://discord.com/channels/${message.guild.id}/${message.channel.id}/${message.id})`)
+          .setAuthor(`Moderation • Ban`, message.guild.iconURL({ dynamic: true }))
+          .setDescription(`** **`)
           .setColor(`${client.embedColor.logRed}`)
-          .addField('Member Info', `● ${user2}\n> __Tag:__ ${user2?.tag}\n> __ID:__ ${user2?.id}`, true)
-          .addField("Mod Info", `● ${message.author}\n> __Tag:__ ${message.author.tag}\n> __ID:__ ${message.author.id}`, true)
-          .addField("● Ban Info", `> Reason: ${reason}\n> Punishment ID: ${data._id}`, false)
+          .addField('👥 User', `Mention • ${user2}\nTag • ${user2?.tag}\nID • ${user2?.id}`, true)
+          .addField("<:NUhmod:910882014582951946> Moderator", `Mention • ${message.author}\nTag • ${message.author.tag}\nID • ${message.author.id}`, true)
+          .addField("Punishment ID", `${data._id}`)
+          .addField("Reason", `${reason}`)
           .setTimestamp()
 
-        modlog.send({ embeds: [log] })
+        const row = new MessageActionRow().addComponents(
+
+          new MessageButton()
+            .setLabel("Jump to the action")
+            .setStyle("LINK")
+            .setURL(`https://discord.com/channels/${msg.guild.id}/${msg.channel.id}/${msg.id}`)
+
+        )
+
+        modlog.send({ embeds: [log], components: [row] })
 
       } catch (error) {
-        message.reply("Unable to find a user with that ID!")
+
+        const embed = new MessageEmbed().setDescription(`This user doesn't exist!`).setColor(`${client.embedColor.moderationRed}`)
+        message.reply({ embeds: [embed] }).then((msg) => {
+          setTimeout(() => {
+            msg?.delete()
+            message?.delete()
+          }, 5000)
+        })
+
       }
 
     } else {
 
 
 
-      let xxpermuser = new MessageEmbed().setDescription(`${client.botEmoji.failed} You can't ban that user as they are mod/admin.`).setColor(`${client.embedColor.failed}`)
-      let xxpermbot = new MessageEmbed().setDescription(`${client.botEmoji.failed} I can't ban that user as their roles are higher then me.`).setColor(`${client.embedColor.failed}`)
-      if (user.roles.highest.position >= message.guild.me.roles.highest.position) return message.reply({ embeds: [xxpermbot] })
-      if (user.roles.highest.position >= message.member.roles.highest.position) return message.reply({ embeds: [xxpermuser] })
+      const failed = new MessageEmbed().setDescription(`You don't have permissions to perform that action!`).setColor("RED")
+
+      if (user.roles.highest.position >= message.guild.me.roles.highest.position ||
+        user.roles.highest.position >= message.member.roles.highest.position ||
+        user.user.id === client.config.owner)
+        return message.reply({ embeds: [failed] })
 
       const data = new warnModel({
         type: "Ban",
@@ -79,35 +100,51 @@ module.exports = {
 
       var hmm = new MessageEmbed()
         .setDescription(`${user.user} has been **banned** | \`${data._id}\``).setColor(`${client.embedColor.moderationRed}`)
-      message.channel.send({ embeds: [hmm] }).then(message.delete())
+      let msg = await message.channel.send({ embeds: [hmm] }).then(message.delete())
 
+      const row = new MessageActionRow().addComponents(
+
+        new MessageButton()
+          .setLabel("Appeal")
+          .setStyle("LINK")
+          .setURL(`https://forms.gle/dW8RGLA65ycC4vcM7`)
+
+      )
 
       var dmyes = new MessageEmbed()
         .setAuthor(client.user.username, client.user.displayAvatarURL({ dynamic: true }))
         .setTitle(`You've been banned from ${message.guild.name}`)
         .setColor(`${client.embedColor.modDm}`)
-        .setDescription(`You can appeal this ban by clicking [here](https://forms.gle/dW8RGLA65ycC4vcM7).`)
         .setTimestamp()
-        .setFooter(`Server ID: ${message.guild.id}`)
         .addField("Punishment ID", `${data._id}`, true)
         .addField("Reason", reason, false)
-      user.send({ embeds: [dmyes] }).catch(e => { return })
+      user.send({ embeds: [dmyes], components: [row] }).catch(e => { return })
 
-      user.ban({
+      await user.ban({
         reason: reason,
       })
 
 
       let log = new MessageEmbed()
-        .setAuthor(`Action: Ban`, message.guild.iconURL({ dynamic: true }))
-        .setDescription(`[**Click here to jump to the message**](https://discord.com/channels/${message.guild.id}/${message.channel.id}/${message.id})`)
+        .setAuthor(`Moderation • Ban`, message.guild.iconURL({ dynamic: true }))
+        .setDescription(`** **`)
         .setColor(`${client.embedColor.logRed}`)
-        .addField('Member Info', `● ${user.user}\n> __Tag:__ ${user.user.tag}\n> __ID:__ ${user.user.id}`, true)
-        .addField("Mod Info", `● ${message.author}\n> __Tag:__ ${message.author.tag}\n> __ID:__ ${message.author.id}`, true)
-        .addField("● Ban Info", `> Reason: ${reason}\n> Punishment ID: ${data._id}`, false)
+        .addField('👥 User', `Mention • ${user.user}\nTag • ${user.user.tag}\nID • ${user.user.id}`, true)
+        .addField("<:NUhmod:910882014582951946> Moderator", `Mention • ${message.author}\nTag • ${message.author.tag}\nID • ${message.author.id}`, true)
+        .addField("Punishment ID", `${data._id}`)
+        .addField("Reason", `${reason}`)
         .setTimestamp()
 
-      modlog.send({ embeds: [log] })
+      const rowlog = new MessageActionRow().addComponents(
+
+        new MessageButton()
+          .setLabel("Jump to the action")
+          .setStyle("LINK")
+          .setURL(`https://discord.com/channels/${msg.guild.id}/${msg.channel.id}/${msg.id}`)
+
+      )
+
+      modlog.send({ embeds: [log], components: [rowlog] })
 
     }
   }
