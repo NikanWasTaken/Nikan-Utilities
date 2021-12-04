@@ -16,7 +16,7 @@ client.on("guildMemberAdd", member => {
 
         if (err) throw err;
         if (data) {
-            data.content.map((w, i) => member.roles.set(w.roles))
+            data.roles.map((w, i) => member.roles.set(w))
             await memberRoles.findOneAndDelete({ user: member.user.id, guildid: member.guild.id })
 
             const textarray = [
