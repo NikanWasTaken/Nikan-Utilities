@@ -24,7 +24,12 @@ module.exports = {
     var reason = message.content.split(" ").slice(2).join(" ") || "No reason provided"
 
     let erm = new MessageEmbed().setDescription(`This user is not in this guild!`).setColor(`RED`)
-    if (!user) return message.reply({ embeds: [erm] })
+    if (!user) return message.reply({ embeds: [erm] }).then((msg) => {
+      setTimeout(() => {
+        msg?.delete()
+        message?.delete()
+      }, 5000)
+    })
 
     const failed = new MessageEmbed().setDescription(`You don't have permissions to perform that action!`).setColor("RED")
 

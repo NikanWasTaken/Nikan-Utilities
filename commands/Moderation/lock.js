@@ -90,7 +90,7 @@ module.exports = {
           .setDescription(`** **`)
           .setColor(`${client.embedColor.logs}`)
           .addField("<:NUhmod:910882014582951946> Moderator", `Mention • ${message.author}\nTag • ${message.author.tag}\nID • ${message.author.id}`, true)
-          .addField("🔇 Channel", `Mention • ${channel}\nID • ${channel.id}`)
+          .addField("🔇 Channel", `Mention • ${channel}\nID • ${channel.id}`, true)
           .addField("Reason", `${reason}`)
           .setTimestamp()
 
@@ -134,7 +134,7 @@ module.exports = {
           .setDescription(`** **`)
           .setColor(`${client.embedColor.logs}`)
           .addField("<:NUhmod:910882014582951946> Moderator", `Mention • ${message.author}\nTag • ${message.author.tag}\nID • ${message.author.id}`, true)
-          .addField("🔕 Channel", `Mention • ${channel}\nID • ${channel.id}`)
+          .addField("🔕 Channel", `Mention • ${channel}\nID • ${channel.id}`, true)
           .addField("Reason", `${reason}`)
           .setTimestamp()
 

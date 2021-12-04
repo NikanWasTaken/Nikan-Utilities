@@ -1,6 +1,7 @@
 const client = require("../../index.js")
 const { MessageEmbed } = require("discord.js")
 const memberRoles = require("../../models/LeftMembers.js")
+const ms = require("ms")
 
 
 client.on("guildMemberAdd", member => {
@@ -88,7 +89,7 @@ client.on("guildMemberRemove", async member => {
     const data = new memberRoles({
         guildid: member.guild.id,
         user: member.user.id,
-        content: [{ roles: member.roles.cache.sort((a, b) => b.position - a.position).filter(r => r.id !== member.guild.id).map(role => role.id) }],
+        roles: [member.roles.cache.sort((a, b) => b.position - a.position).filter(r => r.id !== member.guild.id).map(role => role.id)],
         expires: Date.now() + ms('2 weeks')
     })
 

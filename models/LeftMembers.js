@@ -4,9 +4,8 @@ const mongoose = require("mongoose")
 let Schema = new mongoose.Schema({
     guildid: String,
     user: String,
-    content: Array,
+    roles: Array,
     expires: Number,
-
 })
 
 

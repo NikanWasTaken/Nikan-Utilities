@@ -2,9 +2,11 @@ const mongoose = require("mongoose")
 
 
 let Schema = new mongoose.Schema({
-    guildid: String, 
+    guildid: String,
     user: String,
-    content: Array
+    roles: Array,
+    reason: String,
+
 })
 
 

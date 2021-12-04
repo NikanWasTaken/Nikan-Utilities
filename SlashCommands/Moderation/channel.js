@@ -78,7 +78,7 @@ module.exports = {
           .setDescription(`** **`)
           .setColor(`${client.embedColor.logs}`)
           .addField("<:NUhmod:910882014582951946> Moderator", `Mention • ${interaction.user}\nTag • ${interaction.user.tag}\nID • ${interaction.user.id}`, true)
-          .addField("🔇 Channel", `Mention • ${channel}\nID • ${channel.id}`)
+          .addField("🔇 Channel", `Mention • ${channel}\nID • ${channel.id}`, true)
           .addField("Reason", `${reason}`)
           .setTimestamp()
 
@@ -120,7 +120,7 @@ module.exports = {
           .setDescription(`** **`)
           .setColor(`${client.embedColor.logs}`)
           .addField("<:NUhmod:910882014582951946> Moderator", `Mention • ${interaction.user}\nTag • ${interaction.user.tag}\nID • ${interaction.user.id}`, true)
-          .addField("🔕 Channel", `Mention • ${channel}\nID • ${channel.id}`)
+          .addField("🔕 Channel", `Mention • ${channel}\nID • ${channel.id}`, true)
           .addField("Reason", `${reason}`)
           .setTimestamp()
 
@@ -201,7 +201,7 @@ module.exports = {
           .setDescription(`** **`)
           .setColor(`${client.embedColor.logs}`)
           .addField("<:NUhmod:910882014582951946> Moderator", `Mention • ${interaction.user}\nTag • ${interaction.user.tag}\nID • ${interaction.user.id}`, true)
-          .addField("💬 Channel", `Mention • ${channel}\nID • ${channel.id}`)
+          .addField("💬 Channel", `Mention • ${channel}\nID • ${channel.id}`, true)
           .addField("Reason", `${reason}`)
           .setTimestamp()
 
