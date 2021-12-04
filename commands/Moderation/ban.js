@@ -47,10 +47,10 @@ module.exports = {
         let log = new MessageEmbed()
           .setAuthor(`Moderation • Ban`, message.guild.iconURL({ dynamic: true }))
           .setDescription(`** **`)
-          .setColor(`${client.embedColor.logRed}`)
+          .setColor(`${client.embedColor.logs}`)
           .addField('👥 User', `Mention • ${user2}\nTag • ${user2?.tag}\nID • ${user2?.id}`, true)
           .addField("<:NUhmod:910882014582951946> Moderator", `Mention • ${message.author}\nTag • ${message.author.tag}\nID • ${message.author.id}`, true)
-          .addField("Punishment ID", `${data._id}`)
+          .addField("Punishment ID", `\`${data._id}\``)
           .addField("Reason", `${reason}`)
           .setTimestamp()
 
@@ -67,7 +67,7 @@ module.exports = {
 
       } catch (error) {
 
-        const embed = new MessageEmbed().setDescription(`This user doesn't exist!`).setColor(`${client.embedColor.moderationRed}`)
+        const embed = new MessageEmbed().setDescription(`This user doesn't exist!`).setColor("RED")
         message.reply({ embeds: [embed] }).then((msg) => {
           setTimeout(() => {
             msg?.delete()
@@ -86,7 +86,12 @@ module.exports = {
       if (user.roles.highest.position >= message.guild.me.roles.highest.position ||
         user.roles.highest.position >= message.member.roles.highest.position ||
         user.user.id === client.config.owner)
-        return message.reply({ embeds: [failed] })
+        return message.reply({ embeds: [failed] }).then((msg) => {
+          setTimeout(() => {
+            msg?.delete()
+            message?.delete()
+          }, 5000)
+        })
 
       const data = new warnModel({
         type: "Ban",
@@ -102,7 +107,7 @@ module.exports = {
         .setDescription(`${user.user} has been **banned** | \`${data._id}\``).setColor(`${client.embedColor.moderationRed}`)
       let msg = await message.channel.send({ embeds: [hmm] }).then(message.delete())
 
-      const row = new MessageActionRow().addComponents(
+      const row2 = new MessageActionRow().addComponents(
 
         new MessageButton()
           .setLabel("Appeal")
@@ -116,22 +121,21 @@ module.exports = {
         .setTitle(`You've been banned from ${message.guild.name}`)
         .setColor(`${client.embedColor.modDm}`)
         .setTimestamp()
-        .addField("Punishment ID", `${data._id}`, true)
+        .addField("Punishment ID", `\`${data._id}\``, true)
         .addField("Reason", reason, false)
-      user.send({ embeds: [dmyes], components: [row] }).catch(e => { return })
+      user.send({ embeds: [dmyes], components: [row2] }).catch(e => { return })
 
       await user.ban({
         reason: reason,
       })
 
-
       let log = new MessageEmbed()
         .setAuthor(`Moderation • Ban`, message.guild.iconURL({ dynamic: true }))
         .setDescription(`** **`)
-        .setColor(`${client.embedColor.logRed}`)
+        .setColor(`${client.embedColor.logs}`)
         .addField('👥 User', `Mention • ${user.user}\nTag • ${user.user.tag}\nID • ${user.user.id}`, true)
         .addField("<:NUhmod:910882014582951946> Moderator", `Mention • ${message.author}\nTag • ${message.author.tag}\nID • ${message.author.id}`, true)
-        .addField("Punishment ID", `${data._id}`)
+        .addField("Punishment ID", `\`${data._id}\``)
         .addField("Reason", `${reason}`)
         .setTimestamp()
 

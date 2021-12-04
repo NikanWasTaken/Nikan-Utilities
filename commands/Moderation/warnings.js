@@ -79,9 +79,10 @@ module.exports = {
                         );
 
                         return [
-                            `\`${i + 1}\`. **${warn.type}** | \`${warn._id}\``,
+                            `\`${i + 1}\`. **${warn.type}** | **ID:** \`${warn._id}\``,
                             `> Date: <t:${~~(warn.timestamp / 1000)}:f>`,
                             `> Moderator: ${moderator ? moderator.user.tag : "Moderator has left!"}`,
+                            `> Expires In: ${warn.expires ? `<t:${~~(warn.expires / 1000)}:R>` : "Will not expire"}`,
                             `> Reason: ${warn.reason}`,
                         ].join("\n");
                     }).join("\n\n");
@@ -115,9 +116,9 @@ module.exports = {
                         // );
 
                         return [
-                            `\`${i + 1}\`. **${warn.type}** | \`${warn._id}\``,
+                            `\`${i + 1}\`. **${warn.type}** | **ID:** \`${warn._id}\``,
                             `> Date: <t:${~~(warn.timestamp / 1000)}:f>`,
-                            `> Moderator: Hidden`,
+                            `> Expires In: ${warn.expires ? `<t:${~~(warn.expires / 1000)}:R>` : "Will not expire"}`,
                             `> Reason: ${warn.reason}`,
                         ].join("\n");
                     }).join("\n\n");
@@ -153,9 +154,9 @@ module.exports = {
                     const embedDescription = userWarnings.map((warn, i) => {
 
                         return [
-                            `\`${i + 1}\`. **${warn.type}** | \`${warn._id}\``,
+                            `\`${i + 1}\`. **${warn.type}** | **ID:** \`${warn._id}\``,
                             `> Date: <t:${~~(warn.date / 1000)}:f>`,
-                            `> Moderator: Auto Moderation`,
+                            `> Expires In: ${warn.expires ? `<t:${~~(warn.expires / 1000)}:R>` : "Will not expire"}`,
                             `> Reason: ${warn.reason}`,
                         ].join("\n");
                     }).join("\n\n");
@@ -188,7 +189,7 @@ module.exports = {
                         return [
                             `\`${i + 1}\`. **${warn.type}** | \`${warn._id}\``,
                             `> Date: <t:${~~(warn.date / 1000)}:f>`,
-                            `> Moderator: Auto Moderation`,
+                            `> Expires In: ${warn.expires ? `<t:${~~(warn.expires / 1000)}:R>` : "Will not expire"}`,
                             `> Reason: ${warn.reason}`,
                         ].join("\n");
                     }).join("\n\n");

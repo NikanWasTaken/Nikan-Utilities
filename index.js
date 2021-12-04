@@ -56,7 +56,8 @@ client.embedColor = {
     logRed: "#db504c",
     modDm: "#f5d765",
     botBlue: "#3d81f5",
-    cool: "#905de3"
+    cool: "#905de3",
+    logs: "#f5d765"
 }
 
 client.server = {

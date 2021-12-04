@@ -1,12 +1,12 @@
 const warnModel = require("../../models/Punishments.js")
-const { Message, MessageEmbed } = require('discord.js')
+const { Message, MessageEmbed, MessageActionRow, MessageButton } = require('discord.js')
 
 module.exports = {
-    name : 'delwarn',
-    category : 'moderation',
-    description : `Clear member's warn`,
-    usage:'[warn ID]',
-    aliases : ['delwarn', 'deletewarn', 'delete-warn', 'rmpunish', 'rmpunishment'],
+    name: 'delwarn',
+    category: 'moderation',
+    description: `Clear member's warn`,
+    usage: '[warn ID]',
+    aliases: ['delwarn', 'deletewarn', 'delete-warn', 'rmpunish', 'rmpunishment'],
     cooldown: 10000,
     userPermissions: ["ADMINISTRATOR"],
 
@@ -15,31 +15,59 @@ module.exports = {
      * @param {Message} message
      * @param {String[]} args
      */
-    run : async(client, message, args, missingpartembed, modlog) => {
+    run: async (client, message, args, missingpartembed, modlog) => {
 
         const warnId = args[0]
 
-        if(!warnId) return message.reply({ embeds: [missingpartembed]})
-        const data = await warnModel.findById(warnId).catch(e => { return })
-        if(!data) return message.reply("The warn ID is not valid.")
-        data.delete()
- 
-        const user = message.guild.members.cache.get(data.userId) || "The user has left the server!"
-        const embed = new MessageEmbed()
-         .setDescription(`Removed the punishment with the ID \`${warnId}\`\n From the user: ${user}`)
-         .setColor(`${client.embedColor.moderation}`)
-        message.channel.send({ embeds: [embed]}).then(message.delete())
- 
-        let log = new MessageEmbed()
-        .setAuthor(`Action: Remove Punishment`, message.guild.iconURL({ dynamic: true }))
-        .setDescription(`[**Click here to jump to the message**](https://discord.com/channels/${message.guild.id}/${message.channel.id}/${message.id})`)
-        .setColor(`${client.embedColor.logGreen}`)
-        .addField('Member Info', `● ${user.user}\n> __Tag:__ ${user.user.tag}\n> __ID:__ ${user.user.id}`, true)
-        .addField("Mod Info", `● ${message.member.user}\n> __Tag:__ ${message.member.user.tag}\n> __ID:__ ${message.member.user.id}`, true)
-        .addField("● Punishment Info", `> Warn ID: ${warnId}.\n`, false)
-        .setTimestamp()
- 
-        modlog.send({ embeds: [log]})
+        if (!warnId) return message.reply({ embeds: [missingpartembed] })
+
+        try {
+
+            const data = await warnModel.findById(`${warnId}`)
+            data.delete()
+
+            const user = await client.users.fetch(`${data?.userId}`) || "Can't find user!"
+
+            let embed = new MessageEmbed().setDescription(`➜ **From** • ${user?.tag}\n➜  **Type** • ${data.type}\n➜ **ID** • \`${data._id}\``)
+                .setColor(`${client.embedColor.moderation}`)
+                .setAuthor("Punishment has been removed")
+                .setTimestamp()
+
+            await message.delete()
+            let msg = await message.channel.send({ embeds: [embed] })
+
+            let log = new MessageEmbed()
+                .setAuthor(`Moderation • Punishment Remove`, message.guild.iconURL({ dynamic: true }))
+                .setDescription(`** **`)
+                .setColor(`${client.embedColor.logs}`)
+                .addField('👥 User', `Mention • ${user}\nTag • ${user.tag}\nID • ${user.id}`, true)
+                .addField("<:NUhmod:910882014582951946> Moderator", `Mention • ${message.author}\nTag • ${message.author.tag}\nID • ${message.author.id}`, true)
+                .addField("Punishment ID", `\`${data._id}\``)
+                .setTimestamp()
+
+            const rowlog = new MessageActionRow().addComponents(
+
+                new MessageButton()
+                    .setLabel("Jump to the action")
+                    .setStyle("LINK")
+                    .setURL(`https://discord.com/channels/${msg.guild.id}/${msg.channel.id}/${msg.id}`)
+
+            )
+
+            modlog.send({ embeds: [log], components: [rowlog] })
+
+        } catch (error) {
+
+            const embed = new MessageEmbed().setDescription(`A punishment with that ID doesn't exist in the database!`).setColor(`RED`)
+            return message.reply({ embeds: [embed] }).then((msg) => {
+                setTimeout(() => {
+                    msg?.delete()
+                    message?.delete()
+                }, 5000)
+            })
+
+        }
+
 
     }
 }

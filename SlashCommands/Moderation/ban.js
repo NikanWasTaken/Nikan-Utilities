@@ -1,4 +1,4 @@
-const { Client, CommandInteraction, MessageEmbed } = require("discord.js");
+const { Client, CommandInteraction, MessageEmbed, MessageActionRow, MessageButton } = require("discord.js");
 const warnModel = require("../../models/Punishments.js")
 
 
@@ -17,13 +17,19 @@ module.exports = {
         {
           name: "user",
           description: "The user you want to ban!",
-          required: true,
+          required: false,
           type: "USER",
+        },
+        {
+          name: "user-id",
+          description: "The user ID you want to ban! *Fill this if the user is not in this server!*",
+          required: false,
+          type: "STRING"
         },
         {
           name: "reason",
           description: "The reason of this ban!",
-          required: true,
+          required: false,
           type: "STRING",
         }
       ]
@@ -66,10 +72,68 @@ module.exports = {
       let user = interaction.options.getMember("user")
       var reason = interaction.options.getString("reason") || "No reason provided"
 
-      let xxpermuser = new MessageEmbed().setDescription(`${client.botEmoji.failed} You can't ban that user as they are mod/admin.`).setColor(`${client.embedColor.failed}`)
-      let xxpermbot = new MessageEmbed().setDescription(`${client.botEmoji.failed} I can't ban that user as their roles are higher then me.`).setColor(`${client.embedColor.failed}`)
-      if (user.roles.highest.position >= interaction.guild.me.roles.highest.position) return interaction.followUp({ embeds: [xxpermbot] })
-      if (user.roles.highest.position >= interaction.member.roles.highest.position) return interaction.followUp({ embeds: [xxpermuser] })
+      if (!user) {
+
+        try {
+
+          const userstring = interaction.options.getString("user-id")
+          const user2 = await interaction.guild.members.ban(`${userstring}`, { reason: reason })
+
+          const data = new warnModel({
+            type: "Ban",
+            userId: user2?.id,
+            guildId: interaction.guildId,
+            moderatorId: interaction.user.id,
+            reason,
+            timestamp: Date.now(),
+          })
+          data.save()
+
+          var hmm = new MessageEmbed()
+            .setDescription(`**${user2?.tag}** has been **banned** | \`${data._id}\``).setColor(`${client.embedColor.moderationRed}`)
+          await interaction.deleteReply()
+          let msg = await interaction.channel.send({ embeds: [hmm] })
+
+          let log = new MessageEmbed()
+            .setAuthor(`Moderation • Ban`, interaction.guild.iconURL({ dynamic: true }))
+            .setDescription(`** **`)
+            .setColor(`${client.embedColor.logs}`)
+            .addField('👥 User', `Mention • ${user2}\nTag • ${user2?.tag}\nID • ${user2?.id}`, true)
+            .addField("<:NUhmod:910882014582951946> Moderator", `Mention • ${interaction.user}\nTag • ${interaction.user.tag}\nID • ${interaction.user.id}`, true)
+            .addField("Punishment ID", `\`${data._id}\``)
+            .addField("Reason", `${reason}`)
+            .setTimestamp()
+
+          const row = new MessageActionRow().addComponents(
+
+            new MessageButton()
+              .setLabel("Jump to the action")
+              .setStyle("LINK")
+              .setURL(`https://discord.com/channels/${msg.guild.id}/${msg.channel.id}/${msg.id}`)
+
+          )
+
+          modlog.send({ embeds: [log], components: [row] })
+
+        } catch (error) {
+
+          const embed = new MessageEmbed().setDescription(`This user doesn't exist!`).setColor(`${client.embedColor.moderationRed}`)
+          interaction.followUp({ embeds: [embed] }).then((msg) => {
+            setTimeout(() => {
+              interaction.deleteReply()
+            }, 5000)
+          })
+
+        }
+
+      }
+
+      const failed = new MessageEmbed().setDescription(`You don't have permissions to perform that action!`).setColor("RED")
+
+      if (user.roles.highest.position >= interaction.guild.me.roles.highest.position ||
+        user.roles.highest.position >= interaction.member.roles.highest.position ||
+        user.user.id === client.config.owner
+      ) return interaction.followUp({ embeds: [failed] })
 
 
       const data = new warnModel({
@@ -84,43 +148,69 @@ module.exports = {
 
       var hmm = new MessageEmbed()
         .setDescription(`${user.user} has been **banned** | \`${data._id}\``).setColor(`${client.embedColor.moderationRed}`)
-      interaction.followUp({ embeds: [hmm] })
+      await interaction.deleteReply()
+      let msg = await interaction.channel.send({ embeds: [hmm] })
+
+      const row1 = new MessageActionRow().addComponents(
+
+        new MessageButton()
+          .setLabel("Appeal")
+          .setStyle("LINK")
+          .setURL(`https://forms.gle/dW8RGLA65ycC4vcM7`)
+
+      )
 
       var dmyes = new MessageEmbed()
         .setAuthor(client.user.username, client.user.displayAvatarURL({ dynamic: true }))
         .setTitle(`You've been banned from ${interaction.guild.name}`)
         .setColor(`${client.embedColor.modDm}`)
-        .setDescription(`You can appeal this ban by clicking [here](https://forms.gle/dW8RGLA65ycC4vcM7).`)
         .setTimestamp()
-        .setFooter(`Server ID: ${interaction.guild.id}`)
-        .addField("Punishment ID", `${data._id}`, true)
+        .addField("Punishment ID", `\`${data._id}\``, true)
         .addField("Reason", reason, false)
-      user.send({ embeds: [dmyes] }).catch(e => { return })
+      user.send({ embeds: [dmyes], components: [row1] }).catch(e => { return })
 
       user.ban({
         reason: reason,
       })
 
       let log = new MessageEmbed()
-        .setAuthor(`Action: Ban`, interaction.guild.iconURL({ dynamic: true }))
-        .setDescription(`[**Click here to jump to the interaction**](https://discord.com/channels/${interaction.guild.id}/${interaction.channel.id}/${interaction.id})`)
-        .setColor(`${client.embedColor.logRed}`)
-        .addField('Member Info', `● ${user.user}\n> __Tag:__ ${user.user.tag}\n> __ID:__ ${user.user.id}`, true)
-        .addField("Mod Info", `● ${interaction.member.user}\n> __Tag:__ ${interaction.member.user.tag}\n> __ID:__ ${interaction.member.user.id}`, true)
-        .addField("● Ban Info", `> Reason: ${reason}\n> Punishment ID: ${data._id}`, false)
+        .setAuthor(`Moderation • Ban`, interaction.guild.iconURL({ dynamic: true }))
+        .setDescription(`** **`)
+        .setColor(`${client.embedColor.logs}`)
+        .addField('👥 User', `Mention • ${user.user}\nTag • ${user.user.tag}\nID • ${user.user.id}`, true)
+        .addField("<:NUhmod:910882014582951946> Moderator", `Mention • ${interaction.user}\nTag • ${interaction.user.tag}\nID • ${interaction.user.id}`, true)
+        .addField("Punishment ID", `\`${data._id}\``)
+        .addField("Reason", `${reason}`)
         .setTimestamp()
 
-      modlog.send({ embeds: [log] })
+      const row2 = new MessageActionRow().addComponents(
+
+        new MessageButton()
+          .setLabel("Jump to the action")
+          .setStyle("LINK")
+          .setURL(`https://discord.com/channels/${msg.guild.id}/${msg.channel.id}/${msg.id}`)
+
+      )
+
+      modlog.send({ embeds: [log], components: [row2] })
 
     } else if (subs == "remove") {
 
       let userID = interaction.options.getString("user-id")
       let reason = interaction.options.getString("reason") || "No reason provided"
 
-      interaction.guild.bans.fetch().then(bans => {
+      interaction.guild.bans.fetch().then(async (bans) => {
         let BannedUser = bans.find(b => b.user.id == userID)
 
-        if (!BannedUser) return interaction.followUp("Couldn't find that user in server's banned members!")
+        const nomemberfound = new MessageEmbed().setDescription(`This user is not banned from the server!`).setColor(`RED`)
+
+        if (!BannedUser) return
+        interaction.followUp({ embeds: [nomemberfound] }).then(async (msg) => {
+          setTimeout(() => {
+            interaction.deleteReply()
+          }, 5000)
+        })
+
         interaction.guild.members.unban(BannedUser.user)
 
         const data = new warnModel({
@@ -136,18 +226,32 @@ module.exports = {
         var pop = new MessageEmbed()
           .setDescription(`**${BannedUser.user.tag}** has been **unbanned** | \`${data._id}\``)
           .setColor(`${client.embedColor.moderation}`)
-        interaction.followUp({ embeds: [pop] })
+        await interaction.deleteReply()
+        let msg = await interaction.channel.send({ embeds: [pop] })
 
 
 
         let log = new MessageEmbed()
-          .setAuthor(`Action: Unban`, interaction.guild.iconURL({ dynamic: true }))
-          .setDescription(`[**Click here to jump to the interaction**](https://discord.com/channels/${interaction.guild.id}/${interaction.channel.id}/${interaction.id})`)
-          .setColor("#BFFF00")
-          .addField('Unbanned Member Info', `● ${BannedUser.user}\n> __Tag:__ ${BannedUser.user.tag}\n> __ID:__ ${BannedUser.user.id}`, true)
-          .addField("Mod Info", `● ${interaction.member.user}\n> __Tag:__ ${interaction.member.user.tag}\n> __ID:__ ${interaction.member.user.id}`, true)
+          .setAuthor(`Moderation • Unban`, interaction.guild.iconURL({ dynamic: true }))
+          .setDescription(`** **`)
+          .setColor(`${client.embedColor.logs}`)
+          .addField('👥 User', `Mention • ${user.user}\nTag • ${user.user.tag}\nID • ${user.user.id}`, true)
+          .addField("<:NUhmod:910882014582951946> Moderator", `Mention • ${interaction.user}\nTag • ${interaction.user.tag}\nID • ${interaction.user.id}`, true)
+          .addField("Punishment ID", `\`${data._id}\``)
+          .addField("Reason", `${reason}`)
           .setTimestamp()
-        modlog.send({ embeds: [log] })
+
+        const row = new MessageActionRow().addComponents(
+
+          new MessageButton()
+            .setLabel("Jump to the action")
+            .setStyle("LINK")
+            .setURL(`https://discord.com/channels/${msg.guild.id}/${msg.channel.id}/${msg.id}`)
+
+        )
+
+        modlog.send({ embeds: [log], components: [row] })
+
 
       })
 

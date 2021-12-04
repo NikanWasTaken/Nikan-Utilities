@@ -360,26 +360,53 @@ module.exports = {
             if (!interaction.member.permissions.has("BAN_MEMBERS")) return interaction.followUp({ embeds: [nopermsmh] })
 
             const warnId = interaction.options.getString("warn-id")
-            const data = await warnModel.findById(warnId).catch(e => { return })
-            if (!data) return interaction.followUp("The warn ID is not valid.")
-            data.delete()
+            const data = await warnModel.findById(warnId)
 
-            const user = interaction.guild.members.cache.get(data.userId) || "User not found!"
-            const embed = new MessageEmbed()
-                .setDescription(`Removed the punishment with the ID \`${warnId}\`\n From the user: ${user.user}`)
-                .setColor(`${client.embedColor.moderation}`)
-            interaction.followUp({ embeds: [embed] })
+            try {
 
-            let log = new MessageEmbed()
-                .setAuthor(`Action: Remove Punishment`, interaction.guild.iconURL({ dynamic: true }))
-                .setDescription(`[**Click here to jump to the interaction**](https://discord.com/channels/${interaction.guild.id}/${interaction.channel.id}/${interaction.id})`)
-                .setColor(`${client.embedColor.logGreen}`)
-                .addField('Member Info', `● ${user.user}\n> __Tag:__ ${user.user.tag}\n> __ID:__ ${user.user.id}`, true)
-                .addField("Mod Info", `● ${interaction.member.user}\n> __Tag:__ ${interaction.member.user.tag}\n> __ID:__ ${interaction.member.user.id}`, true)
-                .addField("● Punishment Info", `> Warn ID: ${warnId}.\n`, false)
-                .setTimestamp()
+                const data = await warnModel.findById(`${warnId}`)
+                data.delete()
 
-            modlog.send({ embeds: [log] })
+                const user = await client.users.fetch(`${data?.userId}`) || "Can't find user!"
+
+                let embed = new MessageEmbed().setDescription(`➜ **From** • ${user?.tag}\n➜  **Type** • ${data.type}\n➜ **ID** • \`${data._id}\``)
+                    .setColor(`${client.embedColor.moderation}`)
+                    .setAuthor("Punishment has been removed")
+                    .setTimestamp()
+
+                await interaction.deleteReply()
+                let msg = await interaction.channel.send({ embeds: [embed] })
+
+                let log = new MessageEmbed()
+                    .setAuthor(`Moderation • Punishment Remove`, interaction.guild.iconURL({ dynamic: true }))
+                    .setDescription(`** **`)
+                    .setColor(`${client.embedColor.logs}`)
+                    .addField('👥 User', `Mention • ${user}\nTag • ${user.tag}\nID • ${user.id}`, true)
+                    .addField("<:NUhmod:910882014582951946> Moderator", `Mention • ${interaction.user}\nTag • ${interaction.user.tag}\nID • ${interaction.user.id}`, true)
+                    .addField("Punishment ID", `\`${data._id}\``)
+                    .setTimestamp()
+
+                const rowlog = new MessageActionRow().addComponents(
+
+                    new MessageButton()
+                        .setLabel("Jump to the action")
+                        .setStyle("LINK")
+                        .setURL(`https://discord.com/channels/${msg.guild.id}/${msg.channel.id}/${msg.id}`)
+
+                )
+
+                modlog.send({ embeds: [log], components: [rowlog] })
+
+            } catch (error) {
+
+                const embed = new MessageEmbed().setDescription(`A punishment with that ID doesn't exist in the database!`).setColor(`RED`)
+                return interaction.followUp({ embeds: [embed] }).then((msg) => {
+                    setTimeout(() => {
+                        interaction.deleteReply()
+                    }, 5000)
+                })
+
+            }
 
         } else if (subs == "list") {
 
@@ -406,9 +433,10 @@ module.exports = {
                         );
 
                         return [
-                            `\`${i + 1}\`. **${warn.type}** | \`${warn._id}\``,
+                            `\`${i + 1}\`. **${warn.type}** | **ID:** \`${warn._id}\``,
                             `> Date: <t:${~~(warn.timestamp / 1000)}:f>`,
                             `> Moderator: ${moderator ? moderator.user.tag : "Moderator has left!"}`,
+                            `> Expires In: ${warn.expires ? `<t:${~~(warn.expires / 1000)}:R>` : "Will not expire"}`,
                             `> Reason: ${warn.reason}`,
                         ].join("\n");
                     }).join("\n\n");
@@ -440,9 +468,9 @@ module.exports = {
                         );
 
                         return [
-                            `\`${i + 1}\`. **${warn.type}** | \`${warn._id}\``,
+                            `\`${i + 1}\`. **${warn.type}** | **ID:** \`${warn._id}\``,
                             `> Date: <t:${~~(warn.timestamp / 1000)}:f>`,
-                            `> Moderator: Hidden`,
+                            `> Expires In: ${warn.expires ? `<t:${~~(warn.expires / 1000)}:R>` : "Will not expire"}`,
                             `> Reason: ${warn.reason}`,
                         ].join("\n");
                     }).join("\n\n");
@@ -475,9 +503,9 @@ module.exports = {
                     const embedDescription = userWarnings.map((warn, i) => {
 
                         return [
-                            `\`${i + 1}\`. **${warn.type}** | \`${warn._id}\``,
+                            `\`${i + 1}\`. **${warn.type}** | **ID:** \`${warn._id}\``,
                             `> Date: <t:${~~(warn.date / 1000)}:f>`,
-                            `> Moderator: Auto Moderation`,
+                            `> Expires In: ${warn.expires ? `<t:${~~(warn.expires / 1000)}:R>` : "Will not expire"}`,
                             `> Reason: ${warn.reason}`,
                         ].join("\n");
                     }).join("\n\n");
@@ -506,9 +534,9 @@ module.exports = {
                     const embedDescription = userWarnings.map((warn, i) => {
 
                         return [
-                            `\`${i + 1}\`. **${warn.type}** | \`${warn._id}\``,
+                            `\`${i + 1}\`. **${warn.type}** | **ID:** \`${warn._id}\``,
                             `> Date: <t:${~~(warn.date / 1000)}:f>`,
-                            `> Moderator: Auto Moderation`,
+                            `> Expires In: ${warn.expires ? `<t:${~~(warn.expires / 1000)}:R>` : "Will not expire"}`,
                             `> Reason: ${warn.reason}`,
                         ].join("\n");
                     }).join("\n\n");
