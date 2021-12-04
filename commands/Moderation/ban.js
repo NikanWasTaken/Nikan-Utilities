@@ -50,7 +50,7 @@ module.exports = {
           .setColor(`${client.embedColor.logs}`)
           .addField('👥 User', `Mention • ${user2}\nTag • ${user2?.tag}\nID • ${user2?.id}`, true)
           .addField("<:NUhmod:910882014582951946> Moderator", `Mention • ${message.author}\nTag • ${message.author.tag}\nID • ${message.author.id}`, true)
-          .addField("Punishment ID", `\`${data._id}\``)
+          .addField("Punishment ID", `${data._id}`)
           .addField("Reason", `${reason}`)
           .setTimestamp()
 
@@ -117,11 +117,11 @@ module.exports = {
       )
 
       var dmyes = new MessageEmbed()
-        .setAuthor(client.user.username, client.user.displayAvatarURL({ dynamic: true }))
+        .setAuthor(`${client.user.username}`, client.user.displayAvatarURL({ dynamic: true }))
         .setTitle(`You've been banned from ${message.guild.name}`)
         .setColor(`${client.embedColor.modDm}`)
         .setTimestamp()
-        .addField("Punishment ID", `\`${data._id}\``, true)
+        .addField("Punishment ID", `${data._id}`, true)
         .addField("Reason", reason, false)
       user.send({ embeds: [dmyes], components: [row2] }).catch(e => { return })
 
@@ -135,7 +135,7 @@ module.exports = {
         .setColor(`${client.embedColor.logs}`)
         .addField('👥 User', `Mention • ${user.user}\nTag • ${user.user.tag}\nID • ${user.user.id}`, true)
         .addField("<:NUhmod:910882014582951946> Moderator", `Mention • ${message.author}\nTag • ${message.author.tag}\nID • ${message.author.id}`, true)
-        .addField("Punishment ID", `\`${data._id}\``)
+        .addField("Punishment ID", `${data._id}`)
         .addField("Reason", `${reason}`)
         .setTimestamp()
 

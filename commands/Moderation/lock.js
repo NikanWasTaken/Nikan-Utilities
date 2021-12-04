@@ -1,4 +1,4 @@
-const { MessageEmbed } = require('discord.js')
+const { MessageEmbed, MessageButton, MessageActionRow } = require('discord.js')
 
 module.exports = {
   name: 'lock',
@@ -17,7 +17,6 @@ module.exports = {
   run: async (client, message, args, missingpartembed, modlog) => {
 
     var reason = args.slice(1).join(" ")
-
 
     if (!args[0]) return message.reply({ embeds: [missingpartembed] })
 
@@ -43,7 +42,7 @@ module.exports = {
 
       var hii = new MessageEmbed()
         .setAuthor("Server Locked", client.user.displayAvatarURL({ dynamic: true }))
-        .setDescription("This server has been locked by a staff member. You are not muted.\nMore information will be sent here eventually.")
+        .setDescription("__**You're not muted!**__\nThe server has been locked by a staff memeber, more information will be sent here!")
         .setColor(`${client.embedColor.moderation}`)
         .setTimestamp()
         .addFields({
@@ -54,14 +53,23 @@ module.exports = {
       message.guild.channels.cache.get("782837655082631229").send({ embeds: [hii] })
 
       let log = new MessageEmbed()
-        .setAuthor(`Action: Server Lock`, message.guild.iconURL({ dynamic: true }))
-        .setDescription(`[**Click here to jump to the message**](https://discord.com/channels/${message.guild.id}/${message.channel.id}/${message.id})`)
-        .setColor(`${client.embedColor.logYellow}`)
-        .addField('Channel Info', `● ${message.guild.name}\n> All the channnels\n> Lockdown`, true)
-        .addField("Mod Info", `● ${message.author}\n> __Tag:__ ${message.author.tag}\n> __ID:__ ${message.author.id}`, true)
-        .addField("● Lockdown Info", `> Reason: ${reason}`)
+        .setAuthor(`Moderation • Lockdown`, message.guild.iconURL({ dynamic: true }))
+        .setDescription(`** **`)
+        .setColor(`${client.embedColor.logs}`)
+        .addField("<:NUhmod:910882014582951946> Moderator", `Mention • ${message.author}\nTag • ${message.author.tag}\nID • ${message.author.id}`, true)
+        .addField("Reason", `${reason}`)
         .setTimestamp()
-      modlog.send({ embeds: [log] })
+
+      const rowlog = new MessageActionRow().addComponents(
+
+        new MessageButton()
+          .setLabel("Jump to the action")
+          .setStyle("LINK")
+          .setURL(`https://discord.com/channels/${msg.guild.id}/${msg.channel.id}/${msg.id}`)
+
+      )
+
+      modlog.send({ embeds: [log], components: [rowlog] })
 
 
 
@@ -71,25 +79,31 @@ module.exports = {
 
       if (channel.type === "GUILD_VOICE") {
 
-        var hoy = new MessageEmbed()
-          .setDescription(`${client.botEmoji.success} Locked the voice channel ${channel} for the reason: ${reason}`)
-          .setColor(`${client.embedColor.success}`)
-
-        message.reply({ embeds: [hoy] })
+        let msg = await message.reply({ content: "Channel Locked!" })
 
         channel.permissionOverwrites.edit(message.guild.roles.everyone, {
           CONNECT: false
         });
 
         let log = new MessageEmbed()
-          .setAuthor(`Action: Channel Lock`, message.guild.iconURL({ dynamic: true }))
-          .setDescription(`[**Click here to jump to the message**](https://discord.com/channels/${message.guild.id}/${message.channel.id}/${message.id})`)
-          .setColor(`${client.embedColor.logYellow}`)
-          .addField('Channel Info', `● ${channel}\n> __Name:__ ${channel.name}\n> __ID:__ ${channel.id}`, true)
-          .addField("Mod Info", `● ${message.author}\n> __Tag:__ ${message.author.tag}\n> __ID:__ ${message.author.id}`, true)
-          .addField("● Lock Info", `> Reason: ${reason}`)
+          .setAuthor(`Moderation • Channel Lock`, message.guild.iconURL({ dynamic: true }))
+          .setDescription(`** **`)
+          .setColor(`${client.embedColor.logs}`)
+          .addField("<:NUhmod:910882014582951946> Moderator", `Mention • ${message.author}\nTag • ${message.author.tag}\nID • ${message.author.id}`, true)
+          .addField("🔇 Channel", `Mention • ${channel}\nID • ${channel.id}`)
+          .addField("Reason", `${reason}`)
           .setTimestamp()
-        modlog.send({ embeds: [log] })
+
+        const rowlog = new MessageActionRow().addComponents(
+
+          new MessageButton()
+            .setLabel("Jump to the action")
+            .setStyle("LINK")
+            .setURL(`https://discord.com/channels/${msg.guild.id}/${msg.channel.id}/${msg.id}`)
+
+        )
+
+        modlog.send({ embeds: [log], components: [rowlog] })
 
       } else {
 
@@ -101,7 +115,7 @@ module.exports = {
           SEND_MESSAGES: false
         });
 
-        await msg.edit({ content: "Channel Locked! "})
+        await msg.edit({ content: "Channel Locked! " })
 
         var hii = new MessageEmbed()
           .setAuthor("Channel Locked", client.user.displayAvatarURL({ dynamic: true }))
@@ -113,18 +127,27 @@ module.exports = {
             value: reason
           })
 
-        channel.send({ embeds: [hii] })
-
+        let msg2 = channel.send({ embeds: [hii] })
 
         let log = new MessageEmbed()
-          .setAuthor(`Action: Channel Lock`, message.guild.iconURL({ dynamic: true }))
-          .setDescription(`[**Click here to jump to the message**](https://discord.com/channels/${message.guild.id}/${message.channel.id}/${message.id})`)
-          .setColor(`${client.embedColor.logYellow}`)
-          .addField('Channel Info', `● ${channel}\n> __Name:__ ${channel.name}\n> __ID:__ ${channel.id}`, true)
-          .addField("Mod Info", `● ${message.author}\n> __Tag:__ ${message.author.tag}\n> __ID:__ ${message.author.id}`, true)
-          .addField("● Lock Info", `> Reason: ${reason}`)
+          .setAuthor(`Moderation • Channel Lock`, message.guild.iconURL({ dynamic: true }))
+          .setDescription(`** **`)
+          .setColor(`${client.embedColor.logs}`)
+          .addField("<:NUhmod:910882014582951946> Moderator", `Mention • ${message.author}\nTag • ${message.author.tag}\nID • ${message.author.id}`, true)
+          .addField("🔕 Channel", `Mention • ${channel}\nID • ${channel.id}`)
+          .addField("Reason", `${reason}`)
           .setTimestamp()
-        modlog.send({ embeds: [log] })
+
+        const rowlog = new MessageActionRow().addComponents(
+
+          new MessageButton()
+            .setLabel("Jump to the action")
+            .setStyle("LINK")
+            .setURL(`https://discord.com/channels/${msg2.guild.id}/${msg2.channel.id}/${msg2.id}`)
+
+        )
+
+        modlog.send({ embeds: [log], components: [rowlog] })
 
       }
 
