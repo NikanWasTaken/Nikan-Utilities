@@ -72,6 +72,7 @@ client.slashCommands = new Collection();
 client.snipes = new Collection();
 client.afk = new Collection()
 client.config = require("./config.json");
+client.warncooldown = new Collection();
 // client.player = player;
 
 // Initializing the project

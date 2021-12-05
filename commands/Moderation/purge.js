@@ -22,13 +22,23 @@ module.exports = {
 
     if (!clear) return message.reply({ embeds: [missingpartembed] })
 
-    let heh = new MessageEmbed().setDescription(`${client.botEmoji.failed} You need to provide a number between 1 and 100 to purge.`).setColor(`${client.embedColor.failed}`)
-    if (isNaN(clear) || clear > 100 || clear < 1) return message.reply({ embeds: [heh] })
+    let heh = new MessageEmbed().setDescription(`You need to provide a number between 1 and 100 to purge.`).setColor(`RED`)
+    if (isNaN(clear) || clear > 100 || clear < 1) return message.reply({ embeds: [heh] }).then((msg) => {
+      setTimeout(() => {
+        msg?.delete()
+        message?.delete()
+      }, 5000)
+    })
 
     if (args[1]) {
 
-      const nouser = new MessageEmbed().setDescription(`Unable to find the user: \`${args[1]}\``).setColor(`${client.embedColor.moderationRed}`)
-      if (!user) return message.reply({ embeds: [nouser] })
+      const nouser = new MessageEmbed().setDescription(`I couldn't find that user!`).setColor("RED")
+      if (!user) return message.reply({ embeds: [nouser] }).then((msg) => {
+        setTimeout(() => {
+          msg?.delete()
+          message?.delete()
+        }, 5000)
+      })
 
       const messages = message.channel.messages.fetch({ limit: clear })
       const filtered = (await messages).filter(m => m.author.id === user.user.id)
@@ -39,21 +49,10 @@ module.exports = {
         .setDescription(`Cleared \`${clear}\` messages from \`${user.user.tag}\``)
         .setColor(`${client.embedColor.moderation}`)
 
-      let msglink = await message.channel.send({ embeds: [embeda] }).then((msg) => { setTimeout(() => { msg.delete(), message.delete() }, 5000) })
-
-      let log = new MessageEmbed()
-        .setAuthor(`Action: Purge`, message.guild.iconURL({ dynamic: true }))
-        .setColor(`${client.embedColor.logAqua}`)
-        .addField('Channel Info', `● ${msglink.channel}\n> __Name:__ ${msglink.channel.name}\n> __ID:__ ${msglink.channel.id}`, true)
-        .addField("Mod Info", `● ${message.author}\n> __Tag:__ ${message.author.tag}\n> __ID:__ ${message.author.id}`, true)
-        .addField("● Purge Info", `> Number of messages: **${clear}**\n> From the user: ${user.user}`)
-        .setTimestamp()
-
-      modlog.send({ embeds: [log] })
+      message.channel.send({ embeds: [embeda] }).then((msg) => { setTimeout(() => { msg.delete(), message.delete() }, 5000) })
 
 
     } else if (!args[1]) {
-
 
 
       let msgs = message.channel.messages.fetch({ limit: clear })
@@ -63,17 +62,8 @@ module.exports = {
         .setDescription(`Cleared ${clear} messages in ${message.channel}.`)
         .setColor(`${client.embedColor.moderation}`)
 
-      let msglink = await message.channel.send({ embeds: [embeda] }).then((msg) => { setTimeout(() => { msg.delete(), message.delete() }, 5000) })
+      message.channel.send({ embeds: [embeda] }).then((msg) => { setTimeout(() => { msg.delete(), message.delete() }, 5000) })
 
-      let log = new MessageEmbed()
-        .setAuthor(`Action: Purge`, message.guild.iconURL({ dynamic: true }))
-        .setColor(`${client.embedColor.logAqua}`)
-        .addField('Channel Info', `● ${msglink.channel}\n> __Name:__ ${msglink.channel.name}\n> __ID:__ ${msglink.channel.id}`, true)
-        .addField("Mod Info", `● ${message.author}\n> __Tag:__ ${message.author.tag}\n> __ID:__ ${message.author.id}`, true)
-        .addField("● Purge Info", `> Number of messages: **${clear}**`)
-        .setTimestamp()
-
-      modlog.send({ embeds: [log] })
 
     }
 

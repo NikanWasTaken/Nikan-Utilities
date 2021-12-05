@@ -101,19 +101,43 @@ module.exports = {
     run: async (client, interaction, args, modlog) => {
 
         const subs = interaction.options.getSubcommand(["add", "remove", "list", "info"])
-        const nopermsmh = new MessageEmbed().setDescription("You don't have permissions to permit this command!").setColor(`${client.embedColor.moderationRed}`)
+        const nopermsmh = new MessageEmbed().setDescription("You don't have permissions to use this command!").setColor(`${client.embedColor.moderationRed}`)
 
         if (subs == "add") {
 
             const user = interaction.options.getMember("user")
             const reason = interaction.options.getString("reason")
 
-            if (!interaction.member.permissions.has("BAN_MEMBERS")) return interaction.followUp({ embeds: [nopermsmh] })
+            if (!interaction.member.permissions.has("BAN_MEMBERS")) return interaction.followUp({ embeds: [nopermsmh] }).then((msg) => {
+                setTimeout(() => {
+                    interaction.deleteReply()
+                }, 5000)
+            })
 
-            let xxpermuser = new MessageEmbed().setDescription(`${client.botEmoji.failed} You can't warn that user as they are mod/admin.`).setColor(`${client.embedColor.failed}`)
-            let xxpermbot = new MessageEmbed().setDescription(`${client.botEmoji.failed} I can't warn that user as their roles are higher then me.`).setColor(`${client.embedColor.failed}`)
-            if (user.roles.highest.position >= interaction.guild.me.roles.highest.position) return interaction.followUp({ embeds: [xxpermbot] })
-            if (user.roles.highest.position >= interaction.member.roles.highest.position) return interaction.followUp({ embeds: [xxpermuser] })
+            const failed = new MessageEmbed().setDescription(`You don't have permissions to perform that action!`).setColor("RED")
+
+            if (user.roles.highest.position >= interaction.guild.me.roles.highest.position ||
+                user.roles.highest.position >= interaction.member.roles.highest.position ||
+                user.user.id === client.config.owner ||
+                user.user.bot)
+                return interaction.followUp({ embeds: [failed] }).then((msg) => {
+                    setTimeout(() => {
+                        interaction.deleteReply()
+                    }, 5000)
+                })
+
+            if (client.warncooldown.has(`${user.user.id}`)) {
+                const embed = new MessageEmbed()
+                    .setDescription("Whoops, looks like there is a double warning here!")
+                    .setColor("RED")
+
+                return interaction.followUp({ embeds: [embed] }).then((msg) => {
+                    setTimeout(() => {
+                        interaction.deleteReply()
+                    }, 5000)
+                })
+
+            }
 
             const data = new warnModel({
                 type: "Warn",
@@ -125,17 +149,6 @@ module.exports = {
                 expires: Date.now() + ms('4 weeks')
             })
             data.save();
-
-            let log = new MessageEmbed()
-                .setAuthor(`Action: Warn`, interaction.guild.iconURL({ dynamic: true }))
-                .setDescription(`[**Click here to jump to the interaction**](https://discord.com/channels/${interaction.guild.id}/${interaction.channel.id}/${interaction.id})`)
-                .setColor(`${client.embedColor.logYellow}`)
-                .addField('Member Info', `● ${user.user}\n> __Tag:__ ${user.user.tag}\n> __ID:__ ${user.user.id}`, true)
-                .addField("Mod Info", `● ${interaction.member.user}\n> __Tag:__ ${interaction.member.user.tag}\n> __ID:__ ${interaction.member.user.id}`, true)
-                .addField("● Warn Info", `\n> Reason: ${reason}\n> Warn ID: ${data._id}`, false)
-                .setTimestamp()
-
-            modlog.send({ embeds: [log] })
 
 
             let warndm = new MessageEmbed()
@@ -150,7 +163,36 @@ module.exports = {
             let warned = new MessageEmbed()
                 .setDescription(`${user} has been **warned** | \`${data._id}\``)
                 .setColor(`${client.embedColor.moderation}`)
-            interaction.followUp({ embeds: [warned] })
+            interaction.deleteReply()
+            let msg = await interaction.channel.send({ embeds: [warned] })
+
+            client.warncooldown.set(
+                `${user.user.id}`,
+            );
+            setTimeout(() => {
+                client.warncooldown.delete(`${user.user.id}`);
+            }, 5000);
+
+            let log = new MessageEmbed()
+                .setAuthor(`Moderation • Warn`, interaction.guild.iconURL({ dynamic: true }))
+                .setDescription(`** **`)
+                .setColor(`${client.embedColor.logs}`)
+                .addField('👥 User', `Mention • ${user.user}\nTag • ${user.user.tag}\nID • ${user.user.id}`, true)
+                .addField("<:NUhmod:910882014582951946> Moderator", `Mention • ${interaction.user}\nTag • ${interaction.user.tag}\nID • ${interaction.user.id}`, true)
+                .addField("Punishment ID", `${data._id}`)
+                .addField("Reason", `${reason}`)
+                .setTimestamp()
+
+            const rowlog = new MessageActionRow().addComponents(
+
+                new MessageButton()
+                    .setLabel("Jump to the action")
+                    .setStyle("LINK")
+                    .setURL(`https://discord.com/channels/${msg.guild.id}/${msg.channel.id}/${msg.id}`)
+
+            )
+
+            modlog.send({ embeds: [log], components: [rowlog] })
 
             // ---- checks for 3 stikes, 6 and 9 strikes...
 
@@ -172,7 +214,8 @@ module.exports = {
                 const data = new db({
                     guildid: interaction.guild.id,
                     user: user.user.id,
-                    content: [{ roles: user.roles.cache.map(role => role.id), reason: "Collecting the roles after reaching 2 strikes mute!" }]
+                    roles: [user.roles.cache.map(role => role.id)],
+                    reason: "Muted for reaching 2 strikes!"
                 })
                 data.save()
 
@@ -188,12 +231,7 @@ module.exports = {
 
                 data2.save()
 
-                user.roles.set(null).then(
-                    setTimeout(() => {
-                        user.roles.add("795353284042293319")
-                    }, 3000)
-                )
-
+                user.roles.set(["795353284042293319"])
 
                 let warndm = new MessageEmbed()
                     .setAuthor(client.user.username, client.user.displayAvatarURL({ dynamic: true }))
@@ -205,36 +243,38 @@ module.exports = {
                     .setTimestamp()
                 user.send({ embeds: [warndm] }).catch(e => { return })
 
-                let log = new MessageEmbed()
-                    .setAuthor(`Action: Mute`, interaction.guild.iconURL({ dynamic: true }))
-                    .setColor(`${client.embedColor.logYellow}`)
-                    .addField('Member Info', `● ${user.user}\n> __Tag:__ ${user.user.tag}\n> __ID:__ ${user.user.id}`, true)
-                    .addField("Mod Info", `● Auto`, true)
-                    .addField("● Warn Info", `\n> Reason: Reaching 2 strikes\n> Warn Id: ${data._id}`, false)
-                    .setTimestamp()
-
-                modlog.send({ embeds: [log] })
-
 
                 setTimeout(async () => {
 
-                    db.findOne({ guildid: interaction.guild.id, user: user.user.id }, async (err, data) => {
-                        if (err) throw err;
-                        if (data) {
-                            data.content.map((w, i) => user.roles.set(w.roles).then(user.roles.remove("795353284042293319")))
-                            await db.findOneAndDelete({ user: user.user.id, guildid: interaction.guild.id })
-                        }
-                    })
+                    const findmember = interaction.guild.members.cache.get(`${user.user.id}`)
 
-                    let log = new MessageEmbed()
-                        .setAuthor(`Action: Unmute`, interaction.guild.iconURL({ dynamic: true }))
-                        .setColor(`${client.embedColor.logYellow}`)
-                        .addField('Member Info', `● ${user.user}\n> __Tag:__ ${user.user.tag}\n> __ID:__ ${user.user.id}`, true)
-                        .addField("Mod Info", `● Auto`, true)
-                        .addField("● Mute Info", `\n> Reason: Reaching 2 strikes`, false)
-                        .setTimestamp()
+                    if (findmember) {
 
-                    modlog.send({ embeds: [log] })
+                        db.findOne({ guildid: interaction.guild.id, user: user.user.id }, async (err, data) => {
+                            if (err) throw err;
+                            if (data) {
+
+                                data.roles.map((w, i) => user.roles.set(w))
+                                await db.findOneAndDelete({ user: user.user.id, guildid: interaction.guild.id })
+
+                            }
+                        })
+
+
+                    } else if (!findmember) {
+
+                        const leftroles = require("../../models/LeftMembers.js")
+
+                        db.findOne({ guildid: interaction.guild.id, user: user.user.id }, async (err, data) => {
+                            if (err) throw err;
+                            if (data) {
+
+                                leftroles.findOneAndUpdate({ guildid: interaction.guild.id, user: `${user.user.id}` }, { $set: { roles: [data.roles.map(e => e)] } }, async (data, err) => { })
+                                await db.findOneAndDelete({ user: user.user.id, guildid: interaction.guild.id })
+
+                            }
+                        })
+                    }
 
                 }, 7200000) // 2 hours
 
@@ -243,7 +283,8 @@ module.exports = {
                 const data = new db({
                     guildid: interaction.guild.id,
                     user: user.user.id,
-                    content: [{ roles: user.roles.cache.map(role => role.id), reason: "Collecting the roles after reaching 4 strikes mute!" }]
+                    roles: [user.roles.cache.map(role => role.id)],
+                    reason: "Muted for reaching 4 strikes!"
                 })
                 data.save()
 
@@ -259,11 +300,7 @@ module.exports = {
 
                 data2.save()
 
-                user.roles.set(null).then(
-                    setTimeout(() => {
-                        user.roles.add("795353284042293319")
-                    }, 3000)
-                )
+                user.roles.set(["795353284042293319"])
 
 
                 let warndm = new MessageEmbed()
@@ -276,36 +313,38 @@ module.exports = {
                     .setTimestamp()
                 user.send({ embeds: [warndm] }).catch(e => { return })
 
-                let log = new MessageEmbed()
-                    .setAuthor(`Action: Mute`, interaction.guild.iconURL({ dynamic: true }))
-                    .setColor(`${client.embedColor.logYellow}`)
-                    .addField('Member Info', `● ${user.user}\n> __Tag:__ ${user.user.tag}\n> __ID:__ ${user.user.id}`, true)
-                    .addField("Mod Info", `● Auto`, true)
-                    .addField("● Warn Info", `\n> Reason: Reaching 4 strikes\n> Warn Id: ${data._id}`, false)
-                    .setTimestamp()
-
-                modlog.send({ embeds: [log] })
-
 
                 setTimeout(async () => {
 
-                    db.findOne({ guildid: interaction.guild.id, user: user.user.id }, async (err, data) => {
-                        if (err) throw err;
-                        if (data) {
-                            data.content.map((w, i) => user.roles.set(w.roles).then(user.roles.remove("795353284042293319")))
-                            await db.findOneAndDelete({ user: user.user.id, guildid: interaction.guild.id })
-                        }
-                    })
+                    const findmember = interaction.guild.members.cache.get(`${user.user.id}`)
 
-                    let log = new MessageEmbed()
-                        .setAuthor(`Action: Unmute`, interaction.guild.iconURL({ dynamic: true }))
-                        .setColor(`${client.embedColor.logYellow}`)
-                        .addField('Member Info', `● ${user.user}\n> __Tag:__ ${user.user.tag}\n> __ID:__ ${user.user.id}`, true)
-                        .addField("Mod Info", `● Auto`, true)
-                        .addField("● Mute Info", `\n> Reason: Reaching 4 strikes`, false)
-                        .setTimestamp()
+                    if (findmember) {
 
-                    modlog.send({ embeds: [log] })
+                        db.findOne({ guildid: interaction.guild.id, user: user.user.id }, async (err, data) => {
+                            if (err) throw err;
+                            if (data) {
+
+                                data.roles.map((w, i) => user.roles.set(w))
+                                await db.findOneAndDelete({ user: user.user.id, guildid: interaction.guild.id })
+
+                            }
+                        })
+
+
+                    } else if (!findmember) {
+
+                        const leftroles = require("../../models/LeftMembers.js")
+
+                        db.findOne({ guildid: interaction.guild.id, user: user.user.id }, async (err, data) => {
+                            if (err) throw err;
+                            if (data) {
+
+                                leftroles.findOneAndUpdate({ guildid: interaction.guild.id, user: `${user.user.id}` }, { $set: { roles: [data.roles.map(e => e)] } }, async (data, err) => { })
+                                await db.findOneAndDelete({ user: user.user.id, guildid: interaction.guild.id })
+
+                            }
+                        })
+                    }
 
                 }, 21600000) // 6 hours
 
@@ -334,17 +373,6 @@ module.exports = {
                     .setColor(`${client.embedColor.modDm}`)
                     .setTimestamp()
                 user.send({ embeds: [warndm] }).catch(e => { return })
-
-                let log = new MessageEmbed()
-                    .setAuthor(`Action: Ban`, interaction.guild.iconURL({ dynamic: true }))
-                    .setColor(`${client.embedColor.logYellow}`)
-                    .addField('Member Info', `● ${user.user}\n> __Tag:__ ${user.user.tag}\n> __ID:__ ${user.user.id}`, true)
-                    .addField("Mod Info", `● Auto`, true)
-                    .addField("● Punishment Info", `\n> Reason: Reaching 6 strikes\n> Punishment Id: ${data._id}`, false)
-                    .setTimestamp()
-
-                modlog.send({ embeds: [log] })
-
 
                 user.ban({
                     reason: "Reaching 6 stikes!"

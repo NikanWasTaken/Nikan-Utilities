@@ -35,8 +35,12 @@ module.exports = {
     var user = interaction.options.getMember("user")
 
 
-    let heh = new MessageEmbed().setDescription("You need to provide a number between 1 and 100 to purge.").setColor("RED")
-    if (!clear || isNaN(clear) || clear > 100 || clear < 1) return interaction.followUp({ embeds: [heh] })
+    let heh = new MessageEmbed().setDescription(`You need to provide a number between 1 and 100 to purge.`).setColor(`RED`)
+    if (isNaN(clear) || clear > 100 || clear < 1) return interaction.followUp({ embeds: [heh] }).then((msg) => {
+      setTimeout(() => {
+        interaction.deleteReply()
+      }, 5000)
+    })
 
 
     if (user) {
@@ -50,18 +54,7 @@ module.exports = {
         .setDescription(`Cleared \`${clear}\` messages from \`${user.user.tag}\``)
         .setColor(`${client.embedColor.moderation}`)
 
-      let msg = await interaction.channel.send({ embeds: [embeda] }).then((msg) => { setTimeout(() => { msg.delete(), message.delete() }, 5000) })
-
-      let log = new MessageEmbed()
-        .setAuthor(`Action: Purge`, interaction.guild.iconURL({ dynamic: true }))
-        .setDescription(`[**Click here to jump to the interaction**](https://discord.com/channels/${msg.guild.id}/${msg.channel.id}/${msg.id})`)
-        .setColor(`${client.embedColor.logAqua}`)
-        .addField('Channel Info', `● ${msg.channel}\n> __Name:__ ${msg.channel.name}\n> __ID:__ ${msg.channel.id}`, true)
-        .addField("Mod Info", `● ${interaction.member.user}\n> __Tag:__ ${interaction.member.user.tag}\n> __ID:__ ${interaction.member.user.id}`, true)
-        .addField("● Purge Info", `> Number of messages: **${clear}**\n> From the user: ${user.user}`)
-        .setTimestamp()
-
-      modlog.send({ embeds: [log] })
+      interaction.channel.send({ embeds: [embeda] }).then((msg) => { setTimeout(() => { msg.delete(), message.delete() }, 5000) })
 
 
     } else if (!user) {
@@ -73,18 +66,7 @@ module.exports = {
         .setDescription(`Cleared ${clear} messages in ${interaction.channel}`)
         .setColor(`${client.embedColor.moderation}`)
 
-      let msg = await interaction.channel.send({ embeds: [embeda] }).then((msg) => { setTimeout(() => { msg.delete(), message.delete() }, 5000) })
-
-      let log = new MessageEmbed()
-        .setAuthor(`Action: Purge`, interaction.guild.iconURL({ dynamic: true }))
-        .setDescription(`[**Click here to jump to the interaction**](https://discord.com/channels/${msg.guild.id}/${msg.channel.id}/${msg.id})`)
-        .setColor(`${client.embedColor.logAqua}`)
-        .addField('Channel Info', `● ${msg.channel}\n> __Name:__ ${msg.channel.name}\n> __ID:__ ${msg.channel.id}`, true)
-        .addField("Mod Info", `● ${interaction.member.user}\n> __Tag:__ ${interaction.member.user.tag}\n> __ID:__ ${interaction.member.user.id}`, true)
-        .addField("● Purge Info", `> Number of messages: **${clear}**`)
-        .setTimestamp()
-
-      modlog.send({ embeds: [log] })
+      interaction.channel.send({ embeds: [embeda] }).then((msg) => { setTimeout(() => { msg.delete(), message.delete() }, 5000) })
 
 
     }
