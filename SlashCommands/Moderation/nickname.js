@@ -66,7 +66,7 @@ module.exports = {
   run: async (client, interaction, args, modlog) => {
 
     const subs = interaction.options.getSubcommand(["edit", "reset", "moderate"])
-    const user = interaction.options.getUser("user")
+    const user = interaction.options.getMember("user")
 
 
     switch (subs) {
