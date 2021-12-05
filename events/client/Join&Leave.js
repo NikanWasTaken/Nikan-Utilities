@@ -6,11 +6,8 @@ const ms = require("ms")
 
 client.on("guildMemberAdd", member => {
 
-    if (member.guild.id !== "757268973674037315") return
+    if (member.guild.id !== `${client.server.id}`) return
     const welcomechannel = client.channels.cache.get('791152934045614121');
-    const allmembersvc = client.channels.cache.get("874721718319603743");
-    const humansvc = client.channels.cache.get("874721721930878997");
-
 
     memberRoles.findOne({ guildid: member.guild.id, user: member.user.id }, async (err, data) => {
 
@@ -70,9 +67,6 @@ client.on("guildMemberAdd", member => {
             .setFooter(`${member.guild.name} | +1 member :D`)
             .setTimestamp()
         welcomechannel.send({ embeds: [embed] })
-        allmembersvc.edit({ name: `All Members • ${member.guild.members.cache.size}` })
-        humansvc.edit({ name: `Humans • ${member.guild.members.cache.filter(member => !member.user.bot).size}` })
-
 
     })
 
@@ -110,9 +104,6 @@ client.on("guildMemberRemove", async member => {
         .setTimestamp()
 
     welcomechannel.send({ embeds: [embed] })
-    allmembersvc.edit({ name: `All Members • ${member.guild.members.cache.size}` })
-    humansvc.edit({ name: `Humans • ${member.guild.members.cache.filter(member => !member.user.bot).size}` })
-
 
 
 
