@@ -247,7 +247,7 @@ module.exports = {
           .setAuthor(`Moderation • Unban`, interaction.guild.iconURL({ dynamic: true }))
           .setDescription(`** **`)
           .setColor(`${client.embedColor.logs}`)
-          .addField('👥 User', `Mention • ${user.user}\nTag • ${user.user.tag}\nID • ${user.user.id}`, true)
+          .addField('👥 User', `Mention • ${BannedUser.user}\nTag • ${BannedUser.user.tag}\nID • ${BannedUser.user.id}`, true)
           .addField("<:NUhmod:910882014582951946> Moderator", `Mention • ${interaction.user}\nTag • ${interaction.user.tag}\nID • ${interaction.user.id}`, true)
           .addField("Punishment ID", `${data._id}`)
           .addField("Reason", `${reason}`)

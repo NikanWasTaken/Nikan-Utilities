@@ -50,7 +50,7 @@ module.exports = {
           value: reason
         })
 
-      message.guild.channels.cache.get("782837655082631229").send({ embeds: [hii] })
+      let msg2 = await message.guild.channels.cache.get("782837655082631229").send({ embeds: [hii] })
 
       let log = new MessageEmbed()
         .setAuthor(`Moderation • Lockdown`, message.guild.iconURL({ dynamic: true }))
@@ -65,7 +65,7 @@ module.exports = {
         new MessageButton()
           .setLabel("Jump to the action")
           .setStyle("LINK")
-          .setURL(`https://discord.com/channels/${msg.guild.id}/${msg.channel.id}/${msg.id}`)
+          .setURL(`https://discord.com/channels/${msg2.guild.id}/${msg2.channel.id}/${msg2.id}`)
 
       )
 
@@ -115,7 +115,7 @@ module.exports = {
           SEND_MESSAGES: false
         });
 
-        await msg.edit({ content: "Channel Locked! " })
+        await msg.edit({ content: "Channel Locked!" })
 
         var hii = new MessageEmbed()
           .setAuthor("Channel Locked", client.user.displayAvatarURL({ dynamic: true }))
@@ -127,7 +127,7 @@ module.exports = {
             value: reason
           })
 
-        let msg2 = channel.send({ embeds: [hii] })
+        let msg2 = await channel.send({ embeds: [hii] })
 
         let log = new MessageEmbed()
           .setAuthor(`Moderation • Channel Lock`, message.guild.iconURL({ dynamic: true }))

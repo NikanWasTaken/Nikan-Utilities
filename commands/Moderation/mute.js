@@ -89,11 +89,7 @@ module.exports = {
     })
     data2.save()
 
-    user.roles.set(null).then(
-      setTimeout(() => {
-        user.roles.add("795353284042293319")
-      }, 2000)
-    )
+    user.roles.set(["795353284042293319"])
 
     let mue = new MessageEmbed()
       .setDescription(`${user.user} has been **muted** | \`${data2._id}\``)
@@ -147,7 +143,7 @@ module.exports = {
             if (err) throw err;
             if (data) {
 
-              data.roles.map((w, i) => user.roles.set(w).then(user.roles.remove("795353284042293319")))
+              data.roles.map((w, i) => user.roles.set(w))
               await db.findOneAndDelete({ user: user.user.id, guildid: message.guild.id })
 
             }

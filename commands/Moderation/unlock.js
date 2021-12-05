@@ -19,8 +19,6 @@ module.exports = {
 
     var reason = args.slice(1).join(" ") || "No reason provided"
 
-    if (!args[0]) return message.reply({ embeds: [missingpartembed] })
-
     if (args[0].toLowerCase() == "all") {
 
 
@@ -48,18 +46,28 @@ module.exports = {
         })
         .setTimestamp()
 
-      message.guild.channels.cache.get("782837655082631229").send({ embeds: [hii] })
+      let msg2 = message.guild.channels.cache.get("782837655082631229").send({ embeds: [hii] })
 
       await msg.edit({ content: "Unlocked the server!" })
 
       let log = new MessageEmbed()
-        .setAuthor(`Action: Server Unlock`, message.guild.iconURL({ dynamic: null }))
-        .setDescription(`[**Click here to jump to the message**](https://discord.com/channels/${message.guild.id}/${message.channel.id}/${message.id})`)
-        .setColor(`${client.embedColor.logYellow}`)
-        .addField('Channel Info', `● ${message.guild.name}\n> All the channnels\n> Lockdown ended`, null)
-        .addField("Mod Info", `● ${message.author}\n> __Tag:__ ${message.author.tag}\n> __ID:__ ${message.author.id}`, null)
+        .setAuthor(`Moderation • Lockdown End`, message.guild.iconURL({ dynamic: true }))
+        .setDescription(`** **`)
+        .setColor(`${client.embedColor.logs}`)
+        .addField("<:NUhmod:910882014582951946> Moderator", `Mention • ${message.author}\nTag • ${message.author.tag}\nID • ${message.author.id}`, true)
+        .addField("Reason", `${reason}`)
         .setTimestamp()
-      modlog.send({ embeds: [log] })
+
+      const rowlog = new MessageActionRow().addComponents(
+
+        new MessageButton()
+          .setLabel("Jump to the action")
+          .setStyle("LINK")
+          .setURL(`https://discord.com/channels/${msg2.guild.id}/${msg2.channel.id}/${msg2.id}`)
+
+      )
+
+      modlog.send({ embeds: [log], components: [rowlog] })
 
 
 
@@ -70,24 +78,31 @@ module.exports = {
       if (!channel) return message.reply({ embeds: [missingpartembed] })
       if (channel.type === "GUILD_VOICE") {
 
-        var hoy = new MessageEmbed()
-          .setDescription(`Unlocked the voice channel ${channel}`)
-          .setColor(`${client.embedColor.moderation}`)
-
-        message.reply({ embeds: [hoy] })
-
         channel.permissionOverwrites.edit(message.guild.roles.everyone, {
           CONNECT: null
         });
 
+        let msg = await message.channel.send("Channel Unlocked!")
+
         let log = new MessageEmbed()
-          .setAuthor(`Action: Channel Unlock`, message.guild.iconURL({ dynamic: null }))
-          .setDescription(`[**Click here to jump to the message**](https://discord.com/channels/${message.guild.id}/${message.channel.id}/${message.id})`)
-          .setColor(`${client.embedColor.logGreen}`)
-          .addField('Channel Info', `● ${channel}\n> __Name:__ ${channel.name}\n> __ID:__ ${channel.id}`, null)
-          .addField("Mod Info", `● ${message.author}\n> __Tag:__ ${message.author.tag}\n> __ID:__ ${message.author.id}`, null)
+          .setAuthor(`Moderation • Channel Unlock`, message.guild.iconURL({ dynamic: true }))
+          .setDescription(`** **`)
+          .setColor(`${client.embedColor.logs}`)
+          .addField("<:NUhmod:910882014582951946> Moderator", `Mention • ${message.author}\nTag • ${message.author.tag}\nID • ${message.author.id}`, true)
+          .addField("🔊 Channel", `Mention • ${channel}\nID • ${channel.id}`, true)
+          .addField("Reason", `${reason}`)
           .setTimestamp()
-        modlog.send({ embeds: [log] })
+
+        const rowlog = new MessageActionRow().addComponents(
+
+          new MessageButton()
+            .setLabel("Jump to the action")
+            .setStyle("LINK")
+            .setURL(`https://discord.com/channels/${msg.guild.id}/${msg.channel.id}/${msg.id}`)
+
+        )
+
+        modlog.send({ embeds: [log], components: [rowlog] })
 
       } else {
 
@@ -114,13 +129,24 @@ module.exports = {
 
 
         let log = new MessageEmbed()
-          .setAuthor(`Action: Channel Unlock`, message.guild.iconURL({ dynamic: null }))
-          .setDescription(`[**Click here to jump to the message**](https://discord.com/channels/${message.guild.id}/${message.channel.id}/${message.id})`)
-          .setColor(`${client.embedColor.logGreen}`)
-          .addField('Channel Info', `● ${channel}\n> __Name:__ ${channel.name}\n> __ID:__ ${channel.id}`, null)
-          .addField("Mod Info", `● ${message.author}\n> __Tag:__ ${message.author.tag}\n> __ID:__ ${message.author.id}`, null)
+          .setAuthor(`Moderation • Channel Unlock`, message.guild.iconURL({ dynamic: true }))
+          .setDescription(`** **`)
+          .setColor(`${client.embedColor.logs}`)
+          .addField("<:NUhmod:910882014582951946> Moderator", `Mention • ${message.author}\nTag • ${message.author.tag}\nID • ${message.author.id}`, true)
+          .addField("💬 Channel", `Mention • ${channel}\nID • ${channel.id}`, true)
+          .addField("Reason", `${reason}`)
           .setTimestamp()
-        modlog.send({ embeds: [log] })
+
+        const rowlog = new MessageActionRow().addComponents(
+
+          new MessageButton()
+            .setLabel("Jump to the action")
+            .setStyle("LINK")
+            .setURL(`https://discord.com/channels/${msg.guild.id}/${msg.channel.id}/${msg.id}`)
+
+        )
+
+        modlog.send({ embeds: [log], components: [rowlog] })
 
       }
 

@@ -2,8 +2,8 @@ const { MessageEmbed } = require('discord.js')
 const db = require("../../models/MemberRoles.js")
 
 module.exports = {
-    name : 'unmute',
-    category : 'moderation',
+    name: 'unmute',
+    category: 'moderation',
     description: `Unmutes an user`,
     usage: `[user]`,
     cooldown: 3000,
@@ -15,49 +15,67 @@ module.exports = {
      * @param {String[]} args
      */
 
-    run : async(client, message, args, missingpartembed, modlog) => {
+    run: async (client, message, args, missingpartembed, modlog) => {
 
-        var user = message.guild.members.cache.get(args[0]) || message.mentions.members.first() 
-        if(!args[0]) return message.reply({ embeds: [missingpartembed]})
-        let erm = new MessageEmbed().setDescription(`${client.botEmoji.failed} Can't find that user!`).setColor(`${client.embedColor.failed}`)
-        if(!user) return message.reply({ embeds: [erm] })
+        var user = message.guild.members.cache.get(args[0]) || message.mentions.members.first()
+        if (!args[0]) return message.reply({ embeds: [missingpartembed] })
 
+        let erm = new MessageEmbed().setDescription("This user isn't in this guild!").setColor(`RED`)
+        if (!user) return message.reply({ embeds: [erm] }).then((msg) => {
+            setTimeout(() => {
+                msg?.delete()
+                message?.delete()
+            }, 5000)
+        })
 
-        let xxpermuser = new MessageEmbed().setDescription(`${client.botEmoji.failed} You can't unmute that user!`).setColor(`${client.embedColor.failed}`)
-        let xxpermbot = new MessageEmbed().setDescription(`${client.botEmoji.failed} I can't unmute that user as they can't be muted!`).setColor(`${client.embedColor.failed}`)
-        if (user.roles.highest.position >= message.guild.me.roles.highest.position) return message.reply({ embeds: [xxpermbot] })
-        if (user.roles.highest.position >= message.member.roles.highest.position) return message.reply({ embeds: [xxpermuser] })
+        db.findOne({ guildid: message.guild.id, user: user.user.id }, async (err, data) => {
+            if (err) throw err;
 
-            db.findOne({ guildid: message.guild.id, user: user.user.id }, async (err, data) => {
-                if (err) throw err;
-                if (data) {
-                    data.content.map((w, i) => user.roles.set(w.roles))
-                  await db.findOneAndDelete({ user: user.user.id, guildid: message.guild.id })
+            if (data) {
 
-                  let mue = new MessageEmbed()
-                  .setDescription(`${user.user} has been **unmuted**`)
-                  .setColor(`${client.embedColor.moderation}`)
-                message.channel.send({ embeds: [mue] }).then(message.delete())
-       
+                data.roles.map((w, i) => user.roles.set(w))
                 user.roles.remove("795353284042293319")
-       
+                await db.findOneAndDelete({ user: user.user.id, guildid: message.guild.id })
+
+                let mue = new MessageEmbed()
+                    .setDescription(`${user.user} has been **unmuted**`)
+                    .setColor(`${client.embedColor.moderation}`)
+                let msg = await message.channel.send({ embeds: [mue] }).then(message.delete())
+
                 let log = new MessageEmbed()
-                .setAuthor(`Action: Unmute`, message.guild.iconURL({ dynamic: true }))
-                .setDescription(`[**Click here to jump to the message**](https://discord.com/channels/${message.guild.id}/${message.channel.id}/${message.id})`)
-                .setColor(`${client.embedColor.logGreen}`)
-                .addField('Member Info', `● ${user.user}\n> __Tag:__ ${user.user.tag}\n> __ID:__ ${user.user.id}`, true)
-                .addField("Mod Info", `● ${message.author}\n> __Tag:__ ${message.author.tag}\n> __ID:__ ${message.author.id}`, true)
-                .setTimestamp()
-                modlog.send({ embeds: [log]})
-       
-               } else {
-                   let uu = new MessageEmbed().setDescription(`${client.botEmoji.failed} That user is not muted.`).setColor(`${client.embedColor.failed}`)
-                   message.reply({ embeds: [uu]})
+                    .setAuthor(`Moderation • Unmute`, message.guild.iconURL({ dynamic: true }))
+                    .setDescription(`** **`)
+                    .setColor(`${client.embedColor.logs}`)
+                    .addField('👥 User', `Mention • ${user.user}\nTag • ${user.user.tag}\nID • ${user.user.id}`, true)
+                    .addField("<:NUhmod:910882014582951946> Moderator", `Mention • ${message.author}\nTag • ${message.author.tag}\nID • ${message.author.id}`, true)
+                    .addField("Reason", `${reason}`, false)
+                    .setTimestamp()
 
-               }
+                const rowlog = new MessageActionRow().addComponents(
 
-        
-              })
+                    new MessageButton()
+                        .setLabel("Jump to the action")
+                        .setStyle("LINK")
+                        .setURL(`https://discord.com/channels/${msg.guild.id}/${msg.channel.id}/${msg.id}`)
+
+                )
+
+                modlog.send({ embeds: [log], components: [rowlog] })
+
+            } else {
+
+                const embed = new MessageEmbed().setDescription(`This user is not muted!`).setColor("RED")
+                return message.reply({ embeds: [embed] }).then((msg) => {
+                    setTimeout(() => {
+                        msg?.delete()
+                        message?.delete()
+                    }, 5000)
+                })
+
+            }
+
+
+        })
 
 
     }

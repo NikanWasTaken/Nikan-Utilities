@@ -2,63 +2,83 @@ const { MessageEmbed } = require('discord.js')
 const warnModel = require("../../models/Punishments.js")
 
 module.exports = {
-    name : 'unban',
-    category : 'moderation',
-    description : 'Unbans a banned member from the server',
-    usage:'[user ID] <reason>',
-    aliases:['deban'],
-    cooldown: 5000,
-    userPermissions: ["MOVE_MEMBERS"],
+  name: 'unban',
+  category: 'moderation',
+  description: 'Unbans a banned member from the server',
+  usage: '[user ID] <reason>',
+  aliases: ['deban'],
+  cooldown: 5000,
+  userPermissions: ["MOVE_MEMBERS"],
 
-    /**
-     * @param {Client} client
-     * @param {Message} message
-     * @param {String[]} args
-     */
+  /**
+   * @param {Client} client
+   * @param {Message} message
+   * @param {String[]} args
+   */
 
-    run : async(client, message, args, missingpartembed, modlog) => {
+  run: async (client, message, args, missingpartembed, modlog) => {
 
 
-        if(!args[0]) return message.reply({ embeds: [missingpartembed]})
-        let userID = args[0]
-        let reason = message.content.split(" ").slice(2).join(" ") || "No reason provided"
-       
-             message.guild.bans.fetch().then(bans=> {
-             let BannedUser = bans.find(b => b.user.id == userID)
+    if (!args[0]) return message.reply({ embeds: [missingpartembed] })
+    let userID = args[0]
+    let reason = message.content.split(" ").slice(2).join(" ") || "No reason provided"
 
-             if(!BannedUser) return message.reply("Couldn't find that user in server's banned members!")
-             message.guild.members.unban(BannedUser.user)
+    message.guild.bans.fetch().then(async bans => {
 
-             const data = new warnModel({
-              type: "Unban",
-              userId: userID,
-              guildId: message.guildId,
-              moderatorId: message.author.id,
-              reason,
-              timestamp: Date.now(),
-          })
-            data.save()
+      let BannedUser = bans.find(b => b.user.id == userID)
 
-          
+      const nomemberfound = new MessageEmbed().setDescription(`This user is not banned from the server!`).setColor(`RED`)
 
-             var pop = new MessageEmbed()
-               .setDescription(`**${BannedUser.user.tag}** has been **unbanned** from the server.`)
-               .setColor(`${client.embedColor.moderation}`)
-             message.channel.send({ embeds: [pop]}).then(message.delete())
+      if (!BannedUser) return
+      interaction.followUp({ embeds: [nomemberfound] }).then(async (msg) => {
+        setTimeout(() => {
+          interaction.deleteReply()
+        }, 5000)
+      })
 
-             let log = new MessageEmbed()
-             .setAuthor(`Action: Unban`, message.guild.iconURL({ dynamic: true }))
-             .setDescription(`[**Click here to jump to the message**](https://discord.com/channels/${message.guild.id}/${message.channel.id}/${message.id})`)
-             .setColor(`${client.embedColor.logAqua}`)
-             .addField('Unbanned Member Info', `● ${BannedUser.user}\n> __Tag:__ ${BannedUser.user.tag}\n> __ID:__ ${BannedUser.user.id}`, true)
-             .addField("Mod Info", `● ${message.author}\n> __Tag:__ ${message.author.tag}\n> __ID:__ ${message.author.id}`, true)
-             .setTimestamp()
-             modlog.send({ embeds: [log]})
+      message.guild.members.unban(BannedUser.user)
 
-             })
-              
-              }
+      const data = new warnModel({
+        type: "Unban",
+        userId: userID,
+        guildId: message.guildId,
+        moderatorId: message.author.id,
+        reason,
+        timestamp: Date.now(),
+      })
+      data.save()
+
+
+
+      var pop = new MessageEmbed()
+        .setDescription(`**${BannedUser.user.tag}** has been **unbanned** | \`${data._id}\``)
+        .setColor(`${client.embedColor.moderation}`)
+      let msg = await message.channel.send({ embeds: [pop] }).then(message.delete())
+
+      let log = new MessageEmbed()
+        .setAuthor(`Moderation • Unban`, interaction.guild.iconURL({ dynamic: true }))
+        .setDescription(`** **`)
+        .setColor(`${client.embedColor.logs}`)
+        .addField('👥 User', `Mention • ${BannedUser.user}\nTag • ${BannedUser.user.tag}\nID • ${BannedUser.user.id}`, true)
+        .addField("<:NUhmod:910882014582951946> Moderator", `Mention • ${message.author}\nTag • ${message.author.tag}\nID • ${message.author.id}`, true)
+        .addField("Punishment ID", `${data._id}`)
+        .addField("Reason", `${reason}`)
+        .setTimestamp()
+
+      const row = new MessageActionRow().addComponents(
+
+        new MessageButton()
+          .setLabel("Jump to the action")
+          .setStyle("LINK")
+          .setURL(`https://discord.com/channels/${msg.guild.id}/${msg.channel.id}/${msg.id}`)
+
+      )
+
+      modlog.send({ embeds: [log], components: [row] })
+
+    })
+
+  }
 
 }
 
-    
