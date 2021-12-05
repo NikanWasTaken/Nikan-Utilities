@@ -42,7 +42,8 @@ module.exports = {
 
     if (user.roles.highest.position >= interaction.guild.me.roles.highest.position ||
       user.roles.highest.position >= interaction.member.roles.highest.position ||
-      user.user.id === client.config.owner)
+      user.user.id === client.config.owner ||
+      user.user.bot)
       return interaction.followUp({ embeds: [failed] }).then((msg) => {
         setTimeout(() => {
           interaction.deleteReply()

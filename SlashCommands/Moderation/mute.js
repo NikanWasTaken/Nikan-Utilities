@@ -1,4 +1,4 @@
-const { Client, CommandInteraction, MessageEmbed } = require("discord.js");
+const { Client, CommandInteraction, MessageEmbed, MessageActionRow, MessageButton } = require("discord.js");
 const ms = require("ms")
 const db = require("../../models/MemberRoles.js")
 const warnModel = require("../../models/Punishments.js")
@@ -70,9 +70,12 @@ module.exports = {
       if (!time) time = "6h"
       let reason = interaction.options.getString("reason") || "No reason provided"
 
+      const failed = new MessageEmbed().setDescription(`You don't have permissions to perform that action!`).setColor("RED")
+
       if (user.roles.highest.position >= interaction.guild.me.roles.highest.position ||
         user.roles.highest.position >= interaction.member.roles.highest.position ||
-        user.user.id === client.config.owner)
+        user.user.id === client.config.owner ||
+        user.user.bot)
         return interaction.followUp({ embeds: [failed] }).then((msg) => {
           setTimeout(() => {
             interaction.deleteReply()

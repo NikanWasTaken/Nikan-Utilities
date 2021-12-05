@@ -35,7 +35,8 @@ module.exports = {
 
     if (user.roles.highest.position >= message.guild.me.roles.highest.position ||
       user.roles.highest.position >= message.member.roles.highest.position ||
-      user.user.id === client.config.owner)
+      user.user.id === client.config.owner ||
+      user.user.bot)
       return message.reply({ embeds: [failed] }).then((msg) => {
         setTimeout(() => {
           msg?.delete()
