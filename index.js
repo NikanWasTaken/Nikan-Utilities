@@ -57,7 +57,10 @@ client.embedColor = {
     modDm: "#f5d765",
     botBlue: "#3d81f5",
     cool: "#905de3",
-    logs: "#f5d765"
+    logs: "#f5d765",
+    mute: "#fae673",
+    ban: "#b3666c",
+    unmute: "#87a7ec",
 }
 
 client.server = {

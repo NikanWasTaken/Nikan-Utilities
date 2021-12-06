@@ -54,7 +54,12 @@ module.exports = {
         .setDescription("Whoops, looks like there is a double warning here!")
         .setColor("RED")
 
-      return message.channel.send({ embeds: [embed] })
+      return message.channel.send({ embeds: [embed] }).then((msg) => {
+        setTimeout(() => {
+          msg?.delete()
+          message?.delete()
+        }, 10000)
+      })
 
     }
 
@@ -90,7 +95,7 @@ module.exports = {
     );
     setTimeout(() => {
       client.warncooldown.delete(`${user.user.id}`);
-    }, 5000);
+    }, 10000);
 
 
     let log = new MessageEmbed()
@@ -121,9 +126,7 @@ module.exports = {
       guildId: message.guild.id,
       type: "Warn",
     });
-
     const numberofwarns = []
-
     userWarnings.map((warn, i) => {
       numberofwarns.push(`${i + 1}`)
     })
@@ -163,6 +166,18 @@ module.exports = {
         .setTimestamp()
       user.send({ embeds: [warndm] }).catch(e => { return })
 
+      const warns2 = new MessageEmbed()
+        .setAuthor(`Automatic Actions`, `${client.user.displayAvatarURL()}`)
+        .setColor(`${client.embedColor.mute}`)
+        .setTitle("2 hours mute")
+        .addField("User", `${user.user}`, true)
+        .addField("User Tag", `${user.user.tag}`, true)
+        .addField("User ID", `${user.user.id}`, true)
+        .addField("Reason", `Reached 2 normal strikes!`)
+        .setFooter(`${data2._id}`)
+
+      client.webhook.autoaction.send({ embeds: [warns2] })
+
 
       setTimeout(async () => {
 
@@ -195,6 +210,17 @@ module.exports = {
             }
           })
         }
+
+        const warns2 = new MessageEmbed()
+          .setAuthor(`Automatic Actions`, `${client.user.displayAvatarURL()}`)
+          .setColor(`${client.embedColor.mute}`)
+          .setTitle("Unmute")
+          .addField("User", `${user.user}`, true)
+          .addField("User Tag", `${user.user.tag}`, true)
+          .addField("User ID", `${user.user.id}`, true)
+          .addField("Reason", `Umuted After 2 hours of mute (reaching 2 strikes)`)
+
+        client.webhook.autoaction.send({ embeds: [warns2] })
 
       }, 7200000) // 2 hours
 
