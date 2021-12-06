@@ -134,7 +134,7 @@ module.exports = {
                 return interaction.followUp({ embeds: [embed] }).then((msg) => {
                     setTimeout(() => {
                         interaction.deleteReply()
-                    }, 5000)
+                    }, 10000)
                 })
 
             }
@@ -243,6 +243,18 @@ module.exports = {
                     .setTimestamp()
                 user.send({ embeds: [warndm] }).catch(e => { return })
 
+                const warns2 = new MessageEmbed()
+                    .setAuthor(`Automatic Actions`, `${client.user.displayAvatarURL()}`)
+                    .setColor(`${client.embedColor.mute}`)
+                    .setTitle("➜ 2 Hours Of Mute")
+                    .addField("User", `• ${user.user}`, true)
+                    .addField("User Tag", `• ${user.user.tag}`, true)
+                    .addField("User ID", `• ${user.user.id}`, true)
+                    .addField("Reason", `Reached 2 normal strikes!`)
+                    .setFooter(`ID: ${data2._id}`)
+
+                client.webhook.autoaction.send({ embeds: [warns2] })
+
 
                 setTimeout(async () => {
 
@@ -275,6 +287,18 @@ module.exports = {
                             }
                         })
                     }
+
+
+                    const warns2 = new MessageEmbed()
+                        .setAuthor(`Automatic Actions`, `${client.user.displayAvatarURL()}`)
+                        .setColor(`${client.embedColor.unmute}`)
+                        .setTitle("Unmuted From Tempmute")
+                        .addField("User", `• ${user.user}`, true)
+                        .addField("User Tag", `• ${user.user.tag}`, true)
+                        .addField("User ID", `• ${user.user.id}`, true)
+                        .addField("Reason", `Umuted After 2 hours of mute (reaching 2 strikes)`)
+
+                    client.webhook.autoaction.send({ embeds: [warns2] })
 
                 }, 7200000) // 2 hours
 
@@ -313,6 +337,18 @@ module.exports = {
                     .setTimestamp()
                 user.send({ embeds: [warndm] }).catch(e => { return })
 
+                const warns2 = new MessageEmbed()
+                    .setAuthor(`Automatic Actions`, `${client.user.displayAvatarURL()}`)
+                    .setColor(`${client.embedColor.mute}`)
+                    .setTitle("➜ 6 Hours Of Mute")
+                    .addField("User Mention", `• ${user.user}`, true)
+                    .addField("User Tag", `• ${user.user.tag}`, true)
+                    .addField("User ID", `• ${user.user.id}`, true)
+                    .addField("Reason", `Reached 4 normal strikes!`)
+                    .setFooter(`ID: ${data2._id}`)
+
+                client.webhook.autoaction.send({ embeds: [warns2] })
+
 
                 setTimeout(async () => {
 
@@ -346,6 +382,17 @@ module.exports = {
                         })
                     }
 
+                    const warns2 = new MessageEmbed()
+                        .setAuthor(`Automatic Actions`, `${client.user.displayAvatarURL()}`)
+                        .setColor(`${client.embedColor.unmute}`)
+                        .setTitle("Unmuted From Tempmute")
+                        .addField("User", `• ${user.user}`, true)
+                        .addField("User Tag", `• ${user.user.tag}`, true)
+                        .addField("User ID", `• ${user.user.id}`, true)
+                        .addField("Reason", `Umuted After 6 hours of mute (reaching 4 strikes)`)
+
+                    client.webhook.autoaction.send({ embeds: [warns2] })
+
                 }, 21600000) // 6 hours
 
 
@@ -377,6 +424,18 @@ module.exports = {
                 user.ban({
                     reason: "Reaching 6 stikes!"
                 })
+
+                const warns2 = new MessageEmbed()
+                    .setAuthor(`Automatic Actions`, `${client.user.displayAvatarURL()}`)
+                    .setColor(`${client.embedColor.ban}`)
+                    .setTitle("➜ Ban")
+                    .addField("User Mention", `• ${user.user}`, true)
+                    .addField("User Tag", `• ${user.user.tag}`, true)
+                    .addField("User ID", `• ${user.user.id}`, true)
+                    .addField("Reason", `Reached 6 normal strikes!`)
+                    .setFooter(`ID: ${data2._id}`)
+
+                client.webhook.autoaction.send({ embeds: [warns2] })
 
             }
 
