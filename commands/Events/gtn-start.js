@@ -15,7 +15,7 @@ module.exports = {
      * @param {String[]} args
      */
 
-    run: async (client, message, args, missingpartembed, modlog) => {
+    run: async (client, message, args, missingpartembed) => {
 
         var noperm = new MessageEmbed()
             .setDescription(`You don't have permissions to run this command.`)
@@ -25,13 +25,13 @@ module.exports = {
             .setDescription(`You may only use this command in the threads created in the <#880401081497157643> channel.`)
             .setColor("#b3666c")
 
-            var hostonly = new MessageEmbed()
+        var hostonly = new MessageEmbed()
             .setDescription(`Only the event host can use this command!`)
             .setColor("#b3666c")
 
         if (!message.member.roles.cache.get("880409157969256518")) return message.reply({ embeds: [noperm] }).then((msg) => { setTimeout(() => { msg.delete(), message.delete() }, 5000) })
         if (message.channel.parentId !== "880401081497157643") return message.reply({ embeds: [nochannel] })
-        if(message.channel.ownerId !== message.author.id) return message.reply({ embeds: [hostonly] })
+        if (message.channel.ownerId !== message.author.id) return message.reply({ embeds: [hostonly] })
 
 
 
@@ -65,19 +65,19 @@ module.exports = {
 
             eventchannel.send({ embeds: [embed] })
             eventchannel.send("The event will start in 1 minute...")
-            eventchannel.send({ content: "Please wait..."}).then(async (msg) => { 
-                
-            await setTimeout(() => { msg.edit("Starting in 30 seconds...") }, 30000);
-            await setTimeout(() => { msg.edit("Starting in 15 seconds...") }, 45000);
-            await setTimeout(() => { msg.edit("Starting in 5 seconds...") }, 55000);
-            await setTimeout(() => { msg.edit("Starting in 4 seconds...") }, 56000);
-            await setTimeout(() => { msg.edit("Starting in 3 seconds...") }, 57000);
-            await setTimeout(() => { msg.edit("Starting in 2 seconds...") }, 58000);
-            await setTimeout(() => { msg.edit("Starting in 1 second..."), eventchannel.setRateLimitPerUser(2) }, 59000);
-            await setTimeout(() => { eventchannel.send("Unlocking the channel...") }, 60000);
-            await setTimeout(() => { eventchannel.parent.permissionOverwrites.edit(message.guild.roles.everyone, { SEND_MESSAGES_IN_THREADS: true }) }, 61000);
+            eventchannel.send({ content: "Please wait..." }).then(async (msg) => {
 
-        })
+                await setTimeout(() => { msg.edit("Starting in 30 seconds...") }, 30000);
+                await setTimeout(() => { msg.edit("Starting in 15 seconds...") }, 45000);
+                await setTimeout(() => { msg.edit("Starting in 5 seconds...") }, 55000);
+                await setTimeout(() => { msg.edit("Starting in 4 seconds...") }, 56000);
+                await setTimeout(() => { msg.edit("Starting in 3 seconds...") }, 57000);
+                await setTimeout(() => { msg.edit("Starting in 2 seconds...") }, 58000);
+                await setTimeout(() => { msg.edit("Starting in 1 second..."), eventchannel.setRateLimitPerUser(2) }, 59000);
+                await setTimeout(() => { eventchannel.send("Unlocking the channel...") }, 60000);
+                await setTimeout(() => { eventchannel.parent.permissionOverwrites.edit(message.guild.roles.everyone, { SEND_MESSAGES_IN_THREADS: true }) }, 61000);
+
+            })
 
         } catch (error) {
             console.log(error)

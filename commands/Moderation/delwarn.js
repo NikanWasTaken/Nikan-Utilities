@@ -15,7 +15,7 @@ module.exports = {
      * @param {Message} message
      * @param {String[]} args
      */
-    run: async (client, message, args, missingpartembed, modlog) => {
+    run: async (client, message, args, missingpartembed) => {
 
         const warnId = args[0]
 
@@ -54,7 +54,7 @@ module.exports = {
 
             )
 
-            modlog.send({ embeds: [log], components: [rowlog] })
+            client.webhook.moderation.send({ embeds: [log], components: [rowlog] })
 
         } catch (error) {
 

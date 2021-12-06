@@ -29,7 +29,7 @@ module.exports = {
    * @param {CommandInteraction} interaction
    * @param {String[]} args
    */
-  run: async (client, interaction, args, modlog) => {
+  run: async (client, interaction, args) => {
 
     var clear = interaction.options.getInteger("amount")
     var user = interaction.options.getMember("user")

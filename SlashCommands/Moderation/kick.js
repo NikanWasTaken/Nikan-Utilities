@@ -32,7 +32,7 @@ module.exports = {
    * @param {CommandInteraction} interaction
    * @param {String[]} args
    */
-  run: async (client, interaction, args, modlog) => {
+  run: async (client, interaction, args) => {
 
     var user = interaction.options.getMember("user")
 
@@ -102,7 +102,7 @@ module.exports = {
 
     )
 
-    modlog.send({ embeds: [log], components: [row2] })
+    client.webhook.moderation.send({ embeds: [log], components: [row2] })
 
 
 

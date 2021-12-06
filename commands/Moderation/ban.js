@@ -15,7 +15,7 @@ module.exports = {
    * @param {String[]} args
    */
 
-  run: async (client, message, args, missingpartembed, modlog) => {
+  run: async (client, message, args, missingpartembed) => {
 
     let reason = message.content.split(" ").slice(2).join(" ") || "No reason provided"
     let user = message.guild.members.cache.get(args[0]) || message.mentions.members.first()
@@ -63,7 +63,7 @@ module.exports = {
 
         )
 
-        modlog.send({ embeds: [log], components: [row] })
+        client.webhook.moderation.send({ embeds: [log], components: [row] })
 
       } catch (error) {
 
@@ -149,7 +149,7 @@ module.exports = {
 
       )
 
-      modlog.send({ embeds: [log], components: [rowlog] })
+      client.webhook.moderation.send({ embeds: [log], components: [rowlog] })
 
     }
   }

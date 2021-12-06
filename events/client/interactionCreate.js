@@ -3,11 +3,6 @@ const { Client, Collection, MessageEmbed, WebhookClient } = require("discord.js"
 const Timeout = new Collection();
 const ms = require("ms")
 
-var modlog = new WebhookClient({
-  id: `910100385501433887`,
-  token: `WDxlbcSouTKN5dKX65UaNvajh64Wb2OsXiKtDdmZgyS6Y9VtO22kD3E6YxrpgYMkVi5y`,
-}); // https://discord.com/api/webhooks/910100385501433887/WDxlbcSouTKN5dKX65UaNvajh64Wb2OsXiKtDdmZgyS6Y9VtO22kD3E6YxrpgYMkVi5y
-
 client.on("interactionCreate", async (interaction) => {
   // Slash Command Handling
   if (interaction.isCommand()) {
@@ -20,7 +15,7 @@ client.on("interactionCreate", async (interaction) => {
 
     var devonly = new MessageEmbed().setDescription(`Only developers for ${client.user.username} can use this command!`).setColor(`${client.embedColor.moderationRed}`)
 
-    if(cmd.developerOnly && !client.config.developers.includes(interaction.user.id)) return interaction.reply({ embeds: [devonly], ephemeral: true })
+    if (cmd.developerOnly && !client.config.developers.includes(interaction.user.id)) return interaction.reply({ embeds: [devonly], ephemeral: true })
 
     if (cmd.botCommandOnly === true && !interaction.channel.name.includes("command") && !interaction.member?.permissions?.has("ADMINISTRATOR")) {
 
@@ -36,9 +31,9 @@ client.on("interactionCreate", async (interaction) => {
         if (Timeout.has(`${cmd.name}${interaction.member.user.id}`))
           return interaction.reply({ embeds: [cooldownembed], ephemeral: true })
 
-           await interaction.deferReply({ ephemeral: false || cmd.ephemeral})
+        await interaction.deferReply({ ephemeral: false || cmd.ephemeral })
 
-        cmd.run(client, interaction, args, modlog);
+        cmd.run(client, interaction, args);
         Timeout.set(
           `${cmd.name}${interaction.member.user.id}`,
           Date.now() + cmd.cooldown
@@ -49,8 +44,8 @@ client.on("interactionCreate", async (interaction) => {
 
       } else {
 
-        await interaction.deferReply({ ephemeral: false || cmd.ephemeral})
-        
+        await interaction.deferReply({ ephemeral: false || cmd.ephemeral })
+
         for (let option of interaction.options.data) {
           if (option.type === "SUB_COMMAND") {
             if (option.name) args.push(option.name);
@@ -64,7 +59,7 @@ client.on("interactionCreate", async (interaction) => {
         );
 
 
-        cmd.run(client, interaction, args, modlog);
+        cmd.run(client, interaction, args);
       }
 
     }

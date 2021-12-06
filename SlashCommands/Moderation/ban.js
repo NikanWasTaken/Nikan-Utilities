@@ -63,7 +63,7 @@ module.exports = {
    * @param {CommandInteraction} interaction
    * @param {String[]} args
    */
-  run: async (client, interaction, args, modlog) => {
+  run: async (client, interaction, args) => {
 
     const subs = interaction.options.getSubcommand(["add", "remove", 'list'])
 
@@ -113,7 +113,7 @@ module.exports = {
 
           )
 
-          modlog.send({ embeds: [log], components: [row] })
+          client.webhook.moderation.send({ embeds: [log], components: [row] })
 
         } catch (error) {
 
@@ -193,7 +193,7 @@ module.exports = {
 
         )
 
-        modlog.send({ embeds: [log], components: [row2] })
+        client.webhook.moderation.send({ embeds: [log], components: [row2] })
 
       } else if (!user && !interaction.options.getString("user-id")) {
 
@@ -263,7 +263,7 @@ module.exports = {
 
         )
 
-        modlog.send({ embeds: [log], components: [row] })
+        client.webhook.moderation.send({ embeds: [log], components: [row] })
 
 
       })

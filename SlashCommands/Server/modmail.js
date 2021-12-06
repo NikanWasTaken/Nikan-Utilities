@@ -73,7 +73,7 @@ module.exports = {
      * @param {CommandInteraction} interaction
      * @param {String[]} args
      */
-    run: async (client, interaction, args, modlog) => {
+    run: async (client, interaction, args) => {
 
         const serverId = client.server.id
         const subs = interaction.options.getSubcommand(["close", "blacklist"])
@@ -141,7 +141,7 @@ module.exports = {
                         .addField("Mod Info", `● ${interaction.member.user}\n> __Tag:__ ${interaction.member.user.tag}\n> __ID:__ ${interaction.member.user.id}`, true)
                         .setTimestamp()
 
-                        loghook.send({ embeds: [logembed] })
+                    loghook.send({ embeds: [logembed] })
 
                     const createdembed = new MessageEmbed()
                         .setAuthor(`${client.guilds.cache.get(serverId).name}`, `${interaction.guild.iconURL({ dynamic: true })}`)
@@ -157,15 +157,15 @@ module.exports = {
 
             })
 
-            collector.on("end", async (collected) => { 
+            collector.on("end", async (collected) => {
 
                 const emobed = new MessageEmbed()
-                .setAuthor(`${interaction.guild.name}`, interaction.guild.iconURL({ dynamic: true }))
-                .setTitle("Thread Deletion Timed Out!").setURL(`${client.server.invite}`)
-                .setDescription("The thread deletion has been timed out and canceled due to your late respond! If you want to delete this thread, please run the \`/modmail close\` command again!")
-                .setColor("RED")
-                .setTimestamp()
-                 
+                    .setAuthor(`${interaction.guild.name}`, interaction.guild.iconURL({ dynamic: true }))
+                    .setTitle("Thread Deletion Timed Out!").setURL(`${client.server.invite}`)
+                    .setDescription("The thread deletion has been timed out and canceled due to your late respond! If you want to delete this thread, please run the \`/modmail close\` command again!")
+                    .setColor("RED")
+                    .setTimestamp()
+
 
                 await msg?.edit({ embeds: [emobed], components: [] })
             })
@@ -183,33 +183,33 @@ module.exports = {
 
                 if (!find) {
 
-                const data = new blacklist({
-                    userId: `${user.user.id}`,
-                    guildId: `${interaction.guild.id}`,
-                    moderatorId: `${interaction.user.id}`,
-                    reason: `${reason}`,
-                    timestamp: Date.now(),
-                })
-                data.save()
+                    const data = new blacklist({
+                        userId: `${user.user.id}`,
+                        guildId: `${interaction.guild.id}`,
+                        moderatorId: `${interaction.user.id}`,
+                        reason: `${reason}`,
+                        timestamp: Date.now(),
+                    })
+                    data.save()
 
-                const embed = new MessageEmbed()
-                    .setDescription(`${user.user.tag} has been added to the modmail blacklist!`).setColor(`${client.embedColor.moderation}`)
+                    const embed = new MessageEmbed()
+                        .setDescription(`${user.user.tag} has been added to the modmail blacklist!`).setColor(`${client.embedColor.moderation}`)
 
-                interaction.followUp({ embeds: [embed] })
+                    interaction.followUp({ embeds: [embed] })
 
-                let log = new MessageEmbed()
-                .setAuthor(`BlackList Added`, interaction.guild.iconURL({ dynamic: true }))
-                .setColor(`${client.embedColor.logAqua}`)
-                .addField('Member Info', `● ${user.user}\n> __Tag:__ ${user.user.tag}\n> __ID:__ ${user.user.id}`, true)
-                .addField("Mod Info", `● ${interaction.member.user}\n> __Tag:__ ${interaction.member.user.tag}\n> __ID:__ ${interaction.member.user.id}`, true)
-                .addField("● Information", `> Reason: ${reason}`, false)
-                .setTimestamp()
+                    let log = new MessageEmbed()
+                        .setAuthor(`BlackList Added`, interaction.guild.iconURL({ dynamic: true }))
+                        .setColor(`${client.embedColor.logAqua}`)
+                        .addField('Member Info', `● ${user.user}\n> __Tag:__ ${user.user.tag}\n> __ID:__ ${user.user.id}`, true)
+                        .addField("Mod Info", `● ${interaction.member.user}\n> __Tag:__ ${interaction.member.user.tag}\n> __ID:__ ${interaction.member.user.id}`, true)
+                        .addField("● Information", `> Reason: ${reason}`, false)
+                        .setTimestamp()
 
-                loghook.send({ embeds: [log] })
+                    loghook.send({ embeds: [log] })
 
-            } else {
-                return interaction.followUp({ content: "This user is already blacklisted!" })
-            }
+                } else {
+                    return interaction.followUp({ content: "This user is already blacklisted!" })
+                }
 
             } else if (action == "remove") {
 
@@ -224,12 +224,12 @@ module.exports = {
                 interaction.followUp({ embeds: [embed] })
 
                 let log = new MessageEmbed()
-                .setAuthor(`BlackList Removed`, interaction.guild.iconURL({ dynamic: true }))
-                .setColor(`${client.embedColor.logGreen}`)
-                .addField('Member Info', `● ${user.user}\n> __Tag:__ ${user.user.tag}\n> __ID:__ ${user.user.id}`, true)
-                .addField("Mod Info", `● ${interaction.member.user}\n> __Tag:__ ${interaction.member.user.tag}\n> __ID:__ ${interaction.member.user.id}`, true)
-                .addField("● Information", `> Reason: ${reason}`, false)
-                .setTimestamp()
+                    .setAuthor(`BlackList Removed`, interaction.guild.iconURL({ dynamic: true }))
+                    .setColor(`${client.embedColor.logGreen}`)
+                    .addField('Member Info', `● ${user.user}\n> __Tag:__ ${user.user.tag}\n> __ID:__ ${user.user.id}`, true)
+                    .addField("Mod Info", `● ${interaction.member.user}\n> __Tag:__ ${interaction.member.user.tag}\n> __ID:__ ${interaction.member.user.id}`, true)
+                    .addField("● Information", `> Reason: ${reason}`, false)
+                    .setTimestamp()
 
                 loghook.send({ embeds: [log] })
 

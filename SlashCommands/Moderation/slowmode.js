@@ -23,7 +23,7 @@ module.exports = {
    * @param {CommandInteraction} interaction
    * @param {String[]} args
    */
-  run: async (client, interaction, args, modlog) => {
+  run: async (client, interaction, args) => {
 
 
     const rate = interaction.options.getInteger("rate")

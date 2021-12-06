@@ -14,7 +14,7 @@ module.exports = {
    * @param {String[]} args
    */
 
-  run: async (client, message, args, missingpartembed, modlog) => {
+  run: async (client, message, args, missingpartembed) => {
 
     var reason = args.slice(1).join(" ")
 
@@ -69,7 +69,7 @@ module.exports = {
 
       )
 
-      modlog.send({ embeds: [log], components: [rowlog] })
+      client.webhook.moderation.send({ embeds: [log], components: [rowlog] })
 
 
 
@@ -103,7 +103,7 @@ module.exports = {
 
         )
 
-        modlog.send({ embeds: [log], components: [rowlog] })
+        client.webhook.moderation.send({ embeds: [log], components: [rowlog] })
 
       } else {
 
@@ -147,7 +147,7 @@ module.exports = {
 
         )
 
-        modlog.send({ embeds: [log], components: [rowlog] })
+        client.webhook.moderation.send({ embeds: [log], components: [rowlog] })
 
       }
 

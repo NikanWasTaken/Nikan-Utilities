@@ -42,7 +42,7 @@ module.exports = {
    * @param {CommandInteraction} interaction
    * @param {String[]} args
    */
-  run: async (client, interaction, args, modlog) => {
+  run: async (client, interaction, args) => {
 
     const action = interaction.options.getString("action")
     var reason = interaction.options.getString("reason")
@@ -95,7 +95,7 @@ module.exports = {
 
       )
 
-      modlog.send({ embeds: [log], components: [rowlog] })
+      client.webhook.moderation.send({ embeds: [log], components: [rowlog] })
 
     } else if (action == "end") {
 
@@ -141,7 +141,7 @@ module.exports = {
 
       )
 
-      modlog.send({ embeds: [log], components: [rowlog] })
+      client.webhook.moderation.send({ embeds: [log], components: [rowlog] })
 
     }
 

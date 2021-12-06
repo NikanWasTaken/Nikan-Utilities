@@ -14,7 +14,7 @@ module.exports = {
      * @param {String[]} args
      */
 
-    run: async (client, message, args, missingpartembed, modlog) => {
+    run: async (client, message, args, missingpartembed) => {
 
         var noperm = new MessageEmbed()
             .setDescription(`You don't have permissions to run this command.`)

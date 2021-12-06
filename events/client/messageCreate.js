@@ -77,16 +77,11 @@ client.on("messageCreate", async (message) => {
 
         if (command.cooldown && !message.member?.permissions?.has("ADMINISTRATOR")) {
 
-            var modlog = new WebhookClient({
-                id: `910100385501433887`,
-                token: `WDxlbcSouTKN5dKX65UaNvajh64Wb2OsXiKtDdmZgyS6Y9VtO22kD3E6YxrpgYMkVi5y`,
-            }); // https://discord.com/api/webhooks/910100385501433887/WDxlbcSouTKN5dKX65UaNvajh64Wb2OsXiKtDdmZgyS6Y9VtO22kD3E6YxrpgYMkVi5y
-
             let lek = `${~~(Timeout.get(`${command.name}${message.author.id}`) - Date.now())}`
             let cooldownembed = new MessageEmbed().setColor(`${client.embedColor.noColor}`).setDescription(`You need to wait \`${ms(parseInt(lek), { long: true })}\` to use the \`${command.name}\` command again.`)
             if (Timeout.has(`${command.name}${message.author.id}`))
                 return message.reply({ embeds: [cooldownembed] })
-            command.run(client, message, args, missingpartembed, modlog);
+            command.run(client, message, args, missingpartembed);
             Timeout.set(
                 `${command.name}${message.author.id}`,
                 Date.now() + command.cooldown
@@ -97,12 +92,7 @@ client.on("messageCreate", async (message) => {
 
         } else {
 
-            var modlog = new WebhookClient({
-                id: `910100385501433887`,
-                token: `WDxlbcSouTKN5dKX65UaNvajh64Wb2OsXiKtDdmZgyS6Y9VtO22kD3E6YxrpgYMkVi5y`,
-            }); // https://discord.com/api/webhooks/910100385501433887/WDxlbcSouTKN5dKX65UaNvajh64Wb2OsXiKtDdmZgyS6Y9VtO22kD3E6YxrpgYMkVi5y
-
-            await command.run(client, message, args, missingpartembed, modlog);
+            await command.run(client, message, args, missingpartembed);
 
         }
     }

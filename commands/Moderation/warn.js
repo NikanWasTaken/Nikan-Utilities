@@ -17,7 +17,7 @@ module.exports = {
    * @param {Message} message
    * @param {String[]} args
    */
-  run: async (client, message, args, missingpartembed, modlog) => {
+  run: async (client, message, args, missingpartembed) => {
 
 
     const user = message.guild.members.cache.get(args[0]) || message.mentions.members.first()
@@ -25,13 +25,15 @@ module.exports = {
 
     if (!args[0] || !reason) return message.reply({ embeds: [missingpartembed] })
 
-    const embed = new MessageEmbed().setDescription(`This user is not in this guild!`).setColor("RED")
-    message.reply({ embeds: [embed] }).then((msg) => {
-      setTimeout(() => {
-        msg?.delete()
-        message?.delete()
-      }, 5000)
-    })
+    if (!user) {
+      const embed = new MessageEmbed().setDescription(`This user is not in this guild!`).setColor("RED")
+      message.reply({ embeds: [embed] }).then((msg) => {
+        setTimeout(() => {
+          msg?.delete()
+          message?.delete()
+        }, 5000)
+      })
+    }
 
 
     const failed = new MessageEmbed().setDescription(`You don't have permissions to perform that action!`).setColor("RED")
@@ -110,7 +112,7 @@ module.exports = {
 
     )
 
-    modlog.send({ embeds: [log], components: [rowlog] })
+    client.webhook.moderation.send({ embeds: [log], components: [rowlog] })
 
     // ---- checks for 3 stikes, 6 and 9 strikes...
 

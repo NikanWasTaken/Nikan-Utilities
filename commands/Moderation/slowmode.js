@@ -16,7 +16,7 @@ module.exports = {
      * @param {String[]} args
      */
 
-    run: async (client, message, args, missingpartembed, modlog) => {
+    run: async (client, message, args, missingpartembed) => {
 
         if (!args[0]) {
 

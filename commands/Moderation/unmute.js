@@ -15,7 +15,7 @@ module.exports = {
      * @param {String[]} args
      */
 
-    run: async (client, message, args, missingpartembed, modlog) => {
+    run: async (client, message, args, missingpartembed) => {
 
         var user = message.guild.members.cache.get(args[0]) || message.mentions.members.first()
         if (!args[0]) return message.reply({ embeds: [missingpartembed] })
@@ -60,7 +60,7 @@ module.exports = {
 
                 )
 
-                modlog.send({ embeds: [log], components: [rowlog] })
+                client.webhook.moderation.send({ embeds: [log], components: [rowlog] })
 
             } else {
 

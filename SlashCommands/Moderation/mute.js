@@ -58,7 +58,7 @@ module.exports = {
    * @param {CommandInteraction} interaction
    * @param {String[]} args
    */
-  run: async (client, interaction, args, modlog) => {
+  run: async (client, interaction, args) => {
 
     const subs = interaction.options.getSubcommand(["add", "remove"])
 
@@ -165,7 +165,7 @@ module.exports = {
 
       )
 
-      modlog.send({ embeds: [log], components: [rowlog] })
+      client.webhook.moderation.send({ embeds: [log], components: [rowlog] })
 
 
       setTimeout(async () => {
@@ -239,7 +239,7 @@ module.exports = {
 
           )
 
-          modlog.send({ embeds: [log], components: [rowlog] })
+          client.webhook.moderation.send({ embeds: [log], components: [rowlog] })
 
         } else {
 

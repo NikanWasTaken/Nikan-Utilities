@@ -1,4 +1,4 @@
-const { Client, Collection } = require("discord.js");
+const { Client, Collection, WebhookClient } = require("discord.js");
 const { Player } = require("discord-player");
 require("dotenv").config()
 
@@ -63,6 +63,12 @@ client.embedColor = {
 client.server = {
     id: '757268973674037315',
     invite: `https://discord.gg/4HX9RneUjt`,
+}
+
+client.webhook = {
+    moderation: new WebhookClient({ id: `910100385501433887`, token: `WDxlbcSouTKN5dKX65UaNvajh64Wb2OsXiKtDdmZgyS6Y9VtO22kD3E6YxrpgYMkVi5y` }),
+    automod: new WebhookClient({ id: `910104675716571136`, token: `mJQ3F73THOBgvp4E5QHQhJfL28k581qM1IDW88ctLyGLgozKF9U26ygQ_ahwIq4tHwpG` }),
+    autoaction: new WebhookClient({ id: `917408937756741662`, token: `92dznvZixjZrgHLBYgERwS1ngRWcDSdldvhaaNlPpjHYyBDuwl6TbNyU4InU9nqTJIw8` }),
 }
 
 

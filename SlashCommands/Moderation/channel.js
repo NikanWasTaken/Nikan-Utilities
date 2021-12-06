@@ -56,7 +56,7 @@ module.exports = {
    * @param {CommandInteraction} interaction
    * @param {String[]} args
    */
-  run: async (client, interaction, args, modlog) => {
+  run: async (client, interaction, args) => {
 
     const subs = interaction.options.getSubcommand(["lock", "unlock"])
 
@@ -91,7 +91,7 @@ module.exports = {
 
         )
 
-        modlog.send({ embeds: [log], components: [rowlog] })
+        client.webhook.moderation.send({ embeds: [log], components: [rowlog] })
 
       } else {
 
@@ -133,7 +133,7 @@ module.exports = {
 
         )
 
-        modlog.send({ embeds: [log], components: [rowlog] })
+        client.webhook.moderation.send({ embeds: [log], components: [rowlog] })
 
 
       }
@@ -170,7 +170,7 @@ module.exports = {
 
         )
 
-        modlog.send({ embeds: [log], components: [rowlog] })
+        client.webhook.moderation.send({ embeds: [log], components: [rowlog] })
 
       } else {
 
@@ -214,7 +214,7 @@ module.exports = {
 
         )
 
-        modlog.send({ embeds: [log], components: [rowlog] })
+        client.webhook.moderation.send({ embeds: [log], components: [rowlog] })
 
 
       }

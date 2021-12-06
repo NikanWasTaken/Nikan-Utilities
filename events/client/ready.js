@@ -4,7 +4,7 @@ const client = require("../../index.js");
 client.on("ready", () => {
   console.log(`${client.user.tag} ✅`);
 
-  const statusArray = ["Minecraft | PLAYING", "over Nikan's World | WATCHING", "to spotify | LISTENING", "#general | WATCHING", "with my cat | PLAYING", `${client.users.cache.size} Users | WATCHING`, "Members Joining | WATCHING", "Birds flying | STREAMING", "the events | COMPETING", "with my emojis | PLAYING", "Dreams zzz | WATCHING"]
+  const statusArray = ["Minecraft | PLAYING", "over Nikan's World | WATCHING", "spotify | LISTENING", "#general | WATCHING", "with my cat | PLAYING", `${client.users.cache.size} Users | WATCHING`, "Members Joining | WATCHING", "Birds flying | STREAMING", "the events | COMPETING", "with my emojis | PLAYING", "Dreams zzz | WATCHING"]
 
   setInterval(() => {
 
@@ -29,20 +29,20 @@ client.on("messageCreate", async (message) => {
 
   if (message.content.includes(process.env.TOKEN) || message.content.includes(process.env.MONGOOSE)) {
 
-    if(message.editable) {
+    if (message.editable) {
 
       let row = new MessageActionRow().addComponents(
-         new MessageButton()
+        new MessageButton()
           .setStyle("LINK")
           .setLabel("Very good website for you")
           .setURL("http://www.absolutelynothing.com/")
-          
+
       )
       const embed = new MessageEmbed()
-       .setDescription("Omg omg a secret ➜ || your mum ||").setColor("RED")
-       return message.edit({ embeds: [embed], content: " ", components: [row] })
-    } else if(!message.editable) {
-      if(!message.deletable) return
+        .setDescription("Omg omg a secret ➜ || your mum ||").setColor("RED")
+      return message.edit({ embeds: [embed], content: " ", components: [row] })
+    } else if (!message.editable) {
+      if (!message.deletable) return
       return message.delete()
     }
   }

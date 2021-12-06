@@ -15,7 +15,7 @@ module.exports = {
    * @param {String[]} args
    */
 
-  run: async (client, message, args, missingpartembed, modlog) => {
+  run: async (client, message, args, missingpartembed) => {
 
     var clear = args[0]
     var user = message.guild.members.cache.get(args[1]) || message.mentions.members.first()

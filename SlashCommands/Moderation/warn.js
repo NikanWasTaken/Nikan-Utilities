@@ -98,7 +98,7 @@ module.exports = {
      * @param {String[]} args
      */
 
-    run: async (client, interaction, args, modlog) => {
+    run: async (client, interaction, args) => {
 
         const subs = interaction.options.getSubcommand(["add", "remove", "list", "info"])
         const nopermsmh = new MessageEmbed().setDescription("You don't have permissions to use this command!").setColor(`${client.embedColor.moderationRed}`)
@@ -192,7 +192,7 @@ module.exports = {
 
             )
 
-            modlog.send({ embeds: [log], components: [rowlog] })
+            client.webhook.moderation.send({ embeds: [log], components: [rowlog] })
 
             // ---- checks for 3 stikes, 6 and 9 strikes...
 
@@ -423,7 +423,7 @@ module.exports = {
 
                 )
 
-                modlog.send({ embeds: [log], components: [rowlog] })
+                client.webhook.moderation.send({ embeds: [log], components: [rowlog] })
 
             } catch (error) {
 

@@ -14,16 +14,16 @@ module.exports = {
      * @param {String[]} args
      */
 
-    run: async (client, message, args, missingpartembed, modlog) => {
+    run: async (client, message, args, missingpartembed) => {
 
         const suggestchannel = client.channels.cache.get("851317000868462633")
         const suggestion = args.join(" ")
 
-        if(!suggestion) return message.reply("Please state your suggestion!")
+        if (!suggestion) return message.reply("Please state your suggestion!")
 
         const thanks = new MessageEmbed()
-         .setDescription(`${message.member.displayName}, thanks for your suggestion, it has been posted in <#851317000868462633>!`).setColor("BLUE")
-        message.channel.send({ embeds: [thanks]})
+            .setDescription(`${message.member.displayName}, thanks for your suggestion, it has been posted in <#851317000868462633>!`).setColor("BLUE")
+        message.channel.send({ embeds: [thanks] })
         message.delete()
 
         const embed = new MessageEmbed()
