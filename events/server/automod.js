@@ -46,7 +46,7 @@ client.on("messageCreate", async (message) => {
 
   // Prohibited Words
 
-  if (message.guild.id !== `${client.server.id}`) return
+  if (message?.guild?.id !== `${client.server.id}`) return
 
 
   for (var x in prohibitedwords) {

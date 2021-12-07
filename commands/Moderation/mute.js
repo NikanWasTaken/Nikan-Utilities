@@ -135,6 +135,17 @@ module.exports = {
 
         const findmember = message.guild.members.cache.get(`${user.user.id}`)
 
+        const warns2 = new MessageEmbed()
+          .setAuthor(`Automatic Actions`, `${client.user.displayAvatarURL()}`)
+          .setColor(`${client.color.mute}`)
+          .setTitle(`➜ Unmute After Tempmute`).setURL(`${client.server.invite}`)
+          .addField("User", `• ${await client.users.fetch(`${user.user.id}`) || "I couldn't find them!"}`, true)
+          .addField("User Tag", `• ${(await client.users.fetch(`${user.user.id}`)).tag || "I couldn't find them!"}`, true)
+          .addField("User ID", `• ${(await client.users.fetch(`${user.user.id}`)).id || "I couldn't find them!"}`, true)
+          .addField("Reason", `Unmuted after a ${ms(duration, { long: true })} of tempmute!`)
+
+        client.webhook.autoaction.send({ embeds: [warns2] })
+
         if (findmember) {
 
           db.findOne({ guildid: message.guild.id, user: user.user.id }, async (err, data) => {
@@ -162,17 +173,6 @@ module.exports = {
             }
           })
         }
-
-        const warns2 = new MessageEmbed()
-          .setAuthor(`Automatic Actions`, `${client.user.displayAvatarURL()}`)
-          .setColor(`${client.color.mute}`)
-          .setTitle(`➜ Unmute after ${ms(duration, { long: true })} Tempmute`)
-          .addField("User", `• ${client.users.fetch(`${user.user.id}`) || "I couldn't find them!"}`, true)
-          .addField("User Tag", `• ${(await client.users.fetch(`${user.user.id}`)).tag || "I couldn't find them!"}`, true)
-          .addField("User ID", `• ${(await client.users.fetch(`${user.user.id}`)).id || "I couldn't find them!"}`, true)
-          .addField("Reason", `Reached 2 normal strikes!`)
-
-        client.webhook.autoaction.send({ embeds: [warns2] })
 
       }, ms(time))
 
