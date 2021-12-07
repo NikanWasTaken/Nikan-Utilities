@@ -33,7 +33,7 @@ module.exports = {
             const eeee = new database({
                 correctNumber: "In process...",
                 hostId: `${message.author.id}`,
-                guildId: `757268973674037315`,
+                guildId: `${client.server.id}`,
                 prize: "In process...",
                 totalGuesses: "In process...",
                 status: "In process...",
@@ -74,7 +74,7 @@ module.exports = {
                         if (m.content.toLowerCase() == "cancel") { return dmchannel.send("Canceled!"), await database.findByIdAndDelete(`${eeee._id}`), firstc.stop() }
                         const check = m.content.split(" / ")
 
-                        database.findOneAndUpdate({ guildId: "757268973674037315", hostId: `${m.author.id}` }, { $set: { range: `${check[0]} to ${check[1]}` } }, async (data, err) => {
+                        database.findOneAndUpdate({ guildId: `${client.server.id}`, hostId: `${m.author.id}` }, { $set: { range: `${check[0]} to ${check[1]}` } }, async (data, err) => {
 
                         })
 
@@ -95,7 +95,7 @@ module.exports = {
                             if (isNaN(m.content)) return dmchannel.send("Invalid Number, please try again but this time provide a valid number!")
 
 
-                            database.findOneAndUpdate({ guildId: "757268973674037315", hostId: `${m.author.id}` }, { $set: { correctNumber: `${m.content}` } }, async (data, err) => {
+                            database.findOneAndUpdate({ guildId: `${client.server.id}`, hostId: `${m.author.id}` }, { $set: { correctNumber: `${m.content}` } }, async (data, err) => {
 
                             })
 
@@ -116,7 +116,7 @@ module.exports = {
                                 if (m.author.bot) return
                                 if (m.content.toLowerCase() == "cancel") { return dmchannel.send("Canceled!"), await database.findByIdAndDelete(`${eeee._id}`), thirdc.stop() }
 
-                                database.findOneAndUpdate({ guildId: "757268973674037315", hostId: `${m.author.id}` }, { $set: { prize: `${m.content}` } }, async (data, err) => {
+                                database.findOneAndUpdate({ guildId: `${client.server.id}`, hostId: `${m.author.id}` }, { $set: { prize: `${m.content}` } }, async (data, err) => {
 
                                 })
 
@@ -139,7 +139,7 @@ module.exports = {
                                 )
 
                                 const okk = new MessageEmbed()
-                                    .setAuthor(`${client.guilds.cache.get("757268973674037315").name}`, client.guilds.cache.get("757268973674037315").iconURL({ dynamic: true }))
+                                    .setAuthor(`${client.guilds.cache.get(`${client.server.id}`).name}`, client.guilds.cache.get(`${client.server.id}`).iconURL({ dynamic: true }))
                                     .setTitle("Are you sure?")
                                     .setColor("YELLOW")
                                     .setURL(`${client.server.invite}`)
@@ -159,7 +159,7 @@ module.exports = {
                                     if (collected.customId === "yes-setup-gtn") {
 
                                         const embed = new MessageEmbed()
-                                            .setAuthor(`${client.guilds.cache.get("757268973674037315").name}`, client.guilds.cache.get("757268973674037315").iconURL({ dynamic: true }))
+                                            .setAuthor(`${client.guilds.cache.get(`${client.server.id}`).name}`, client.guilds.cache.get(`${client.server.id}`).iconURL({ dynamic: true }))
                                             .setTitle("Data has been saved")
                                             .setColor("GREEN")
                                             .setURL(`${client.server.invite}`)
@@ -170,7 +170,7 @@ module.exports = {
                                         collected.update({ embeds: [embed], components: [] })
 
 
-                                        database.findOneAndUpdate({ guildId: "757268973674037315", hostId: `${collected.user.id}` }, { $set: { status: `saved and ready to get started` } }, async (data, err) => {
+                                        database.findOneAndUpdate({ guildId: `${client.server.id}`, hostId: `${collected.user.id}` }, { $set: { status: `saved and ready to get started` } }, async (data, err) => {
 
                                         })
 
@@ -187,7 +187,7 @@ module.exports = {
                                     } else if (collected.customId === "no-setup-gtn") {
 
                                         const embed = new MessageEmbed()
-                                            .setAuthor(`${client.guilds.cache.get("757268973674037315").name}`, client.guilds.cache.get("757268973674037315").iconURL({ dynamic: true }))
+                                            .setAuthor(`${client.guilds.cache.get(`${client.server.id}`).name}`, client.guilds.cache.get(`${client.server.id}`).iconURL({ dynamic: true }))
                                             .setTitle("Data has been removed")
                                             .setColor("RED")
                                             .setURL(`${client.server.invite}`)
@@ -197,7 +197,7 @@ module.exports = {
 
                                         collected.update({ embeds: [embed], components: [] })
 
-                                        await database.findOneAndDelete({ guildId: "757268973674037315", hostId: `${collected.user.id}` })
+                                        await database.findOneAndDelete({ guildId: `${client.server.id}`, hostId: `${collected.user.id}` })
 
                                     }
 

@@ -76,7 +76,7 @@ client.on("guildMemberAdd", member => {
 
 client.on("guildMemberRemove", async member => {
 
-    if (member.guild.id !== "757268973674037315") return
+    if (member.guild.id !== `${client.server.id}`) return
     const allmembersvc = client.channels.cache.get("874721718319603743");
     const humansvc = client.channels.cache.get("874721721930878997");
 

@@ -94,7 +94,7 @@ module.exports = {
                     new MessageButton()
                         .setLabel("General Channel")
                         .setStyle("LINK")
-                        .setURL(`https://discord.com/channels/757268973674037315/782837655082631229`)
+                        .setURL(`https://discord.com/channels/${client.server.id}/782837655082631229`)
                 )
 
                 m.delete()
