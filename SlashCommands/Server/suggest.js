@@ -4,18 +4,18 @@ const { Client, CommandInteraction, MessageEmbed } = require("discord.js");
 
 module.exports = {
     name: "suggest",
-    description : `Suggest something for the server or the bot!`,
+    description: `Suggest something for the server or the bot!`,
     ephemeral: true,
     botCommandOnly: true,
     cooldown: 600000,
     options: [
         {
-           name: 'suggestion',
-           description: "What is your suggestion? Please provide it here with details!",
-           required: true,
-           type: "STRING",
+            name: 'suggestion',
+            description: "What is your suggestion? Please provide it here with details!",
+            required: true,
+            type: "STRING",
         },
-      ],
+    ],
 
 
     /**
@@ -26,12 +26,12 @@ module.exports = {
      */
     run: async (client, interaction, args) => {
 
-        const suggestchannel = client.channels.cache.get("851317000868462633") 
+        const suggestchannel = client.channels.cache.get("851317000868462633")
         const suggestion = interaction.options.getString("suggestion")
 
         const thanks = new MessageEmbed()
-         .setDescription(`${interaction.member.displayName}, thanks for your suggestion, it has been posted in <#851317000868462633>!`).setColor(`${client.embedColor.botBlue}`)
-        interaction.followUp({ embeds: [thanks]})
+            .setDescription(`${interaction.member.displayName}, thanks for your suggestion, it has been posted in <#851317000868462633>!`).setColor(`${client.color.botBlue}`)
+        interaction.followUp({ embeds: [thanks] })
 
         const embed = new MessageEmbed()
             .setAuthor(`${interaction.user.tag}`, interaction.user.displayAvatarURL({ dynamic: true }))

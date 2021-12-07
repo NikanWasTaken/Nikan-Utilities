@@ -53,7 +53,7 @@ module.exports = {
 
         const embed = new MessageEmbed()
             .setAuthor(`${message.guild.name}`, `${message.guild.iconURL({ dynamic: true })}`)
-            .setColor(`${client.embedColor.cool}`)
+            .setColor(`${client.color.cool}`)
 
         if (added?.length)
             embed.addField(`Added [${added.length}]`, `${added.map(e => e) || "no"}`)

@@ -24,7 +24,7 @@ client.on("channelDelete", (channel) => {
             .setAuthor(`${client.guilds.cache.get(serverId).name}`, `${client.guilds.cache.get(serverId).iconURL({ dynamic: true })}`)
             .setTitle("Thread Closed").setURL(`${client.server.invite}`)
             .setDescription(`Your thread has been closed by a staff member, thanks for contacting ${client.guilds.cache.get(serverId).name}. If you got more problems, feel free to open a thread and ask your question again!`)
-            .setColor(`${client.embedColor.botBlue}`)
+            .setColor(`${client.color.botBlue}`)
             .setFooter(`Thread has been closed`)
             .setTimestamp()
 
@@ -56,7 +56,7 @@ client.on("messageCreate", async (message) => {
                 .setAuthor("Staff Team", "https://cdn.discordapp.com/attachments/870637449158742057/909825851225427978/staff-icon.png")
                 .setDescription(`${message.content ? message.content : `No content in this message!`}`)
                 .setImage(message.attachments.first()?.proxyURL || null)
-                .setColor(`${client.embedColor.botBlue}`)
+                .setColor(`${client.color.botBlue}`)
 
                 ; (await member).send({ embeds: [respondembed] }).catch(e => { return message.channel.send({ content: "This person has closed his dms, couldn't dm them!" }), message.reactions.removeAll(), message.react(`${client.botEmoji.failed}`) })
             await message.react(`${client.botEmoji.success}`)
@@ -77,7 +77,7 @@ client.on("messageCreate", async (message) => {
                 .setTitle("Blacklisted From Opening Threads").setURL(`${client.server.invite}`)
                 .setDescription("Sorry, but you've been blacklisted from opening modmail threads.\nIf you think that this punishment is not fair and you don't deserve it, please contact a head moderator or above!")
                 .addField("Reason", `${await find.reason}`, true)
-                .setColor(`${client.embedColor.moderationRed}`)
+                .setColor(`${client.color.moderationRed}`)
                 .setFooter(`${client.user.username}`, `${client.user.displayAvatarURL()}`)
 
             return message.channel.send({ embeds: [edie] })
@@ -119,7 +119,7 @@ client.on("messageCreate", async (message) => {
                 .setTitle("Are you sure that you want to create a thread?").setURL(`${client.server.invite}`)
                 .setDescription("Please open a thread if you're sure that your question is related to an option below!\nCreating tickets for trolling reasons will get you different punishments!")
                 .addField("** **", `**➜ #1 Reporting A User**\nYou can report users for the stuff happened in ${client.guilds.cache.get(serverId).name}! This can include people who are breaking the rules, dm advertising, sending you gore content etc..\n\n**➜ #2 Request Role**\nYou can open a thread if you want to get a role in ${client.guilds.cache.get(serverId)}! These roles can only be the creator roles, giveaways, event host etc.. Please do not open a thread for free staff roles.\n\n**➜ #3 Appeal**\nYou can create a thread if you want to appeal a warning/mute given by a **moderator** to you. You may not ask for auto moderation warns removal as they expire after 2 days!\n\n**➜ #4 Any Other Question**\nYou can create a thread if you want to ask a question about the server. For example: How do I suggest something to the server.`)
-                .setColor(`${client.embedColor.botBlue}`)
+                .setColor(`${client.color.botBlue}`)
                 .setFooter("Please click the buttons below to choose your action!")
 
             const comsg = await message.channel.send({ embeds: [areusure], components: [dmbuttons] })
@@ -144,7 +144,7 @@ client.on("messageCreate", async (message) => {
                     const embed = new MessageEmbed()
                         .setAuthor(`${client.guilds.cache.get(serverId).name}`, `${client.guilds.cache.get(serverId).iconURL({ dynamic: true })}`)
                         .setTitle("Ticket Creation Has Been Canceled").setURL(`${client.server.invite}`)
-                        .setColor(`${client.embedColor.failed}`)
+                        .setColor(`${client.color.failed}`)
                         .setDescription("Your ticket creation has been cancelled according to your button choice!")
                         .setFooter(`${client.user.username}`, `${client.user.displayAvatarURL()}`)
                         .setTimestamp()
@@ -157,7 +157,7 @@ client.on("messageCreate", async (message) => {
                     const createdembed = new MessageEmbed()
                         .setAuthor(`${client.guilds.cache.get(serverId).name}`, `${client.guilds.cache.get(serverId).iconURL({ dynamic: true })}`)
                         .setTitle("Thread Created").setURL(`${client.server.invite}`)
-                        .setColor(`${client.embedColor.success}`)
+                        .setColor(`${client.color.success}`)
                         .setDescription("Your thread has been created!\nPlease write your question here and don't wait for a staff member to tell you about asking the question.\nBe patient & wait for a staff member to respond, we'll get to you as soon as possible!")
                         .setFooter(`${client.user.username}`, `${client.user.displayAvatarURL()}`)
                         .setTimestamp()
@@ -178,7 +178,7 @@ client.on("messageCreate", async (message) => {
                         .setThumbnail(message.author.displayAvatarURL({ dynamic: true }))
                         .addField("__**Account Information**__", `**Username** • ${message.author.username}\n**ID** • ${message.author.id}\n**discriminator** • #${message.author.discriminator}\n**Tag** • ${message.author.tag}\n**Registered** • <t:${~~(message.author.createdAt / 1000)}:f> [<t:${~~(message.author.createdAt / 1000)}:R>]\n** **`)
                         .addField("__**Server Member Information**__", `**Nickname** • ${message.author.username == client.guilds.cache.get(serverId).members.cache.get(message.author.id).displayName ? `No Nickname in ${client.guilds.cache.get(serverId).name}` : client.guilds.cache.get(serverId).members.cache.get(message.author.id).displayName}\n**Joined** • <t:${~~(client.guilds.cache.get(serverId).members.cache.get(message.author.id).joinedAt / 1000)}:f> [<t:${~~(client.guilds.cache.get(serverId).members.cache.get(message.author.id).joinedAt / 1000)}:R>]`)
-                        .setColor(`${client.embedColor.botBlue}`)
+                        .setColor(`${client.color.botBlue}`)
                         .setFooter(`${client.user.username}`, client.user.displayAvatarURL())
                         .setTimestamp()
 
@@ -187,7 +187,7 @@ client.on("messageCreate", async (message) => {
                     let log = new MessageEmbed()
                         .setAuthor(`Ticket Created`, client.guilds.cache.get(serverId).iconURL({ dynamic: true }))
                         .setThumbnail(`${message.author.displayAvatarURL({ dynamic: true })}`)
-                        .setColor(`${client.embedColor.botBlue}`)
+                        .setColor(`${client.color.botBlue}`)
                         .addField('Member Info', `● ${message.author}\n> __Tag:__ ${message.author.tag}\n> __ID:__ ${message.author.id}`, true)
                         .setTimestamp()
 
@@ -222,7 +222,7 @@ client.on("messageCreate", async (message) => {
                 .setAuthor(message.author.tag, message.author.displayAvatarURL({ dynamic: true }))
                 .setDescription(`${message.content ? message.content : `No content in this message!`}`)
                 .setImage(message.attachments.first()?.proxyURL || null)
-                .setColor(`${client.embedColor.botBlue}`)
+                .setColor(`${client.color.botBlue}`)
 
                 ; (await personticket).send({ embeds: [embed] })
             message.react(`${client.botEmoji.success}`)

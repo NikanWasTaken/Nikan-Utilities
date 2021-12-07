@@ -14,7 +14,7 @@ process.on("unhandledRejection", (reason, promise) => {
         .addField("Promise", `\`\`\`${promise}\`\`\``)
         .setTimestamp()
         .setFooter(`${client.user.username} Error Handling`, client.user.displayAvatarURL({ dynamic: true }))
-        .setColor(`${client.embedColor.noColor}`)
+        .setColor(`${client.color.noColor}`)
 
     console.log(reason)
     return channel.send({ embeds: [embed] })
@@ -34,7 +34,7 @@ process.on("uncaughtException", (err, origin) => {
         .addField("Origin", `\`\`\`${origin}\`\`\``)
         .setTimestamp()
         .setFooter(`${client.user.username} Error Handling`, client.user.displayAvatarURL({ dynamic: true }))
-        .setColor(`${client.embedColor.noColor}`)
+        .setColor(`${client.color.noColor}`)
 
     return channel.send({ embeds: [embed] })
 
@@ -52,7 +52,7 @@ process.on("uncaughtExceptionMonitor", (err, origin) => {
         .addField("Origin", `\`\`\`${origin}\`\`\``)
         .setTimestamp()
         .setFooter(`${client.user.username} Error Handling`, client.user.displayAvatarURL({ dynamic: true }))
-        .setColor(`${client.embedColor.noColor}`)
+        .setColor(`${client.color.noColor}`)
 
     return channel.send({ embeds: [embed] })
 

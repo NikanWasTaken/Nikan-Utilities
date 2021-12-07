@@ -94,7 +94,7 @@ module.exports = {
 
     let mue = new MessageEmbed()
       .setDescription(`${user.user} has been **muted** | \`${data2._id}\``)
-      .setColor(`${client.embedColor.moderation}`)
+      .setColor(`${client.color.moderation}`)
     let msg = await message.channel.send({ embeds: [mue] }).then(message.delete())
 
     var duration = ms(time)
@@ -102,7 +102,7 @@ module.exports = {
     let mm = new MessageEmbed()
       .setAuthor(client.user.username, client.user.displayAvatarURL({ dynamic: true }))
       .setTitle(`You've been Muted in ${message.guild.name}`)
-      .setColor(`${client.embedColor.modDm}`)
+      .setColor(`${client.color.modDm}`)
       .setTimestamp()
       .addField("Punishment ID", `${data2._id}`, true)
       .addField("Duration", `${ms(duration, { long: true })}`, true)
@@ -110,17 +110,14 @@ module.exports = {
     user.send({ embeds: [mm] }).catch(e => { return })
 
 
-    let log = new MessageEmbed()
-      .setAuthor(`Moderation • Mute`, message.guild.iconURL({ dynamic: true }))
-      .setDescription(`** **`)
-      .setColor(`${client.embedColor.logs}`)
-      .addField('👥 User', `Mention • ${user.user}\nTag • ${user.user.tag}\nID • ${user.user.id}`, true)
-      .addField("<:NUhmod:910882014582951946> Moderator", `Mention • ${message.author}\nTag • ${message.author.tag}\nID • ${message.author.id}`, true)
-      .addField("** **", "** **", true)
-      .addField("Punishment ID", `\`${data._id}\``, true)
-      .addField("Duration", `${ms(duration, { long: true })}`, true)
-      .addField("Reason", `${reason}`, false)
-      .setTimestamp()
+    const log = new MessageEmbed()
+      .setAuthor(`${client.user.username}`, `${client.user.displayAvatarURL()}`)
+      .setTitle(`➜ ${ms(duration, { long: true })} Of Mute`).setURL(`${client.server.invite}`)
+      .setColor(`${client.color.mute}`)
+      .addField("➜ User", `• ${user.user}\n• ${user.user.tag}\n• ${user.user.id}`, true)
+      .addField("➜ Moderator", `• ${message.author}\n• ${message.author.tag}\n• ${message.author.id}`, true)
+      .addField("➜ Reason", `${reason}`, false)
+      .setFooter(`ID: ${data._id}`)
 
     const rowlog = new MessageActionRow().addComponents(
 
@@ -165,6 +162,17 @@ module.exports = {
             }
           })
         }
+
+        const warns2 = new MessageEmbed()
+          .setAuthor(`Automatic Actions`, `${client.user.displayAvatarURL()}`)
+          .setColor(`${client.color.mute}`)
+          .setTitle(`➜ Unmute after ${ms(duration, { long: true })} Tempmute`)
+          .addField("User", `• ${client.users.fetch(`${user.user.id}`) || "I couldn't find them!"}`, true)
+          .addField("User Tag", `• ${(await client.users.fetch(`${user.user.id}`)).tag || "I couldn't find them!"}`, true)
+          .addField("User ID", `• ${(await client.users.fetch(`${user.user.id}`)).id || "I couldn't find them!"}`, true)
+          .addField("Reason", `Reached 2 normal strikes!`)
+
+        client.webhook.autoaction.send({ embeds: [warns2] })
 
       }, ms(time))
 

@@ -66,36 +66,17 @@ module.exports = {
       var hii = new MessageEmbed()
         .setAuthor("Server Locked", client.user.displayAvatarURL({ dynamic: true }))
         .setDescription("This server has been locked by a staff member. You are not muted.\nMore information will be sent here eventually.")
-        .setColor(`${client.embedColor.moderation}`)
+        .setColor(`${client.color.moderation}`)
         .setTimestamp()
         .addFields({
           name: "Reason",
           value: reason
         })
 
-      let msg2 = interaction.guild.channels.cache.get("782837655082631229").send({ embeds: [hii] })
+      await interaction.guild.channels.cache.get("782837655082631229").send({ embeds: [hii] })
 
       await msg.edit({ content: "Server Locked!" })
 
-
-      let log = new MessageEmbed()
-        .setAuthor(`Moderation • Lockdown`, interaction.guild.iconURL({ dynamic: true }))
-        .setDescription(`** **`)
-        .setColor(`${client.embedColor.logs}`)
-        .addField("<:NUhmod:910882014582951946> Moderator", `Mention • ${interaction.user}\nTag • ${interaction.user.tag}\nID • ${interaction.user.id}`, true)
-        .addField("Reason", `${reason}`)
-        .setTimestamp()
-
-      const rowlog = new MessageActionRow().addComponents(
-
-        new MessageButton()
-          .setLabel("Jump to the action")
-          .setStyle("LINK")
-          .setURL(`https://discord.com/channels/${msg2.guild.id}/${msg2.channel.id}/${msg2.id}`)
-
-      )
-
-      client.webhook.moderation.send({ embeds: [log], components: [rowlog] })
 
     } else if (action == "end") {
 
@@ -116,32 +97,14 @@ module.exports = {
       var hii = new MessageEmbed()
         .setAuthor("Server Unlocked", client.user.displayAvatarURL({ dynamic: true }))
         .setDescription("This server has been unlocked by a staff member.\nYou may start chatting now!")
-        .setColor(`${client.embedColor.moderation}`)
+        .setColor(`${client.color.moderation}`)
         .addField("Reason", `${reason}`)
         .setTimestamp()
 
-      let msg2 = interaction.guild.channels.cache.get("782837655082631229").send({ embeds: [hii] })
+      await interaction.guild.channels.cache.get("782837655082631229").send({ embeds: [hii] })
 
       await msg.edit({ content: "Server unlocked!" })
 
-      let log = new MessageEmbed()
-        .setAuthor(`Moderation • Lockdown End`, interaction.guild.iconURL({ dynamic: true }))
-        .setDescription(`** **`)
-        .setColor(`${client.embedColor.logs}`)
-        .addField("<:NUhmod:910882014582951946> Moderator", `Mention • ${interaction.user}\nTag • ${interaction.user.tag}\nID • ${interaction.user.id}`, true)
-        .addField("Reason", `${reason}`)
-        .setTimestamp()
-
-      const rowlog = new MessageActionRow().addComponents(
-
-        new MessageButton()
-          .setLabel("Jump to the action")
-          .setStyle("LINK")
-          .setURL(`https://discord.com/channels/${msg2.guild.id}/${msg2.channel.id}/${msg2.id}`)
-
-      )
-
-      client.webhook.moderation.send({ embeds: [log], components: [rowlog] })
 
     }
 

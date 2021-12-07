@@ -82,7 +82,7 @@ module.exports = {
             const reason = interaction.options.getString("reason") || "No reason provided";
 
             const channelblock = new MessageEmbed()
-                .setDescription("You may only use this command in tickets channel from modmail category!").setColor(`${client.embedColor.moderationRed}`);
+                .setDescription("You may only use this command in tickets channel from modmail category!").setColor(`${client.color.moderationRed}`);
 
             if (interaction.channel.parentId !== categoryId || interaction.channel.id === "880538350740725850" || interaction.channel.id === "885266382235795477") return interaction.followUp({ embeds: [channelblock] })
 
@@ -101,7 +101,7 @@ module.exports = {
 
             const areusure = new MessageEmbed()
                 .setAuthor(`${interaction.guild.name}`, interaction.guild.iconURL({ dynamic: true }))
-                .setColor(`${client.embedColor.botBlue}`)
+                .setColor(`${client.color.botBlue}`)
                 .setTitle("Are you sure that you want to close this thread?").setURL(`${client.server.invite}`)
                 .setDescription("By accepting to close this thread, this channel will be deleted and you can't undo this action!\nAre you sure?")
                 .setFooter(`You have 60 seconds to answer`, client.user.displayAvatarURL()).setTimestamp()
@@ -121,7 +121,7 @@ module.exports = {
                     const embed = new MessageEmbed()
                         .setAuthor(`${interaction.guild.name}`, `${interaction.guild.iconURL({ dynamic: true })}`)
                         .setTitle("Ticket Deletion Has Been Canceled").setURL(`${client.server.invite}`)
-                        .setColor(`${client.embedColor.failed}`)
+                        .setColor(`${client.color.failed}`)
                         .setDescription("The ticket deletion has been cancelled according to your button choice!")
                         .setFooter(`${client.user.username}`, `${client.user.displayAvatarURL()}`)
                         .setTimestamp()
@@ -136,7 +136,7 @@ module.exports = {
 
                     const logembed = new MessageEmbed()
                         .setAuthor(`Ticket Closed`, interaction.guild.iconURL({ dynamic: true }))
-                        .setColor(`${client.embedColor.logYellow}`)
+                        .setColor(`${client.color.logYellow}`)
                         .addField('Ticket Opened By', `● ${user.user}\n> __Tag:__ ${user.user.tag}\n> __ID:__ ${user.user.id}`, true)
                         .addField("Mod Info", `● ${interaction.member.user}\n> __Tag:__ ${interaction.member.user.tag}\n> __ID:__ ${interaction.member.user.id}`, true)
                         .setTimestamp()
@@ -146,7 +146,7 @@ module.exports = {
                     const createdembed = new MessageEmbed()
                         .setAuthor(`${client.guilds.cache.get(serverId).name}`, `${interaction.guild.iconURL({ dynamic: true })}`)
                         .setTitle("Thread Deletion Confimred").setURL(`${client.server.invite}`)
-                        .setColor(`${client.embedColor.success}`)
+                        .setColor(`${client.color.success}`)
                         .setDescription("This ticket will be deleted in 10 seconds!\nThread deletion has been confimied according to your button choice!")
                         .setFooter(`${client.user.username}`, `${client.user.displayAvatarURL()}`)
                         .setTimestamp()
@@ -193,13 +193,13 @@ module.exports = {
                     data.save()
 
                     const embed = new MessageEmbed()
-                        .setDescription(`${user.user.tag} has been added to the modmail blacklist!`).setColor(`${client.embedColor.moderation}`)
+                        .setDescription(`${user.user.tag} has been added to the modmail blacklist!`).setColor(`${client.color.moderation}`)
 
                     interaction.followUp({ embeds: [embed] })
 
                     let log = new MessageEmbed()
                         .setAuthor(`BlackList Added`, interaction.guild.iconURL({ dynamic: true }))
-                        .setColor(`${client.embedColor.logAqua}`)
+                        .setColor(`${client.color.logAqua}`)
                         .addField('Member Info', `● ${user.user}\n> __Tag:__ ${user.user.tag}\n> __ID:__ ${user.user.id}`, true)
                         .addField("Mod Info", `● ${interaction.member.user}\n> __Tag:__ ${interaction.member.user.tag}\n> __ID:__ ${interaction.member.user.id}`, true)
                         .addField("● Information", `> Reason: ${reason}`, false)
@@ -218,14 +218,14 @@ module.exports = {
                 if (!find) return interaction.followUp({ content: "This user is not blacklisted!" })
 
                 const embed = new MessageEmbed()
-                    .setDescription(`${user.user.tag} has been removed from the modmail blacklist!`).setColor(`${client.embedColor.moderation}`)
+                    .setDescription(`${user.user.tag} has been removed from the modmail blacklist!`).setColor(`${client.color.moderation}`)
 
                 await find.delete()
                 interaction.followUp({ embeds: [embed] })
 
                 let log = new MessageEmbed()
                     .setAuthor(`BlackList Removed`, interaction.guild.iconURL({ dynamic: true }))
-                    .setColor(`${client.embedColor.logGreen}`)
+                    .setColor(`${client.color.logGreen}`)
                     .addField('Member Info', `● ${user.user}\n> __Tag:__ ${user.user.tag}\n> __ID:__ ${user.user.id}`, true)
                     .addField("Mod Info", `● ${interaction.member.user}\n> __Tag:__ ${interaction.member.user.tag}\n> __ID:__ ${interaction.member.user.id}`, true)
                     .addField("● Information", `> Reason: ${reason}`, false)

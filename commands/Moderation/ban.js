@@ -41,18 +41,17 @@ module.exports = {
         data.save()
 
         var hmm = new MessageEmbed()
-          .setDescription(`**${user2?.tag}** has been **banned** | \`${data._id}\``).setColor(`${client.embedColor.moderationRed}`)
+          .setDescription(`**${user2?.tag}** has been **banned** | \`${data._id}\``).setColor(`${client.color.moderationRed}`)
         let msg = await message.channel.send({ embeds: [hmm] }).then(message.delete())
 
-        let log = new MessageEmbed()
-          .setAuthor(`Moderation • Ban`, message.guild.iconURL({ dynamic: true }))
-          .setDescription(`** **`)
-          .setColor(`${client.embedColor.logs}`)
-          .addField('👥 User', `Mention • ${user2}\nTag • ${user2?.tag}\nID • ${user2?.id}`, true)
-          .addField("<:NUhmod:910882014582951946> Moderator", `Mention • ${message.author}\nTag • ${message.author.tag}\nID • ${message.author.id}`, true)
-          .addField("Punishment ID", `${data._id}`)
-          .addField("Reason", `${reason}`)
-          .setTimestamp()
+        const log = new MessageEmbed()
+          .setAuthor(`${client.user.username}`, `${client.user.displayAvatarURL()}`)
+          .setTitle(`➜ Ban`).setURL(`${client.server.invite}`)
+          .setColor(`${client.color.ban}`)
+          .addField("➜ User", `• ${user2}\n• ${user2.tag}\n• ${user2.id}`, true)
+          .addField("➜ Moderator", `• ${message.author}\n• ${message.author.tag}\n• ${message.author.id}`, true)
+          .addField("➜ Reason", `${reason}`, false)
+          .setFooter(`ID: ${data._id}`)
 
         const row = new MessageActionRow().addComponents(
 
@@ -105,7 +104,7 @@ module.exports = {
       data.save()
 
       var hmm = new MessageEmbed()
-        .setDescription(`${user.user} has been **banned** | \`${data._id}\``).setColor(`${client.embedColor.moderationRed}`)
+        .setDescription(`${user.user} has been **banned** | \`${data._id}\``).setColor(`${client.color.moderationRed}`)
       let msg = await message.channel.send({ embeds: [hmm] }).then(message.delete())
 
       const row2 = new MessageActionRow().addComponents(
@@ -120,7 +119,7 @@ module.exports = {
       var dmyes = new MessageEmbed()
         .setAuthor(`${client.user.username}`, client.user.displayAvatarURL({ dynamic: true }))
         .setTitle(`You've been banned from ${message.guild.name}`)
-        .setColor(`${client.embedColor.modDm}`)
+        .setColor(`${client.color.modDm}`)
         .setTimestamp()
         .addField("Punishment ID", `${data._id}`, true)
         .addField("Reason", reason, false)
@@ -130,15 +129,14 @@ module.exports = {
         reason: reason,
       })
 
-      let log = new MessageEmbed()
-        .setAuthor(`Moderation • Ban`, message.guild.iconURL({ dynamic: true }))
-        .setDescription(`** **`)
-        .setColor(`${client.embedColor.logs}`)
-        .addField('👥 User', `Mention • ${user.user}\nTag • ${user.user.tag}\nID • ${user.user.id}`, true)
-        .addField("<:NUhmod:910882014582951946> Moderator", `Mention • ${message.author}\nTag • ${message.author.tag}\nID • ${message.author.id}`, true)
-        .addField("Punishment ID", `${data._id}`)
-        .addField("Reason", `${reason}`)
-        .setTimestamp()
+      const log = new MessageEmbed()
+        .setAuthor(`${client.user.username}`, `${client.user.displayAvatarURL()}`)
+        .setTitle(`➜ Ban`).setURL(`${client.server.invite}`)
+        .setColor(`${client.color.ban}`)
+        .addField("➜ User", `• ${user.user}\n• ${user.user.tag}\n• ${user.user.id}`, true)
+        .addField("➜ Moderator", `• ${message.author}\n• ${message.author.tag}\n• ${message.author.id}`, true)
+        .addField("➜ Reason", `${reason}`, false)
+        .setFooter(`ID: ${data._id}`)
 
       const rowlog = new MessageActionRow().addComponents(
 

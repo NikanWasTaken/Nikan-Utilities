@@ -43,7 +43,7 @@ client.botEmoji = {
     bot: "<:NUbot:875668173419073546>",
 }
 
-client.embedColor = {
+client.color = {
     success: "#65b385",
     failed: "#de564c",
     loading: "#d5a538",
@@ -61,6 +61,9 @@ client.embedColor = {
     mute: "#fae673",
     ban: "#b3666c",
     unmute: "#87a7ec",
+    remove: "#85ef93",
+    expire: "#905de3",
+    warn: "#f5d765",
 }
 
 client.server = {

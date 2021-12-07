@@ -57,7 +57,7 @@ module.exports = {
     data.save();
 
     var hmm = new MessageEmbed()
-      .setDescription(`${user.user} has been **kicked** | \`${data._id}\``).setColor(`${client.embedColor.moderation}`)
+      .setDescription(`${user.user} has been **kicked** | \`${data._id}\``).setColor(`${client.color.moderation}`)
     let msg = await message.channel.send({ embeds: [hmm] }).then(message.delete())
 
     let row = new MessageActionRow().addComponents(
@@ -70,7 +70,7 @@ module.exports = {
     var dmyes = new MessageEmbed()
       .setAuthor(`${client.user.username}`, client.user.displayAvatarURL({ dynamic: true }))
       .setTitle(`You've been kicked from ${message.guild.name}`)
-      .setColor(`${client.embedColor.modDm}`)
+      .setColor(`${client.color.modDm}`)
       .setTimestamp()
       .addField("Punishment ID", `${data._id}`, true)
       .addField("Reason", reason, false)
@@ -82,15 +82,14 @@ module.exports = {
       reason: reason,
     })
 
-    let log = new MessageEmbed()
-      .setAuthor(`Moderation • Kick`, message.guild.iconURL({ dynamic: true }))
-      .setDescription(`** **`)
-      .setColor(`${client.embedColor.logs}`)
-      .addField('👥 User', `Mention • ${user.user}\nTag • ${user.user.tag}\nID • ${user.user.id}`, true)
-      .addField("<:NUhmod:910882014582951946> Moderator", `Mention • ${message.author}\nTag • ${message.author.tag}\nID • ${message.author.id}`, true)
-      .addField("Punishment ID", `\`${data._id}\``)
-      .addField("Reason", `${reason}`)
-      .setTimestamp()
+    const log = new MessageEmbed()
+      .setAuthor(`${client.user.username}`, `${client.user.displayAvatarURL()}`)
+      .setTitle(`➜ Kick`).setURL(`${client.server.invite}`)
+      .setColor(`${client.color.logs}`)
+      .addField("➜ User", `• ${user.user}\n• ${user.user.tag}\n• ${user.user.id}`, true)
+      .addField("➜ Moderator", `• ${message.author}\n• ${message.author.tag}\n• ${message.author.id}`, true)
+      .addField("➜ Reason", `${reason}`, false)
+      .setFooter(`ID: ${data._id}`)
 
     const rowlog = new MessageActionRow().addComponents(
 

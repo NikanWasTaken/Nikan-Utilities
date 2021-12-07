@@ -13,13 +13,13 @@ client.on("interactionCreate", async (interaction) => {
 
     let args = [];
 
-    var devonly = new MessageEmbed().setDescription(`Only developers for ${client.user.username} can use this command!`).setColor(`${client.embedColor.moderationRed}`)
+    var devonly = new MessageEmbed().setDescription(`Only developers for ${client.user.username} can use this command!`).setColor(`${client.color.moderationRed}`)
 
     if (cmd.developerOnly && !client.config.developers.includes(interaction.user.id)) return interaction.reply({ embeds: [devonly], ephemeral: true })
 
     if (cmd.botCommandOnly === true && !interaction.channel.name.includes("command") && !interaction.member?.permissions?.has("ADMINISTRATOR")) {
 
-      var botcmd = new MessageEmbed().setDescription('You may only use this command in bot command channels!').setColor(`${client.embedColor.moderationRed}`)
+      var botcmd = new MessageEmbed().setDescription('You may only use this command in bot command channels!').setColor(`${client.color.moderationRed}`)
       interaction.reply({ embeds: [botcmd], ephemeral: true })
 
     } else {
@@ -27,7 +27,7 @@ client.on("interactionCreate", async (interaction) => {
       if (cmd.cooldown && !interaction.member?.permissions?.has("ADMINISTRATOR")) {
 
         let lek = `${~~(Timeout.get(`${cmd.name}${interaction.user.id}`) - Date.now())}`
-        let cooldownembed = new MessageEmbed().setColor(`${client.embedColor.noColor}`).setDescription(`You need to wait \`${ms(parseInt(lek), { long: true })}\` to use this slash command again.`)
+        let cooldownembed = new MessageEmbed().setColor(`${client.color.noColor}`).setDescription(`You need to wait \`${ms(parseInt(lek), { long: true })}\` to use this slash command again.`)
         if (Timeout.has(`${cmd.name}${interaction.member.user.id}`))
           return interaction.reply({ embeds: [cooldownembed], ephemeral: true })
 

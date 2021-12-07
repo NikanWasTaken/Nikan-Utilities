@@ -21,10 +21,10 @@ module.exports = {
         const anythingelseforu = "OK maybe dont do that?"
 
 
-        if(code?.includes(".destroy")) return message.channel.send({ content: anythingelseforu })
-        if(code?.includes(".exit")) return message.channel.send({ content: anythingelseforu })
-        if(code?.includes(".token")) return message.channel.send({ content: anythingelseforu })
-        if(code?.includes(".env")) return message.channel.send({ content: anythingelseforu })
+        if (code?.includes(".destroy")) return message.channel.send({ content: anythingelseforu })
+        if (code?.includes(".exit")) return message.channel.send({ content: anythingelseforu })
+        if (code?.includes(".token")) return message.channel.send({ content: anythingelseforu })
+        if (code?.includes(".env")) return message.channel.send({ content: anythingelseforu })
 
 
 
@@ -43,7 +43,7 @@ module.exports = {
         }
 
         try {
-            
+
 
             let evaled = eval(code);
 
@@ -52,8 +52,8 @@ module.exports = {
 
             const cleaned = clean(evaled);
 
-            if(evaled?.includes(process.env.TOKEN)) return message.channel.send({ content: anythingelseforu })
-            if(evaled?.includes(process.env.MONGOOSE)) return message.channel.send({ content: anythingelseforu })
+            if (evaled?.includes(process.env.TOKEN)) return message.channel.send({ content: anythingelseforu })
+            if (evaled?.includes(process.env.MONGOOSE)) return message.channel.send({ content: anythingelseforu })
 
 
             if (cleaned !== 'Promise { <pending> }') {
@@ -67,11 +67,11 @@ module.exports = {
                 const embed = new MessageEmbed()
                     .setAuthor(`${client.user.username}`, client.user.displayAvatarURL())
                     .setTitle(`Evolution Succeded`).setURL(`${client.server.invite}`)
-                    .setColor(`${client.embedColor.success}`)
+                    .setColor(`${client.color.success}`)
                     .addField("Code", `\`\`\`js\n${code}\n\`\`\``)
                     .setTimestamp()
 
-                    message.channel.send({ embeds: [embed] })
+                message.channel.send({ embeds: [embed] })
             }
 
         } catch (err) {
@@ -79,7 +79,7 @@ module.exports = {
             const embed = new MessageEmbed()
                 .setAuthor(`${client.user.username}`, client.user.displayAvatarURL())
                 .setTitle(`Error While Evoluting`).setURL(`${client.server.invite}`)
-                .setColor(`${client.embedColor.failed}`)
+                .setColor(`${client.color.failed}`)
                 .addField("Code", `\`\`\`js\n${code}\n\`\`\``)
                 .addField("Error Message", `\`\`\`xl\n${err.message}\n\`\`\``)
                 .setTimestamp()

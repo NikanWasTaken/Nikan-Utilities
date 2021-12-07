@@ -94,7 +94,7 @@ module.exports = {
 
         const embed1 = new MessageEmbed()
           .setDescription(`${user.user} nickname has been reset`)
-          .setColor(`${client.embedColor.moderation}`)
+          .setColor(`${client.color.moderation}`)
 
         interaction.followUp({ embeds: [embed1] })
         user.setNickname(`${user.user.username}`)
@@ -121,7 +121,7 @@ module.exports = {
 
         const embed2 = new MessageEmbed()
           .setDescription(`${user.user} nickname has been moderated!`)
-          .setColor(`${client.embedColor.moderation}`)
+          .setColor(`${client.color.moderation}`)
 
         interaction.followUp({ embeds: [embed2] })
 
@@ -153,7 +153,7 @@ module.exports = {
 
         const embed4 = new MessageEmbed()
           .setDescription(`${user.user} nickname has been changed to \`${name}\``)
-          .setColor(`${client.embedColor.moderation}`)
+          .setColor(`${client.color.moderation}`)
 
         interaction.followUp({ embeds: [embed4] })
         user.setNickname(`${name}`)

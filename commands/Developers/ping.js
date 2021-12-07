@@ -33,7 +33,7 @@ module.exports = {
             .addField("<:ping:894097855759912970> Bot", `• \`${Date.now() - message.createdTimestamp}ms\``, true)
             .addField("<:ping:894097855759912970> Operate", `• \`${Math.round(client.ws.ping)}ms\``, true)
             .addField("🕐 Uptime", `**${days}** Days • **${hours}** Hours • **${minutes}** Minutes • **${seconds}** Seconds`)
-            .setColor(`${client.embedColor.cool}`)
+            .setColor(`${client.color.cool}`)
 
         message.reply({ embeds: [embed] })
 

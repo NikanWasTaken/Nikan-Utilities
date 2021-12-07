@@ -81,15 +81,16 @@ module.exports = {
       .addField("Punishment ID", `${data._id}`, true)
       .addField("Expires In", `4 weeks`, true)
       .addField("Reason", reason, false)
-      .setColor(`${client.embedColor.modDm}`)
+      .setColor(`${client.color.modDm}`)
       .setTimestamp()
     user.send({ embeds: [warndm] }).catch(e => { return })
 
     let warne = new MessageEmbed()
       .setDescription(`${user} has been **warned** | \`${data._id}\``)
-      .setColor(`${client.embedColor.moderation}`)
+      .setColor(`${client.color.moderation}`)
 
     let msg = await message.channel.send({ embeds: [warne] }).then(message.delete())
+
     client.warncooldown.set(
       `${user.user.id}`,
     );
@@ -98,15 +99,14 @@ module.exports = {
     }, 10000);
 
 
-    let log = new MessageEmbed()
-      .setAuthor(`Moderation • Warn`, message.guild.iconURL({ dynamic: true }))
-      .setDescription(`** **`)
-      .setColor(`${client.embedColor.logs}`)
-      .addField('👥 User', `Mention • ${user.user}\nTag • ${user.user.tag}\nID • ${user.user.id}`, true)
-      .addField("<:NUhmod:910882014582951946> Moderator", `Mention • ${message.author}\nTag • ${message.author.tag}\nID • ${message.author.id}`, true)
-      .addField("Punishment ID", `${data._id}`)
-      .addField("Reason", `${reason}`)
-      .setTimestamp()
+    const log = new MessageEmbed()
+      .setAuthor(`${client.user.username}`, `${client.user.displayAvatarURL()}`)
+      .setTitle(`➜ Warn`).setURL(`${client.server.invite}`)
+      .setColor(`${client.color.warn}`)
+      .addField("➜ User", `• ${user.user}\n• ${user.user.tag}\n• ${user.user.id}`, true)
+      .addField("➜ Moderator", `• ${message.author}\n• ${message.author.tag}\n• ${message.author.id}`, true)
+      .addField("➜ Reason", `${reason}`, false)
+      .setFooter(`ID: ${data._id}`)
 
     const rowlog = new MessageActionRow().addComponents(
 
@@ -162,13 +162,13 @@ module.exports = {
         .addField("Punishment ID", `${data2._id}`, true)
         .addField("Duration", "2 hours", true)
         .addField("Reason", "Reaching 2 strikes", false)
-        .setColor(`${client.embedColor.modDm}`)
+        .setColor(`${client.color.modDm}`)
         .setTimestamp()
       user.send({ embeds: [warndm] }).catch(e => { return })
 
       const warns2 = new MessageEmbed()
         .setAuthor(`Automatic Actions`, `${client.user.displayAvatarURL()}`)
-        .setColor(`${client.embedColor.mute}`)
+        .setColor(`${client.color.mute}`)
         .setTitle("➜ 2 Hours Of Mute")
         .addField("User", `• ${user.user}`, true)
         .addField("User Tag", `• ${user.user.tag}`, true)
@@ -213,11 +213,11 @@ module.exports = {
 
         const warns2 = new MessageEmbed()
           .setAuthor(`Automatic Actions`, `${client.user.displayAvatarURL()}`)
-          .setColor(`${client.embedColor.unmute}`)
+          .setColor(`${client.color.unmute}`)
           .setTitle("Unmuted From Tempmute")
-          .addField("User", `• ${user.user}`, true)
-          .addField("User Tag", `• ${user.user.tag}`, true)
-          .addField("User ID", `• ${user.user.id}`, true)
+          .addField("User", `• ${client.users.fetch(`${user.user.id}`) || "I couldn't find them!"}`, true)
+          .addField("User Tag", `• ${(await client.users.fetch(`${user.user.id}`)).tag || "I couldn't find them!"}`, true)
+          .addField("User ID", `• ${(await client.users.fetch(`${user.user.id}`)).id || "I couldn't find them!"}`, true)
           .addField("Reason", `Umuted After 2 hours of mute (reaching 2 strikes)`)
 
         client.webhook.autoaction.send({ embeds: [warns2] })
@@ -254,13 +254,13 @@ module.exports = {
         .addField("Punishment ID", `${data2._id}`, true)
         .addField("Duration", "6 hours", true)
         .addField("Reason", "Reaching 4 strikes", false)
-        .setColor(`${client.embedColor.modDm}`)
+        .setColor(`${client.color.modDm}`)
         .setTimestamp()
       user.send({ embeds: [warndm] }).catch(e => { return })
 
       const warns2 = new MessageEmbed()
         .setAuthor(`Automatic Actions`, `${client.user.displayAvatarURL()}`)
-        .setColor(`${client.embedColor.mute}`)
+        .setColor(`${client.color.mute}`)
         .setTitle("➜ 6 Hours Of Mute")
         .addField("User Mention", `• ${user.user}`, true)
         .addField("User Tag", `• ${user.user.tag}`, true)
@@ -305,12 +305,12 @@ module.exports = {
 
         const warns2 = new MessageEmbed()
           .setAuthor(`Automatic Actions`, `${client.user.displayAvatarURL()}`)
-          .setColor(`${client.embedColor.unmute}`)
+          .setColor(`${client.color.unmute}`)
           .setTitle("Unmuted From Tempmute")
-          .addField("User", `• ${user.user}`, true)
-          .addField("User Tag", `• ${user.user.tag}`, true)
-          .addField("User ID", `• ${user.user.id}`, true)
-          .addField("Reason", `Umuted After 6 hours of mute (reaching 4 strikes)`)
+          .addField("User", `• ${client.users.fetch(`${user.user.id}`) || "I couldn't find them!"}`, true)
+          .addField("User Tag", `• ${(await client.users.fetch(`${user.user.id}`)).tag || "I couldn't find them!"}`, true)
+          .addField("User ID", `• ${(await client.users.fetch(`${user.user.id}`)).id || "I couldn't find them!"}`, true)
+          .addField("Reason", `Umuted After 2 hours of mute (reaching 4 strikes)`)
 
         client.webhook.autoaction.send({ embeds: [warns2] })
 
@@ -335,7 +335,7 @@ module.exports = {
         .setTitle(`You've been Banned from ${message.guild.name}`)
         .addField("Punishment ID", `${data2._id}`, true)
         .addField("Reason", "Reaching 6 strikes", false)
-        .setColor(`${client.embedColor.modDm}`)
+        .setColor(`${client.color.modDm}`)
         .setTimestamp()
       user.send({ embeds: [warndm] }).catch(e => { return })
 
@@ -345,7 +345,7 @@ module.exports = {
 
       const warns2 = new MessageEmbed()
         .setAuthor(`Automatic Actions`, `${client.user.displayAvatarURL()}`)
-        .setColor(`${client.embedColor.ban}`)
+        .setColor(`${client.color.ban}`)
         .setTitle("➜ Ban")
         .addField("User Mention", `• ${user.user}`, true)
         .addField("User Tag", `• ${user.user.tag}`, true)

@@ -43,34 +43,14 @@ module.exports = {
       var hii = new MessageEmbed()
         .setAuthor("Server Locked", client.user.displayAvatarURL({ dynamic: true }))
         .setDescription("__**You're not muted!**__\nThe server has been locked by a staff memeber, more information will be sent here!")
-        .setColor(`${client.embedColor.moderation}`)
+        .setColor(`${client.color.moderation}`)
         .setTimestamp()
         .addFields({
           name: "Reason",
           value: reason
         })
 
-      let msg2 = await message.guild.channels.cache.get("782837655082631229").send({ embeds: [hii] })
-
-      let log = new MessageEmbed()
-        .setAuthor(`Moderation • Lockdown`, message.guild.iconURL({ dynamic: true }))
-        .setDescription(`** **`)
-        .setColor(`${client.embedColor.logs}`)
-        .addField("<:NUhmod:910882014582951946> Moderator", `Mention • ${message.author}\nTag • ${message.author.tag}\nID • ${message.author.id}`, true)
-        .addField("Reason", `${reason}`)
-        .setTimestamp()
-
-      const rowlog = new MessageActionRow().addComponents(
-
-        new MessageButton()
-          .setLabel("Jump to the action")
-          .setStyle("LINK")
-          .setURL(`https://discord.com/channels/${msg2.guild.id}/${msg2.channel.id}/${msg2.id}`)
-
-      )
-
-      client.webhook.moderation.send({ embeds: [log], components: [rowlog] })
-
+      await message.guild.channels.cache.get("782837655082631229").send({ embeds: [hii] })
 
 
     } else {
@@ -84,26 +64,6 @@ module.exports = {
         channel.permissionOverwrites.edit(message.guild.roles.everyone, {
           CONNECT: false
         });
-
-        let log = new MessageEmbed()
-          .setAuthor(`Moderation • Channel Lock`, message.guild.iconURL({ dynamic: true }))
-          .setDescription(`** **`)
-          .setColor(`${client.embedColor.logs}`)
-          .addField("<:NUhmod:910882014582951946> Moderator", `Mention • ${message.author}\nTag • ${message.author.tag}\nID • ${message.author.id}`, true)
-          .addField("🔇 Channel", `Mention • ${channel}\nID • ${channel.id}`, true)
-          .addField("Reason", `${reason}`)
-          .setTimestamp()
-
-        const rowlog = new MessageActionRow().addComponents(
-
-          new MessageButton()
-            .setLabel("Jump to the action")
-            .setStyle("LINK")
-            .setURL(`https://discord.com/channels/${msg.guild.id}/${msg.channel.id}/${msg.id}`)
-
-        )
-
-        client.webhook.moderation.send({ embeds: [log], components: [rowlog] })
 
       } else {
 
@@ -120,34 +80,15 @@ module.exports = {
         var hii = new MessageEmbed()
           .setAuthor("Channel Locked", client.user.displayAvatarURL({ dynamic: true }))
           .setDescription("This channel has been locked by a staff member. You are not muted.\nMore information will be sent here eventually.")
-          .setColor(`${client.embedColor.moderation}`)
+          .setColor(`${client.color.moderation}`)
           .setTimestamp()
           .addFields({
             name: "Reason",
             value: reason
           })
 
-        let msg2 = await channel.send({ embeds: [hii] })
+        await channel.send({ embeds: [hii] })
 
-        let log = new MessageEmbed()
-          .setAuthor(`Moderation • Channel Lock`, message.guild.iconURL({ dynamic: true }))
-          .setDescription(`** **`)
-          .setColor(`${client.embedColor.logs}`)
-          .addField("<:NUhmod:910882014582951946> Moderator", `Mention • ${message.author}\nTag • ${message.author.tag}\nID • ${message.author.id}`, true)
-          .addField("🔕 Channel", `Mention • ${channel}\nID • ${channel.id}`, true)
-          .addField("Reason", `${reason}`)
-          .setTimestamp()
-
-        const rowlog = new MessageActionRow().addComponents(
-
-          new MessageButton()
-            .setLabel("Jump to the action")
-            .setStyle("LINK")
-            .setURL(`https://discord.com/channels/${msg2.guild.id}/${msg2.channel.id}/${msg2.id}`)
-
-        )
-
-        client.webhook.moderation.send({ embeds: [log], components: [rowlog] })
 
       }
 

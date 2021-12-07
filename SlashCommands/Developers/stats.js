@@ -27,7 +27,7 @@ module.exports = {
 
         const embed = new MessageEmbed()
             .setAuthor(`${client.user.username}`, client.user.displayAvatarURL())
-            .setColor(`${client.embedColor.cool}`)
+            .setColor(`${client.color.cool}`)
             .addField(`<:ping:894097855759912970> Ping`, `• \`${Date.now() - interaction.createdTimestamp}ms\``, true)
             .addField("🕐 Last Restart", `<t:${~~(Date.now() / 1000 - client.uptime / 1000).toFixed(0)}:R>`, true)
             .addField("<:memory:894097854484860939> Memory", `• \`${(process.memoryUsage().heapUsed / 1024 / 1024).toFixed(2)} MB\``, true)
@@ -63,7 +63,7 @@ module.exports = {
 
             const embedmore = new MessageEmbed()
                 .setAuthor(`${client.user.username}`, `${client.user.displayAvatarURL()}`)
-                .setColor(`${client.embedColor.cool}`)
+                .setColor(`${client.color.cool}`)
                 .addField("<:cpu:894097794405646346> CPU Stats", `➜ Model • ${cpu.model()}\n➜ Cores • ${cpu.count()}\n➜ Usage • ${(await cpu.usage())}%`)
                 .addField("<:database:915823830423982140> Database", `➜ Model • Mongoose\n➜ Status • ${switchTo(connection.readyState)}\n➜ Objects • ${totalEntries}`)
                 .addField("<:node:894097855269208085> Operating", `➜ Host • Railway <:railway:915827823053262848>\n➜ Name • ${(await os.oos())}\n➜ Platform • ${os.platform()}\n➜ Type • ${os.type()}\n➜ Architecture • ${os.arch()}`)

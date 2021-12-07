@@ -39,17 +39,15 @@ module.exports = {
 
                 let mue = new MessageEmbed()
                     .setDescription(`${user.user} has been **unmuted**`)
-                    .setColor(`${client.embedColor.moderation}`)
+                    .setColor(`${client.color.moderation}`)
                 let msg = await message.channel.send({ embeds: [mue] }).then(message.delete())
 
-                let log = new MessageEmbed()
-                    .setAuthor(`Moderation • Unmute`, message.guild.iconURL({ dynamic: true }))
-                    .setDescription(`** **`)
-                    .setColor(`${client.embedColor.logs}`)
-                    .addField('👥 User', `Mention • ${user.user}\nTag • ${user.user.tag}\nID • ${user.user.id}`, true)
-                    .addField("<:NUhmod:910882014582951946> Moderator", `Mention • ${message.author}\nTag • ${message.author.tag}\nID • ${message.author.id}`, true)
-                    .addField("Reason", `${reason}`, false)
-                    .setTimestamp()
+                const log = new MessageEmbed()
+                    .setAuthor(`${client.user.username}`, `${client.user.displayAvatarURL()}`)
+                    .setTitle(`➜ Unmute`).setURL(`${client.server.invite}`)
+                    .setColor(`${client.color.unmute}`)
+                    .addField("➜ User", `• ${user.user}\n• ${user.user.tag}\n• ${user.user.id}`, true)
+                    .addField("➜ Moderator", `• ${message.author}\n• ${message.author.tag}\n• ${message.author.id}`, true)
 
                 const rowlog = new MessageActionRow().addComponents(
 

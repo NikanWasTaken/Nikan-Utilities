@@ -43,7 +43,8 @@ module.exports = {
     if (user.roles.highest.position >= interaction.guild.me.roles.highest.position ||
       user.roles.highest.position >= interaction.member.roles.highest.position ||
       user.user.id === client.config.owner ||
-      user.user.bot)
+      user.user.bot
+    )
       return interaction.followUp({ embeds: [failed] }).then((msg) => {
         setTimeout(() => {
           interaction.deleteReply()
@@ -64,7 +65,7 @@ module.exports = {
     data.save();
 
     var hmm = new MessageEmbed()
-      .setDescription(`${user.user} has been **kicked** | \`${data._id}\``).setColor(`${client.embedColor.moderation}`)
+      .setDescription(`${user.user} has been **kicked** | \`${data._id}\``).setColor(`${client.color.moderation}`)
     await interaction.deleteReply()
     let msg = await interaction.channel.send({ embeds: [hmm] })
 
@@ -72,7 +73,7 @@ module.exports = {
     var dmyes = new MessageEmbed()
       .setAuthor(`${client.user.username}`, client.user.displayAvatarURL({ dynamic: true }))
       .setTitle(`You've been kicked from ${interaction.guild.name}`)
-      .setColor(`${client.embedColor.modDm}`)
+      .setColor(`${client.color.modDm}`)
       .setTimestamp()
       .addField("Punishment ID", `${data._id}`, true)
       .addField("Reason", reason, false)
@@ -83,15 +84,14 @@ module.exports = {
     })
 
 
-    let log = new MessageEmbed()
-      .setAuthor(`Moderation • Kick`, interaction.guild.iconURL({ dynamic: true }))
-      .setDescription(`** **`)
-      .setColor(`${client.embedColor.logs}`)
-      .addField('👥 User', `Mention • ${user.user}\nTag • ${user.user.tag}\nID • ${user.user.id}`, true)
-      .addField("<:NUhmod:910882014582951946> Moderator", `Mention • ${interaction.user}\nTag • ${interaction.user.tag}\nID • ${interaction.user.id}`, true)
-      .addField("Punishment ID", `${data._id}`)
-      .addField("Reason", `${reason}`)
-      .setTimestamp()
+    const log = new MessageEmbed()
+      .setAuthor(`${client.user.username}`, `${client.user.displayAvatarURL()}`)
+      .setTitle(`➜ Kick`).setURL(`${client.server.invite}`)
+      .setColor(`${client.color.logs}`)
+      .addField("➜ User", `• ${user.user}\n• ${user.user.tag}\n• ${user.user.id}`, true)
+      .addField("➜ Moderator", `• ${interaction.user}\n• ${interaction.user.tag}\n• ${interaction.user.id}`, true)
+      .addField("➜ Reason", `${reason}`, false)
+      .setFooter(`ID: ${data._id}`)
 
     const row2 = new MessageActionRow().addComponents(
 

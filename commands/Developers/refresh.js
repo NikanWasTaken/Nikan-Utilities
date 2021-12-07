@@ -35,7 +35,7 @@ module.exports = {
 
         const embed = new MessageEmbed()
             .setAuthor(`${client.user.username}`, `${client.user.displayAvatarURL()}`)
-            .setColor(`${client.embedColor.cool}`)
+            .setColor(`${client.color.cool}`)
             .addField("Refresh Client", `If you want to refresh the bot's client`)
             .addField("Refresh Commands", `If you want to refresh commands and slash commands.`)
             .setTimestamp()
@@ -58,13 +58,13 @@ module.exports = {
                 collector.stop()
                 const refresh = new MessageEmbed()
                     .setAuthor(`${client.user.username}`, `${client.user.displayAvatarURL()}`)
-                    .setColor(`${client.embedColor.loading}`)
+                    .setColor(`${client.color.loading}`)
                     .addField(`Refreshing`, `${client.botEmoji.loading} Refreshing the client...`)
 
                 let msg = await message.channel.send({ embeds: [refresh] })
                 await client.destroy()
                 await client.login(`${process.env.TOKEN}`)
-                await msg.edit({ embeds: [refresh.addField("Refreshed", `${client.botEmoji.success} The client has been refreshed!`).setColor(`${client.embedColor.success}`).setTimestamp()] }).then((msgg) => {
+                await msg.edit({ embeds: [refresh.addField("Refreshed", `${client.botEmoji.success} The client has been refreshed!`).setColor(`${client.color.success}`).setTimestamp()] }).then((msgg) => {
                     setTimeout(() => {
                         msgg.delete()
                     }, 2000)
@@ -79,7 +79,7 @@ module.exports = {
 
                 const reload = new MessageEmbed()
                     .setAuthor(`${client.user.username}`, `${client.user.displayAvatarURL()}`)
-                    .setColor(`${client.embedColor.loading}`)
+                    .setColor(`${client.color.loading}`)
 
                 let msg = await message.channel.send({ embeds: [reload] })
 
@@ -104,7 +104,7 @@ module.exports = {
                 });
 
                 msg.edit({
-                    embeds: [reload.addField("Reloaded Message Commands", `${client.botEmoji.success} Reloaded the message commands!`).setColor(`${client.embedColor.success}`)]
+                    embeds: [reload.addField("Reloaded Message Commands", `${client.botEmoji.success} Reloaded the message commands!`).setColor(`${client.color.success}`)]
                 })
 
 
@@ -127,7 +127,7 @@ module.exports = {
 
                 });
 
-                msg.edit({ embeds: [reload.addField("Reloaded Slash Commands", `${client.botEmoji.success} Reloaded the slash commands!`).setColor(`${client.embedColor.success}`)] }).then((msgg) => {
+                msg.edit({ embeds: [reload.addField("Reloaded Slash Commands", `${client.botEmoji.success} Reloaded the slash commands!`).setColor(`${client.color.success}`)] }).then((msgg) => {
                     setTimeout(() => {
                         msgg.delete()
                     }, 2000)

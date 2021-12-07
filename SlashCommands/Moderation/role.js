@@ -77,29 +77,29 @@ module.exports = {
 
             if (action === "add") {
 
-                let errorembed = new MessageEmbed().setDescription(`${client.botEmoji.failed} I can't manage that role for that user!`).setColor(`${client.embedColor.failed}`)
-                let ee = new MessageEmbed().setDescription(`${client.botEmoji.failed} You may not give random people staff roles!`).setColor(`${client.embedColor.failed}`)
-                let e1 = new MessageEmbed().setDescription(`${client.botEmoji.failed} You don't have permissions to edit roles for that person!`).setColor(`${client.embedColor.failed}`)
+                let errorembed = new MessageEmbed().setDescription(`${client.botEmoji.failed} I can't manage that role for that user!`).setColor(`${client.color.failed}`)
+                let ee = new MessageEmbed().setDescription(`${client.botEmoji.failed} You may not give random people staff roles!`).setColor(`${client.color.failed}`)
+                let e1 = new MessageEmbed().setDescription(`${client.botEmoji.failed} You don't have permissions to edit roles for that person!`).setColor(`${client.color.failed}`)
 
                 if (role.position >= interaction.guild.me.roles.highest.position) return interaction.followUp({ embeds: [errorembed] })
-                if(interaction.member.roles.highest.position <= user.roles.highest.position) return interaction.followUp({ embeds: [e1] })
-                if(role.permissions.has("BAN_MEMBERS")) return interaction.followUp({ embeds: [ee] })
+                if (interaction.member.roles.highest.position <= user.roles.highest.position) return interaction.followUp({ embeds: [e1] })
+                if (role.permissions.has("BAN_MEMBERS")) return interaction.followUp({ embeds: [ee] })
                 if (role.managed) return interaction.followUp({ embeds: [errorembed] })
 
-                let embed = new MessageEmbed().setDescription(`Added the role ${role.name} to \`${user.user.tag}\``).setColor(`${client.embedColor.moderation}`)
+                let embed = new MessageEmbed().setDescription(`Added the role ${role.name} to \`${user.user.tag}\``).setColor(`${client.color.moderation}`)
                 interaction.followUp({ embeds: [embed] })
                 user.roles.add(role)
 
             } else if (action === "remove") {
 
-                let errorembed = new MessageEmbed().setDescription(`${client.botEmoji.failed} I can't manage that role for that user!`).setColor(`${client.embedColor.failed}`)
-                let e1 = new MessageEmbed().setDescription(`${client.botEmoji.failed} You don't have permissions to edit roles for that person!`).setColor(`${client.embedColor.failed}`)
+                let errorembed = new MessageEmbed().setDescription(`${client.botEmoji.failed} I can't manage that role for that user!`).setColor(`${client.color.failed}`)
+                let e1 = new MessageEmbed().setDescription(`${client.botEmoji.failed} You don't have permissions to edit roles for that person!`).setColor(`${client.color.failed}`)
 
                 if (role.position >= interaction.guild.me.roles.highest.position) return interaction.followUp({ embeds: [errorembed] })
-                if(interaction.member.roles.highest.position <= user.roles.highest.position) return interaction.followUp({ embeds: [e1] })
+                if (interaction.member.roles.highest.position <= user.roles.highest.position) return interaction.followUp({ embeds: [e1] })
                 if (role.managed) return interaction.followUp({ embeds: [errorembed] })
 
-                let embed = new MessageEmbed().setDescription(`Removed the role ${role.name} from \`${user.user.tag}\``).setColor(`${client.embedColor.moderation}`)
+                let embed = new MessageEmbed().setDescription(`Removed the role ${role.name} from \`${user.user.tag}\``).setColor(`${client.color.moderation}`)
                 interaction.followUp({ embeds: [embed] })
                 user.roles.remove(role)
 
@@ -114,17 +114,17 @@ module.exports = {
                 .setFooter(`Requested By ${interaction.user.username}`)
                 .setColor("BLURPLE")
                 .setTimestamp()
-                .setThumbnail(`${interaction.guild.iconURL({ dynamic: true} )}`)
+                .setThumbnail(`${interaction.guild.iconURL({ dynamic: true })}`)
                 .setDescription(`Here is all the roles for the member: ${user.user.tag}\n\n${user.roles.cache.sort((a, b) => b.position - a.position).filter(r => r.id !== interaction.guild.id).map((role, i) => {
 
-                   return [
-                       `• ${role.name} | \`${role.id}\``
-                   ]
+                    return [
+                        `• ${role.name} | \`${role.id}\``
+                    ]
 
                 }).join("\n")
                     }\n\n➢ In total they have **${user.roles.cache.size}** roles!`)
 
-                    interaction.followUp({ embeds: [embed] })
+            interaction.followUp({ embeds: [embed] })
         }
 
     },

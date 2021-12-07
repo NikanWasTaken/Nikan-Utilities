@@ -47,7 +47,7 @@ module.exports = {
 
       let embeda = new MessageEmbed()
         .setDescription(`Cleared \`${clear}\` messages from \`${user.user.tag}\``)
-        .setColor(`${client.embedColor.moderation}`)
+        .setColor(`${client.color.moderation}`)
 
       message.channel.send({ embeds: [embeda] }).then((msg) => { setTimeout(() => { msg.delete(), message.delete() }, 5000) })
 
@@ -60,7 +60,7 @@ module.exports = {
 
       let embeda = new MessageEmbed()
         .setDescription(`Cleared ${clear} messages in ${message.channel}.`)
-        .setColor(`${client.embedColor.moderation}`)
+        .setColor(`${client.color.moderation}`)
 
       message.channel.send({ embeds: [embeda] }).then((msg) => { setTimeout(() => { msg.delete(), message.delete() }, 5000) })
 

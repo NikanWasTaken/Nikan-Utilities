@@ -72,6 +72,12 @@ module.exports = {
                     required: false,
                     type: "USER",
                 },
+                // {
+                //     name: "user-id",
+                //     description: "The ID of the user you want to check thier warns! - staff only!",
+                //     required: false,
+                //     type: "STRING",
+                // },
             ]
 
         },
@@ -101,7 +107,7 @@ module.exports = {
     run: async (client, interaction, args) => {
 
         const subs = interaction.options.getSubcommand(["add", "remove", "list", "info"])
-        const nopermsmh = new MessageEmbed().setDescription("You don't have permissions to use this command!").setColor(`${client.embedColor.moderationRed}`)
+        const nopermsmh = new MessageEmbed().setDescription("You don't have permissions to use this command!").setColor(`${client.color.moderationRed}`)
 
         if (subs == "add") {
 
@@ -157,12 +163,12 @@ module.exports = {
                 .addField("Punishment ID", `${data._id}`, true)
                 .addField("Expires in", `4 weeks`, true)
                 .addField("Reason", reason, false)
-                .setColor(`${client.embedColor.modDm}`)
+                .setColor(`${client.color.modDm}`)
             user.send({ embeds: [warndm] }).catch(e => { return })
 
             let warned = new MessageEmbed()
                 .setDescription(`${user} has been **warned** | \`${data._id}\``)
-                .setColor(`${client.embedColor.moderation}`)
+                .setColor(`${client.color.moderation}`)
             interaction.deleteReply()
             let msg = await interaction.channel.send({ embeds: [warned] })
 
@@ -176,7 +182,7 @@ module.exports = {
             let log = new MessageEmbed()
                 .setAuthor(`Moderation • Warn`, interaction.guild.iconURL({ dynamic: true }))
                 .setDescription(`** **`)
-                .setColor(`${client.embedColor.logs}`)
+                .setColor(`${client.color.logs}`)
                 .addField('👥 User', `Mention • ${user.user}\nTag • ${user.user.tag}\nID • ${user.user.id}`, true)
                 .addField("<:NUhmod:910882014582951946> Moderator", `Mention • ${interaction.user}\nTag • ${interaction.user.tag}\nID • ${interaction.user.id}`, true)
                 .addField("Punishment ID", `${data._id}`)
@@ -239,13 +245,13 @@ module.exports = {
                     .addField("Punishment ID", `${data2._id}`, true)
                     .addField("Duration", "2 hours", true)
                     .addField("Reason", "Reaching 2 strikes", false)
-                    .setColor(`${client.embedColor.modDm}`)
+                    .setColor(`${client.color.modDm}`)
                     .setTimestamp()
                 user.send({ embeds: [warndm] }).catch(e => { return })
 
                 const warns2 = new MessageEmbed()
                     .setAuthor(`Automatic Actions`, `${client.user.displayAvatarURL()}`)
-                    .setColor(`${client.embedColor.mute}`)
+                    .setColor(`${client.color.mute}`)
                     .setTitle("➜ 2 Hours Of Mute")
                     .addField("User", `• ${user.user}`, true)
                     .addField("User Tag", `• ${user.user.tag}`, true)
@@ -291,7 +297,7 @@ module.exports = {
 
                     const warns2 = new MessageEmbed()
                         .setAuthor(`Automatic Actions`, `${client.user.displayAvatarURL()}`)
-                        .setColor(`${client.embedColor.unmute}`)
+                        .setColor(`${client.color.unmute}`)
                         .setTitle("Unmuted From Tempmute")
                         .addField("User", `• ${user.user}`, true)
                         .addField("User Tag", `• ${user.user.tag}`, true)
@@ -333,13 +339,13 @@ module.exports = {
                     .addField("Punishment ID", `${data2._id}`, true)
                     .addField("Duration", "6 hours", true)
                     .addField("Reason", "Reaching 4 strikes", false)
-                    .setColor(`${client.embedColor.modDm}`)
+                    .setColor(`${client.color.modDm}`)
                     .setTimestamp()
                 user.send({ embeds: [warndm] }).catch(e => { return })
 
                 const warns2 = new MessageEmbed()
                     .setAuthor(`Automatic Actions`, `${client.user.displayAvatarURL()}`)
-                    .setColor(`${client.embedColor.mute}`)
+                    .setColor(`${client.color.mute}`)
                     .setTitle("➜ 6 Hours Of Mute")
                     .addField("User Mention", `• ${user.user}`, true)
                     .addField("User Tag", `• ${user.user.tag}`, true)
@@ -384,7 +390,7 @@ module.exports = {
 
                     const warns2 = new MessageEmbed()
                         .setAuthor(`Automatic Actions`, `${client.user.displayAvatarURL()}`)
-                        .setColor(`${client.embedColor.unmute}`)
+                        .setColor(`${client.color.unmute}`)
                         .setTitle("Unmuted From Tempmute")
                         .addField("User", `• ${user.user}`, true)
                         .addField("User Tag", `• ${user.user.tag}`, true)
@@ -417,7 +423,7 @@ module.exports = {
                     .setDescription(`You can appeal this ban by clicking [here](https://forms.gle/dW8RGLA65ycC4vcM7).`)
                     .addField("Punishment ID", `${data2._id}`, true)
                     .addField("Reason", "Reaching 6 strikes", false)
-                    .setColor(`${client.embedColor.modDm}`)
+                    .setColor(`${client.color.modDm}`)
                     .setTimestamp()
                 user.send({ embeds: [warndm] }).catch(e => { return })
 
@@ -427,7 +433,7 @@ module.exports = {
 
                 const warns2 = new MessageEmbed()
                     .setAuthor(`Automatic Actions`, `${client.user.displayAvatarURL()}`)
-                    .setColor(`${client.embedColor.ban}`)
+                    .setColor(`${client.color.ban}`)
                     .setTitle("➜ Ban")
                     .addField("User Mention", `• ${user.user}`, true)
                     .addField("User Tag", `• ${user.user.tag}`, true)
@@ -457,7 +463,7 @@ module.exports = {
                 const user = await client.users.fetch(`${data?.userId}`) || "Can't find user!"
 
                 let embed = new MessageEmbed().setDescription(`➜ **From** • ${user?.tag}\n➜  **Type** • ${data.type}\n➜ **ID** • \`${data._id}\``)
-                    .setColor(`${client.embedColor.moderation}`)
+                    .setColor(`${client.color.moderation}`)
                     .setAuthor("Punishment has been removed")
                     .setTimestamp()
 
@@ -467,7 +473,7 @@ module.exports = {
                 let log = new MessageEmbed()
                     .setAuthor(`Moderation • Punishment Remove`, interaction.guild.iconURL({ dynamic: true }))
                     .setDescription(`** **`)
-                    .setColor(`${client.embedColor.logs}`)
+                    .setColor(`${client.color.logs}`)
                     .addField('👥 User', `Mention • ${user}\nTag • ${user.tag}\nID • ${user.id}`, true)
                     .addField("<:NUhmod:910882014582951946> Moderator", `Mention • ${interaction.user}\nTag • ${interaction.user.tag}\nID • ${interaction.user.id}`, true)
                     .addField("Punishment ID", `\`${data._id}\``)
@@ -504,7 +510,7 @@ module.exports = {
 
                 if (user) {
 
-                    let no = new MessageEmbed().setDescription('You can only check your own warnings').setColor(`${client.embedColor.moderationRed}`)
+                    let no = new MessageEmbed().setDescription('You can only check your own warnings').setColor(`${client.color.moderationRed}`)
                     if (!interaction.member.permissions.has("MANAGE_MESSAGES")) return interaction.followUp({ embeds: [no] })
 
                     const userWarnings = await warnModel.find({
@@ -539,7 +545,7 @@ module.exports = {
 
                 } else {
 
-                    var botcmd = new MessageEmbed().setDescription('You may only use this command in bot command channels!').setColor(`${client.embedColor.moderationRed}`)
+                    var botcmd = new MessageEmbed().setDescription('You may only use this command in bot command channels!').setColor(`${client.color.moderationRed}`)
                     if (!interaction.channel.name.includes("command")) return interaction.followUp({ embeds: [botcmd] })
 
                     const userWarnings = await warnModel.find({
@@ -577,7 +583,7 @@ module.exports = {
 
                 if (user) {
 
-                    let no = new MessageEmbed().setDescription('You can only check your own warnings').setColor(`${client.embedColor.moderationRed}`)
+                    let no = new MessageEmbed().setDescription('You can only check your own warnings').setColor(`${client.color.moderationRed}`)
                     if (!interaction.member.permissions.has("MANAGE_MESSAGES")) return interaction.followUp({ embeds: [no] })
 
                     const userWarnings = await automodModel.find({
@@ -608,7 +614,7 @@ module.exports = {
 
                 } else {
 
-                    var botcmd = new MessageEmbed().setDescription('You may only use this command in bot command channels!').setColor(`${client.embedColor.moderationRed}`)
+                    var botcmd = new MessageEmbed().setDescription('You may only use this command in bot command channels!').setColor(`${client.color.moderationRed}`)
                     if (!interaction.channel.name.includes("command")) return interaction.followUp({ embeds: [botcmd] })
 
                     const userWarnings = await automodModel.find({

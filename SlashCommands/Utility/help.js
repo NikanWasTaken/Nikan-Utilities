@@ -162,7 +162,7 @@ module.exports = {
       if (!command) {
         const emb2 = new MessageEmbed()
           .setDescription(`Invalid command! Use \`${prefix}help\` for all of my commands!`)
-          .setColor(`${client.embedColor.failed}`);
+          .setColor(`${client.color.failed}`);
         return interaction.followUp({
           embeds: [emb2]
         });

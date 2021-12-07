@@ -178,7 +178,7 @@ module.exports = {
                                         const howtod = new MessageEmbed()
                                             .setAuthor(`Your guess the number event token`, collected.user.displayAvatarURL({ dynamic: true }))
                                             .setDescription(`\`\`\`${eeee._id}\`\`\``)
-                                            .setColor(`${client.embedColor.noColor}`)
+                                            .setColor(`${client.color.noColor}`)
                                             .setFooter("You will need this token when you want to start your event!")
                                         await dmchannel.send({ content: "** **", embeds: [howtod] })
 
