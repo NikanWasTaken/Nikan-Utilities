@@ -23,7 +23,7 @@ module.exports = {
         if (!message.member.permissions.has("MANAGE_MESSAGES")) user = message.member;
 
 
-        if (args[0]) {
+        if (args[0] && !user) {
 
 
             await client.users.fetch(`${args[0]}`).catch(e => {
