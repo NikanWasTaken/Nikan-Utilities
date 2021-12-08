@@ -8,6 +8,7 @@ module.exports = {
     developerOnly: true,
     aliases: ["reload", "reloadall"],
     cooldown: 10000,
+    visible: false,
 
     /**
      * @param {Client} client

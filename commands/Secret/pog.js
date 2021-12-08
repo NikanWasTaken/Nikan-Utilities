@@ -6,6 +6,7 @@ module.exports = {
     description: 'poggr',
     cooldown: 2000,
     userPermissions: ["MANAGE_MESSAGES"],
+    visible: false,
 
     /**
      * @param {Client} client

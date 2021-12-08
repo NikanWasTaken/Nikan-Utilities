@@ -8,6 +8,7 @@ module.exports = {
   usage: `[user] <reason>`,
   cooldown: 2000,
   userPermissions: ["MANAGE_MESSAGES"],
+  visible: false,
 
   /**
    * @param {Client} client

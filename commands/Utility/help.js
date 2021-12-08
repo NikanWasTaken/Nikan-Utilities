@@ -20,6 +20,7 @@ module.exports = {
 
   run: async (client, message, args) => {
 
+    return message.reply("This command is currently in progress! come back later!")
 
 
     if (!args.length) {
@@ -34,7 +35,7 @@ module.exports = {
       }
 
       const directories = [
-        ...new Set(client.commands.filter(e => e.directory != "Secret").map((cmd) => cmd.directory))
+        ...new Set(client.commands.map((cmd) => cmd.directory))
       ];
 
       const formatString = (str) => `${str[0].toUpperCase()}${str.slice(1).toLowerCase()}`
@@ -56,41 +57,15 @@ module.exports = {
 
       });
 
-      let cata = [];
 
-      readdirSync("./commands/").filter((fi) => fi !== "Secret").forEach((dir) => {
-        const commands = readdirSync(`./commands/${dir}/`).filter((file) =>
-          file.endsWith(".js")
-        );
-
-        const cmds = commands.map((command) => {
-          let file = require(`../../commands/${dir}/${command}`);
-
-          if (!file.name) return "No command name.";
-
-          let name = file.name.replace(".js", "");
-
-          return `\`${name}\``;
-        });
-
-        let data = new Object();
-
-        data = {
-          name: cap(dir),
-          value: cmds.length === 0 ? "This Category is in progress..." : cmds.join(" "),
-        };
-
-        cata.push(data);
-      });
-
-
+      let moderation = client.commands.filter(c => c.category === "moderation" && c.visible !== false)
+      let other = client.commands.filter(c => c.category !== "moderation" && c.visible !== false && c.category !== "Secret" && c.category !== "Events")
       let mainembed = new MessageEmbed()
-        .setTitle(`${client.user.username} Help menu`)
-        .setDescription("Please select a category from the dropdown!")
-        .addFields(cata)
-        .setColor("BLUE")
-        .setFooter(`You only have 1 minute to use this help menu.`)
-        .setTimestamp();
+        .setAuthor(`${client.user.username}`, `${client.user.displayAvatarURL()}`)
+        .setDescription(`[** Vote for ${client.guilds.cache.get(client.server.id).name}**](https://top.gg/servers/${client.server.id}) • [**Subreddit**](https://www.reddit.com/r/NikanWorld/) `)
+        .addField(`**Moderation [${moderation.size}]**`, `${moderation.map(c => `\`${c.name}\``).join(" • ")}`)
+        .addField(`**Other [${other.size}]**`, `${other.map(c => `\`${c.name}\``).join(" • ")}`)
+        .setColor(`${client.color.botBlue}`)
 
       const components = (state) => [
         new MessageActionRow().addComponents(
@@ -161,9 +136,8 @@ module.exports = {
       const emb3 = new MessageEmbed()
         .setAuthor(`${cap(command.name)} Command`, client.user.displayAvatarURL())
         .setDescription(`> **Name:** ${command.name ? cap(command.name) : 'No name'}\n> **Category:** ${command.category ? cap(command.category) : "No Category"}\n> **Description:** ${command.description ? command.description : "No description"}\n> **Usage:** ${command.usage ? `\`${config.prefix + command.name + ` ${command.usage}`}\`` : "No Usage found!"}\n> **Aliases:** ${command.aliases ? `\`${command.aliases.join("` `")}\`` : "No Aliases Available"}\n> **Cooldown:** ${command.cooldown ? ms(command.cooldown, { long: true }) : "No Cooldown"}`)
-        .setColor("BLURPLE")
+        .setColor(`${client.color.botBlue}`)
         .setFooter(`Syntax: "[] = required", "<> = optional"`)
-        .setTimestamp()
       message.reply({
         embeds: [emb3]
       })

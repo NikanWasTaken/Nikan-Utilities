@@ -28,10 +28,8 @@ module.exports = {
 
             const user = await client.users.fetch(`${data?.userId}`) || "Can't find user!"
 
-            let embed = new MessageEmbed().setDescription(`➜ **From** • ${user?.tag}\n➜  **Type** • ${data.type}\n➜ **ID** • \`${data._id}\``)
+            let embed = new MessageEmbed().setDescription(`Punnishment \`${data._id}\` has been deleted!`)
                 .setColor(`${client.color.moderation}`)
-                .setAuthor("Punishment has been removed")
-                .setTimestamp()
 
             await message.delete()
             let msg = await message.channel.send({ embeds: [embed] })
@@ -43,7 +41,6 @@ module.exports = {
                 .addField("➜ User", `• ${user}\n• ${user.tag}\n• ${user.id}`, true)
                 .addField("➜ Moderator", `• ${message.author}\n• ${message.author.tag}\n• ${message.author.id}`, true)
                 .addField("➜ Punishment", `• ID: ${data?._id}\n• Type: ${data?.type}\n• Reason: ${data?.reason}\n• Moderator: ${(await client.users.fetch(`${data?.moderatorId}`))?.tag || "I can't find them."}`, false)
-                .setFooter(`ID: ${data._id}`)
 
             const rowlog = new MessageActionRow().addComponents(
 

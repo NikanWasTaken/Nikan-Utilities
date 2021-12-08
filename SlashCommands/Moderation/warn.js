@@ -462,22 +462,20 @@ module.exports = {
 
                 const user = await client.users.fetch(`${data?.userId}`) || "Can't find user!"
 
-                let embed = new MessageEmbed().setDescription(`➜ **From** • ${user?.tag}\n➜  **Type** • ${data.type}\n➜ **ID** • \`${data._id}\``)
+                let embed = new MessageEmbed().setDescription(`Punnishment \`${data._id}\` has been deleted!`)
                     .setColor(`${client.color.moderation}`)
-                    .setAuthor("Punishment has been removed")
                     .setTimestamp()
 
                 await interaction.deleteReply()
                 let msg = await interaction.channel.send({ embeds: [embed] })
 
-                let log = new MessageEmbed()
-                    .setAuthor(`Moderation • Punishment Remove`, interaction.guild.iconURL({ dynamic: true }))
-                    .setDescription(`** **`)
-                    .setColor(`${client.color.logs}`)
-                    .addField('👥 User', `Mention • ${user}\nTag • ${user.tag}\nID • ${user.id}`, true)
-                    .addField("<:NUhmod:910882014582951946> Moderator", `Mention • ${interaction.user}\nTag • ${interaction.user.tag}\nID • ${interaction.user.id}`, true)
-                    .addField("Punishment ID", `\`${data._id}\``)
-                    .setTimestamp()
+                const log = new MessageEmbed()
+                    .setAuthor(`${client.user.username}`, `${client.user.displayAvatarURL()}`)
+                    .setTitle(`➜ Punishment Removal`).setURL(`${client.server.invite}`)
+                    .setColor(`${client.color.remove}`)
+                    .addField("➜ User", `• ${user}\n• ${user.tag}\n• ${user.id}`, true)
+                    .addField("➜ Moderator", `• ${interaction.user}\n• ${interaction.user.tag}\n• ${interaction.user.id}`, true)
+                    .addField("➜ Punishment", `• ID: ${data?._id}\n• Type: ${data?.type}\n• Reason: ${data?.reason}\n• Moderator: ${(await client.users.fetch(`${data?.moderatorId}`))?.tag || "I can't find them."}`, false)
 
                 const rowlog = new MessageActionRow().addComponents(
 

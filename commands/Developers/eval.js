@@ -6,8 +6,8 @@ module.exports = {
     name: 'eval',
     category: 'Developers',
     usage: '[code]',
-    aliases: ["sudo"],
     developerOnly: true,
+    visible: false,
 
     /**
      * @param {Client} client
@@ -18,7 +18,7 @@ module.exports = {
     run: async (client, message, args, missingpartembed) => {
 
         const code = args.join(' ');
-        const anythingelseforu = "OK maybe dont do that?"
+        const anythingelseforu = "ok maybe dont do that?"
 
 
         if (code?.includes(".destroy")) return message.channel.send({ content: anythingelseforu })

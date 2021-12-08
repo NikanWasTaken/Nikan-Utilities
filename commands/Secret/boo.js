@@ -8,6 +8,7 @@ module.exports = {
   aliases: ["boop"],
   cooldown: 2000,
   userPermissions: ["MANAGE_MESSAGES"],
+  visible: false,
 
 
   /**
