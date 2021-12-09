@@ -24,7 +24,7 @@ module.exports = {
         if (user) {
 
             message.delete()
-            const name = user.user.username;
+            const name = user.user.diplayName;
             const avatar = user.user.displayAvatarURL();
 
             let create = await message.channel.createWebhook(`${name}`, { avatar: `${avatar}` })
