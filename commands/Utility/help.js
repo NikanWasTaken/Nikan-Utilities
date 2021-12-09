@@ -21,8 +21,6 @@ module.exports = {
 
   run: async (client, message, args) => {
 
-    // return message.reply("This command is currently in progress! come back later!")
-
 
     if (!args.length) {
 
@@ -113,7 +111,7 @@ module.exports = {
 
           if (collected.values[0] === "moderation") {
 
-            if (collected.user.id !== message.author.id) return collected.reply({ content: "This is not menu!", ephemeral: true })
+            if (collected.user.id !== message.author.id) return collected.reply({ content: "This is not your menu!", ephemeral: true })
 
             const no = new MessageEmbed()
               .setAuthor(`${client.user.username}`, `${client.user.displayAvatarURL()}`)
@@ -140,7 +138,7 @@ module.exports = {
 
           } else if (collected.values[0] === "events") {
 
-            if (collected.user.id !== message.author.id) return collected.reply({ content: "This is not menu!", ephemeral: true })
+            if (collected.user.id !== message.author.id) return collected.reply({ content: "This is not your menu!", ephemeral: true })
 
             const no = new MessageEmbed()
               .setAuthor(`${client.user.username}`, `${client.user.displayAvatarURL()}`)
@@ -165,7 +163,7 @@ module.exports = {
 
           } else if (collected.values[0] === "other") {
 
-            if (collected.user.id !== message.author.id) return collected.reply({ content: "This is not menu!", ephemeral: true })
+            if (collected.user.id !== message.author.id) return collected.reply({ content: "This is not your menu!", ephemeral: true })
 
             const row = new MessageActionRow().addComponents(
               new MessageButton()
