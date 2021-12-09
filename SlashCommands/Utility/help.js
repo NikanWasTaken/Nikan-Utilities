@@ -1,5 +1,5 @@
 const cap = require("capitalize-first-letter")
-const { MessageEmbed, Client, MessageActionRow, MessageSelectMenu, Message, CommandInteraction } = require("discord.js");
+const { MessageEmbed, Client, MessageActionRow, MessageSelectMenu, Message, CommandInteraction, MessageButton } = require("discord.js");
 const config = require("../../config.json");
 const prefix = config.prefix
 const ms = require("ms");
@@ -132,7 +132,7 @@ module.exports = {
               .setColor(`${client.color.moderation}`)
               .setTitle("Moderation Guide™️").setURL(`https://discord.com/channels/${client.server.id}/881803011503058944`)
               .setDescription(`Hey dear moderator, this page is made for you to learn more about me! We've made alot of channels for you to understand everything about me! Now it's my turn to tell you somethings!\nFirst of all, let's start with my commands, these are all of my commands, you need to learn to use them correctly as a staff member!`)
-              .addField("My Commands", `${moderation.map(c => `\`${client.config.prefix}${c.name}\``).join(" • ")}\n\nWoah Woah wait a sec, I have some secret commands for you too!\n${client.commands.filter(c => c.category === "Secret").map(c => `\`${client.config.prefix}${c.name}\``).join(" • ")}\n\nI don't even know what these do, maybe try them yourself or ask other moderators?\nMake sure to check all of my commands [**here**](https://discord.com/channels/${client.server.id}/881803011503058944) with their full information!`, true)
+              .addField("My Commands", `${moderation.map(c => `\`${client.config.prefix}${c.name}\``).join(" • ")}\n\nWoah Woah wait a sec, I have some secret commands for you too!\n${client.commands.filter(c => c.category === "Secret").map(c => `\`${c.name}\``).join(" • ")}\n\nI don't even know what these do, maybe try them yourself or ask other moderators?\nMake sure to check all of my commands [**here**](https://discord.com/channels/${client.server.id}/881803011503058944) with their full information!`, true)
               .addField("Moderation", `Well, the next thing I want to talk about is how to moderate and [rules](https://discord.com/channels/${client.server.id}/882245740221591563) for it!\nI can't describe and tell you all of them here because of my laziness, but, Nikan has written them down [**here**](https://discord.com/channels/${client.server.id}/882245740221591563) for you!`)
               .addField("Your duties", `Exactly like the rules, I'm too lazy to write your responsibilities here, but thanks to Nikan for writing them, I can just give you a link to them!\nJust check them out [**here**](https://discord.com/channels/${client.server.id}/882718002162839582)`)
               .addField("Other useful channels", `These channels are useful for you as a moderator too! Make sure to check them out at the staff category channels!`)
