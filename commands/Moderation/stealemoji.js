@@ -4,7 +4,7 @@ const failed = [];
 
 module.exports = {
     name: `stealemoji`,
-    category: 'utility',
+    category: 'moderation',
     description: `Steal some emojis ;)`,
     cooldown: 5000,
     usage: `[emoji]<emoji><emoji>...`,

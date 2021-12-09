@@ -2,7 +2,7 @@ const { MessageEmbed, WebhookClient } = require('discord.js')
 
 module.exports = {
     name: 'suggest',
-    category: 'suggestion',
+    category: 'server',
     description: 'Suggest something to the server using this command',
     usage: `[suggestion]`,
     cooldown: 120000,

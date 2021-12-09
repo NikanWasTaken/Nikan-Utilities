@@ -3,7 +3,7 @@ const cap = require("capitalize-first-letter")
 
 module.exports = {
   name: 'whois',
-  category: 'information',
+  category: 'utility',
   description: `Gets information about an user`,
   aliases: ['userinfo'],
   cooldown: 5000,

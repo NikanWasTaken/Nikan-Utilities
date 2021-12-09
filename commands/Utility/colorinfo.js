@@ -3,7 +3,7 @@ const fetch = require('node-fetch')
 
 module.exports = {
     name: 'colorinfo',
-    category: 'information',
+    category: 'utility',
     description: `Info about a hex code`,
     cooldown: 5000,
     usage: `[hex code]`,
