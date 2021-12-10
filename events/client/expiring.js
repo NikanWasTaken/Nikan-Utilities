@@ -25,6 +25,7 @@ client.on("messageCreate", async (message) => {
             .setFooter(`ID: ${data?._id}`)
 
         client.webhook.autoaction.send({ embeds: [embed] })
+
         data.delete()
 
     })
@@ -52,6 +53,7 @@ client.on("messageCreate", async (message) => {
             .setFooter(`ID: ${data?._id}`)
 
         client.webhook.autoaction.send({ embeds: [embed] })
+
         data.delete()
 
     })
@@ -67,6 +69,7 @@ client.on("messageCreate", async (message) => {
     const finaldata = (await data)?.filter(c => Date.now() > c.expires)
 
     finaldata.forEach(async (data) => {
+
         data.delete()
 
     })
