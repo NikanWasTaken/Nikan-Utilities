@@ -20,7 +20,6 @@ module.exports = {
     run: async (client, message, args) => {
 
         const user = message.mentions.members.first() || message.guild.members.cache.get(args[0])
-        if (!message.member.permissions.has("MANAGE_MESSAGES")) user = message.member;
 
 
         if (args[0] && !user) {
