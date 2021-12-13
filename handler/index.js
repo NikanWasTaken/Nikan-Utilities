@@ -11,11 +11,6 @@ const mongoose = require('mongoose')
 module.exports = async (client) => {
 
 
-  // Commands
-
-  const command = client.commands
-
-
   var commandFiles = await globPromise(`${process.cwd()}/commands/**/*.js`);
   commandFiles.map((value) => {
     const file = require(value);

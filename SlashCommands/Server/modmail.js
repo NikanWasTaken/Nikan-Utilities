@@ -2,6 +2,7 @@ const { Client, CommandInteraction, MessageEmbed, Message, MessageActionRow, Mes
 const modmailconfig = require("../../json/modmail.json");
 const categoryId = modmailconfig.category;
 const blacklist = require("../../models/modmail-blacklist.js")
+const sourcebin = require("sourcebin")
 let loghook = new WebhookClient({
     id: `${modmailconfig.hookId}`,
     token: `${modmailconfig.hookToken}`,
@@ -133,6 +134,55 @@ module.exports = {
                     if (collected.user.id !== interaction.user.id) return collected.reply({ content: "This menu is not for you!", ephemeral: true })
 
                     const user = interaction.guild.members.cache.find(m => m.id === interaction.channel.name)
+                    const fetch = await interaction.channel.messages.fetch({ limit: 100 })
+
+                    const filtered = fetch.filter(async (msg) => {
+                        if (msg.author.bot) {
+                            if ((await msg.embeds[0])?.footer?.text === message.channel.id) {
+                                const getUser = await client.users.fetch((msg.embeds[0].footer.text))
+                                const getEmbed = msg.embeds[0]
+                                return [
+                                    `
+                                    ${getUser?.tag} :: ${getEmbed?.image ?
+                                        `Content : ${getEmbed?.description} || Attachments: ${getEmbed?.image?.url}` :
+                                        `${getEmbed.description}`}
+                                    `
+                                ]
+                            }
+                        } else if (!msg.author.bot) {
+                            const getUser = await client.users.fetch(`${msg.author.id}`)
+                            return [
+                                `
+                                ${getUser.tag} :: ${msg?.attachments?.first() ? `Content: ${msg?.content} || Attachments: ${msg.attachments.first().url}` : `${msg.content}`}
+                                `
+                            ]
+                        }
+
+                    })
+
+
+                    const sorted = filtered.sort((a, b) => b.createdTimestamp - a.createdTimestamp)
+
+                    const bin = await sourcebin.create(
+                        [
+                            {
+                                content: `${sorted}`,
+                                language: "AsciiDoc"
+                            }
+                        ],
+                        {
+                            title: `Modmail Transcript`,
+                            description: `Modmail Transcript for the user: ${(await client.users.fetch(`${message.channel.id}`)).tag}`
+                        }
+                    )
+
+
+                    const row = new MessageActionRow().addComponents(
+                        new MessageButton()
+                            .setLabel("Transcript")
+                            .setStyle("LINK")
+                            .setURL(`${bin.url}`)
+                    )
 
                     const logembed = new MessageEmbed()
                         .setAuthor(`Ticket Closed`, interaction.guild.iconURL({ dynamic: true }))
@@ -141,7 +191,7 @@ module.exports = {
                         .addField("Mod Info", `● ${interaction.member.user}\n> __Tag:__ ${interaction.member.user.tag}\n> __ID:__ ${interaction.member.user.id}`, true)
                         .setTimestamp()
 
-                    loghook.send({ embeds: [logembed] })
+                    loghook.send({ embeds: [logembed], components: [row] })
 
                     const createdembed = new MessageEmbed()
                         .setAuthor(`${client.guilds.cache.get(serverId).name}`, `${interaction.guild.iconURL({ dynamic: true })}`)

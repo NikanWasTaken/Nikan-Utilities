@@ -58,8 +58,8 @@ client.on("messageCreate", async (message) => {
                 .setImage(message.attachments.first()?.proxyURL || null)
                 .setColor(`${client.color.botBlue}`)
 
-                ; (await member).send({ embeds: [respondembed] }).catch(e => { return message.channel.send({ content: "This person has closed his dms, couldn't dm them!" }), message.reactions.removeAll(), message.react(`${client.botEmoji.failed}`) })
-            await message.react(`${client.botEmoji.success}`)
+                ; (await member).send({ embeds: [respondembed] }).catch(e => { return message.channel.send({ content: "This person has closed his dms, couldn't dm them!" }), message.reactions.removeAll(), message.react(`${client.emoji.failed}`) })
+            await message.react(`${client.emoji.success}`)
 
         }
 
@@ -182,7 +182,8 @@ client.on("messageCreate", async (message) => {
                         .setFooter(`${client.user.username}`, client.user.displayAvatarURL())
                         .setTimestamp()
 
-                        ; (await ticketchannel).send({ content: "<@&867685674496950272> Looks like there is someone here!", embeds: [infoinchannel], allowedMentions: { parse: ["roles"] } })
+                        // <@&867685674496950272>
+                        ; (await ticketchannel).send({ content: "Looks like there is someone here!", embeds: [infoinchannel], allowedMentions: { parse: ["roles"] } })
 
                     let log = new MessageEmbed()
                         .setAuthor(`Ticket Created`, client.guilds.cache.get(serverId).iconURL({ dynamic: true }))
@@ -223,9 +224,10 @@ client.on("messageCreate", async (message) => {
                 .setDescription(`${message.content ? message.content : `No content in this message!`}`)
                 .setImage(message.attachments.first()?.proxyURL || null)
                 .setColor(`${client.color.botBlue}`)
+                .setFooter(`${message.author.id}`)
 
                 ; (await personticket).send({ embeds: [embed] })
-            message.react(`${client.botEmoji.success}`)
+            message.react(`${client.emoji.success}`)
 
         } catch (error) {
 

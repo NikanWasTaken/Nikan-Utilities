@@ -77,31 +77,47 @@ module.exports = {
 
             if (action === "add") {
 
-                let errorembed = new MessageEmbed().setDescription(`${client.botEmoji.failed} I can't manage that role for that user!`).setColor(`${client.color.failed}`)
-                let ee = new MessageEmbed().setDescription(`${client.botEmoji.failed} You may not give random people staff roles!`).setColor(`${client.color.failed}`)
-                let e1 = new MessageEmbed().setDescription(`${client.botEmoji.failed} You don't have permissions to edit roles for that person!`).setColor(`${client.color.failed}`)
 
-                if (role.position >= interaction.guild.me.roles.highest.position) return interaction.followUp({ embeds: [errorembed] })
-                if (interaction.member.roles.highest.position <= user.roles.highest.position) return interaction.followUp({ embeds: [e1] })
-                if (role.permissions.has("BAN_MEMBERS")) return interaction.followUp({ embeds: [ee] })
-                if (role.managed) return interaction.followUp({ embeds: [errorembed] })
+                const failed = new MessageEmbed().setDescription(`You don't have permissions to perform that action!`).setColor("RED")
 
-                let embed = new MessageEmbed().setDescription(`Added the role ${role.name} to \`${user.user.tag}\``).setColor(`${client.color.moderation}`)
-                interaction.followUp({ embeds: [embed] })
-                user.roles.add(role)
+                if (
+                    role.position >= interaction.guild.me.roles.highest.position ||
+                    interaction.member.roles.highest.position <= user.roles.highest.position ||
+                    role.permissions.has("BAN_MEMBERS") ||
+                    role.managed
+                )
+                    return interaction.followUp({ embeds: [failed] }).then((msg) => {
+                        setTimeout(() => {
+                            interaction?.deleteReply()
+                        }, 5000)
+                    })
+
+                let embed = new MessageEmbed()
+                    .setDescription(`${user.user} has been added the role ${role}`)
+                    .setColor(`${client.color.moderation}`)
+                await user.roles.add(role)
+                await interaction.followUp({ embeds: [embed] })
 
             } else if (action === "remove") {
 
-                let errorembed = new MessageEmbed().setDescription(`${client.botEmoji.failed} I can't manage that role for that user!`).setColor(`${client.color.failed}`)
-                let e1 = new MessageEmbed().setDescription(`${client.botEmoji.failed} You don't have permissions to edit roles for that person!`).setColor(`${client.color.failed}`)
+                const failed = new MessageEmbed().setDescription(`You don't have permissions to perform that action!`).setColor("RED")
 
-                if (role.position >= interaction.guild.me.roles.highest.position) return interaction.followUp({ embeds: [errorembed] })
-                if (interaction.member.roles.highest.position <= user.roles.highest.position) return interaction.followUp({ embeds: [e1] })
-                if (role.managed) return interaction.followUp({ embeds: [errorembed] })
+                if (
+                    role.position >= interaction.guild.me.roles.highest.position ||
+                    interaction.member.roles.highest.position <= user.roles.highest.position ||
+                    role.managed
+                )
+                    return interaction.followUp({ embeds: [failed] }).then((msg) => {
+                        setTimeout(() => {
+                            interaction?.deleteReply()
+                        }, 5000)
+                    })
 
-                let embed = new MessageEmbed().setDescription(`Removed the role ${role.name} from \`${user.user.tag}\``).setColor(`${client.color.moderation}`)
-                interaction.followUp({ embeds: [embed] })
-                user.roles.remove(role)
+                let embed = new MessageEmbed()
+                    .setDescription(`${user.user} has been removed the role ${role}`)
+                    .setColor(`${client.color.moderation}`)
+                await user.roles.remove(role)
+                await interaction.followUp({ embeds: [embed] })
 
             }
 
@@ -109,21 +125,20 @@ module.exports = {
 
             const user = interaction.options.getMember("user");
 
+            const roles = user.roles.cache.sort((a, b) => b.position - a.position).filter(r => r.id !== interaction.guild.id);
+
             const embed = new MessageEmbed()
-                .setAuthor(`Roles for ${user.user.username}`, user.user.displayAvatarURL({ dynamic: true }))
-                .setFooter(`Requested By ${interaction.user.username}`)
-                .setColor("BLURPLE")
-                .setTimestamp()
-                .setThumbnail(`${interaction.guild.iconURL({ dynamic: true })}`)
-                .setDescription(`Here is all the roles for the member: ${user.user.tag}\n\n${user.roles.cache.sort((a, b) => b.position - a.position).filter(r => r.id !== interaction.guild.id).map((role, i) => {
-
-                    return [
-                        `• ${role.name} | \`${role.id}\``
-                    ]
-
-                }).join("\n")
-                    }\n\n➢ In total they have **${user.roles.cache.size}** roles!`)
-
+                .setAuthor(`${user.user.tag}`, user.user.displayAvatarURL({ dynamic: true }))
+                .setColor(`${client.color.moderation}`)
+                .setTitle(`Role List for ${user.displayName}`)
+                .setDescription(roles ?
+                    `${roles.map(async (r) => {
+                        return [
+                            `${r} **|** ${r.id}`
+                        ]
+                    })}
+                    ` : "This user doesn't have any roles!")
+                .setFooter(`Total Roles: ${roles.size}`)
             interaction.followUp({ embeds: [embed] })
         }
 

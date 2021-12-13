@@ -60,12 +60,12 @@ module.exports = {
                 const refresh = new MessageEmbed()
                     .setAuthor(`${client.user.username}`, `${client.user.displayAvatarURL()}`)
                     .setColor(`${client.color.loading}`)
-                    .addField(`Refreshing`, `${client.botEmoji.loading} Refreshing the client...`)
+                    .addField(`Refreshing`, `${client.emoji.loading} Refreshing the client...`)
 
                 let msg = await message.channel.send({ embeds: [refresh] })
                 await client.destroy()
                 await client.login(`${process.env.TOKEN}`)
-                await msg.edit({ embeds: [refresh.addField("Refreshed", `${client.botEmoji.success} The client has been refreshed!`).setColor(`${client.color.success}`).setTimestamp()] }).then((msgg) => {
+                await msg.edit({ embeds: [refresh.addField("Refreshed", `${client.emoji.success} The client has been refreshed!`).setColor(`${client.color.success}`).setTimestamp()] }).then((msgg) => {
                     setTimeout(() => {
                         msgg.delete()
                     }, 2000)
@@ -105,7 +105,7 @@ module.exports = {
                 });
 
                 msg.edit({
-                    embeds: [reload.addField("Reloaded Message Commands", `${client.botEmoji.success} Reloaded the message commands!`).setColor(`${client.color.success}`)]
+                    embeds: [reload.addField("Reloaded Message Commands", `${client.emoji.success} Reloaded the message commands!`).setColor(`${client.color.success}`)]
                 })
 
 
@@ -128,7 +128,7 @@ module.exports = {
 
                 });
 
-                msg.edit({ embeds: [reload.addField("Reloaded Slash Commands", `${client.botEmoji.success} Reloaded the slash commands!`).setColor(`${client.color.success}`)] }).then((msgg) => {
+                msg.edit({ embeds: [reload.addField("Reloaded Slash Commands", `${client.emoji.success} Reloaded the slash commands!`).setColor(`${client.color.success}`)] }).then((msgg) => {
                     setTimeout(() => {
                         msgg.delete()
                     }, 2000)
