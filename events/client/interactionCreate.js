@@ -22,14 +22,14 @@ client.on("interactionCreate", async (interaction) => {
 
     if (cmd.developerOnly && !client.config.developers.includes(interaction.user.id)) return interaction.reply({ embeds: [noperm], ephemeral: true })
 
-    if (cmd.botCommandOnly === true && !interaction.channel.name.includes("command") && !interaction.member?.permissions?.has("ADMINISTRATOR") && message.author.id !== client.config.owner) {
+    if (cmd.botCommandOnly === true && !interaction.channel.name.includes("command") && !interaction.member?.permissions?.has("ADMINISTRATOR") && interaction.user.id !== client.config.owner) {
 
       var botcmd = new MessageEmbed().setDescription('You may only use this command in bot command channels!').setColor(`${client.color.moderationRed}`)
       interaction.reply({ embeds: [botcmd], ephemeral: true })
 
     } else {
 
-      if (cmd.cooldown && !interaction.member?.permissions?.has("ADMINISTRATOR") && message.author.id !== client.config.owner) {
+      if (cmd.cooldown && !interaction.member?.permissions?.has("ADMINISTRATOR") && interaction.user.id !== client.config.owner) {
 
         let lek = `${~~(Timeout.get(`${cmd.name}${interaction.user.id}`) - Date.now())}`
         let cooldownembed = new MessageEmbed().setColor(`${client.color.noColor}`).setDescription(`You need to wait \`${ms(parseInt(lek), { long: true })}\` to use this slash command again.`)
