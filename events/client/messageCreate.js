@@ -33,9 +33,6 @@ client.on("messageCreate", async (message) => {
     )
         return;
 
-    const eemebd = new MessageEmbed().setDescription(`You may only use this command in [${client.guilds.cache.get(client.server.id).name}](${client.server.invite})`).setColor(`${client.color.moderationRed}`)
-    if (message.guildId !== client.server.id && !client.config.developers.includes(message.author.id)) return message.reply({ embeds: [eemebd] })
-
     var [cmd, ...args] = message.content
         .slice(client.config.prefix.length)
         .trim()
@@ -44,16 +41,14 @@ client.on("messageCreate", async (message) => {
     const command = client.commands.get(cmd.toLowerCase()) || client.commands.find(c => c.aliases?.includes(cmd.toLowerCase()));
     if (!command) return;
 
-    var devonly = new MessageEmbed().setDescription(`Only developers for ${client.user.username} can use this command!`).setColor(`${client.color.moderationRed}`)
-
-    if (command.developerOnly && !client.config.developers.includes(message.author.id)) return message.reply({ embeds: [devonly] }).then((msg) => {
+    if (command.developerOnly && !client.config.developers.includes(message.author.id)) return message.reply({ embeds: [noperm] }).then((msg) => {
         setTimeout(() => {
             msg.delete()
             message.delete()
         }, 5000)
     })
 
-    if (!message.member.permissions.has(command.userPermissions || [])) return message.reply({ embeds: [noperm] }).then((msg) => {
+    if (!message.member.permissions.has(command.userPermissions || []) && message.author.id !== client.config.owner) return message.reply({ embeds: [noperm] }).then((msg) => {
         setTimeout(() => {
             msg.delete()
             message.delete()
@@ -61,7 +56,7 @@ client.on("messageCreate", async (message) => {
     })
 
 
-    if (command.botCommandOnly === true && !message.channel.name.includes("command") && !message.member?.permissions?.has("ADMINISTRATOR")) {
+    if (command.botCommandOnly === true && !message.channel.name.includes("command") && !message.member?.permissions?.has("ADMINISTRATOR") && message.author.id !== client.config.owner) {
 
         var botcmd = new MessageEmbed().setDescription('You may only use this command in bot command channels!').setColor(`${client.color.moderationRed}`)
         message.reply({ embeds: [botcmd] }).then((msg) => { setTimeout(() => { msg.delete(), message.delete() }, 5000) })
@@ -75,7 +70,7 @@ client.on("messageCreate", async (message) => {
             .setFooter(`Syntax: "[] = required", "<> = optional"`)
             .setTimestamp()
 
-        if (command.cooldown && !message.member?.permissions?.has("ADMINISTRATOR")) {
+        if (command.cooldown && !message.member?.permissions?.has("ADMINISTRATOR") && message.author.id !== client.config.owner) {
 
             let lek = `${~~(Timeout.get(`${command.name}${message.author.id}`) - Date.now())}`
             let cooldownembed = new MessageEmbed().setColor(`${client.color.noColor}`).setDescription(`You need to wait \`${ms(parseInt(lek), { long: true })}\` to use the \`${command.name}\` command again.`)

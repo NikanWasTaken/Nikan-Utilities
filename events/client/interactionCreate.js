@@ -7,24 +7,29 @@ client.on("interactionCreate", async (interaction) => {
   // Slash Command Handling
   if (interaction.isCommand()) {
 
+    var noperm = new MessageEmbed()
+      .setDescription(`You don't have permissions to run this command.`)
+      .setColor("#b3666c")
+
+    //
+
+
     const cmd = client.slashCommands.get(interaction.commandName);
 
     if (!cmd) return interaction.reply({ content: "An error has occured " });
 
     let args = [];
 
-    var devonly = new MessageEmbed().setDescription(`Only developers for ${client.user.username} can use this command!`).setColor(`${client.color.moderationRed}`)
+    if (cmd.developerOnly && !client.config.developers.includes(interaction.user.id)) return interaction.reply({ embeds: [noperm], ephemeral: true })
 
-    if (cmd.developerOnly && !client.config.developers.includes(interaction.user.id)) return interaction.reply({ embeds: [devonly], ephemeral: true })
-
-    if (cmd.botCommandOnly === true && !interaction.channel.name.includes("command") && !interaction.member?.permissions?.has("ADMINISTRATOR")) {
+    if (cmd.botCommandOnly === true && !interaction.channel.name.includes("command") && !interaction.member?.permissions?.has("ADMINISTRATOR") && message.author.id !== client.config.owner) {
 
       var botcmd = new MessageEmbed().setDescription('You may only use this command in bot command channels!').setColor(`${client.color.moderationRed}`)
       interaction.reply({ embeds: [botcmd], ephemeral: true })
 
     } else {
 
-      if (cmd.cooldown && !interaction.member?.permissions?.has("ADMINISTRATOR")) {
+      if (cmd.cooldown && !interaction.member?.permissions?.has("ADMINISTRATOR") && message.author.id !== client.config.owner) {
 
         let lek = `${~~(Timeout.get(`${cmd.name}${interaction.user.id}`) - Date.now())}`
         let cooldownembed = new MessageEmbed().setColor(`${client.color.noColor}`).setDescription(`You need to wait \`${ms(parseInt(lek), { long: true })}\` to use this slash command again.`)

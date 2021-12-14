@@ -63,14 +63,34 @@ module.exports = {
 
             } else {
 
-                const embed = new MessageEmbed()
-                    .setAuthor(`${client.user.username}`, client.user.displayAvatarURL())
-                    .setTitle(`Evolution Succeded`).setURL(`${client.server.invite}`)
-                    .setColor(`${client.color.success}`)
-                    .addField("Code", `\`\`\`js\n${code}\n\`\`\``)
-                    .setTimestamp()
+                try {
 
-                message.channel.send({ embeds: [embed] })
+
+                    const embed = new MessageEmbed()
+                        .setAuthor(`${client.user.username}`, client.user.displayAvatarURL())
+                        .setTitle(`Evolution Succeded`).setURL(`${client.server.invite}`)
+                        .setColor(`${client.color.success}`)
+                        .addField("Code", `\`\`\`js\n${code}\n\`\`\``)
+                        .setTimestamp()
+
+                    message.channel.send({ embeds: [embed] })
+
+                } catch (error) {
+
+                    const embed = new MessageEmbed()
+                        .setAuthor(`${client.user.username}`, client.user.displayAvatarURL())
+                        .setTitle(`Error While Evoluting`).setURL(`${client.server.invite}`)
+                        .setColor(`${client.color.failed}`)
+                        .addField("Code", `\`\`\`js\n${code}\n\`\`\``)
+                        .addField("Error Message", `\`\`\`xl\n${error.message}\n\`\`\``)
+                        .setTimestamp()
+
+                    message.channel.send({
+                        embeds: [embed]
+                    });
+
+                }
+
             }
 
         } catch (err) {
