@@ -138,24 +138,24 @@ module.exports = {
 
                     const filtered = fetch.filter(async (msg) => {
                         if (msg.author.bot) {
-                            if ((await msg.embeds[0])?.footer?.text === message.channel.id) {
-                                const getUser = await client.users.fetch((msg.embeds[0].footer.text))
-                                const getEmbed = msg.embeds[0]
+                            if (msg.embeds[0]?.footer?.text === interaction.channel.name) {
+                                const getUser = await client.users.fetch((msg.embeds[0].footer.text));
+                                const getEmbed = msg.embeds[0];
                                 return [
                                     `
                                     ${getUser?.tag} :: ${getEmbed?.image ?
                                         `Content : ${getEmbed?.description} || Attachments: ${getEmbed?.image?.url}` :
                                         `${getEmbed.description}`}
                                     `
-                                ]
+                                ];
                             }
                         } else if (!msg.author.bot) {
-                            const getUser = await client.users.fetch(`${msg.author.id}`)
+                            const getUser = await client.users.fetch(`${msg.author.id}`);
                             return [
                                 `
                                 ${getUser.tag} :: ${msg?.attachments?.first() ? `Content: ${msg?.content} || Attachments: ${msg.attachments.first().url}` : `${msg.content}`}
                                 `
-                            ]
+                            ];
                         }
 
                     })
@@ -172,7 +172,7 @@ module.exports = {
                         ],
                         {
                             title: `Modmail Transcript`,
-                            description: `Modmail Transcript for the user: ${(await client.users.fetch(`${message.channel.id}`)).tag}`
+                            description: `Modmail Transcript for the user: ${(await client.users.fetch(`${interaction.channel.name}`)).tag}`
                         }
                     )
 
