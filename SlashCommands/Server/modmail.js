@@ -136,37 +136,33 @@ module.exports = {
                     const user = interaction.guild.members.cache.find(m => m.id === interaction.channel.name)
                     const fetch = await interaction.channel.messages.fetch({ limit: 100 })
 
-                    const filtered = fetch.filter(async (msg) => {
+                    const filtered = fetch.sort((a, b) => b.createdTimestamp - a.createdTimestamp).map(async (msg) => {
                         if (msg.author.bot) {
                             if (msg.embeds[0]?.footer?.text === interaction.channel.name) {
                                 const getUser = await client.users.fetch((msg.embeds[0].footer.text));
                                 const getEmbed = msg.embeds[0];
-                                return [
-                                    `
-                                    ${getUser?.tag} :: ${getEmbed?.image ?
+                                `
+                                ${getUser?.tag} :: ${getEmbed?.image ?
                                         `Content : ${getEmbed?.description} || Attachments: ${getEmbed?.image?.url}` :
                                         `${getEmbed.description}`}
-                                    `
-                                ];
+                                        `
                             }
+
                         } else if (!msg.author.bot) {
                             const getUser = await client.users.fetch(`${msg.author.id}`);
-                            return [
-                                `
-                                ${getUser.tag} :: ${msg?.attachments?.first() ? `Content: ${msg?.content} || Attachments: ${msg.attachments.first().url}` : `${msg.content}`}
-                                `
-                            ];
+                            `
+                            ${getUser.tag} :: ${msg?.attachments?.first() ?
+                                    `Content: ${msg?.content} || Attachments: ${msg.attachments.first().url}` :
+                                    `${msg.content}`}
+                            `
                         }
 
-                    })
-
-
-                    const sorted = filtered.sort((a, b) => b.createdTimestamp - a.createdTimestamp)
+                    }).join("\n")
 
                     const bin = await sourcebin.create(
                         [
                             {
-                                content: `${sorted}`,
+                                content: `${filtered}`,
                                 language: "AsciiDoc"
                             }
                         ],
