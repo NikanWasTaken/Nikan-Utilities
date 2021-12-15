@@ -649,6 +649,12 @@ module.exports = {
 
         } else if (subs == "info") {
 
+            if (!interaction.member.permissions.has("BAN_MEMBERS")) return interaction.followUp({ embeds: [nopermsmh] }).then((msg) => {
+                setTimeout(() => {
+                    interaction.deleteReply()
+                }, 5000)
+            })
+
             const punishid = interaction.options.getString("warn-id")
 
             const warnfind = await warnModel.findById(punishid)
