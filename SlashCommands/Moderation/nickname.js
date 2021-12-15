@@ -146,8 +146,15 @@ module.exports = {
         if (user.displayName === name)
           return message.channel.send({ embeds: [failedtochange2] }).then((msg) => {
             setTimeout(() => {
-              message?.delete()
-              msg?.delete()
+              interaction?.deleteReply()
+            }, 5000)
+          })
+
+        const failedtochange3 = new MessageEmbed().setDescription("Nickname should be fewer than 32 characters in length!").setColor("RED")
+        if (name.length > 32)
+          return message.channel.send({ embeds: [failedtochange3] }).then((msg) => {
+            setTimeout(() => {
+              interaction?.deleteReply()
             }, 5000)
           })
 

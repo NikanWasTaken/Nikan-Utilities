@@ -100,6 +100,15 @@ module.exports = {
                         }, 5000)
                     })
 
+                const failedtochange3 = new MessageEmbed().setDescription("Nickname should be fewer than 32 characters in length!").setColor("RED")
+                if (name.length > 32)
+                    return message.channel.send({ embeds: [failedtochange3] }).then((msg) => {
+                        setTimeout(() => {
+                            message?.delete()
+                            msg?.delete()
+                        }, 5000)
+                    })
+
                 const embed4 = new MessageEmbed()
                     .setDescription(`${user.user} nickname has been changed to \`${name}\``)
                     .setColor(`${client.color.moderation}`)
