@@ -224,7 +224,7 @@ client.on("messageCreate", async (message) => {
                 .setDescription(`${message.content ? message.content : `No content in this message!`}`)
                 .setImage(message.attachments.first()?.proxyURL || null)
                 .setColor(`${client.color.botBlue}`)
-                .setFooter(`${message.author.id}`)
+                .setFooter(`ID: ${message.author.id}`)
 
                 ; (await personticket).send({ embeds: [embed] })
             message.react(`${client.emoji.success}`)

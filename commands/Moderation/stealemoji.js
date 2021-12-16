@@ -5,6 +5,7 @@ module.exports = {
     category: 'moderation',
     description: `Steal some emojis ;)`,
     cooldown: 5000,
+    aliases: ["steal"],
     usage: `[emoji-name] <emoji/attachment/url>`,
     userPermissions: ["BAN_MEMBERS"],
 

@@ -133,25 +133,32 @@ module.exports = {
 
                     if (collected.user.id !== interaction.user.id) return collected.reply({ content: "This menu is not for you!", ephemeral: true })
 
+                    const createdembed = new MessageEmbed()
+                        .setAuthor(`${client.guilds.cache.get(serverId).name}`, `${interaction.guild.iconURL({ dynamic: true })}`)
+                        .setTitle("Thread Deletion Confimred").setURL(`${client.server.invite}`)
+                        .setColor(`${client.color.success}`)
+                        .setDescription(`${client.emojis.loading} Saving the transcript...`)
+                        .setFooter(`${client.user.username}`, `${client.user.displayAvatarURL()}`)
+                        .setTimestamp()
+
+                    await collected.update({ embeds: [createdembed], components: [] })
+
                     const user = interaction.guild.members.cache.find(m => m.id === interaction.channel.name)
                     const fetch = await interaction.channel.messages.fetch({ limit: 100 })
 
-                    const filtered = fetch.sort((a, b) => b.createdTimestamp - a.createdTimestamp).map(async (msg) => {
+                    const filtered = fetch.sort((a, b) => a.createdTimestamp - b.createdTimestamp).map((msg) => {
 
                         if (msg.author.bot) {
 
-                            if (msg.embeds[0]?.footer?.text === interaction.channel.name) {
-                                const getUser = await client.users.fetch(`${msg.embeds[0].footer.text}`);
-                                const getEmbed = msg.embeds[0];
+                            if (msg.embeds[0]?.footer?.text.endsWith(`${interaction.channel.name}`)) {
 
-                                return `${getUser.tag} :: ${getEmbed.description}`
+                                const getEmbed = msg.embeds[0];
+                                return `${getEmbed?.author.name} :: ${getEmbed.description}`
                             }
 
                         } else if (!msg.author.bot) {
 
-                            const getUser = await client.users.fetch(`${msg.author.id}`);
-
-                            return `${getUser?.tag} :: ${msg?.content}`
+                            return `${msg?.author?.tag} :: ${msg?.content}`
 
                         }
 
@@ -184,18 +191,18 @@ module.exports = {
                         .addField('Ticket Opened By', `● ${user.user}\n> __Tag:__ ${user.user.tag}\n> __ID:__ ${user.user.id}`, true)
                         .addField("Mod Info", `● ${interaction.member.user}\n> __Tag:__ ${interaction.member.user.tag}\n> __ID:__ ${interaction.member.user.id}`, true)
                         .setTimestamp()
-
                     loghook.send({ embeds: [logembed], components: [row] })
 
-                    const createdembed = new MessageEmbed()
+                    const createdembedee = new MessageEmbed()
                         .setAuthor(`${client.guilds.cache.get(serverId).name}`, `${interaction.guild.iconURL({ dynamic: true })}`)
                         .setTitle("Thread Deletion Confimred").setURL(`${client.server.invite}`)
                         .setColor(`${client.color.success}`)
-                        .setDescription("This ticket will be deleted in 10 seconds!\nThread deletion has been confimied according to your button choice!")
+                        .setDescription(`Trascript Saved! This channel is going to be deleted in 10 seconds!`)
                         .setFooter(`${client.user.username}`, `${client.user.displayAvatarURL()}`)
                         .setTimestamp()
 
-                    await collected.update({ embeds: [createdembed], components: [] }).then((msg) => { setTimeout(() => { interaction.channel.delete() }, 10000) })
+                    await collected.update({ embeds: [createdembedee], components: [] })
+                        .then((msg) => { setTimeout(() => { interaction?.channel?.delete() }, 10000) })
 
                 }
 

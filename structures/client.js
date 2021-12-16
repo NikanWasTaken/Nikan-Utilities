@@ -31,9 +31,9 @@ module.exports = async (client) => {
 
     // emoijs
     client.emoji = {
-        success: "<a:NUsuccess:872203367047397426>",
+        success: "<:success:920918055813533746> ",
         loading: "<a:NUloading:894087871626084352>",
-        failed: "<a:NUfailed:872203367718457424>",
+        failed: "<:failed:920917857670422599> ",
         bot: "<:NUbot:875668173419073546>",
     }
 
