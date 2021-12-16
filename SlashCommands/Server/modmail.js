@@ -127,7 +127,7 @@ module.exports = {
                         .setFooter(`${client.user.username}`, `${client.user.displayAvatarURL()}`)
                         .setTimestamp()
 
-                    await collected.update({ embeds: [embed], components: [] })
+                    await msg?.edit({ embeds: [embed], components: [] })
 
                 } else if (collected.customId === "delete-ticket") {
 
@@ -141,7 +141,7 @@ module.exports = {
                         .setFooter(`${client.user.username}`, `${client.user.displayAvatarURL()}`)
                         .setTimestamp()
 
-                    await collected.update({ embeds: [createdembed], components: [] })
+                    await msg?.edit({ embeds: [createdembed], components: [] })
 
                     const user = interaction.guild.members.cache.find(m => m.id === interaction.channel.name)
                     const fetch = await interaction.channel.messages.fetch({ limit: 100 })
@@ -188,7 +188,7 @@ module.exports = {
                         .setTimestamp()
                     loghook.send({ embeds: [logembed], components: [row] })
 
-                    await collected.update({
+                    await msg.edit({
                         embeds: [
                             createdembed.setDescription(`${client.emoji.success} Trascript Saved! This channel is going to be deleted in 10 seconds!`)
                         ]
