@@ -137,7 +137,7 @@ module.exports = {
                         .setAuthor(`${client.guilds.cache.get(serverId).name}`, `${interaction.guild.iconURL({ dynamic: true })}`)
                         .setTitle("Thread Deletion Confimred").setURL(`${client.server.invite}`)
                         .setColor(`${client.color.success}`)
-                        .setDescription(`${client.emojis.loading} Saving the transcript...`)
+                        .setDescription(`${client.emoji.loading} Saving the transcript...`)
                         .setFooter(`${client.user.username}`, `${client.user.displayAvatarURL()}`)
                         .setTimestamp()
 
@@ -147,19 +147,15 @@ module.exports = {
                     const fetch = await interaction.channel.messages.fetch({ limit: 100 })
 
                     const filtered = fetch.sort((a, b) => a.createdTimestamp - b.createdTimestamp).map((msg) => {
-
                         if (msg.author.bot) {
 
                             if (msg.embeds[0]?.footer?.text.endsWith(`${interaction.channel.name}`)) {
-
                                 const getEmbed = msg.embeds[0];
                                 return `${getEmbed?.author.name} :: ${getEmbed.description}`
                             }
-
                         } else if (!msg.author.bot) {
 
                             return `${msg?.author?.tag} :: ${msg?.content}`
-
                         }
 
                     }).join("\n")
@@ -177,7 +173,6 @@ module.exports = {
                         }
                     )
 
-
                     const row = new MessageActionRow().addComponents(
                         new MessageButton()
                             .setLabel("Transcript")
@@ -193,15 +188,11 @@ module.exports = {
                         .setTimestamp()
                     loghook.send({ embeds: [logembed], components: [row] })
 
-                    const createdembedee = new MessageEmbed()
-                        .setAuthor(`${client.guilds.cache.get(serverId).name}`, `${interaction.guild.iconURL({ dynamic: true })}`)
-                        .setTitle("Thread Deletion Confimred").setURL(`${client.server.invite}`)
-                        .setColor(`${client.color.success}`)
-                        .setDescription(`Trascript Saved! This channel is going to be deleted in 10 seconds!`)
-                        .setFooter(`${client.user.username}`, `${client.user.displayAvatarURL()}`)
-                        .setTimestamp()
-
-                    await collected.update({ embeds: [createdembedee], components: [] })
+                    await collected.update({
+                        embeds: [
+                            createdembed.setDescription(`${client.emoji.success} Trascript Saved! This channel is going to be deleted in 10 seconds!`)
+                        ]
+                    })
                         .then((msg) => { setTimeout(() => { interaction?.channel?.delete() }, 10000) })
 
                 }
