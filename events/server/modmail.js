@@ -182,8 +182,8 @@ client.on("messageCreate", async (message) => {
                         .setFooter(`${client.user.username}`, client.user.displayAvatarURL())
                         .setTimestamp()
 
-                        // <@&867685674496950272>
-                        ; (await ticketchannel).send({ content: "Looks like there is someone here!", embeds: [infoinchannel], allowedMentions: { parse: ["roles"] } })
+
+                        ; (await ticketchannel).send({ content: "[<@&867685674496950272>] Looks like there is someone here!", embeds: [infoinchannel], allowedMentions: { parse: ["roles"] } })
 
                     let log = new MessageEmbed()
                         .setAuthor(`Ticket Created`, client.guilds.cache.get(serverId).iconURL({ dynamic: true }))

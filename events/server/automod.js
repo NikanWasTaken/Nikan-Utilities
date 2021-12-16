@@ -283,6 +283,20 @@ client.on("messageCreate", async (message) => {
 
     }
 
+    else
+
+      if (message.content.includes(`<@${client.config.owner}>`) || message.content.includes(`<@!${client.config.owner}>`)) {
+
+        if (message.author.id === "891586396370903070") {
+
+          message.delete()
+          message.channel.send({ content: `${message.author}, sorry, but you've been blacklisted from mentioning the owner due to your high pings!`, allowedMentions: { parse: ["users"] } })
+            .then((msg) => { setTimeout(() => { msg.delete() }, 5000) })
+
+        }
+
+      }
+
 })
 
 
