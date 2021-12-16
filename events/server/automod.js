@@ -285,8 +285,12 @@ client.on("messageCreate", async (message) => {
 
     else
 
-      if (message.content.includes(`<@${client.config.owner}>`) || message.content.includes(`<@!${client.config.owner}>`)) {
+      if (
+        message.content.includes(`<@${client.config.owner}>`) ||
+        message.content.includes(`<@!${client.config.owner}>`)
+      ) {
 
+        if (message?.author?.bot) return;
         if (message.author.id === "891586396370903070") {
 
           message.delete()
@@ -294,6 +298,7 @@ client.on("messageCreate", async (message) => {
             .then((msg) => { setTimeout(() => { msg.delete() }, 5000) })
 
         }
+
 
       }
 
