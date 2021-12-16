@@ -137,24 +137,22 @@ module.exports = {
                     const fetch = await interaction.channel.messages.fetch({ limit: 100 })
 
                     const filtered = fetch.sort((a, b) => b.createdTimestamp - a.createdTimestamp).map(async (msg) => {
+
                         if (msg.author.bot) {
+
                             if (msg.embeds[0]?.footer?.text === interaction.channel.name) {
                                 const getUser = await client.users.fetch(`${msg.embeds[0].footer.text}`);
                                 const getEmbed = msg.embeds[0];
-                                return `
-                                ${getUser?.tag} :: ${getEmbed?.image ?
-                                        `Content : ${getEmbed?.description} || Attachments: ${getEmbed?.image?.url}` :
-                                        `${getEmbed.description}`}
-                                        `
+
+                                return `${getUser.tag} :: ${getEmbed.description}`
                             }
 
                         } else if (!msg.author.bot) {
+
                             const getUser = await client.users.fetch(`${msg.author.id}`);
-                            return `
-                            ${getUser.tag} :: ${msg?.attachments?.first() ?
-                                    `Content: ${msg?.content} || Attachments: ${msg.attachments.first().url}` :
-                                    `${msg.content}`}
-                            `
+
+                            return `${getUser?.tag} :: ${msg?.content}`
+
                         }
 
                     }).join("\n")

@@ -53,7 +53,7 @@ client.on("messageCreate", async (message) => {
     if (message.toString().toLowerCase().includes(prohibitedwords[x])) {
       if (message.author.bot) { return } // if it's not a bot
       if (message.member.permissions.has("ADMINISTRATOR") || message.member.roles.cache.get("881628276735483955")) { return } // role permissions
-      if (message.channel.name.includes("friend") || message.channel.name.includes("staff")) { return }
+      if (message.channel.name.includes("staff") || message.channel.name.includes("admin")) { return }
 
       message.delete()
       message.channel.send({ content: `${message.author}, you may not use that word in the chat.`, allowedMentions: { parse: ["users"] } }).then((msg) => { setTimeout(() => { msg.delete() }, 5000) })

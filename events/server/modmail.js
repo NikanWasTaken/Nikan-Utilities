@@ -211,7 +211,7 @@ client.on("messageCreate", async (message) => {
                     .setTimestamp()
 
 
-                await comsg.edit({ embeds: [emobed], components: [] })
+                comsg.edit({ embeds: [emobed], components: [] })
             })
 
 
