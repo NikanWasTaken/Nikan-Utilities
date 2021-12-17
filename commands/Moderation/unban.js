@@ -30,9 +30,10 @@ module.exports = {
       const nomemberfound = new MessageEmbed().setDescription(`This user is not banned from the server!`).setColor(`RED`)
 
       if (!BannedUser) return
-      interaction.followUp({ embeds: [nomemberfound] }).then(async (msg) => {
+      message.reply({ embeds: [nomemberfound] }).then(async (msg) => {
         setTimeout(() => {
-          interaction.deleteReply()
+          message?.delete()
+          msg?.delete()
         }, 5000)
       })
 

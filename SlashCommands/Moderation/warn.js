@@ -462,9 +462,9 @@ module.exports = {
 
                 const user = await client.users.fetch(`${data?.userId}`) || "Can't find user!"
 
-                let embed = new MessageEmbed().setDescription(`Punnishment \`${data._id}\` has been deleted!`)
+                let embed = new MessageEmbed()
+                    .setDescription(`Punnishment \`${data._id}\` has been deleted!`)
                     .setColor(`${client.color.moderation}`)
-                    .setTimestamp()
 
                 await interaction.deleteReply()
                 let msg = await interaction.channel.send({ embeds: [embed] })
