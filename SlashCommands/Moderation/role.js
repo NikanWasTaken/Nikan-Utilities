@@ -132,7 +132,7 @@ module.exports = {
                 .setColor(`${client.color.moderation}`)
                 .setTitle(`Role List for ${user.displayName}`)
                 .setDescription(roles ?
-                    `${roles.map(async (r) => {
+                    `${roles.map((r) => {
                         return [
                             `${r} **|** ${r.id}`
                         ]
