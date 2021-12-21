@@ -230,9 +230,18 @@ module.exports = {
 
       const emb3 = new MessageEmbed()
         .setAuthor(`${cap(command.name)} Command`, client.user.displayAvatarURL())
-        .setDescription(`> **Name:** ${command.name ? cap(command.name) : 'No name'}\n> **Category:** ${command.category ? cap(command.category) : "No Category"}\n> **Description:** ${command.description ? command.description : "No description"}\n> **Usage:** ${command.usage ? `\`${config.prefix + command.name + ` ${command.usage}`}\`` : "No Usage found!"}\n> **Aliases:** ${command.aliases ? `\`${command.aliases.join("` `")}\`` : "No Aliases Available"}\n> **Cooldown:** ${command.cooldown ? ms(command.cooldown, { long: true }) : "No Cooldown"}`)
+        .setDescription(
+          [
+            `> ** Name:** ${command.name ? cap(command.name) : 'No name'}`,
+            `> ** Category:** ${command.category ? cap(command.category) : "No Category"}`,
+            `> ** Description:** ${command.description ? command.description : "No description"}`,
+            `> ** Usage:** ${command.usage ? `\`${config.prefix + command.name + ` ${command.usage}`}\`` : "No Usage found!"}`,
+            `> ** Aliases:** ${command.aliases ? `\`${command.aliases.join("` `")}\`` : "No Aliases Available"}`,
+            `> ** Cooldown:** ${command.cooldown ? ms(command.cooldown, { long: true }) : "No Cooldown"}`
+          ].join("\n")
+        )
         .setColor(`${client.color.botBlue}`)
-        .setFooter(`Syntax: "[] = required", "<> = optional"`)
+        .setFooter(`[] = required" • <> = optional`)
       interaction.followUp({
         embeds: [emb3]
       })
