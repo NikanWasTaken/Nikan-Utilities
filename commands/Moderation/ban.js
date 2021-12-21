@@ -22,6 +22,10 @@ module.exports = {
     let user = message.guild.members.cache.get(args[0]) || message.mentions.members.first()
     if (!args[0]) return message.reply({ embeds: [wrongUsage] })
 
+    const cannotPerform = new MessageEmbed()
+      .setDescription(`You don't have permissions to perform that action!`)
+      .setColor("RED")
+
 
     if (!user) {
 
@@ -85,7 +89,7 @@ module.exports = {
         user.roles.highest.position >= message.member.roles.highest.position ||
         user.user.id === client.config.owner ||
         user.user.bot)
-        return message.reply({ embeds: [client.embed.cannotPerform] }).then((msg) => {
+        return message.reply({ embeds: [cannotPerform] }).then((msg) => {
           setTimeout(() => {
             msg?.delete()
             message?.delete()

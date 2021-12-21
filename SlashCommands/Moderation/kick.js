@@ -34,6 +34,10 @@ module.exports = {
    */
   run: async (client, interaction, args) => {
 
+    const cannotPerform = new MessageEmbed()
+      .setDescription(`You don't have permissions to perform that action!`)
+      .setColor("RED")
+
     var user = interaction.options.getMember("user")
 
     var reason = interaction.options.getString("reason") || "No reason provided"
@@ -43,7 +47,7 @@ module.exports = {
       user.user.id === client.config.owner ||
       user.user.bot
     )
-      return interaction.followUp({ embeds: [client.embed.cannotPerform] }).then((msg) => {
+      return interaction.followUp({ embeds: [cannotPerform] }).then((msg) => {
         setTimeout(() => {
           interaction.deleteReply()
         }, 5000)

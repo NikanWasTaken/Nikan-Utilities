@@ -74,7 +74,7 @@ module.exports = {
         user.roles.highest.position >= interaction.member.roles.highest.position ||
         user.user.id === client.config.owner ||
         user.user.bot)
-        return interaction.followUp({ embeds: [client.embed.cannotPerform] }).then((msg) => {
+        return interaction.followUp({ embeds: [cannotPerform] }).then((msg) => {
           setTimeout(() => {
             interaction.deleteReply()
           }, 5000)

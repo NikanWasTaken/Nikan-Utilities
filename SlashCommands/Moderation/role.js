@@ -67,6 +67,10 @@ module.exports = {
      */
     run: async (client, interaction, args) => {
 
+        const cannotPerform = new MessageEmbed()
+            .setDescription(`You don't have permissions to perform that action!`)
+            .setColor("RED")
+
         const subs = interaction.options.getSubcommand(["edit", "list"])
 
         if (subs === "edit") {
@@ -84,7 +88,7 @@ module.exports = {
                     role.permissions.has("BAN_MEMBERS") ||
                     role.managed
                 )
-                    return interaction.followUp({ embeds: [client.embed.cannotPerform] }).then((msg) => {
+                    return interaction.followUp({ embeds: [cannotPerform] }).then((msg) => {
                         setTimeout(() => {
                             interaction?.deleteReply()
                         }, 5000)
@@ -103,7 +107,7 @@ module.exports = {
                     interaction.member.roles.highest.position <= user.roles.highest.position ||
                     role.managed
                 )
-                    return interaction.followUp({ embeds: [client.embed.cannotPerform] }).then((msg) => {
+                    return interaction.followUp({ embeds: [cannotPerform] }).then((msg) => {
                         setTimeout(() => {
                             interaction?.deleteReply()
                         }, 5000)

@@ -50,28 +50,6 @@ module.exports = async (client) => {
         autoaction: new WebhookClient({ id: `917408937756741662`, token: `92dznvZixjZrgHLBYgERwS1ngRWcDSdldvhaaNlPpjHYyBDuwl6TbNyU4InU9nqTJIw8` }),
     }
 
-    // embeds for client.embed function;
-
-    const cannotPerformEmbed = new MessageEmbed()
-        .setDescription(`You don't have permissions to perform that action!`)
-        .setColor("RED")
-
-    const noPermissionsEmbed = new MessageEmbed()
-        .setDescription(`You don't have permissions to run this command.`)
-        .setColor(`${client.color.moderationRed}`)
-
-    const botCommandEmbed = new MessageEmbed()
-        .setDescription('You may only use this command in bot command channels!')
-        .setColor(`${client.color.moderationRed}`)
-
-    // embeds
-    client.embed = {
-        cannotPerform: cannotPerformEmbed,
-        noPermissions: noPermissionsEmbed,
-        botCommand: botCommandEmbed
-    };
-
-
 
     // other functions 
 

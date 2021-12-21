@@ -3,6 +3,13 @@ const { Collection, MessageEmbed } = require("discord.js");
 const Timeout = new Collection();
 const ms = require("ms")
 
+const noPermissions = new MessageEmbed()
+  .setDescription("You don't have permissions to run this command.")
+  .setColor(`${client.color.moderationRed}`)
+
+const botCommand = new MessageEmbed()
+  .setDescription('You may only use this command in bot command channels!')
+  .setColor(`${client.color.moderationRed}`)
 
 client.on("interactionCreate", async (interaction) => {
   if (interaction.isCommand()) {
@@ -17,7 +24,7 @@ client.on("interactionCreate", async (interaction) => {
     if (
       cmd.developer &&
       !client.config.developers.includes(interaction.user.id)
-    ) return interaction.reply({ embeds: [client.embed.noPermissions], ephemeral: true })
+    ) return interaction.reply({ embeds: [noPermissions], ephemeral: true })
 
 
     // bot command check
@@ -27,7 +34,7 @@ client.on("interactionCreate", async (interaction) => {
       !interaction.member?.permissions?.has("ADMINISTRATOR") &&
       !client.config.developers.includes(interaction?.user?.id) &&
       interaction.user.id !== client.config.owner
-    ) return interaction.reply({ embeds: [client.embed.botCommand], ephemeral: true })
+    ) return interaction.reply({ embeds: [botCommand], ephemeral: true })
 
 
     if (
