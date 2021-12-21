@@ -46,7 +46,7 @@ module.exports = async (client) => {
   client.on("ready", async () => {
 
     const guild = client.guilds.cache.get(`${client.server.id}`)
-    await guild.commands.set(arrayOfSlashCommands)
+    await guild.commands.set([])
       .then((cmd) => {
         const getRoles = (commandName) => {
           const permissions = arrayOfSlashCommands.find(x => x.name === commandName).permissions;
