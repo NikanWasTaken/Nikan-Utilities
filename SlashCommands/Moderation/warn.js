@@ -106,6 +106,10 @@ module.exports = {
 
     run: async (client, interaction, args) => {
 
+        const noPermissions = new MessageEmbed()
+            .setDescription("You don't have permissions to run this command.")
+            .setColor(`${client.color.moderationRed}`)
+
         const cannotPerform = new MessageEmbed()
             .setDescription(`You don't have permissions to perform that action!`)
             .setColor("RED")
@@ -117,7 +121,7 @@ module.exports = {
             const user = interaction.options.getMember("user")
             const reason = interaction.options.getString("reason")
 
-            if (!interaction.member.permissions.has("BAN_MEMBERS")) return interaction.followUp({ embeds: [client.embed.noPermissions] }).then((msg) => {
+            if (!interaction.member.permissions.has("BAN_MEMBERS")) return interaction.followUp({ embeds: [noPermissions] }).then((msg) => {
                 setTimeout(() => {
                     interaction.deleteReply()
                 }, 5000)
@@ -452,7 +456,7 @@ module.exports = {
 
         } else if (subs == "remove") {
 
-            if (!interaction.member.permissions.has("BAN_MEMBERS")) return interaction.followUp({ embeds: [client.embed.noPermissions] })
+            if (!interaction.member.permissions.has("BAN_MEMBERS")) return interaction.followUp({ embeds: [noPermissions] })
 
             const warnId = interaction.options.getString("warn-id")
             const data = await warnModel.findById(warnId)
@@ -654,7 +658,7 @@ module.exports = {
 
         } else if (subs == "info") {
 
-            if (!interaction.member.permissions.has("BAN_MEMBERS")) return interaction.followUp({ embeds: [client.embed.noPermissions] }).then((msg) => {
+            if (!interaction.member.permissions.has("BAN_MEMBERS")) return interaction.followUp({ embeds: [noPermissions] }).then((msg) => {
                 setTimeout(() => {
                     interaction.deleteReply()
                 }, 5000)
