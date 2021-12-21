@@ -39,14 +39,14 @@ module.exports = async (client) => {
     client.slashCommands.set(file.name, file);
 
     if (["MESSAGE", "USER"].includes(file.type)) delete file.description;
-    if (file.userPermissions) file.defaultPermission = false
+    if (file.permissions) file.defaultPermission = false
     arrayOfSlashCommands.push(file);
   });
 
   client.on("ready", async () => {
 
     const guild = client.guilds.cache.get(`${client.server.id}`)
-    await guild.commands.set([])
+    await guild.commands.set(arrayOfSlashCommands)
       .then((cmd) => {
         const getRoles = (commandName) => {
           const permissions = arrayOfSlashCommands.find(x => x.name === commandName).permissions;
