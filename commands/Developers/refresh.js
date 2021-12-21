@@ -5,9 +5,9 @@ const glob = require("glob");
 module.exports = {
     name: 'refresh',
     category: 'Developers',
-    developerOnly: true,
     aliases: ["reload", "reloadall"],
     cooldown: 10000,
+    developer: true,
     visible: false,
 
     /**
@@ -105,28 +105,12 @@ module.exports = {
                 });
 
                 msg.edit({
-                    embeds: [reload.addField("Reloaded Message Commands", `${client.emoji.success} Reloaded the message commands!`).setColor(`${client.color.success}`)]
+                    embeds: [
+                        reload.addField("Reloaded Message Commands", `${client.emoji.success} Reloaded the message commands!`)
+                            .setColor(`${client.color.success}`)
+                    ]
                 })
 
-
-                glob(`${__dirname} /../**/*.js`, async (err, filePaths) => {
-
-                    if (err) return console.log(err);
-                    filePaths.forEach((file) => {
-                        delete require.cache[require.resolve(file)];
-
-                        const pull = require(file);
-
-                        if (pull.name) {
-
-                            client.slashCommands.set(pull.name, pull);
-
-                        }
-
-
-                    });
-
-                });
 
                 msg.edit({ embeds: [reload.addField("Reloaded Slash Commands", `${client.emoji.success} Reloaded the slash commands!`).setColor(`${client.color.success}`)] }).then((msgg) => {
                     setTimeout(() => {
@@ -138,7 +122,9 @@ module.exports = {
 
         })
 
-        collector.on("end", async (i) => { msg.delete() })
+        collector.on("end", async (i) => {
+            msg.delete()
+        })
 
 
     }

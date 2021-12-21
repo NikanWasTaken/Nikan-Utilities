@@ -5,7 +5,7 @@ const moment = require("moment")
 module.exports = {
   name: "user-search",
   description: 'Searches for people in the server.',
-  userPermissions: ["MANAGE_MESSAGES"],
+  permissions: ["MANAGE_MESSAGES"],
   options: [
     {
       name: "user",

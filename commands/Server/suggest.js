@@ -6,7 +6,7 @@ module.exports = {
     description: 'Suggest something to the server using this command',
     usage: `[suggestion]`,
     cooldown: 120000,
-    botCommandOnly: true,
+    botCommand: true,
 
     /**
      * @param {Client} client
@@ -14,7 +14,7 @@ module.exports = {
      * @param {String[]} args
      */
 
-    run: async (client, message, args, missingpartembed) => {
+    run: async (client, message, args, wrongUsage) => {
 
         const suggestchannel = client.channels.cache.get("851317000868462633")
         const suggestion = args.join(" ")

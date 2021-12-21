@@ -1,4 +1,4 @@
-const { MessageEmbed, Collection, DataResolver, MessageActionRow, MessageButton } = require('discord.js')
+const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js')
 const ms = require("ms")
 const db = require("../../models/MemberRoles.js")
 const warnModel = require("../../models/Punishments.js")
@@ -9,7 +9,7 @@ module.exports = {
   description: `Mutes a user`,
   usage: "[user] <time> <reason>",
   cooldown: 3000,
-  userPermissions: ["MANAGE_MESSAGES"],
+  permissions: ["MANAGE_MESSAGES"],
 
   /**
    * @param {Client} client
@@ -17,7 +17,7 @@ module.exports = {
    * @param {String[]} args
    */
 
-  run: async (client, message, args, missingpartembed) => {
+  run: async (client, message, args, wrongUsage) => {
 
 
     var user = message.guild.members.cache.get(args[0]) || message.mentions.members.first()
@@ -25,8 +25,11 @@ module.exports = {
     if (!args[1]) time = "6h"
     let reason = message.content.split(" ").slice(3).join(" ") || "No reason provided"
 
-    if (!args[0]) return message.reply({ embeds: [missingpartembed] })
-    let erm = new MessageEmbed().setDescription("This user isn't in this guild!").setColor(`RED`)
+    if (!args[0]) return message.reply({ embeds: [wrongUsage] })
+    let erm = new MessageEmbed()
+      .setDescription("This user isn't in this guild!")
+      .setColor(`RED`)
+
     if (!user) return message.reply({ embeds: [erm] }).then((msg) => {
       setTimeout(() => {
         msg?.delete()
@@ -34,13 +37,11 @@ module.exports = {
       }, 5000)
     })
 
-    const failed = new MessageEmbed().setDescription(`You don't have permissions to perform that action!`).setColor("RED")
-
     if (user.roles.highest.position >= message.guild.me.roles.highest.position ||
       user.roles.highest.position >= message.member.roles.highest.position ||
       user.user.id === client.config.owner ||
       user.user.bot)
-      return message.reply({ embeds: [failed] }).then((msg) => {
+      return message.reply({ embeds: [client.embed.cannotPerform] }).then((msg) => {
         setTimeout(() => {
           msg?.delete()
           message?.delete()
@@ -61,7 +62,10 @@ module.exports = {
 
     if (ms(time) === undefined) {
 
-      const embed = new MessageEmbed().setDescription(`I couldn't find out the duration of this mute!`).setColor("RED")
+      const embed = new MessageEmbed()
+        .setDescription(`I couldn't find out the duration of this mute!`)
+        .setColor("RED")
+
       return message.reply({ embeds: [embed] }).then((msg) => {
         setTimeout(() => {
           msg?.delete()
@@ -86,7 +90,7 @@ module.exports = {
       moderatorId: message.author.id,
       reason,
       timestamp: Date.now(),
-      expires: Date.now() + ms('4 weeks'),
+      systemExpire: Date.now() + ms("26 weeks")
     })
     data2.save()
 

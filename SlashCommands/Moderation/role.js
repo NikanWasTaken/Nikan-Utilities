@@ -5,7 +5,7 @@ module.exports = {
     name: "role",
     description: 'Role commands',
     cooldown: 10000,
-    userPermissions: ["BAN_MEMBERS"],
+    permissions: ["BAN_MEMBERS"],
     options: [
         {
             name: "edit",
@@ -78,15 +78,13 @@ module.exports = {
             if (action === "add") {
 
 
-                const failed = new MessageEmbed().setDescription(`You don't have permissions to perform that action!`).setColor("RED")
-
                 if (
                     role.position >= interaction.guild.me.roles.highest.position ||
                     interaction.member.roles.highest.position <= user.roles.highest.position ||
                     role.permissions.has("BAN_MEMBERS") ||
                     role.managed
                 )
-                    return interaction.followUp({ embeds: [failed] }).then((msg) => {
+                    return interaction.followUp({ embeds: [client.embed.cannotPerform] }).then((msg) => {
                         setTimeout(() => {
                             interaction?.deleteReply()
                         }, 5000)
@@ -100,14 +98,12 @@ module.exports = {
 
             } else if (action === "remove") {
 
-                const failed = new MessageEmbed().setDescription(`You don't have permissions to perform that action!`).setColor("RED")
-
                 if (
                     role.position >= interaction.guild.me.roles.highest.position ||
                     interaction.member.roles.highest.position <= user.roles.highest.position ||
                     role.managed
                 )
-                    return interaction.followUp({ embeds: [failed] }).then((msg) => {
+                    return interaction.followUp({ embeds: [client.embed.cannotPerform] }).then((msg) => {
                         setTimeout(() => {
                             interaction?.deleteReply()
                         }, 5000)

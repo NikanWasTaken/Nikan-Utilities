@@ -13,7 +13,7 @@ let loghook = new WebhookClient({
 module.exports = {
     name: "modmail",
     description: `Actions on modmail!`,
-    userPermissions: ["BAN_MEMBERS"],
+    permissions: ["BAN_MEMBERS"],
     cooldown: 3000,
     options: [
         {

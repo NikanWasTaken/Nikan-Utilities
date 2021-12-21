@@ -1,5 +1,6 @@
-const { MessageEmbed, WebhookClient, MessageActionRow, MessageButton } = require('discord.js')
-const warnModel = require("../../models/Punishments.js")
+const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
+const warnModel = require("../../models/Punishments.js");
+const ms = require("ms");
 
 module.exports = {
   name: 'ban',
@@ -7,7 +8,7 @@ module.exports = {
   description: 'Bans a member from the server',
   usage: `[user] <reason>`,
   cooldown: 2000,
-  userPermissions: ["BAN_MEMBERS"],
+  permissions: ["BAN_MEMBERS"],
 
   /**
    * @param {Client} client
@@ -15,11 +16,11 @@ module.exports = {
    * @param {String[]} args
    */
 
-  run: async (client, message, args, missingpartembed) => {
+  run: async (client, message, args, wrongUsage) => {
 
     let reason = message.content.split(" ").slice(2).join(" ") || "No reason provided"
     let user = message.guild.members.cache.get(args[0]) || message.mentions.members.first()
-    if (!args[0]) return message.reply({ embeds: [missingpartembed] })
+    if (!args[0]) return message.reply({ embeds: [wrongUsage] })
 
 
     if (!user) {
@@ -36,6 +37,7 @@ module.exports = {
           moderatorId: message.author.id,
           reason,
           timestamp: Date.now(),
+          systemExpire: Date.now() + ms("26 weeks")
         })
 
         data.save()
@@ -79,14 +81,11 @@ module.exports = {
     } else {
 
 
-
-      const failed = new MessageEmbed().setDescription(`You don't have permissions to perform that action!`).setColor("RED")
-
       if (user.roles.highest.position >= message.guild.me.roles.highest.position ||
         user.roles.highest.position >= message.member.roles.highest.position ||
         user.user.id === client.config.owner ||
         user.user.bot)
-        return message.reply({ embeds: [failed] }).then((msg) => {
+        return message.reply({ embeds: [client.embed.cannotPerform] }).then((msg) => {
           setTimeout(() => {
             msg?.delete()
             message?.delete()
@@ -104,8 +103,11 @@ module.exports = {
       data.save()
 
       var hmm = new MessageEmbed()
-        .setDescription(`${user.user} has been **banned** | \`${data._id}\``).setColor(`${client.color.moderationRed}`)
-      let msg = await message.channel.send({ embeds: [hmm] }).then(message.delete())
+        .setDescription(`${user.user} has been **banned** | \`${data._id}\``)
+        .setColor(`${client.color.moderationRed}`)
+
+      let msg = await message.channel.send({ embeds: [hmm] })
+        .then(message.delete())
 
       const row2 = new MessageActionRow().addComponents(
 
@@ -123,7 +125,8 @@ module.exports = {
         .setTimestamp()
         .addField("Punishment ID", `${data._id}`, true)
         .addField("Reason", reason, false)
-      user.send({ embeds: [dmyes], components: [row2] }).catch(e => { return })
+      user.send({ embeds: [dmyes], components: [row2] })
+        .catch(e => { return })
 
       await user.ban({
         reason: reason,

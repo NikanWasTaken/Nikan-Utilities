@@ -8,7 +8,7 @@ module.exports = {
     usage: '[limit in second]',
     aliases: ['sm'],
     cooldown: 3000,
-    userPermissions: ["MANAGE_MESSAGES"],
+    permissions: ["MANAGE_MESSAGES"],
 
     /**
      * @param {Client} client
@@ -16,7 +16,7 @@ module.exports = {
      * @param {String[]} args
      */
 
-    run: async (client, message, args, missingpartembed) => {
+    run: async (client, message, args, wrongUsage) => {
 
         if (!args[0]) {
 

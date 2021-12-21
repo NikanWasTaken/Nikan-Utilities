@@ -1,81 +1,89 @@
 const client = require("../../index");
-const { Client, Collection, MessageEmbed, WebhookClient } = require("discord.js");
+const { Collection, MessageEmbed } = require("discord.js");
 const Timeout = new Collection();
 const ms = require("ms")
 
+
 client.on("interactionCreate", async (interaction) => {
-  // Slash Command Handling
   if (interaction.isCommand()) {
-
-    var noperm = new MessageEmbed()
-      .setDescription(`You don't have permissions to run this command.`)
-      .setColor("#b3666c")
-
-    //
-
-
     const cmd = client.slashCommands.get(interaction.commandName);
-
-    if (!cmd) return interaction.reply({ content: "An error has occured " });
-
     let args = [];
 
-    if (cmd.developerOnly && !client.config.developers.includes(interaction.user.id)) return interaction.reply({ embeds: [noperm], ephemeral: true })
+    // command check
+    if (!cmd) return interaction.reply({ content: "An error has occured " });
 
-    if (cmd.botCommandOnly === true && !interaction.channel.name.includes("command") && !interaction.member?.permissions?.has("ADMINISTRATOR") && interaction.user.id !== client.config.owner) {
 
-      var botcmd = new MessageEmbed().setDescription('You may only use this command in bot command channels!').setColor(`${client.color.moderationRed}`)
-      interaction.reply({ embeds: [botcmd], ephemeral: true })
+    // developer commands check
+    if (
+      cmd.developer &&
+      !client.config.developers.includes(interaction.user.id)
+    ) return interaction.reply({ embeds: [client.embed.noPermissions], ephemeral: true })
+
+
+    // bot command check
+    if (
+      command.botCommand === true &&
+      !interaction.channel.name.includes("command") &&
+      !interaction.member?.permissions?.has("ADMINISTRATOR") &&
+      !client.config.developers.includes(interaction?.user?.id) &&
+      interaction.user.id !== client.config.owner
+    ) return interaction.reply({ embeds: [client.embed.botCommand], ephemeral: true })
+
+
+    if (
+      cmd.cooldown &&
+      !interaction.member?.permissions?.has("ADMINISTRATOR") &&
+      interaction.user.id !== client.config.owner) {
+
+      let cooldownRemaining = `${~~(Timeout.get(`${cmd.name}${interaction.user.id}`) - Date.now())}`
+
+      let cooldownEmbed = new MessageEmbed()
+        .setColor(`${client.color.invisible}`)
+        .setDescription(`You need to wait \`${ms(parseInt(cooldownRemaining), { long: true })}\` to use this slash command again.`);
+
+      if (Timeout.has(`${cmd.name}${interaction.member.user.id}`))
+        return interaction.reply({ embeds: [cooldownEmbed], ephemeral: true })
+
+      cmd.run(client, interaction, args);
+      Timeout.set(
+        `${cmd.name}${interaction.member.user.id}`,
+        Date.now() + cmd.cooldown
+      );
+      setTimeout(() => {
+        Timeout.delete(`${cmd.name}${interaction.member.user.id}`);
+      }, cmd.cooldown);
 
     } else {
 
-      if (cmd.cooldown && !interaction.member?.permissions?.has("ADMINISTRATOR") && interaction.user.id !== client.config.owner) {
+      // deffering the reply
+      await interaction.deferReply({ ephemeral: false || cmd.ephemeral })
 
-        let lek = `${~~(Timeout.get(`${cmd.name}${interaction.user.id}`) - Date.now())}`
-        let cooldownembed = new MessageEmbed().setColor(`${client.color.noColor}`).setDescription(`You need to wait \`${ms(parseInt(lek), { long: true })}\` to use this slash command again.`)
-        if (Timeout.has(`${cmd.name}${interaction.member.user.id}`))
-          return interaction.reply({ embeds: [cooldownembed], ephemeral: true })
-
-        await interaction.deferReply({ ephemeral: false || cmd.ephemeral })
-
-        cmd.run(client, interaction, args);
-        Timeout.set(
-          `${cmd.name}${interaction.member.user.id}`,
-          Date.now() + cmd.cooldown
-        );
-        setTimeout(() => {
-          Timeout.delete(`${cmd.name}${interaction.member.user.id}`);
-        }, cmd.cooldown);
-
-      } else {
-
-        await interaction.deferReply({ ephemeral: false || cmd.ephemeral })
-
-        for (let option of interaction.options.data) {
-          if (option.type === "SUB_COMMAND") {
-            if (option.name) args.push(option.name);
-            option.options?.forEach((x) => {
-              if (x.value) args.push(x.value);
-            });
-          } else if (option.value) args.push(option.value);
-        }
-        interaction.member = interaction.guild.members.cache.get(
-          interaction.user.id
-        );
-
-
-        cmd.run(client, interaction, args);
+      // installing the sub commands
+      for (let option of interaction.options.data) {
+        if (option.type === "SUB_COMMAND") {
+          if (option.name) args.push(option.name);
+          option.options?.forEach((x) => {
+            if (x.value) args.push(x.value);
+          });
+        } else if (option.value) args.push(option.value);
       }
+      interaction.member = interaction.guild.members.cache.get(
+        interaction.user.id
+      );
+
+
+      cmd.run(client, interaction, args);
 
     }
+
 
   }
 
 
   // Context Menu Handling
   if (interaction.isContextMenu()) {
-    await interaction.deferReply({ ephemeral: false });
     const command = client.slashCommands.get(interaction.commandName);
+    await interaction.deferReply({ ephemeral: false || command.ephemeral });
     if (command) command.run(client, interaction);
   }
 });

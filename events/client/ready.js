@@ -4,13 +4,29 @@ const client = require("../../index.js");
 client.on("ready", () => {
   console.log(`${client.user.tag} ✅`);
 
-  const statusArray = ["Minecraft | PLAYING", "over Nikan's World | WATCHING", "spotify | LISTENING", "#general | WATCHING", "with my cat | PLAYING", `${client.users.cache.size} Users | WATCHING`, "Members Joining | WATCHING", "Birds flying | STREAMING", "the events | COMPETING", "with my emojis | PLAYING", "Dreams zzz | WATCHING"]
+  const statusArray =
+    [
+      "Minecraft | PLAYING",
+      `over ${client.guilds.cache.get(client.server.id).name} | WATCHING`,
+      "spotify | LISTENING",
+      "#general | WATCHING",
+      "with my cat | PLAYING",
+      `${client.guilds.cache.get(client.server.id).members.cache.size} Users | WATCHING`,
+      "Members Joining | WATCHING",
+      "Birds flying | STREAMING",
+      "the events | COMPETING",
+      "with my emojis | PLAYING",
+      "Dreams zzz | WATCHING",
+      "Nightmares 😨 | WATCHING",
+      "Boo nuggies | WATCHING",
+      "Fortnite | PLAYING",
+    ];
 
   setInterval(() => {
 
-    const random = statusArray[~~(Math.random() * statusArray.length)].split(" | ")
-    const name = random[0]
-    const type = random[1]
+    const random = statusArray[~~(Math.random() * statusArray.length)].split(" | ");
+    const name = random[0];
+    const type = random[1];
 
     client.user.setActivity(`${name}`, { type: `${type}`, url: "https://twitch.tv/nikanwastaken" })
   }, 10000)
@@ -46,5 +62,30 @@ client.on("messageCreate", async (message) => {
       return message.delete()
     }
   }
+
+  // Client Mention Codes
+
+  const clientMentionEmbed = new MessageEmbed()
+    .setAuthor(`${client.user.username}`, client.user.displayAvatarURL({ dynamic: true }))
+    .setDescription(
+      [
+        `👋 Hey I'm ${client.user.username}.`,
+        `My prefixes are \`${client.config.prefix}\` and <:NUslashcommands:897085046710763550> commands.`,
+        `Type \`${client.config.prefix}help\` or \`/help\` in bot command channels to see my commands!`
+      ].join("\n")
+    )
+    .setColor(`${client.color.invisible}`);
+
+  if (
+    message.content === `<@${client.user.id}>` ||
+    message.content === `<@!${client.user.id}>` &&
+    !message.author.bot
+  ) return message.reply({ embeds: [clientMentionEmbed] }).then((msg) => {
+    setTimeout(() => {
+      msg?.delete()
+      message?.delete()
+    }, 20000)
+  })
+
 
 })

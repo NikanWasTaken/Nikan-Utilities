@@ -10,6 +10,7 @@ module.exports = mongoose.model(
     moderatorId: String,
     reason: String,
     timestamp: Number,
-    expires: Number
+    expires: Number,
+    systemExpire: Number,
   })
 );

@@ -1,6 +1,5 @@
 const { Client, CommandInteraction, MessageEmbed, MessageAttachment, MessageActionRow, MessageButton } = require("discord.js");
 const { Captcha } = require("captcha-canvas");
-const { i } = require("mathjs");
 
 module.exports = {
     name: "verify",

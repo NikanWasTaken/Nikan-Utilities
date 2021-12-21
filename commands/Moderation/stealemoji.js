@@ -7,7 +7,7 @@ module.exports = {
     cooldown: 5000,
     aliases: ["steal"],
     usage: `[emoji-name] <emoji/attachment/url>`,
-    userPermissions: ["BAN_MEMBERS"],
+    permissions: ["BAN_MEMBERS"],
 
 
     /**
@@ -16,15 +16,15 @@ module.exports = {
      * @param {String[]} args
      */
 
-    run: async (client, message, args, missingpartembed) => {
+    run: async (client, message, args, wrongUsage) => {
 
 
-        if (!args.length) return message.reply({ embeds: [missingpartembed] })
+        if (!args.length) return message.reply({ embeds: [wrongUsage] })
         const name = args[0]
         const emoji = message.content.split(" ").slice(2).join(" ")
 
-        if (!args[0]) return message.reply({ embeds: [missingpartembed] })
-        if (!args[1] && !message.attachments.first()) return message.reply({ embeds: [missingpartembed] })
+        if (!args[0]) return message.reply({ embeds: [wrongUsage] })
+        if (!args[1] && !message.attachments.first()) return message.reply({ embeds: [wrongUsage] })
 
 
         if (args[1]) {
@@ -95,7 +95,7 @@ module.exports = {
 
         } else if (!args[1]) {
 
-            if (!message.attachments.first()) return message.reply({ embeds: [missingpartembed] })
+            if (!message.attachments.first()) return message.reply({ embeds: [wrongUsage] })
 
             try {
 

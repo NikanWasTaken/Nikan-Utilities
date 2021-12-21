@@ -5,7 +5,7 @@ const ms = require("ms")
 module.exports = {
   name: "slowmode",
   description: 'Sets the slowmode for the channel.',
-  userPermissions: ["MANAGE_MESSAGES"],
+  permissions: ["MANAGE_MESSAGES"],
   cooldown: 5000,
   options: [
     {

@@ -16,7 +16,7 @@ client.on("guildMemberAdd", member => {
             data.roles.map((w, i) => member.roles.set(w))
             await memberRoles.findOneAndDelete({ user: member.user.id, guildid: member.guild.id })
 
-            const textarray = [
+            const textArray = [
                 `${member.user} just showed up.. not for the first time!`,
                 `${member.user} just landed.. but not for the first time!`,
                 `${member.user} re-joined the party!`,
@@ -33,7 +33,7 @@ client.on("guildMemberAdd", member => {
                 `Yay you made it back, ${member.user}!`,
             ];
 
-            const emojiarray = [
+            const emojiArray = [
                 `<:welcome1:905792468765786152>`,
                 `<:welcome2:906109766068207656>`,
                 `<a:welcome3:905792474998538250>`,
@@ -48,12 +48,15 @@ client.on("guildMemberAdd", member => {
                 `<a:welcome12:906150349960790026>`,
             ];
 
-            const randomtexts = textarray[~~(Math.random() * textarray.length)];
-            const randomemojis = emojiarray[~~(Math.random() * emojiarray.length)];
+            const randomTexts = textArray[~~(Math.random() * textArray.ength)];
+            const randomEmojis = emojiArray[~~(Math.random() * emojiArray.length)];
 
-            let channel = client.channels.cache.get("782837655082631229")
-            await channel.send({ content: `${randomemojis} ${randomtexts} \`[#${member.guild.memberCount}]\``, allowedMentions: { parse: ["users"] } })
-        }
+            let channel = client.channels.cache.get("782837655082631229");
+            await channel.send({
+                content: `${randomEmojis} ${randomTexts} \`[#${member.guild.memberCount}]\``,
+                allowedMentions: { parse: ["users"] }
+            });
+        };
 
         const embed = new MessageEmbed()
             .setAuthor(`Member Joined!`, member.user.displayAvatarURL({ dynamic: true }))
@@ -71,14 +74,12 @@ client.on("guildMemberAdd", member => {
     })
 
 
-})
+});
 
 
 client.on("guildMemberRemove", async member => {
 
     if (member.guild.id !== `${client.server.id}`) return
-    const allmembersvc = client.channels.cache.get("874721718319603743");
-    const humansvc = client.channels.cache.get("874721721930878997");
 
     const data = new memberRoles({
         guildid: member.guild.id,
@@ -86,10 +87,9 @@ client.on("guildMemberRemove", async member => {
         roles: [member.roles.cache.sort((a, b) => b.position - a.position).filter(r => r.id !== member.guild.id).map(role => role.id)],
         expires: Date.now() + ms('2 weeks')
     })
+    data.save();
 
-    data.save()
-
-    const welcomechannel = member.guild.channels.cache.get('791152934045614121')
+    const welcomeChannel = member.guild.channels.cache.get('791152934045614121');
 
     const embed = new MessageEmbed()
         .setAuthor(`Member Left!`, member.user.displayAvatarURL({ dynamic: true }))
@@ -103,7 +103,9 @@ client.on("guildMemberRemove", async member => {
         .setFooter(`${member.guild.name} | -1 member :C`)
         .setTimestamp()
 
-    welcomechannel.send({ embeds: [embed] })
+    welcomeChannel.send({
+        embeds: [embed]
+    })
 
 
 

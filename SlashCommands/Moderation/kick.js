@@ -7,7 +7,7 @@ const ms = require("ms")
 module.exports = {
   name: "kick",
   description: `Kicks a member from the server!`,
-  userPermissions: ["KICK_MEMBERS"],
+  permissions: ["KICK_MEMBERS"],
   cooldown: 5000,
   options: [
     {
@@ -38,14 +38,12 @@ module.exports = {
 
     var reason = interaction.options.getString("reason") || "No reason provided"
 
-    const failed = new MessageEmbed().setDescription(`You don't have permissions to perform that action!`).setColor("RED")
-
     if (user.roles.highest.position >= interaction.guild.me.roles.highest.position ||
       user.roles.highest.position >= interaction.member.roles.highest.position ||
       user.user.id === client.config.owner ||
       user.user.bot
     )
-      return interaction.followUp({ embeds: [failed] }).then((msg) => {
+      return interaction.followUp({ embeds: [client.embed.cannotPerform] }).then((msg) => {
         setTimeout(() => {
           interaction.deleteReply()
         }, 5000)
@@ -59,7 +57,7 @@ module.exports = {
       moderatorId: interaction.user.id,
       reason,
       timestamp: Date.now(),
-      expires: Date.now() + ms('4 weeks')
+      systemExpire: Date.now() + ms("26 weeks")
     })
 
     data.save();

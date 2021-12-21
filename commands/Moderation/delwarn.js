@@ -8,18 +8,18 @@ module.exports = {
     usage: '[warn ID]',
     aliases: ['delwarn', 'deletewarn', 'delete-warn', 'rmpunish', 'rmpunishment'],
     cooldown: 10000,
-    userPermissions: ["ADMINISTRATOR"],
+    permissions: ["ADMINISTRATOR"],
 
     /**
      * @param {Client} client
      * @param {Message} message
      * @param {String[]} args
      */
-    run: async (client, message, args, missingpartembed) => {
+    run: async (client, message, args, wrongUsage) => {
 
         const warnId = args[0]
 
-        if (!warnId) return message.reply({ embeds: [missingpartembed] })
+        if (!warnId) return message.reply({ embeds: [wrongUsage] })
 
         try {
 
@@ -28,7 +28,8 @@ module.exports = {
 
             const user = await client.users.fetch(`${data?.userId}`) || "Can't find user!"
 
-            let embed = new MessageEmbed().setDescription(`Punnishment \`${data._id}\` has been deleted!`)
+            let embed = new MessageEmbed()
+                .setDescription(`Punnishment \`${data._id}\` has been deleted!`)
                 .setColor(`${client.color.moderation}`)
 
             await message.delete()

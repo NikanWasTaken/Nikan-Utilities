@@ -8,7 +8,7 @@ module.exports = {
   description: 'Kicks a user from the server.',
   usage: `[user] <reason>`,
   cooldown: 3000,
-  userPermissions: ["KICK_MEMBERS"],
+  permissions: ["KICK_MEMBERS"],
 
   /**
    * @param {Client} client
@@ -16,11 +16,11 @@ module.exports = {
    * @param {String[]} args
    */
 
-  run: async (client, message, args, missingpartembed) => {
+  run: async (client, message, args, wrongUsage) => {
 
     var user = message.guild.members.cache.get(args[0]) || message.mentions.members.first()
 
-    if (!args[0]) return message.reply({ embeds: [missingpartembed] })
+    if (!args[0]) return message.reply({ embeds: [wrongUsage] })
     var reason = message.content.split(" ").slice(2).join(" ") || "No reason provided"
 
     let erm = new MessageEmbed().setDescription(`This user is not in this guild!`).setColor(`RED`)
@@ -31,13 +31,11 @@ module.exports = {
       }, 5000)
     })
 
-    const failed = new MessageEmbed().setDescription(`You don't have permissions to perform that action!`).setColor("RED")
-
     if (user.roles.highest.position >= message.guild.me.roles.highest.position ||
       user.roles.highest.position >= message.member.roles.highest.position ||
       user.user.id === client.config.owner ||
       user.user.bot)
-      return message.reply({ embeds: [failed] }).then((msg) => {
+      return message.reply({ embeds: [client.embed.cannotPerform] }).then((msg) => {
         setTimeout(() => {
           msg?.delete()
           message?.delete()
@@ -51,7 +49,7 @@ module.exports = {
       moderatorId: message.author.id,
       reason,
       timestamp: Date.now(),
-      expires: Date.now() + ms('4 weeks')
+      systemExpire: Date.now() + ms("26 weeks")
     })
 
     data.save();

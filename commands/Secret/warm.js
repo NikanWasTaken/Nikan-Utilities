@@ -7,7 +7,7 @@ module.exports = {
   description: 'Fake warn a user!',
   usage: `[user] <reason>`,
   cooldown: 2000,
-  userPermissions: ["MANAGE_MESSAGES"],
+  permissions: ["MANAGE_MESSAGES"],
   visible: false,
 
   /**

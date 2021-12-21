@@ -5,7 +5,7 @@ module.exports = {
     category: 'Secret',
     description: 'poggr',
     cooldown: 2000,
-    userPermissions: ["MANAGE_MESSAGES"],
+    permissions: ["MANAGE_MESSAGES"],
     visible: false,
 
     /**

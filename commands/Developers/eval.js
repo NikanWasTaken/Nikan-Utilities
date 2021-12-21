@@ -5,7 +5,7 @@ module.exports = {
     name: 'eval',
     category: 'Developers',
     usage: '[code]',
-    developerOnly: true,
+    developer: true,
     visible: false,
 
     /**
@@ -14,7 +14,7 @@ module.exports = {
      * @param {String[]} args
      */
 
-    run: async (client, message, args, missingpartembed) => {
+    run: async (client, message, args, wrongUsage) => {
 
         const code = args.join(' ');
         const anythingelseforu = "ok maybe dont do that?"
@@ -86,7 +86,6 @@ module.exports = {
                 .addField("Code", `\`\`\`js\n${code}\n\`\`\``)
                 .addField("Error Message", `\`\`\`xl\n${err.message}\n\`\`\``)
                 .setTimestamp()
-
 
             message.channel.send({
                 embeds: [embed]

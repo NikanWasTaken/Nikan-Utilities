@@ -1,5 +1,4 @@
-const { Client, Collection, WebhookClient } = require("discord.js");
-const { Player } = require("discord-player");
+const { Client } = require("discord.js");
 require("dotenv").config()
 
 const client = new Client({
@@ -26,9 +25,8 @@ module.exports = client;
 // exporting the handler
 require("./handler")(client);
 
-// exporting other structures
-require("./structures/client.js")(client); // client functions
-require("./structures/send.js")(client); // this.send() functions
-
+// exporting other functions
+require("./functions/client.js")(client); // client functions
+require("./functions/send.js")(client); // this.send() functions
 
 client.login(`${process.env.TOKEN}`);

@@ -8,7 +8,7 @@ module.exports = {
   usage: '[user ID] <reason>',
   aliases: ['deban'],
   cooldown: 5000,
-  userPermissions: ["MOVE_MEMBERS"],
+  permissions: ["MOVE_MEMBERS"],
 
   /**
    * @param {Client} client
@@ -16,10 +16,10 @@ module.exports = {
    * @param {String[]} args
    */
 
-  run: async (client, message, args, missingpartembed) => {
+  run: async (client, message, args, wrongUsage) => {
 
 
-    if (!args[0]) return message.reply({ embeds: [missingpartembed] })
+    if (!args[0]) return message.reply({ embeds: [wrongUsage] })
     let userID = args[0]
     let reason = message.content.split(" ").slice(2).join(" ") || "No reason provided"
 
@@ -46,6 +46,7 @@ module.exports = {
         moderatorId: message.author.id,
         reason,
         timestamp: Date.now(),
+        systemExpire: Date.now() + ms("26 weeks")
       })
       data.save()
 

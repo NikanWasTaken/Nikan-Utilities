@@ -1,5 +1,5 @@
 const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js')
-const { mem, cpu, os } = require('node-os-utils');
+const { cpu, os } = require('node-os-utils');
 const { models, connection } = require("mongoose")
 
 module.exports = {
@@ -7,7 +7,7 @@ module.exports = {
     category: 'Developers',
     description: `Returns the bot's stats including cpu usage, ram etc...`,
     cooldown: 10000,
-    botCommandOnly: true,
+    botCommand: true,
 
     /**
      * @param {Client} client
@@ -35,7 +35,7 @@ module.exports = {
             .addField("<:slashcommands:897085046710763550> Commands", `• \`${client.slashCommands.size} commands\``, true)
             .addField("<:cpu:894097794405646346> CPU Usage", `• \`${await cpu.usage()}%\``, true)
             .addField("<:node:894097855269208085> Node", `• \`${process.version}\``, true)
-            .addField("<:discordjs:915821441843343381> Discord.js", `• \`${(await require("../../package.json").dependencies['discord.js'].replace("^", "v"))}\``, true)
+            .addField("<:discordjs:915821441843343381> Discord.js", `• \`${(require("../../package.json").dependencies['discord.js'].replace("^", "v"))}\``, true)
             .setTimestamp()
 
         const components = (state) => [
@@ -79,7 +79,6 @@ module.exports = {
 
 
         // mongoose connection status
-
         function switchTo(val) {
             var status = " ";
             switch (val) {

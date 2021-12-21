@@ -7,7 +7,7 @@ module.exports = {
     description: `Unmutes an user`,
     usage: `[user]`,
     cooldown: 3000,
-    userPermissions: ["BAN_MEMBERS"],
+    permissions: ["BAN_MEMBERS"],
 
     /**
      * @param {Client} client
@@ -15,10 +15,10 @@ module.exports = {
      * @param {String[]} args
      */
 
-    run: async (client, message, args, missingpartembed) => {
+    run: async (client, message, args, wrongUsage) => {
 
         var user = message.guild.members.cache.get(args[0]) || message.mentions.members.first()
-        if (!args[0]) return message.reply({ embeds: [missingpartembed] })
+        if (!args[0]) return message.reply({ embeds: [wrongUsage] })
 
         let erm = new MessageEmbed().setDescription("This user isn't in this guild!").setColor(`RED`)
         if (!user) return message.reply({ embeds: [erm] }).then((msg) => {

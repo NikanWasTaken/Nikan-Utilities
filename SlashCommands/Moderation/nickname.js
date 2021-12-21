@@ -5,7 +5,7 @@ const randomnick = require("randomstring")
 module.exports = {
   name: "nickname",
   description: 'Manages the nickname of an user in some ways!',
-  userPermissions: ["MANAGE_MESSAGES"],
+  permissions: ["MANAGE_MESSAGES"],
   options: [
     {
       name: "edit",

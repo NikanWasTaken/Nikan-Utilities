@@ -1,4 +1,4 @@
-const { MessageEmbed, MessageButton, MessageActionRow } = require('discord.js')
+const { MessageEmbed } = require('discord.js')
 
 module.exports = {
   name: 'lock',
@@ -6,7 +6,7 @@ module.exports = {
   description: `Locks the chnanel`,
   usage: '[channel/all] [reason]',
   cooldown: 3000,
-  userPermissions: ["BAN_MEMBERS"],
+  permissions: ["BAN_MEMBERS"],
 
   /**
    * @param {Client} client
@@ -14,15 +14,15 @@ module.exports = {
    * @param {String[]} args
    */
 
-  run: async (client, message, args, missingpartembed) => {
+  run: async (client, message, args, wrongUsage) => {
 
     var reason = args.slice(1).join(" ")
 
-    if (!args[0]) return message.reply({ embeds: [missingpartembed] })
+    if (!args[0]) return message.reply({ embeds: [wrongUsage] })
 
     if (args[0].toLowerCase() == "all") {
 
-      if (!reason) return message.reply({ embeds: [missingpartembed] })
+      if (!reason) return message.reply({ embeds: [wrongUsage] })
 
       let msg = await message.reply({ content: "Locking the server..." })
 
@@ -67,7 +67,7 @@ module.exports = {
 
       } else {
 
-        if (!args[0] || !reason) return message.reply({ embeds: [missingpartembed] })
+        if (!args[0] || !reason) return message.reply({ embeds: [wrongUsage] })
 
         let msg = await message.reply({ content: "Locking the channel..." })
 

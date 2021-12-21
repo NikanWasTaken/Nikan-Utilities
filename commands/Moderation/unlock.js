@@ -6,7 +6,7 @@ module.exports = {
   description: `Unlocks the channel`,
   usage: "[#channel/all] <reason>",
   cooldown: 3000,
-  userPermissions: ["BAN_MEMBERS"],
+  permissions: ["BAN_MEMBERS"],
 
   /**
    * @param {Client} client
@@ -15,7 +15,7 @@ module.exports = {
    */
 
 
-  run: async (client, message, args, missingpartembed) => {
+  run: async (client, message, args, wrongUsage) => {
 
     var reason = args.slice(1).join(" ") || "No reason provided"
 
@@ -55,7 +55,7 @@ module.exports = {
 
       let channel = message.mentions.channels.first() || message.guild.channels.cache.get(args[0])
 
-      if (!channel) return message.reply({ embeds: [missingpartembed] })
+      if (!channel) return message.reply({ embeds: [wrongUsage] })
       if (channel.type === "GUILD_VOICE") {
 
         channel.permissionOverwrites.edit(message.guild.roles.everyone, {

@@ -7,7 +7,7 @@ module.exports = {
   usage: `<boo this guy>`,
   aliases: ["boop"],
   cooldown: 2000,
-  userPermissions: ["MANAGE_MESSAGES"],
+  permissions: ["MANAGE_MESSAGES"],
   visible: false,
 
 

@@ -107,26 +107,23 @@ module.exports = {
     run: async (client, interaction, args) => {
 
         const subs = interaction.options.getSubcommand(["add", "remove", "list", "info"])
-        const nopermsmh = new MessageEmbed().setDescription("You don't have permissions to use this command!").setColor(`${client.color.moderationRed}`)
 
         if (subs == "add") {
 
             const user = interaction.options.getMember("user")
             const reason = interaction.options.getString("reason")
 
-            if (!interaction.member.permissions.has("BAN_MEMBERS")) return interaction.followUp({ embeds: [nopermsmh] }).then((msg) => {
+            if (!interaction.member.permissions.has("BAN_MEMBERS")) return interaction.followUp({ embeds: [client.embed.noPermissions] }).then((msg) => {
                 setTimeout(() => {
                     interaction.deleteReply()
                 }, 5000)
             })
 
-            const failed = new MessageEmbed().setDescription(`You don't have permissions to perform that action!`).setColor("RED")
-
             if (user.roles.highest.position >= interaction.guild.me.roles.highest.position ||
                 user.roles.highest.position >= interaction.member.roles.highest.position ||
                 user.user.id === client.config.owner ||
                 user.user.bot)
-                return interaction.followUp({ embeds: [failed] }).then((msg) => {
+                return interaction.followUp({ embeds: [client.embed.cannotPerform] }).then((msg) => {
                     setTimeout(() => {
                         interaction.deleteReply()
                     }, 5000)
@@ -152,7 +149,8 @@ module.exports = {
                 moderatorId: interaction.user.id,
                 reason,
                 timestamp: Date.now(),
-                expires: Date.now() + ms('4 weeks')
+                expires: Date.now() + ms('4 weeks'),
+                systemExpire: Date.now() + ms("4 weeks"),
             })
             data.save();
 
@@ -236,7 +234,6 @@ module.exports = {
                 })
 
                 data2.save()
-
                 user.roles.set(["795353284042293319"])
 
                 let warndm = new MessageEmbed()
@@ -272,7 +269,7 @@ module.exports = {
                             if (err) throw err;
                             if (data) {
 
-                                data.roles.map((w, i) => user.roles.set(w))
+                                data.roles.map((w) => user.roles.set(w))
                                 await db.findOneAndDelete({ user: user.user.id, guildid: interaction.guild.id })
 
                             }
@@ -450,7 +447,7 @@ module.exports = {
 
         } else if (subs == "remove") {
 
-            if (!interaction.member.permissions.has("BAN_MEMBERS")) return interaction.followUp({ embeds: [nopermsmh] })
+            if (!interaction.member.permissions.has("BAN_MEMBERS")) return interaction.followUp({ embeds: [client.embed.noPermissions] })
 
             const warnId = interaction.options.getString("warn-id")
             const data = await warnModel.findById(warnId)
@@ -490,7 +487,10 @@ module.exports = {
 
             } catch (error) {
 
-                const embed = new MessageEmbed().setDescription(`A punishment with that ID doesn't exist in the database!`).setColor(`RED`)
+                const embed = new MessageEmbed()
+                    .setDescription(`A punishment with that ID doesn't exist in the database!`)
+                    .setColor(`RED`)
+
                 return interaction.followUp({ embeds: [embed] }).then((msg) => {
                     setTimeout(() => {
                         interaction.deleteReply()
@@ -527,7 +527,7 @@ module.exports = {
                             `\`${i + 1}\`. **${warn.type}** | **ID:** \`${warn._id}\``,
                             `> Date: <t:${~~(warn.timestamp / 1000)}:f>`,
                             `> Moderator: ${moderator ? moderator.user.tag : "Moderator has left!"}`,
-                            `> Expires In: ${warn.expires ? `<t:${~~(warn.expires / 1000)}:R>` : "Will not expire"}`,
+                            `> Expires: ${warn.expires ? `<t:${~~(warn.expires / 1000)}:R>` : "Permanent"}`,
                             `> Reason: ${warn.reason}`,
                         ].join("\n");
                     }).join("\n\n");
@@ -561,7 +561,7 @@ module.exports = {
                         return [
                             `\`${i + 1}\`. **${warn.type}** | **ID:** \`${warn._id}\``,
                             `> Date: <t:${~~(warn.timestamp / 1000)}:f>`,
-                            `> Expires In: ${warn.expires ? `<t:${~~(warn.expires / 1000)}:R>` : "Will not expire"}`,
+                            `> Expires: ${warn.expires ? `<t:${~~(warn.expires / 1000)}:R>` : "Permanent"}`,
                             `> Reason: ${warn.reason}`,
                         ].join("\n");
                     }).join("\n\n");
@@ -596,7 +596,7 @@ module.exports = {
                         return [
                             `\`${i + 1}\`. **${warn.type}** | **ID:** \`${warn._id}\``,
                             `> Date: <t:${~~(warn.date / 1000)}:f>`,
-                            `> Expires In: ${warn.expires ? `<t:${~~(warn.expires / 1000)}:R>` : "Will not expire"}`,
+                            `> Expires: ${warn.expires ? `<t:${~~(warn.expires / 1000)}:R>` : "Permanent"}`,
                             `> Reason: ${warn.reason}`,
                         ].join("\n");
                     }).join("\n\n");
@@ -627,7 +627,7 @@ module.exports = {
                         return [
                             `\`${i + 1}\`. **${warn.type}** | **ID:** \`${warn._id}\``,
                             `> Date: <t:${~~(warn.date / 1000)}:f>`,
-                            `> Expires In: ${warn.expires ? `<t:${~~(warn.expires / 1000)}:R>` : "Will not expire"}`,
+                            `> Expires: ${warn.expires ? `<t:${~~(warn.expires / 1000)}:R>` : "Permanent"}`,
                             `> Reason: ${warn.reason}`,
                         ].join("\n");
                     }).join("\n\n");
@@ -649,7 +649,7 @@ module.exports = {
 
         } else if (subs == "info") {
 
-            if (!interaction.member.permissions.has("BAN_MEMBERS")) return interaction.followUp({ embeds: [nopermsmh] }).then((msg) => {
+            if (!interaction.member.permissions.has("BAN_MEMBERS")) return interaction.followUp({ embeds: [client.embed.noPermissions] }).then((msg) => {
                 setTimeout(() => {
                     interaction.deleteReply()
                 }, 5000)

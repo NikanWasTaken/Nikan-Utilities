@@ -1,6 +1,6 @@
 const { MessageEmbed, MessageActionRow, MessageButton } = require("discord.js");
-const warnModel = require("../../models/Punishments.js")
-const db = require("../../models/MemberRoles.js")
+const warnModel = require("../../models/Punishments.js");
+const db = require("../../models/MemberRoles.js");
 const ms = require("ms")
 
 
@@ -10,20 +10,20 @@ module.exports = {
   description: `Warns a user in the server`,
   usage: '[user] [reason]',
   cooldown: 3000,
-  userPermissions: ["MANAGE_MESSAGES"],
+  permissions: ["MANAGE_MESSAGES"],
 
   /**
    * @param {Client} client
    * @param {Message} message
    * @param {String[]} args
    */
-  run: async (client, message, args, missingpartembed) => {
+  run: async (client, message, args, wrongUsage) => {
 
 
     const user = message.guild.members.cache.get(args[0]) || message.mentions.members.first()
     const reason = args.slice(1).join(" ")
 
-    if (!args[0] || !reason) return message.reply({ embeds: [missingpartembed] })
+    if (!args[0] || !reason) return message.reply({ embeds: [wrongUsage] })
 
     if (!user) {
       const embed = new MessageEmbed().setDescription(`This user is not in this guild!`).setColor("RED")
@@ -35,14 +35,11 @@ module.exports = {
       })
     }
 
-
-    const failed = new MessageEmbed().setDescription(`You don't have permissions to perform that action!`).setColor("RED")
-
     if (user.roles.highest.position >= message.guild.me.roles.highest.position ||
       user.roles.highest.position >= message.member.roles.highest.position ||
       user.user.id === client.config.owner ||
       user.user.bot)
-      return message.reply({ embeds: [failed] }).then((msg) => {
+      return message.reply({ embeds: [client.embed.cannotPerform] }).then((msg) => {
         setTimeout(() => {
           msg?.delete()
           message?.delete()
@@ -70,7 +67,8 @@ module.exports = {
       moderatorId: message.author.id,
       reason,
       timestamp: Date.now(),
-      expires: Date.now() + ms('4 weeks')
+      expires: Date.now() + ms('4 weeks'),
+      systemExpire: Date.now() + ms("4 weeks")
     })
     data.save();
 

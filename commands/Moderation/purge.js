@@ -7,7 +7,7 @@ module.exports = {
   usage: '[number of messages] <user>',
   aliases: ['clear'],
   cooldown: 10000,
-  userPermissions: ["BAN_MEMBERS"],
+  permissions: ["BAN_MEMBERS"],
 
   /**
    * @param {Client} client
@@ -15,12 +15,12 @@ module.exports = {
    * @param {String[]} args
    */
 
-  run: async (client, message, args, missingpartembed) => {
+  run: async (client, message, args, wrongUsage) => {
 
     var clear = args[0]
     var user = message.guild.members.cache.get(args[1]) || message.mentions.members.first()
 
-    if (!clear) return message.reply({ embeds: [missingpartembed] })
+    if (!clear) return message.reply({ embeds: [wrongUsage] })
 
     let heh = new MessageEmbed().setDescription(`You need to provide a number between 1 and 100 to purge.`).setColor(`RED`)
     if (isNaN(clear) || clear > 100 || clear < 1) return message.reply({ embeds: [heh] }).then((msg) => {

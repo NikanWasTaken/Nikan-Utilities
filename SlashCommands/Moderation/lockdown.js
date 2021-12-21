@@ -5,7 +5,7 @@ const { Client, CommandInteraction, Message, MessageEmbed, MessageActionRow, Mes
 module.exports = {
   name: "lockdown",
   description: `Takes an action on every channel!`,
-  userPermissions: ["BAN_MEMBERS"],
+  permissions: ["BAN_MEMBERS"],
   cooldown: 5000,
   options: [
     {

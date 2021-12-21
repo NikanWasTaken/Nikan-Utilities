@@ -10,7 +10,7 @@ module.exports = {
     usage: '<user>',
     aliases: ['warns', 'strikes', 'punishes', 'punishments'],
     cooldown: 5000,
-    botCommandOnly: true,
+    botCommand: true,
 
     /**
      * @param {Client} client
@@ -92,7 +92,10 @@ module.exports = {
                             guildId: message.guild.id,
                         });
 
-                        const nowarns = new MessageEmbed().setDescription(`${user.user} doesn't have any normal warning!`).setColor("ORANGE")
+                        const nowarns = new MessageEmbed()
+                            .setDescription(`${user.user} doesn't have any normal warning!`)
+                            .setColor("ORANGE")
+
                         if (!userWarnings?.length) return collected.update({ embeds: [nowarns] })
 
                         const embedDescription = userWarnings.map((warn, i) => {
@@ -104,7 +107,7 @@ module.exports = {
                                 `\`${i + 1}\`. **${warn.type}** | **ID:** \`${warn._id}\``,
                                 `> Date: <t:${~~(warn.timestamp / 1000)}:f>`,
                                 `> Moderator: ${moderator ? moderator.user.tag : "Moderator has left!"}`,
-                                `> Expires: ${warn.expires ? `<t:${~~(warn.expires / 1000)}:R>` : "Will not expire"}`,
+                                `> Expires: ${warn.expires ? `<t:${~~(warn.expires / 1000)}:R>` : "Permanent"}`,
                                 `> Reason: ${warn.reason}`,
                             ].join("\n");
                         }).join("\n\n");
@@ -120,7 +123,8 @@ module.exports = {
 
                     } else if (!user) {
 
-                        if (collected.user.id !== message.author.id) return collected.reply({ content: "This isn't your menu!", ephemeral: true })
+                        if (collected.user.id !== message.author.id)
+                            return collected.reply({ content: "This isn't your menu!", ephemeral: true })
 
                         let user2 = await client.users.fetch(`${args[0]}`)
 
@@ -141,7 +145,7 @@ module.exports = {
                                 `\`${i + 1}\`. **${warn.type}** | **ID:** \`${warn._id}\``,
                                 `> Date: <t:${~~(warn.timestamp / 1000)}:f>`,
                                 `> Moderator: ${moderator ? moderator.user.tag : "Moderator has left!"}`,
-                                `> Expires: ${warn.expires ? `<t:${~~(warn.expires / 1000)}:R>` : "Will not expire"}`,
+                                `> Expires: ${warn.expires ? `<t:${~~(warn.expires / 1000)}:R>` : "Permanent"}`,
                                 `> Reason: ${warn.reason}`,
                             ].join("\n");
                         }).join("\n\n");
@@ -179,7 +183,7 @@ module.exports = {
                         return [
                             `\`${i + 1}\`. **${warn.type}** | **ID:** \`${warn._id}\``,
                             `> Date: <t:${~~(warn.timestamp / 1000)}:f>`,
-                            `> Expires In: ${warn.expires ? `<t:${~~(warn.expires / 1000)}:R>` : "Will not expire"}`,
+                            `> Expires: ${warn.expires ? `<t:${~~(warn.expires / 1000)}:R>` : "Permanent"}`,
                             `> Reason: ${warn.reason}`,
                         ].join("\n");
                     }).join("\n\n");
@@ -219,7 +223,7 @@ module.exports = {
                             return [
                                 `\`${i + 1}\`. **${warn.type}** | **ID:** \`${warn._id}\``,
                                 `> Date: <t:${~~(warn.date / 1000)}:f>`,
-                                `> Expires In: ${warn.expires ? `<t:${~~(warn.expires / 1000)}:R>` : "Will not expire"}`,
+                                `> Expires: ${warn.expires ? `<t:${~~(warn.expires / 1000)}:R>` : "Permanent"}`,
                                 `> Reason: ${warn.reason}`,
                             ].join("\n");
                         }).join("\n\n");
@@ -252,7 +256,7 @@ module.exports = {
                             return [
                                 `\`${i + 1}\`. **${warn.type}** | **ID:** \`${warn._id}\``,
                                 `> Date: <t:${~~(warn.date / 1000)}:f>`,
-                                `> Expires In: ${warn.expires ? `<t:${~~(warn.expires / 1000)}:R>` : "Will not expire"}`,
+                                `> Expires: ${warn.expires ? `<t:${~~(warn.expires / 1000)}:R>` : "Permanent"}`,
                                 `> Reason: ${warn.reason}`,
                             ].join("\n");
                         }).join("\n\n");
@@ -286,7 +290,7 @@ module.exports = {
                         return [
                             `\`${i + 1}\`. **${warn.type}** | \`${warn._id}\``,
                             `> Date: <t:${~~(warn.date / 1000)}:f>`,
-                            `> Expires In: ${warn.expires ? `<t:${~~(warn.expires / 1000)}:R>` : "Will not expire"}`,
+                            `> Expires: ${warn.expires ? `<t:${~~(warn.expires / 1000)}:R>` : "Permanent"}`,
                             `> Reason: ${warn.reason}`,
                         ].join("\n");
                     }).join("\n\n");

@@ -6,7 +6,7 @@ const warnModel = require("../../models/Punishments.js")
 module.exports = {
   name: "mute",
   description: `Mutes a member in the server!`,
-  userPermissions: ["MANAGE_MESSAGES"],
+  permissions: ["MANAGE_MESSAGES"],
   options: [
     {
       name: "add",
@@ -70,13 +70,11 @@ module.exports = {
       if (!time) time = "6h"
       let reason = interaction.options.getString("reason") || "No reason provided"
 
-      const failed = new MessageEmbed().setDescription(`You don't have permissions to perform that action!`).setColor("RED")
-
       if (user.roles.highest.position >= interaction.guild.me.roles.highest.position ||
         user.roles.highest.position >= interaction.member.roles.highest.position ||
         user.user.id === client.config.owner ||
         user.user.bot)
-        return interaction.followUp({ embeds: [failed] }).then((msg) => {
+        return interaction.followUp({ embeds: [client.embed.cannotPerform] }).then((msg) => {
           setTimeout(() => {
             interaction.deleteReply()
           }, 5000)
@@ -255,13 +253,8 @@ module.exports = {
               interaction.deleteReply()
             }, 5000)
           })
-
         }
-
-
       })
-
     }
-
   }
 }

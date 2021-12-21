@@ -11,7 +11,7 @@ module.exports = {
   cooldown: 5000,
   category: "utility",
   usage: `<command name>`,
-  botCommandOnly: true,
+  botCommand: true,
 
   /**
    * @param {Client} client

@@ -9,7 +9,7 @@ module.exports = {
   aliases: ['translator', 'tr'],
   cooldown: 5000,
   usage: `[to language] [text]`,
-  botCommandOnly: true,
+  botCommand: true,
 
 
   /**
@@ -18,12 +18,12 @@ module.exports = {
    * @param {String[]} args
    */
 
-  run: async (client, message, args, missingpartembed) => {
+  run: async (client, message, args, wrongUsage) => {
 
     let query = message.content.split(" ").slice(2).join(" ")
     let language = args[0]
 
-    if (!language || !query) return message.reply({ embeds: [missingpartembed] })
+    if (!language || !query) return message.reply({ embeds: [wrongUsage] })
 
     try {
 

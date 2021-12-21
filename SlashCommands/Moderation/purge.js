@@ -5,7 +5,7 @@ module.exports = {
   name: "purge",
   description: 'Purges messages in the channel',
   cooldown: 10000,
-  userPermissions: ["BAN_MEMBERS"],
+  permissions: ["BAN_MEMBERS"],
   options: [
     {
       name: "amount",

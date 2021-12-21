@@ -6,7 +6,7 @@ const warnModel = require("../../models/Punishments.js")
 module.exports = {
   name: "ban",
   description: `Actions on a ban!`,
-  userPermissions: ["BAN_MEMBERS"],
+  permissions: ["BAN_MEMBERS"],
   cooldown: 3000,
   options: [
     {
@@ -86,6 +86,7 @@ module.exports = {
             moderatorId: interaction.user.id,
             reason,
             timestamp: Date.now(),
+            systemExpire: Date.now() + ms("26 weeks")
           })
           data.save()
 
@@ -116,7 +117,10 @@ module.exports = {
 
         } catch (error) {
 
-          const embed = new MessageEmbed().setDescription(`This user doesn't exist!`).setColor(`${client.color.moderationRed}`)
+          const embed = new MessageEmbed()
+            .setDescription(`This user doesn't exist!`)
+            .setColor(`${client.color.moderationRed}`)
+
           interaction.followUp({ embeds: [embed] }).then((msg) => {
             setTimeout(() => {
               interaction.deleteReply()
@@ -127,13 +131,11 @@ module.exports = {
 
       } else if (user) {
 
-        const failed = new MessageEmbed().setDescription(`You don't have permissions to perform that action!`).setColor("RED")
-
         if (user.roles.highest.position >= interaction.guild.me.roles.highest.position ||
           user.roles.highest.position >= interaction.member.roles.highest.position ||
           user.user.id === client.config.owner ||
           user.user.bot
-        ) return interaction.followUp({ embeds: [failed] })
+        ) return interaction.followUp({ embeds: [client.embed.cannotPerform] })
 
 
         const data = new warnModel({
@@ -143,6 +145,7 @@ module.exports = {
           moderatorId: interaction.user.id,
           reason,
           timestamp: Date.now(),
+          systemExpire: Date.now() + ms("26 weeks")
         })
         data.save()
 
@@ -232,6 +235,7 @@ module.exports = {
           moderatorId: interaction.user.id,
           reason,
           timestamp: Date.now(),
+          systemExpire: Date.now() + ms("26 weeks")
         })
         data.save()
 

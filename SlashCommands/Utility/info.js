@@ -7,7 +7,7 @@ module.exports = {
   name: "info",
   description: `Checks the information about a channel.`,
   cooldown: 5000,
-  botCommandOnly: true,
+  botCommand: true,
   options: [
     {
       name: "user",

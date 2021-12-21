@@ -1,5 +1,4 @@
 const { MessageEmbed } = require('discord.js')
-const { mem, cpu, os } = require('node-os-utils');
 
 module.exports = {
     name: 'ping',
@@ -26,7 +25,6 @@ module.exports = {
         let seconds = Math.floor(totalSeconds % 60);
 
         // const upvalue = (Date.now() / 1000 - client.uptime / 1000).toFixed(0);
-
 
         let embed = new MessageEmbed()
             .setAuthor(`${client.user.username}`, client.user.displayAvatarURL())

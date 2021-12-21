@@ -6,7 +6,6 @@ let Schema = new mongoose.Schema({
     user: String,
     roles: Array,
     reason: String,
-
 })
 
 

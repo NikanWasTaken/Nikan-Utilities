@@ -7,17 +7,17 @@ module.exports = {
   aliases: ["usearch"],
   usage: `[user's ID, username, discriminator, nickname, tag]`,
   cooldown: 5000,
-  userPermissions: ["MANAGE_MESSAGES"],
+  permissions: ["MANAGE_MESSAGES"],
 
   /**
    * @param {Client} client
    * @param {Message} message
    * @param {String[]} args
    */
-  run: async (client, message, args, missingpartembed) => {
+  run: async (client, message, args, wrongUsage) => {
 
     const user = args.join(" ")
-    if (!user) return message.reply({ embeds: [missingpartembed] });
+    if (!user) return message.reply({ embeds: [wrongUsage] });
     const array = [];
 
     message.guild.members.cache.forEach((use) => {

@@ -8,7 +8,7 @@ module.exports = {
   aliases: ['userinfo'],
   cooldown: 5000,
   usage: `<user>`,
-  botCommandOnly: true,
+  botCommand: true,
 
 
   /**

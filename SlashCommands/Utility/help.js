@@ -9,7 +9,7 @@ module.exports = {
   name: "help",
   description: "Show the help menu!",
   cooldown: 5000,
-  botCommandOnly: true,
+  botCommand: true,
   options: [
     {
       name: "command",

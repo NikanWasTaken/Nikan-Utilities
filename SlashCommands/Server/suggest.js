@@ -6,7 +6,7 @@ module.exports = {
     name: "suggest",
     description: `Suggest something for the server or the bot!`,
     ephemeral: true,
-    botCommandOnly: true,
+    botCommand: true,
     cooldown: 600000,
     options: [
         {

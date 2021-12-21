@@ -5,7 +5,7 @@ module.exports = {
   category: 'utility',
   description: "Counting server's members.",
   cooldown: 5000,
-  botCommandOnly: true,
+  botCommand: true,
 
 
   /**

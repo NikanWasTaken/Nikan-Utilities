@@ -8,7 +8,7 @@ module.exports = {
     usage: '[user] [new nickname/reset/moderate]',
     aliases: ['nick'],
     cooldown: 3000,
-    userPermissions: ["MANAGE_MESSAGES"],
+    permissions: ["MANAGE_MESSAGES"],
 
     /**
      * @param {Client} client
@@ -16,20 +16,18 @@ module.exports = {
      * @param {String[]} args
      */
 
-    run: async (client, message, args, missingpartembed) => {
+    run: async (client, message, args, wrongUsage) => {
 
         var name = message.content.split(" ").slice(2).join(" ")
         var user = message.guild.members.cache.get(args[0]) || message.mentions.members.first()
 
-        if (!user) return message.reply({ embeds: [missingpartembed] })
-
-        const failed = new MessageEmbed().setDescription(`You don't have permissions to perform that action!`).setColor("RED")
+        if (!user) return message.reply({ embeds: [wrongUsage] })
 
         if (user.roles.highest.position >= message.guild.me.roles.highest.position ||
             user.roles.highest.position >= message.member.roles.highest.position ||
             user.user.id === client.config.owner ||
             user.user.bot)
-            return message.reply({ embeds: [failed] }).then((msg) => {
+            return message.reply({ embeds: [client.embed.cannotPerform] }).then((msg) => {
                 setTimeout(() => {
                     msg?.delete()
                     message?.delete()

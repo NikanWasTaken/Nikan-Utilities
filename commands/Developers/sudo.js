@@ -4,7 +4,7 @@ module.exports = {
     name: 'sudo',
     category: 'Developers',
     usage: '[user] [message]',
-    developerOnly: true,
+    developer: true,
     visible: false,
 
     /**

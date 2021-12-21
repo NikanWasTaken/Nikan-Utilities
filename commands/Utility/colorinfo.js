@@ -7,7 +7,7 @@ module.exports = {
     description: `Info about a hex code`,
     cooldown: 5000,
     usage: `[hex code]`,
-    botCommandOnly: true,
+    botCommand: true,
 
 
     /**
@@ -16,11 +16,11 @@ module.exports = {
      * @param {String[]} args
      */
 
-    run: async (client, message, args, missingpartembed) => {
+    run: async (client, message, args, wrongUsage) => {
 
         var color = args[0]
 
-        if (!color) return message.reply({ embeds: [missingpartembed] })
+        if (!color) return message.reply({ embeds: [wrongUsage] })
         if (color.includes("#")) {
             color = args[0].split("#")[1]
         }
