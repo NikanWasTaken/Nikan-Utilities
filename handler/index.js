@@ -47,6 +47,7 @@ module.exports = async (client) => {
 
     const guild = client.guilds.cache.get(`${client.server.id}`)
     await guild.commands.set(arrayOfSlashCommands)
+
       .then((cmd) => {
         const getRoles = (commandName) => {
           const permissions = arrayOfSlashCommands.find(x => x.name === commandName).permissions;
@@ -85,7 +86,7 @@ module.exports = async (client) => {
   });
 
 
-  // mongoose 
+  // mongoose
 
   if (!mongooseConnectionString) return;
 

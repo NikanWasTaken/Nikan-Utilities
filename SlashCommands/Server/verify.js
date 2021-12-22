@@ -7,7 +7,6 @@ module.exports = {
     ephemeral: true,
     cooldown: 10000,
 
-
     /**
      *
      * @param {Client} client
@@ -72,7 +71,7 @@ module.exports = {
             .setImage("attachment://captcha.png")
             .setFooter(`You have 20 seconds to solve this captcha!`, `${client.user.displayAvatarURL()}`)
 
-        let msg = await interaction.followUp({ embeds: [embed], files: [attachment] })
+        await interaction.followUp({ embeds: [embed], files: [attachment] })
 
         const collector = interaction.channel.createMessageCollector({
             filter: (m) =>
