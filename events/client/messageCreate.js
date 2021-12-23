@@ -3,7 +3,6 @@ const ms = require("ms")
 const config = client.config
 const { Collection, MessageEmbed } = require("discord.js")
 const Timeout = new Collection();
-const cap = require("capitalize-first-letter");
 
 const noPermissions = new MessageEmbed()
     .setDescription("You don't have permissions to run this command.")
@@ -80,7 +79,7 @@ client.on("messageCreate", async (message) => {
 
 
     const wrongUsage = new MessageEmbed()
-        .setAuthor(`${cap(command.name)} Command`, client.user.displayAvatarURL())
+        .setAuthor(`${client.cap(command.name)} Command`, client.user.displayAvatarURL())
         .setDescription(
             [
                 `This command is missing an argument from the usage below!\n`,

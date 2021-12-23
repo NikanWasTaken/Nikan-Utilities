@@ -1,4 +1,4 @@
-const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js');
+const { MessageEmbed, MessageActionRow, MessageButton, Message, Client } = require('discord.js');
 const warnModel = require("../../models/Punishments.js");
 const ms = require("ms");
 
@@ -22,18 +22,11 @@ module.exports = {
     let user = message.guild.members.cache.get(args[0]) || message.mentions.members.first()
     if (!args[0]) return message.reply({ embeds: [wrongUsage] })
 
-    const cannotPerform = new MessageEmbed()
-      .setDescription(`You don't have permissions to perform that action!`)
-      .setColor("RED")
-
-
     if (!user) {
 
       try {
 
         var user2 = await message.guild.members.ban(`${args[0]}`, { reason: reason })
-
-
         const data = new warnModel({
           type: "Ban",
           userId: user2?.id,
@@ -43,58 +36,41 @@ module.exports = {
           timestamp: Date.now(),
           systemExpire: Date.now() + ms("26 weeks")
         })
-
         data.save()
 
         var hmm = new MessageEmbed()
           .setDescription(`**${user2?.tag}** has been **banned** | \`${data._id}\``).setColor(`${client.color.moderationRed}`)
         let msg = await message.channel.send({ embeds: [hmm] }).then(message.delete())
 
-        const log = new MessageEmbed()
-          .setAuthor(`${client.user.username}`, `${client.user.displayAvatarURL()}`)
-          .setTitle(`➜ Ban`).setURL(`${client.server.invite}`)
-          .setColor(`${client.color.ban}`)
-          .addField("➜ User", `• ${user2}\n• ${user2.tag}\n• ${user2.id}`, true)
-          .addField("➜ Moderator", `• ${message.author}\n• ${message.author.tag}\n• ${message.author.id}`, true)
-          .addField("➜ Reason", `${reason}`, false)
-          .setFooter(`ID: ${data._id}`)
-
-        const row = new MessageActionRow().addComponents(
-
-          new MessageButton()
-            .setLabel("Jump to the action")
-            .setStyle("LINK")
-            .setURL(`https://discord.com/channels/${msg.guild.id}/${msg.channel.id}/${msg.id}`)
-
-        )
-
-        client.webhook.moderation.send({ embeds: [log], components: [row] })
+        client.log.action({
+          type: "Ban",
+          color: "BAN",
+          user: `${user.id}`,
+          moderator: `${message.author.id}`,
+          reason: `${reason}`,
+          id: `${data._id}`,
+          url: `https://discord.com/channels/${message.guildId}/${message.channelId}/${msg.id}`
+        })
 
       } catch (error) {
 
-        const embed = new MessageEmbed().setDescription(`This user doesn't exist!`).setColor("RED")
+        const embed = new MessageEmbed()
+          .setDescription(`This user doesn't exist!`)
+          .setColor("RED")
         message.reply({ embeds: [embed] }).then((msg) => {
-          setTimeout(() => {
-            msg?.delete()
-            message?.delete()
-          }, 5000)
+          client.delete.message(message, msg);
         })
 
       }
 
     } else {
 
-
       if (user.roles.highest.position >= message.guild.me.roles.highest.position ||
         user.roles.highest.position >= message.member.roles.highest.position ||
         user.user.id === client.config.owner ||
         user.user.bot)
-        return message.reply({ embeds: [cannotPerform] }).then((msg) => {
-          setTimeout(() => {
-            msg?.delete()
-            message?.delete()
-          }, 5000)
-        })
+        return message.reply({ embeds: [client.embeds.cannotPerform] })
+          .then((msg) => client.delete.message(message, msg))
 
       const data = new warnModel({
         type: "Ban",
@@ -114,12 +90,10 @@ module.exports = {
         .then(message.delete())
 
       const row2 = new MessageActionRow().addComponents(
-
         new MessageButton()
           .setLabel("Appeal")
           .setStyle("LINK")
           .setURL(`https://forms.gle/dW8RGLA65ycC4vcM7`)
-
       )
 
       var dmyes = new MessageEmbed()
@@ -136,29 +110,17 @@ module.exports = {
         reason: reason,
       })
 
-      const log = new MessageEmbed()
-        .setAuthor(`${client.user.username}`, `${client.user.displayAvatarURL()}`)
-        .setTitle(`➜ Ban`).setURL(`${client.server.invite}`)
-        .setColor(`${client.color.ban}`)
-        .addField("➜ User", `• ${user.user}\n• ${user.user.tag}\n• ${user.user.id}`, true)
-        .addField("➜ Moderator", `• ${message.author}\n• ${message.author.tag}\n• ${message.author.id}`, true)
-        .addField("➜ Reason", `${reason}`, false)
-        .setFooter(`ID: ${data._id}`)
-
-      const rowlog = new MessageActionRow().addComponents(
-
-        new MessageButton()
-          .setLabel("Jump to the action")
-          .setStyle("LINK")
-          .setURL(`https://discord.com/channels/${msg.guild.id}/${msg.channel.id}/${msg.id}`)
-
-      )
-
-      client.webhook.moderation.send({ embeds: [log], components: [rowlog] })
+      client.log.action({
+        type: "Ban",
+        color: "BAN",
+        user: `${user.user.id}`,
+        moderator: `${message.author.id}`,
+        reason: `${reason}`,
+        id: `${data._id}`,
+        url: `https://discord.com/channels/${message.guildId}/${message.channelId}/${msg.id}`
+      })
 
     }
   }
-
-
 
 }

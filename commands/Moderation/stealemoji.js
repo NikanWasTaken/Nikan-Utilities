@@ -1,4 +1,4 @@
-const { MessageEmbed, Util } = require('discord.js');
+const { MessageEmbed, Util, Message, Client } = require('discord.js');
 
 module.exports = {
     name: `stealemoji`,
@@ -57,7 +57,8 @@ module.exports = {
                         .setAuthor(`${client.user.username}`, `${client.user.displayAvatarURL()}`)
                         .setTitle("Steal Failed!")
                         .setColor("RED")
-                        .addField("Action Failed", `The emoji add action has been failed, this might happen if\n> ➜ The server has reached max emoji alots\n> ➜ The file size is more than standard\n> ➜ Other reasons...`, true)
+                        .addField("Action Failed", `The emoji add action has been failed, this might happen if\n> ➜ The server has reached max emoji alots\n> ➜ The file size is more than standard\n> ➜ Other reasons...`, false)
+                        .addField("Error", `\`\`\`js\n${error}\n\`\`\``, false)
                     message.channel.send({ embeds: [embed] })
 
                 }
@@ -86,7 +87,8 @@ module.exports = {
                         .setAuthor(`${client.user.username}`, `${client.user.displayAvatarURL()}`)
                         .setTitle("Steal Failed!")
                         .setColor("RED")
-                        .addField("Action Failed", `The emoji add action has been failed, this might happen if\n> ➜ The server has reached max emoji alots\n> ➜ The file size is more than standard\n> ➜ Other reasons...`, true)
+                        .addField("Action Failed", `The emoji add action has been failed, this might happen if\n> ➜ The server has reached max emoji alots\n> ➜ The file size is more than standard\n> ➜ Other reasons...`, false)
+                        .addField("Error", `\`\`\`js\n${error}\n\`\`\``, false)
                     message.channel.send({ embeds: [embed] })
 
                 }
@@ -120,6 +122,7 @@ module.exports = {
                     .setTitle("Steal Failed!")
                     .setColor("RED")
                     .addField("Action Failed", `The emoji add action has been failed, this might happen if\n> ➜ The server has reached max emoji alots\n> ➜ The file size is more than standard\n> ➜ Other reasons...`, true)
+                    .addField("Error", `\`\`\`js\n${error}\n\`\`\``, false)
                 message.channel.send({ embeds: [embed] })
 
             }

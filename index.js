@@ -28,5 +28,6 @@ require("./handler")(client);
 // exporting other functions
 require("./functions/client.js")(client); // client functions
 require("./functions/send.js")(client); // this.send() functions
+require("./functions/embeds.js")(client)
 
 client.login(`${process.env.TOKEN}`);

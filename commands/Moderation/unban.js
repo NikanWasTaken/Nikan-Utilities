@@ -1,4 +1,4 @@
-const { MessageEmbed, MessageButton, MessageActionRow } = require('discord.js')
+const { MessageEmbed, Client, Message } = require('discord.js')
 const warnModel = require("../../models/Punishments.js")
 
 module.exports = {
@@ -18,7 +18,6 @@ module.exports = {
 
   run: async (client, message, args, wrongUsage) => {
 
-
     if (!args[0]) return message.reply({ embeds: [wrongUsage] })
     let userID = args[0]
     let reason = message.content.split(" ").slice(2).join(" ") || "No reason provided"
@@ -27,15 +26,14 @@ module.exports = {
 
       let BannedUser = bans.find(b => b.user.id == userID)
 
-      const nomemberfound = new MessageEmbed().setDescription(`This user is not banned from the server!`).setColor(`RED`)
+      const nomemberfound = new MessageEmbed()
+        .setDescription(`This user is not banned from the server!`)
+        .setColor(`RED`)
 
-      if (!BannedUser) return
-      message.reply({ embeds: [nomemberfound] }).then(async (msg) => {
-        setTimeout(() => {
-          message?.delete()
-          msg?.delete()
-        }, 5000)
-      })
+      if (!BannedUser)
+        return message.reply({ embeds: [nomemberfound] }).then((msg) => {
+          client.delete.message(message, msg);
+        })
 
       message.guild.members.unban(BannedUser.user)
 
@@ -44,13 +42,11 @@ module.exports = {
         userId: userID,
         guildId: message.guildId,
         moderatorId: message.author.id,
-        reason,
+        reason: reason,
         timestamp: Date.now(),
         systemExpire: Date.now() + ms("26 weeks")
       })
       data.save()
-
-
 
       var pop = new MessageEmbed()
         .setDescription(`**${BannedUser.user.tag}** has been **unbanned** | \`${data._id}\``)
@@ -58,29 +54,17 @@ module.exports = {
       let msg = await message.channel.send({ embeds: [pop] }).then(message.delete())
 
 
-      const log = new MessageEmbed()
-        .setAuthor(`${client.user.username}`, `${client.user.displayAvatarURL()}`)
-        .setTitle(`➜ Unban`).setURL(`${client.server.invite}`)
-        .setColor(`${client.color.remove}`)
-        .addField("➜ User", `• ${BannedUser.user}\n• ${BannedUser.user.tag}\n• ${BannedUser.user.id}`, true)
-        .addField("➜ Moderator", `• ${message.author}\n• ${message.author.tag}\n• ${message.author.id}`, true)
-        .addField("➜ Reason", `${reason}`, false)
-        .setFooter(`ID: ${data._id}`)
-
-      const row = new MessageActionRow().addComponents(
-
-        new MessageButton()
-          .setLabel("Jump to the action")
-          .setStyle("LINK")
-          .setURL(`https://discord.com/channels/${msg.guild.id}/${msg.channel.id}/${msg.id}`)
-
-      )
-
-      client.webhook.moderation.send({ embeds: [log], components: [row] })
+      client.log.action({
+        type: "Unban",
+        color: "UNBAN",
+        user: `${BannedUser.user.id}`,
+        moderator: `${message.author.id}`,
+        reason: `${reason}`,
+        id: `${data._id}`,
+        url: `https://discord.com/channels/${message.guildId}/${message.channelId}/${msg.id}`
+      })
 
     })
-
   }
-
 }
 

@@ -1,4 +1,4 @@
-const { MessageEmbed } = require("discord.js");
+const { MessageEmbed, Message, Client } = require("discord.js");
 
 module.exports = {
   name: "usersearch",
@@ -45,7 +45,11 @@ module.exports = {
       .setThumbnail("https://cdn.discordapp.com/attachments/870637449158742057/874944240290005042/bloodbros-search.gif")
 
     message.reply({ embeds: [embed] })
-      .catch(e => { message.reply("There are too many search results, can't show them all in a single message!") })
+      .catch(e => {
+        message.reply({
+          content: "There are too many search results, can't show them all in a single message!"
+        })
+      })
 
 
   },

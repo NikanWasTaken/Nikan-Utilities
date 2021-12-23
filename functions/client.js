@@ -1,4 +1,4 @@
-const { WebhookClient, Collection, MessageEmbed } = require("discord.js")
+const { WebhookClient, Collection } = require("discord.js")
 /**
  * @param {Client} client
  */
@@ -41,6 +41,7 @@ module.exports = async (client) => {
     client.server = {
         id: '757268973674037315',
         invite: `https://discord.gg/4HX9RneUjt`,
+        mutedRole: "795353284042293319"
     }
 
     // Webhooks
@@ -48,6 +49,33 @@ module.exports = async (client) => {
         moderation: new WebhookClient({ id: `910100385501433887`, token: `WDxlbcSouTKN5dKX65UaNvajh64Wb2OsXiKtDdmZgyS6Y9VtO22kD3E6YxrpgYMkVi5y` }),
         automod: new WebhookClient({ id: `910104675716571136`, token: `mJQ3F73THOBgvp4E5QHQhJfL28k581qM1IDW88ctLyGLgozKF9U26ygQ_ahwIq4tHwpG` }),
         autoaction: new WebhookClient({ id: `917408937756741662`, token: `92dznvZixjZrgHLBYgERwS1ngRWcDSdldvhaaNlPpjHYyBDuwl6TbNyU4InU9nqTJIw8` }),
+    }
+
+    // Capatilize first latter
+    client.cap = function capatilize(string) {
+        if (!string) throw new Error("You need to provide a string for capatilize function to work!");
+        return `${string[0].toUpperCase()}${string.slice(1).toLowerCase()}`
+    }
+
+    // Delete Functions
+    let deleteMessageFunction = function (message, msg) {
+
+        setTimeout(() => {
+            message?.delete()
+            msg?.delete()
+        }, 5000)
+    }
+
+    let deleteInteractionFunction = function (interaction) {
+
+        setTimeout(() => {
+            interaction?.deleteReply()
+        }, 5000)
+    }
+
+    client.delete = {
+        message: deleteMessageFunction,
+        interaction: deleteInteractionFunction
     }
 
 
@@ -59,7 +87,6 @@ module.exports = async (client) => {
     client.afk = new Collection()
     client.config = require("../config.json");
     client.warncooldown = new Collection();
-
 
 
 }

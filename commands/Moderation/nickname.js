@@ -1,4 +1,4 @@
-const { MessageEmbed } = require('discord.js')
+const { MessageEmbed, Message, Client } = require('discord.js')
 const randomnick = require("randomstring")
 
 module.exports = {
@@ -33,10 +33,7 @@ module.exports = {
             user.user.id === client.config.owner ||
             user.user.bot)
             return message.reply({ embeds: [cannotPerform] }).then((msg) => {
-                setTimeout(() => {
-                    msg?.delete()
-                    message?.delete()
-                }, 5000)
+                client.delete.message(message, msg);
             })
 
         switch (name) {
@@ -45,10 +42,7 @@ module.exports = {
                 const failedtochange1 = new MessageEmbed().setDescription("This user doesn't have a nickname!").setColor("RED")
                 if (user.displayName === user.user.username)
                     return message.channel.send({ embeds: [failedtochange1] }).then((msg) => {
-                        setTimeout(() => {
-                            message?.delete()
-                            msg?.delete()
-                        }, 5000)
+                        client.delete.message(message, msg);
                     })
 
                 const embed1 = new MessageEmbed()
@@ -56,7 +50,6 @@ module.exports = {
                     .setColor(`${client.color.moderation}`)
 
                 message.channel.send({ embeds: [embed1] })
-
                 user.setNickname(`${user.user.username}`)
 
                 break;
@@ -73,7 +66,6 @@ module.exports = {
                     .setColor(`${client.color.moderation}`)
 
                 message.channel.send({ embeds: [embed2] })
-
                 user.setNickname(`${nickname1}`)
                 break;
 
@@ -97,19 +89,13 @@ module.exports = {
                 const failedtochange2 = new MessageEmbed().setDescription("You provided this user's current nickname!").setColor("RED")
                 if (user.displayName === name)
                     return message.channel.send({ embeds: [failedtochange2] }).then((msg) => {
-                        setTimeout(() => {
-                            message?.delete()
-                            msg?.delete()
-                        }, 5000)
+                        client.delete.message(message, msg);
                     })
 
                 const failedtochange3 = new MessageEmbed().setDescription("Nickname should be fewer than 32 characters in length!").setColor("RED")
                 if (name.length > 32)
                     return message.channel.send({ embeds: [failedtochange3] }).then((msg) => {
-                        setTimeout(() => {
-                            message?.delete()
-                            msg?.delete()
-                        }, 5000)
+                        client.delete.message(message, msg);
                     })
 
                 const embed4 = new MessageEmbed()
@@ -117,7 +103,6 @@ module.exports = {
                     .setColor(`${client.color.moderation}`)
 
                 message.channel.send({ embeds: [embed4] })
-
                 user.setNickname(`${name}`)
                 break;
         }

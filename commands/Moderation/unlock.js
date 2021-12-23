@@ -1,4 +1,4 @@
-const { MessageEmbed, MessageActionRow, MessageButton } = require('discord.js')
+const { MessageEmbed, Client, Message } = require('discord.js')
 
 module.exports = {
   name: 'unlock',
@@ -89,11 +89,6 @@ module.exports = {
         await msg.edit({ content: "Unlocked the channel!" })
 
       }
-
     }
-
-
-
-
   }
 }

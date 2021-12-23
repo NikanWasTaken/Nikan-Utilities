@@ -1,7 +1,5 @@
-const { Client, CommandInteraction, interaction, MessageEmbed, MessageActionRow, MessageButton } = require("discord.js");
-const moment = require("moment")
+const { Client, CommandInteraction, MessageEmbed, MessageActionRow, MessageButton } = require("discord.js");
 const fetch = require("node-fetch")
-const cap = require("capitalize-first-letter")
 
 module.exports = {
   name: "info",

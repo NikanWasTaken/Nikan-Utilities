@@ -1,9 +1,6 @@
-const cap = require("capitalize-first-letter")
 const { MessageEmbed, Client, MessageActionRow, MessageSelectMenu, Message, CommandInteraction, MessageButton } = require("discord.js");
 const config = require("../../config.json");
-const prefix = config.prefix
 const ms = require("ms");
-const { readdirSync } = require("fs")
 
 module.exports = {
   name: "help",
@@ -121,7 +118,7 @@ module.exports = {
 
             const no = new MessageEmbed()
               .setAuthor(`${client.user.username}`, `${client.user.displayAvatarURL()}`)
-              .setDescription("The FitnessGram™ Pacer Test is a multistage aerobic capacity test that progressively gets more difficult as it continues. The 20 meter pacer test will begin in 30 seconds. Line up at the start. The running speed starts slowly, but gets faster each minute after you hear this signal. [Beep] A single lap should be completed each time you hear this sound. Remember to run in a straight line, and run as long as possible. The second time you fail to complete a lap before the sound, your test is over.")
+              .setDescription("The FitnessGram™ Pacer Test is a multistage aerobic client.capacity test that progressively gets more difficult as it continues. The 20 meter pacer test will begin in 30 seconds. Line up at the start. The running speed starts slowly, but gets faster each minute after you hear this signal. [Beep] A single lap should be completed each time you hear this sound. Remember to run in a straight line, and run as long as possible. The second time you fail to complete a lap before the sound, your test is over.")
               .addField("** **", "Well, nice wasting your time reading that. Whoops, I forgot to say you need staff to see this page!")
               .setTimestamp()
               .setColor("RED")
@@ -148,7 +145,7 @@ module.exports = {
 
             const no = new MessageEmbed()
               .setAuthor(`${client.user.username}`, `${client.user.displayAvatarURL()}`)
-              .setDescription("The FitnessGram™ Pacer Test is a multistage aerobic capacity test that progressively gets more difficult as it continues. The 20 meter pacer test will begin in 30 seconds. Line up at the start. The running speed starts slowly, but gets faster each minute after you hear this signal. [Beep] A single lap should be completed each time you hear this sound. Remember to run in a straight line, and run as long as possible. The second time you fail to complete a lap before the sound, your test is over.")
+              .setDescription("The FitnessGram™ Pacer Test is a multistage aerobic client.capacity test that progressively gets more difficult as it continues. The 20 meter pacer test will begin in 30 seconds. Line up at the start. The running speed starts slowly, but gets faster each minute after you hear this signal. [Beep] A single lap should be completed each time you hear this sound. Remember to run in a straight line, and run as long as possible. The second time you fail to complete a lap before the sound, your test is over.")
               .addField("** **", "Well, nice wasting your time reading that. Whoops, I guess I forgot to say only event hosts can see this page!")
               .setTimestamp()
               .setColor("RED")
@@ -229,11 +226,11 @@ module.exports = {
       }
 
       const emb3 = new MessageEmbed()
-        .setAuthor(`${cap(command.name)} Command`, client.user.displayAvatarURL())
+        .setAuthor(`${client.cap(command.name)} Command`, client.user.displayAvatarURL())
         .setDescription(
           [
-            `> ** Name:** ${command.name ? cap(command.name) : 'No name'}`,
-            `> ** Category:** ${command.category ? cap(command.category) : "No Category"}`,
+            `> ** Name:** ${command.name ? client.cap(command.name) : 'No name'}`,
+            `> ** Category:** ${command.category ? client.cap(command.category) : "No Category"}`,
             `> ** Description:** ${command.description ? command.description : "No description"}`,
             `> ** Usage:** ${command.usage ? `\`${config.prefix + command.name + ` ${command.usage}`}\`` : "No Usage found!"}`,
             `> ** Aliases:** ${command.aliases ? `\`${command.aliases.join("` `")}\`` : "No Aliases Available"}`,
