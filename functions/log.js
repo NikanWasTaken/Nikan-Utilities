@@ -108,7 +108,7 @@ module.exports = async (client) => {
         }).catch(() => { });
     }
 
-    client.log.action = {
+    client.log = {
         action: actionLogFunction,
         autoAction: autoActionLogFunction
     }
