@@ -1,11 +1,12 @@
-let { MessageEmbed } = require("discord.js")
+let { MessageEmbed, WebhookClient } = require("discord.js")
 let client = require("../../index.js")
 
-
+const errorHandlerChannel = new WebhookClient({
+    token: "Pc5j3AjcSEK3bed4QrxytOgFLwhbZiIiQYL8oezsVCDEF5_K1CA6-wzzJV4JoMMu1lvY",
+    id: "923873525616484392"
+})
 
 process.on("unhandledRejection", (reason, promise) => {
-
-    const channel = client.channels.cache.get("901478033628753951")
 
     const embed = new MessageEmbed()
         .setTitle(`Unhandled Rejection`)
@@ -17,15 +18,13 @@ process.on("unhandledRejection", (reason, promise) => {
         .setColor(`${client.color.invisible}`)
 
     console.log(reason)
-    return channel.send({ embeds: [embed] })
+    return errorHandlerChannel.send({ embeds: [embed] })
 
 
 });
 
 
 process.on("uncaughtException", (err, origin) => {
-
-    const channel = client.channels.cache.get("901478033628753951")
 
     const embed = new MessageEmbed()
         .setTitle(`Uncaught Exception`)
@@ -36,14 +35,12 @@ process.on("uncaughtException", (err, origin) => {
         .setFooter(`${client.user.username} Error Handling`, client.user.displayAvatarURL({ dynamic: true }))
         .setColor(`${client.color.invisible}`)
 
-    return channel.send({ embeds: [embed] })
+    return errorHandlerChannel.send({ embeds: [embed] })
 
 });
 
 
 process.on("uncaughtExceptionMonitor", (err, origin) => {
-
-    const channel = client.channels.cache.get("901478033628753951")
 
     const embed = new MessageEmbed()
         .setTitle(`Uncaught Exception Monitor`)
@@ -54,6 +51,6 @@ process.on("uncaughtExceptionMonitor", (err, origin) => {
         .setFooter(`${client.user.username} Error Handling`, client.user.displayAvatarURL({ dynamic: true }))
         .setColor(`${client.color.invisible}`)
 
-    return channel.send({ embeds: [embed] })
+    return errorHandlerChannel.send({ embeds: [embed] })
 
 });

@@ -1,4 +1,4 @@
-const { MessageEmbed, WebhookClient, MessageAttachment, Message } = require('discord.js')
+const { MessageAttachment, Message, Client } = require('discord.js')
 
 module.exports = {
   name: 'boo',
@@ -31,7 +31,7 @@ module.exports = {
     const boop = array[~~(Math.random() * array.length)]
     const boo = new MessageAttachment(boop)
 
-    let msg = await message.channel.send({ files: [boo] })
+    await message.channel.send({ files: [boo] })
 
     const collector = message.channel.createMessageCollector({
       filter: (m) =>
@@ -51,8 +51,6 @@ module.exports = {
     const randomemoji = emojis[~~(Math.random() * emojis.length)];
 
     collector.on("collect", async (i) => {
-
-
       i.react(randomemoji)
 
     })
