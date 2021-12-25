@@ -75,8 +75,8 @@ module.exports = async (client) => {
             embeds: [
                 {
                     author: {
-                        iconURL: "Automatic Actions",
-                        name: client.user.username,
+                        iconURL: client.user.displayAvatarURL(),
+                        name: "Automatic Actions",
                     },
                     title: `• ${client.cap(options?.type)}`,
                     color: `${colors[options?.color?.toUpperCase()]}`,
@@ -94,7 +94,7 @@ module.exports = async (client) => {
                         {
                             name: "User ID",
                             value: `${options?.user}`,
-                            inline: false
+                            inline: true
                         },
                         {
                             name: "Reason",
@@ -105,7 +105,7 @@ module.exports = async (client) => {
                     timestamp: Date.now()
                 }
             ],
-        }).catch(() => { });
+        }).catch((e) => { console.log(e) });
     }
 
     client.log = {

@@ -12,7 +12,8 @@ client.on('messageReactionAdd', async (reaction, user) => {
     // if (reaction.message.author.id === user.id && reaction.emoji.name === "⭐") return reaction.message.reactions.resolve("⭐").users.remove(user.id) 
 
     // reqs
-    if (reaction.message.channel.type === "DM") return
+    if (reaction.message.channel.type === "DM") return;
+    if (reaction.message.guildId !== `${client.server.id}`) return;
     if (reaction.message.channel.id === SBchannelId && reaction.message.author.id === `${client.user.id}`) return;
     if (reaction.count >= starCount && reaction.emoji.name === "⭐") {
 

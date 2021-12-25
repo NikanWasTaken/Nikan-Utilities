@@ -52,7 +52,7 @@ client.on("interactionCreate", async (interaction) => {
         return interaction.reply({ embeds: [cooldownEmbed], ephemeral: true })
 
       await interaction.deferReply({ ephemeral: false || cmd.ephemeral })
-r 
+
       cmd.run(client, interaction, args);
       Timeout.set(
         `${cmd.name}${interaction.member.user.id}`,
