@@ -34,12 +34,7 @@ module.exports = {
    */
   run: async (client, interaction, args) => {
 
-    const cannotPerform = new MessageEmbed()
-      .setDescription(`You don't have permissions to perform that action!`)
-      .setColor("RED")
-
     var user = interaction.options.getMember("user")
-
     var reason = interaction.options.getString("reason") || "No reason provided"
 
     if (user.roles.highest.position >= interaction.guild.me.roles.highest.position ||
@@ -47,11 +42,10 @@ module.exports = {
       user.user.id === client.config.owner ||
       user.user.bot
     )
-      return interaction.followUp({ embeds: [cannotPerform] }).then((msg) => {
-        setTimeout(() => {
-          interaction.deleteReply()
-        }, 5000)
-      })
+      return interaction.followUp({ embeds: [client.embeds.cannotPerform] })
+        .then(() => {
+          client.delete.interaction(interaction);
+        })
 
 
     const data = new warnModel({
@@ -59,52 +53,41 @@ module.exports = {
       userId: user.user.id,
       guildId: interaction.guildId,
       moderatorId: interaction.user.id,
-      reason,
+      reason: reason,
       timestamp: Date.now(),
       systemExpire: Date.now() + ms("26 weeks")
     })
-
     data.save();
 
     var hmm = new MessageEmbed()
-      .setDescription(`${user.user} has been **kicked** | \`${data._id}\``).setColor(`${client.color.moderation}`)
+      .setDescription(`${user.user} has been **kicked** | \`${data._id}\``)
+      .setColor(`${client.color.moderation}`)
     await interaction.deleteReply()
     let msg = await interaction.channel.send({ embeds: [hmm] })
 
 
     var dmyes = new MessageEmbed()
-      .setAuthor(`${client.user.username}`, client.user.displayAvatarURL({ dynamic: true }))
+      .setAuthor({ name: `${client.user.username}`, iconURL: client.user.displayAvatarURL() })
       .setTitle(`You've been kicked from ${interaction.guild.name}`)
       .setColor(`${client.color.modDm}`)
       .setTimestamp()
       .addField("Punishment ID", `${data._id}`, true)
       .addField("Reason", reason, false)
-    user.send({ embeds: [dmyes] }).catch(e => { return })
+    user.send({ embeds: [dmyes] }).catch(() => { return })
 
     user.kick({
       reason: reason,
     })
 
-
-    const log = new MessageEmbed()
-      .setAuthor(`${client.user.username}`, `${client.user.displayAvatarURL()}`)
-      .setTitle(`➜ Kick`).setURL(`${client.server.invite}`)
-      .setColor(`${client.color.logs}`)
-      .addField("➜ User", `• ${user.user}\n• ${user.user.tag}\n• ${user.user.id}`, true)
-      .addField("➜ Moderator", `• ${interaction.user}\n• ${interaction.user.tag}\n• ${interaction.user.id}`, true)
-      .addField("➜ Reason", `${reason}`, false)
-      .setFooter(`ID: ${data._id}`)
-
-    const row2 = new MessageActionRow().addComponents(
-
-      new MessageButton()
-        .setLabel("Jump to the action")
-        .setStyle("LINK")
-        .setURL(`https://discord.com/channels/${msg.guild.id}/${msg.channel.id}/${msg.id}`)
-
-    )
-
-    client.webhook.moderation.send({ embeds: [log], components: [row2] })
+    client.log.action({
+      type: "Kick",
+      color: "KICK",
+      user: `${user.user.id}`,
+      moderator: `${interaction.user.id}`,
+      reason: `${reason}`,
+      id: `${data._id}`,
+      url: `https://discord.com/channels/${interaction.guildId}/${interaction.channelId}/${msg.id}`
+    })
 
 
 

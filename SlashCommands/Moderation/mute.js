@@ -139,7 +139,7 @@ module.exports = {
       })
       data2.save()
 
-      await user.roles.set(["795353284042293319"]);
+      await user.roles.set([`${client.server.mutedRole}`]);
       await user.timeout(duration, `${reason}`);
 
       let mue = new MessageEmbed()

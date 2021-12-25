@@ -147,7 +147,7 @@ module.exports = {
           new MessageButton()
             .setLabel("Appeal")
             .setStyle("LINK")
-            .setURL(`https://forms.gle/dW8RGLA65ycC4vcM7`)
+            .setURL(`${client.server.appeal}`)
         )
 
         var dmyes = new MessageEmbed()

@@ -41,7 +41,8 @@ module.exports = async (client) => {
     client.server = {
         id: '757268973674037315',
         invite: `https://discord.gg/4HX9RneUjt`,
-        mutedRole: "795353284042293319"
+        mutedRole: "795353284042293319",
+        appeal: "https://forms.gle/dW8RGLA65ycC4vcM7"
     }
 
     // Webhooks

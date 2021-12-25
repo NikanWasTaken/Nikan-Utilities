@@ -93,18 +93,18 @@ module.exports = {
         new MessageButton()
           .setLabel("Appeal")
           .setStyle("LINK")
-          .setURL(`https://forms.gle/dW8RGLA65ycC4vcM7`)
+          .setURL(`${client.server.appeal}`)
       )
 
       var dmyes = new MessageEmbed()
-        .setAuthor(`${client.user.username}`, client.user.displayAvatarURL({ dynamic: true }))
+        .setAuthor({ name: `${client.user.username}`, iconURL: client.user.displayAvatarURL() })
         .setTitle(`You've been banned from ${message.guild.name}`)
         .setColor(`${client.color.modDm}`)
         .setTimestamp()
         .addField("Punishment ID", `${data._id}`, true)
         .addField("Reason", reason, false)
       user.send({ embeds: [dmyes], components: [row2] })
-        .catch(e => { return })
+        .catch(() => { return })
 
       await user.ban({
         reason: reason,

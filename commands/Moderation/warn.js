@@ -1,4 +1,4 @@
-const { MessageEmbed, MessageActionRow, MessageButton } = require("discord.js");
+const { MessageEmbed, Client, Message, MessageActionRow, MessageButton } = require("discord.js");
 const warnModel = require("../../models/Punishments.js");
 const db = require("../../models/MemberRoles.js");
 const ms = require("ms")
@@ -29,12 +29,11 @@ module.exports = {
     if (!args[0] || !reason) return message.reply({ embeds: [wrongUsage] })
 
     if (!user) {
-      const embed = new MessageEmbed().setDescription(`This user is not in this guild!`).setColor("RED")
+      const embed = new MessageEmbed()
+        .setDescription(`This user is not in this guild!`)
+        .setColor("RED")
       message.reply({ embeds: [embed] }).then((msg) => {
-        setTimeout(() => {
-          msg?.delete()
-          message?.delete()
-        }, 5000)
+        client.delete.message(message, msg)
       })
     }
 
@@ -55,10 +54,7 @@ module.exports = {
         .setColor("RED")
 
       return message.channel.send({ embeds: [embed] }).then((msg) => {
-        setTimeout(() => {
-          msg?.delete()
-          message?.delete()
-        }, 10000)
+        client.delete.message(message, msg)
       })
 
     }
@@ -77,14 +73,14 @@ module.exports = {
 
 
     let warndm = new MessageEmbed()
-      .setAuthor(client.user.username, client.user.displayAvatarURL({ dynamic: true }))
+      .setAuthor({ name: `${client.user.username}`, iconURL: client.user.displayAvatarURL() })
       .setTitle(`You've been Warned in ${message.guild.name}`)
       .addField("Punishment ID", `${data._id}`, true)
       .addField("Expires In", `4 weeks`, true)
       .addField("Reason", reason, false)
       .setColor(`${client.color.modDm}`)
       .setTimestamp()
-    user.send({ embeds: [warndm] }).catch(e => { return })
+    user.send({ embeds: [warndm] }).catch(() => { })
 
     let warne = new MessageEmbed()
       .setDescription(`${user} has been **warned** | \`${data._id}\``)
@@ -99,36 +95,26 @@ module.exports = {
       client.warncooldown.delete(`${user.user.id}`);
     }, 10000);
 
+    client.log.action({
+      type: "Warn",
+      color: "WARN",
+      user: `${user.user.id}`,
+      moderator: `${message.author.id}`,
+      reason: `${reason}`,
+      id: `${data._id}`,
+      url: `https://discord.com/channels/${message.guildId}/${message.channelId}/${msg.id}`
+    })
 
-    const log = new MessageEmbed()
-      .setAuthor(`${client.user.username}`, `${client.user.displayAvatarURL()}`)
-      .setTitle(`➜ Warn`).setURL(`${client.server.invite}`)
-      .setColor(`${client.color.warn}`)
-      .addField("➜ User", `• ${user.user}\n• ${user.user.tag}\n• ${user.user.id}`, true)
-      .addField("➜ Moderator", `• ${message.author}\n• ${message.author.tag}\n• ${message.author.id}`, true)
-      .addField("➜ Reason", `${reason}`, false)
-      .setFooter(`ID: ${data._id}`)
-
-    const rowlog = new MessageActionRow().addComponents(
-
-      new MessageButton()
-        .setLabel("Jump to the action")
-        .setStyle("LINK")
-        .setURL(`https://discord.com/channels/${msg.guild.id}/${msg.channel.id}/${msg.id}`)
-
-    )
-
-    client.webhook.moderation.send({ embeds: [log], components: [rowlog] })
-
-    // ---- checks for 3 stikes, 6 and 9 strikes...
+    // ---- checks for warns and mutes
 
     const userWarnings = await warnModel.find({
       userId: user.user.id,
       guildId: message.guild.id,
       type: "Warn",
     });
-    const numberofwarns = []
-    userWarnings.map((warn, i) => {
+
+    const numberofwarns = [];
+    userWarnings.map((i) => {
       numberofwarns.push(`${i + 1}`)
     })
 
@@ -136,10 +122,11 @@ module.exports = {
     if (numberofwarns.length == 2) {
 
       const data = new db({
-        guildid: message.guild.id,
-        user: user.user.id,
+        guildId: message.guild.id,
+        userId: user.user.id,
         roles: [user.roles.cache.map(role => role.id)],
-        reason: "Muted for reaching 2 strikes"
+        until: Date.now() + ms("2 hours"),
+        reason: "Muted for reaching 2 normal warnings!"
       })
       data.save()
 
@@ -154,84 +141,34 @@ module.exports = {
       })
 
       data2.save()
-
-      user.roles.set(["795353284042293319"])
+      user.roles.set([`${client.server.mutedRole}`])
 
       let warndm = new MessageEmbed()
-        .setAuthor(client.user.username, client.user.displayAvatarURL({ dynamic: true }))
+        .setAuthor({ name: `${client.user.username}`, iconURL: client.user.displayAvatarURL() })
         .setTitle(`You've been Muted in ${message.guild.name}`)
         .addField("Punishment ID", `${data2._id}`, true)
         .addField("Duration", "2 hours", true)
         .addField("Reason", "Reaching 2 strikes", false)
         .setColor(`${client.color.modDm}`)
         .setTimestamp()
-      user.send({ embeds: [warndm] }).catch(e => { return })
+      user.send({ embeds: [warndm] }).catch(() => { })
 
-      const warns2 = new MessageEmbed()
-        .setAuthor(`Automatic Actions`, `${client.user.displayAvatarURL()}`)
-        .setColor(`${client.color.mute}`)
-        .setTitle("➜ 2 Hours Of Mute")
-        .addField("User", `• ${user.user}`, true)
-        .addField("User Tag", `• ${user.user.tag}`, true)
-        .addField("User ID", `• ${user.user.id}`, true)
-        .addField("Reason", `Reached 2 normal strikes!`)
-        .setFooter(`ID: ${data2._id}`)
+      client.log.autoAction({
+        type: "2 hours of mute",
+        color: "MUTE",
+        user: `${user.user.id}`,
+        reason: `Reaching 2 normal warnings`
+      });
 
-      client.webhook.autoaction.send({ embeds: [warns2] })
-
-
-      setTimeout(async () => {
-
-        const findmember = message.guild.members.cache.get(`${user.user.id}`)
-
-        if (findmember) {
-
-          db.findOne({ guildid: message.guild.id, user: user.user.id }, async (err, data) => {
-            if (err) throw err;
-            if (data) {
-
-              data.roles.map((w, i) => user.roles.set(w))
-              await db.findOneAndDelete({ user: user.user.id, guildid: message.guild.id })
-
-            }
-          })
-
-
-        } else if (!findmember) {
-
-          const leftroles = require("../../models/LeftMembers.js")
-
-          db.findOne({ guildid: message.guild.id, user: user.user.id }, async (err, data) => {
-            if (err) throw err;
-            if (data) {
-
-              leftroles.findOneAndUpdate({ guildid: message.guild.id, user: `${user.user.id}` }, { $set: { roles: [data.roles.map(e => e)] } }, async (data, err) => { })
-              await db.findOneAndDelete({ user: user.user.id, guildid: message.guild.id })
-
-            }
-          })
-        }
-
-        const warns2 = new MessageEmbed()
-          .setAuthor(`Automatic Actions`, `${client.user.displayAvatarURL()}`)
-          .setColor(`${client.color.unmute}`)
-          .setTitle("Unmuted From Tempmute")
-          .addField("User", `• ${client.users.fetch(`${user.user.id}`) || "I couldn't find them!"}`, true)
-          .addField("User Tag", `• ${(await client.users.fetch(`${user.user.id}`)).tag || "I couldn't find them!"}`, true)
-          .addField("User ID", `• ${(await client.users.fetch(`${user.user.id}`)).id || "I couldn't find them!"}`, true)
-          .addField("Reason", `Umuted After 2 hours of mute (reaching 2 strikes)`)
-
-        client.webhook.autoaction.send({ embeds: [warns2] })
-
-      }, 7200000) // 2 hours
 
     } else if (numberofwarns.length == 4) {
 
       const data = new db({
-        guildid: message.guild.id,
-        user: user.user.id,
+        guildId: message.guild.id,
+        userId: user.user.id,
         roles: [user.roles.cache.map(role => role.id)],
-        reason: "Muted for reaching 4 strikes!"
+        until: Date.now() + ms("6 hours"),
+        reason: "Muted for reaching 4 normal warnings!"
       })
       data.save()
 
@@ -246,80 +183,27 @@ module.exports = {
       })
 
       data2.save()
-
-      user.roles.set(["795353284042293319x"])
+      user.roles.set([`${client.server.mutedRole}`])
 
       let warndm = new MessageEmbed()
-        .setAuthor(client.user.username, client.user.displayAvatarURL({ dynamic: true }))
+        .setAuthor({ name: `${client.user.username}`, iconURL: client.user.displayAvatarURL() })
         .setTitle(`You've been Muted in ${message.guild.name}`)
         .addField("Punishment ID", `${data2._id}`, true)
         .addField("Duration", "6 hours", true)
         .addField("Reason", "Reaching 4 strikes", false)
         .setColor(`${client.color.modDm}`)
         .setTimestamp()
-      user.send({ embeds: [warndm] }).catch(e => { return })
+      user.send({ embeds: [warndm] }).catch(() => { return })
 
-      const warns2 = new MessageEmbed()
-        .setAuthor(`Automatic Actions`, `${client.user.displayAvatarURL()}`)
-        .setColor(`${client.color.mute}`)
-        .setTitle("➜ 6 Hours Of Mute")
-        .addField("User Mention", `• ${user.user}`, true)
-        .addField("User Tag", `• ${user.user.tag}`, true)
-        .addField("User ID", `• ${user.user.id}`, true)
-        .addField("Reason", `Reached 4 normal strikes!`)
-        .setFooter(`ID: ${data2._id}`)
-
-      client.webhook.autoaction.send({ embeds: [warns2] })
-
-
-      setTimeout(async () => {
-
-        const findmember = message.guild.members.cache.get(`${user.user.id}`)
-
-        if (findmember) {
-
-          db.findOne({ guildid: message.guild.id, user: user.user.id }, async (err, data) => {
-            if (err) throw err;
-            if (data) {
-
-              data.roles.map((w, i) => user.roles.set(w))
-              await db.findOneAndDelete({ user: user.user.id, guildid: message.guild.id })
-
-            }
-          })
-
-
-        } else if (!findmember) {
-
-          const leftroles = require("../../models/LeftMembers.js")
-
-          db.findOne({ guildid: message.guild.id, user: user.user.id }, async (err, data) => {
-            if (err) throw err;
-            if (data) {
-
-              leftroles.findOneAndUpdate({ guildid: message.guild.id, user: `${user.user.id}` }, { $set: { roles: [data.roles.map(e => e)] } }, async (data, err) => { })
-              await db.findOneAndDelete({ user: user.user.id, guildid: message.guild.id })
-
-            }
-          })
-        }
-
-        const warns2 = new MessageEmbed()
-          .setAuthor(`Automatic Actions`, `${client.user.displayAvatarURL()}`)
-          .setColor(`${client.color.unmute}`)
-          .setTitle("Unmuted From Tempmute")
-          .addField("User", `• ${client.users.fetch(`${user.user.id}`) || "I couldn't find them!"}`, true)
-          .addField("User Tag", `• ${(await client.users.fetch(`${user.user.id}`)).tag || "I couldn't find them!"}`, true)
-          .addField("User ID", `• ${(await client.users.fetch(`${user.user.id}`)).id || "I couldn't find them!"}`, true)
-          .addField("Reason", `Umuted After 2 hours of mute (reaching 4 strikes)`)
-
-        client.webhook.autoaction.send({ embeds: [warns2] })
-
-      }, 21600000) // 6 hours
+      client.log.autoAction({
+        type: "6 hours of mute",
+        color: "MUTE",
+        user: `${user.user.id}`,
+        reason: `Reaching 4 normal warnings`
+      });
 
 
     } else if (numberofwarns.length == 6) {
-
 
       const data2 = new warnModel({
         type: "Ban",
@@ -332,33 +216,33 @@ module.exports = {
       })
       data2.save()
 
+      const row2 = new MessageActionRow().addComponents(
+        new MessageButton()
+          .setLabel("Appeal")
+          .setStyle("LINK")
+          .setURL(`${client.server.appeal}`)
+      )
+
       let warndm = new MessageEmbed()
-        .setAuthor(client.user.username, client.user.displayAvatarURL({ dynamic: true }))
+        .setAuthor({ name: `${client.user.username}`, iconURL: client.user.displayAvatarURL() })
         .setTitle(`You've been Banned from ${message.guild.name}`)
         .addField("Punishment ID", `${data2._id}`, true)
         .addField("Reason", "Reaching 6 strikes", false)
         .setColor(`${client.color.modDm}`)
         .setTimestamp()
-      user.send({ embeds: [warndm] }).catch(e => { return })
+      user.send({ embeds: [warndm], components: [row2] }).catch(() => { })
 
       user.ban({
         reason: "Reaching 6 stikes!"
       })
 
-      const warns2 = new MessageEmbed()
-        .setAuthor(`Automatic Actions`, `${client.user.displayAvatarURL()}`)
-        .setColor(`${client.color.ban}`)
-        .setTitle("➜ Ban")
-        .addField("User Mention", `• ${user.user}`, true)
-        .addField("User Tag", `• ${user.user.tag}`, true)
-        .addField("User ID", `• ${user.user.id}`, true)
-        .addField("Reason", `Reached 6 normal strikes!`)
-        .setFooter(`ID: ${data2._id}`)
-
-      client.webhook.autoaction.send({ embeds: [warns2] })
+      client.log.autoAction({
+        type: "Ban",
+        color: "BAN",
+        user: `${user.user.id}`,
+        reason: `Reaching 6 normal warnings`
+      });
 
     }
-
-
   },
 };
