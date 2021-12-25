@@ -34,6 +34,7 @@ module.exports = {
 
                 data.roles.map((w) => user.roles.set(w))
                 await data.delete();
+                await user.timeout(null, "Unmute by a moderator")
 
                 let mue = new MessageEmbed()
                     .setDescription(`${user.user} has been **unmuted**`)
