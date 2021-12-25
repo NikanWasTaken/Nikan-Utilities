@@ -188,7 +188,7 @@ module.exports = {
       let userID = interaction.options.getString("user-id")
       let reason = interaction.options.getString("reason") || "No reason provided"
 
-      interaction.guild.bans.fetch().then((bans) => {
+      interaction.guild.bans.fetch().then(async (bans) => {
         let BannedUser = bans.find(b => b.user.id == userID)
 
         const noMemberFound = new MessageEmbed()

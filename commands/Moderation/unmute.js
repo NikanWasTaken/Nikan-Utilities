@@ -28,7 +28,7 @@ module.exports = {
                 client.delete.message(message, msg)
             })
 
-        db.findOne({ guildId: message.guild.id, userId: user.user.id }, async (err, data) => {
+        db.findOne({ guildId: message.guildId, userId: user.user.id }, async (err, data) => {
             if (err) throw err;
             if (data) {
 

@@ -61,9 +61,9 @@ client.on("messageCreate", async (message) => {
 
     // Expiring member's mutes
     const data = await Roles.find({ guildId: message?.guild?.id });
-    const finaldata = (await data)?.filter(c => Date.now() > c.until);
+    const finaldataMutes = (await data)?.filter(c => Date.now() > c.until);
 
-    finaldata.forEach((data) => {
+    finaldataMutes.forEach((data) => {
 
         const findmember = message?.guild?.members?.cache?.get(`${data?.userId}`);
 
