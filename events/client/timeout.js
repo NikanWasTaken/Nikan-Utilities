@@ -3,14 +3,14 @@ const Roles = require("../../models/MemberRoles.js");
 const leftRoles = require("../../models/LeftMembers.js");
 
 
-client.on("typingStart", async (typing) => {
+client.on("messageCreate", async (message) => {
 
-    const data = await Roles.find({ guildId: typing?.guild?.id });
+    const data = await Roles.find({ guildId: message?.guild?.id });
     const finaldata = (await data)?.filter(c => Date.now() > c.until);
 
     finaldata.forEach((data) => {
 
-        const findmember = typing?.guild?.members?.cache?.get(`${data?.userId}`);
+        const findmember = message?.guild?.members?.cache?.get(`${data?.userId}`);
 
         client.log.autoAction({
             type: "Unmute",
@@ -26,7 +26,7 @@ client.on("typingStart", async (typing) => {
 
         } else if (!findmember) {
 
-            leftRoles.findOneAndUpdate({ guildid: typing?.guild?.id, user: `${data?.userId}` }, { $set: { roles: [data.roles.map(e => e)] } })
+            leftRoles.findOneAndUpdate({ guildid: message?.guild?.id, user: `${data?.userId}` }, { $set: { roles: [data.roles.map(e => e)] } })
             data.delete()
 
         }
