@@ -43,6 +43,16 @@ module.exports = {
       client.delete.message(message, msg);
     })
 
+    if (!message.guild.roles.cache.get(`${client.server.mutedRole}`)) {
+      const Server = client.guilds.cache.get(`${client.server.id}`);
+      const embed = new MessageEmbed()
+        .setDescription(`I couldn't find the muted role! Are you running the command in [${Server.name}](${client.server.invite})?`)
+        .setColor("RED")
+      return message.reply({ embeds: [embed] }).then((msg) => {
+        client.delete.message(message, msg);
+      })
+    };
+
     if (user.roles.cache.some(role => role.id === `${client.server.mutedRole}`)) {
 
       const embed = new MessageEmbed()
@@ -51,7 +61,6 @@ module.exports = {
       return message.reply({ embeds: [embed] }).then((msg) => {
         client.delete.message(message, msg);
       })
-
     };
 
     if (ms(time) === undefined) {
@@ -64,15 +73,14 @@ module.exports = {
       })
     };
 
-    if (!message.guild.roles.cache.get(`${client.server.mutedRole}`)) {
-      const Server = client.guilds.cache.get(`${client.server.id}`);
+    if (ms(time) > 2332800000) {
+
       const embed = new MessageEmbed()
-        .setDescription(`I couldn't find the muted role! Are you running the command in [${Server.name}](${client.server.invite})?`)
+        .setDescription(`You can't mute users for more than 27 days!`)
         .setColor("RED")
       return message.reply({ embeds: [embed] }).then((msg) => {
         client.delete.message(message, msg);
       })
-
     };
 
     const duration = ms(time)
