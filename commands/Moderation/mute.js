@@ -60,7 +60,7 @@ module.exports = {
         .setDescription(`I couldn't find out the duration of this mute!`)
         .setColor("RED")
       return message.reply({ embeds: [embed] }).then((msg) => {
-        client.delete(message, msg);
+        client.delete.message(message, msg);
       })
     };
 
@@ -70,7 +70,7 @@ module.exports = {
         .setDescription(`I couldn't find the muted role! Are you running the command in [${Server.name}](${client.server.invite})?`)
         .setColor("RED")
       return message.reply({ embeds: [embed] }).then((msg) => {
-        client.delete(message, msg);
+        client.delete.message(message, msg);
       })
 
     };
