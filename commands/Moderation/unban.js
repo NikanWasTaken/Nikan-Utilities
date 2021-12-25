@@ -1,5 +1,6 @@
 const { MessageEmbed, Client, Message } = require('discord.js')
 const warnModel = require("../../models/Punishments.js")
+const ms = require("ms");
 
 module.exports = {
   name: 'unban',

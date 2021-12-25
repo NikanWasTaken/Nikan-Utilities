@@ -5,7 +5,7 @@ const SBchannelId = "868358834052296724";
 
 
 
-client.on('messageReactionAdd', async (reaction, user) => {
+client.on('messageReactionAdd', async (reaction) => {
 
     const starBoardChannel = client.channels.cache.get(SBchannelId)
 

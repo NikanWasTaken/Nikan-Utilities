@@ -122,7 +122,7 @@ module.exports = {
       .addField("Punishment ID", `${data2._id}`, true)
       .addField("Duration", `${ms(duration, { long: true })}`, true)
       .addField("Reason", `${reason}`, false)
-    user.send({ embeds: [mm] }).catch(e => { return })
+    user.send({ embeds: [mm] }).catch(() => { return })
 
 
     client.log.action({
@@ -134,7 +134,6 @@ module.exports = {
       id: `${data2._id}`,
       url: `https://discord.com/channels/${message.guildId}/${message.channelId}/${msg.id}`
     })
-
 
   }
 }

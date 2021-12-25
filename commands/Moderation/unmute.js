@@ -23,22 +23,23 @@ module.exports = {
         let erm = new MessageEmbed()
             .setDescription("This user isn't in this guild!")
             .setColor(`RED`)
-        if (!user) return message.reply({ embeds: [erm] }).then((msg) => {
-            client.delete.message(message, msg)
-        })
+        if (!user) return message.reply({ embeds: [erm] })
+            .then((msg) => {
+                client.delete.message(message, msg)
+            })
 
-        db.findOne({ guildid: message.guild.id, user: user.user.id }, async (err, data) => {
+        db.findOne({ guildId: message.guild.id, userId: user.user.id }, async (err, data) => {
             if (err) throw err;
-
             if (data) {
 
-                data.roles.map((w, i) => user.roles.set(w))
-                await db.findOneAndDelete({ user: user.user.id, guildid: message.guild.id })
+                data.roles.map((w) => user.roles.set(w))
+                await data.delete();
 
                 let mue = new MessageEmbed()
                     .setDescription(`${user.user} has been **unmuted**`)
                     .setColor(`${client.color.moderation}`)
-                let msg = await message.channel.send({ embeds: [mue] }).then(message.delete())
+                let msg = await message.channel.send({ embeds: [mue] })
+                    .then(message.delete())
 
                 client.log.action({
                     type: "Unmute",
