@@ -62,11 +62,20 @@ module.exports = {
       return message.reply({ embeds: [embed] }).then((msg) => {
         client.delete(message, msg);
       })
+    };
+
+    if (!message.guild.roles.cache.get(`${client.server.mutedRole}`)) {
+      const Server = client.guilds.cache.get(`${client.server.id}`);
+      const embed = new MessageEmbed()
+        .setDescription(`I couldn't find the muted role! Are you running the command in [${Server.name}](${client.server.invite})?`)
+        .setColor("RED")
+      return message.reply({ embeds: [embed] }).then((msg) => {
+        client.delete(message, msg);
+      })
 
     };
 
     const duration = ms(time)
-
     const data = new db({
       guildId: message.guildId,
       userId: user.user.id,
