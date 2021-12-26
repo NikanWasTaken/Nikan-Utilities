@@ -13,6 +13,7 @@ const client = new Client({
         },
         */
     intents: 32767,
+    restTimeOffset: 300,
     partials: ['CHANNEL', 'MESSAGE', 'REACTION', 'GUILD_MEMBER', 'USER'],
     allowedMentions: {
         repliedUser: false,
