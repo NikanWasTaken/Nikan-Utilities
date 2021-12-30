@@ -4,7 +4,6 @@ const { WebhookClient, Collection } = require("discord.js")
  */
 module.exports = async (client) => {
 
-
     // colors
     client.color = {
         success: "#65b385",
