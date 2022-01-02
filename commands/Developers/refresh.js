@@ -122,7 +122,7 @@ module.exports = {
 
         })
 
-        collector.on("end", async (i) => {
+        collector.on("end", async () => {
             msg.delete()
         })
 
