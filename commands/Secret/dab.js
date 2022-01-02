@@ -99,45 +99,5 @@ module.exports = {
                         })
                 }, 1000);
             })
-        // .then(() => {
-        //     setTimeout(() => {
-        //         msg.edit({ content: two })
-        //     }, 1000);
-        // })
-        // .then(() => {
-        //     setTimeout(() => {
-        //         msg.edit({ content: one })
-        //     }, 1000);
-        // })
-        // .then(() => {
-        //     setTimeout(() => {
-        //         msg.edit({ content: two })
-        //     }, 1000);
-        // })
-        // .then(() => {
-        //     setTimeout(() => {
-        //         msg.edit({ content: one })
-        //     }, 1000);
-        // })
-        // .then(() => {
-        //     setTimeout(() => {
-        //         msg.edit({ content: two })
-        //     }, 1000);
-        // })
-        // .then(() => {
-        //     setTimeout(() => {
-        //         msg.edit({ content: one })
-        //     }, 1000);
-        // })
-        // .then(() => {
-        //     setTimeout(() => {
-        //         msg.edit({ content: two })
-        //     }, 1000);
-        // })
-        // .then(() => {
-        //     setTimeout(() => {
-        //         msg.edit({ content: one })
-        //     }, 1000);
-        // })
     }
 }
