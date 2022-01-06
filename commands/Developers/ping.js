@@ -18,9 +18,9 @@ module.exports = {
 
         let embed = new MessageEmbed()
             .setAuthor({ name: `${client.user.username}`, iconURL: client.user.displayAvatarURL() })
-            .addField("<:ping:894097855759912970> Clinet", `• \`${Date.now() - message.createdTimestamp}ms\``, true)
-            .addField("<:ping:894097855759912970> API", `• \`${Math.round(client.ws.ping)}ms\``, true)
-            .addField("🕐 Uptime", `${client.convert.time(client.uptime)}`)
+            .addField("<:ping:894097855759912970> Bot", `• \`${Date.now() - message.createdTimestamp}ms\``, true)
+            .addField("<:ping:894097855759912970> Operate", `• \`${Math.round(client.ws.ping)}ms\``, true)
+            .addField("🕐 Uptime", `${client.convert.time(process.uptime())}`)
             .setColor(`${client.color.cool}`)
 
         message.reply({ embeds: [embed] })

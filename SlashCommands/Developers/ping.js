@@ -20,7 +20,7 @@ module.exports = {
             .setAuthor({ name: `${client.user.username}`, iconURL: client.user.displayAvatarURL() })
             .addField("<:ping:894097855759912970> Client", `• \`${Date.now() - interaction.createdTimestamp}ms\``, true)
             .addField("<:ping:894097855759912970> API", `• \`${Math.round(client.ws.ping)}ms\``, true)
-            .addField("🕐 Uptime", `${client.convert.time(client.uptime)}`)
+            .addField("🕐 Uptime", `${client.convert.time(process.uptime())}`)
             .setColor(`${client.color.cool}`)
 
         interaction.followUp({ embeds: [embed] })
