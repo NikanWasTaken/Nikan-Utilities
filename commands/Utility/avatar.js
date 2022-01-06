@@ -19,7 +19,7 @@ module.exports = {
 
         const user = message.mentions.users.first() || await client.users.fetch(`${args[0] || message.author.id}`)
 
-        const row = new MessageActionRow().addComponents(
+        const rowNoNitro = new MessageActionRow().addComponents(
             new MessageSelectMenu()
                 .setCustomId("avatar")
                 .setPlaceholder("Please select a format!")
@@ -43,6 +43,34 @@ module.exports = {
                             description: `${user.username} avatar in .jpg format`,
                             emoji: "🖼️"
                         },
+                        {
+                            label: "Jpeg",
+                            value: "jpeg",
+                            description: `${user.username} avatar in .jpeg format`,
+                            emoji: "🖼️"
+                        },
+                    ]
+                )
+        )
+
+        const rowNitro = new MessageActionRow().addComponents(
+            new MessageSelectMenu()
+                .setCustomId("avatar")
+                .setPlaceholder("Please select a format!")
+                .setOptions(
+                    [
+                        {
+                            label: "Web Page",
+                            value: "webp",
+                            description: `${user.username} avatar in .webp format`,
+                            emoji: "🖼️"
+                        },
+                        {
+                            label: "Gif",
+                            value: "gif",
+                            description: `${user.username} avatar in .gif format`,
+                            emoji: "🖼️"
+                        },
                     ]
                 )
         )
@@ -55,23 +83,11 @@ module.exports = {
                 .setOptions(
                     [
                         {
-                            label: "Web Page",
-                            value: "webp",
-                            description: `${user.username} avatar in .webp format`,
-                            emoji: "🖼️"
-                        },
-                        {
-                            label: "Png",
-                            value: "png",
-                            description: `${user.username} avatar in .png format`,
-                            emoji: "🖼️"
-                        },
-                        {
-                            label: "Jpg",
-                            value: "jpg",
-                            description: `${user.username} avatar in .jpg format`,
-                            emoji: "🖼️"
-                        },
+                            label: "Timed Out!",
+                            value: "timeout",
+                            description: `This select menu has timed out!`,
+                            emoji: "❌"
+                        }
                     ]
                 )
         )
@@ -83,7 +99,9 @@ module.exports = {
             .setURL(`${client.server.invite}`)
             .setImage(user.displayAvatarURL({ dynamic: true, size: 1024 }))
             .setFooter(`Selected Format: .webp`)
-        let msg = await message.reply({ embeds: [avatarEmbed], components: [row] })
+
+        const checkForNitro = user.displayAvatarURL({ dynamic: true }).endsWith(".gif") ? rowNitro : rowNoNitro;
+        let msg = await message.reply({ embeds: [avatarEmbed], components: [checkForNitro] })
 
         const collector = msg.createMessageComponentCollector({
             componentType: "SELECT_MENU",
@@ -97,8 +115,8 @@ module.exports = {
                 switch (collected.values[0]) {
                     case "webp":
                         const embed1 = avatarEmbed
-                            .setImage(`${user.displayAvatarURL({ size: 1024, dynamic: true })}`)
-                            .setDescription(`[Click me to download this avatar!](${user.displayAvatarURL({ size: 1024, dynamic: true })})`)
+                            .setImage(`${user.displayAvatarURL({ size: 1024, format: 'webp' })}`)
+                            .setDescription(`[Click me to download this avatar!](${user.displayAvatarURL({ size: 1024, format: 'webp' })})`)
                             .setFooter("Selected Format: .webp");
                         msg.edit({ embeds: [embed1] })
                         collected.deferUpdate()
@@ -107,7 +125,7 @@ module.exports = {
                     case "png":
                         const embed2 = avatarEmbed
                             .setImage(`${user.displayAvatarURL({ size: 1024, format: 'png' })}`)
-                            .setDescription(`[Click me to download this avatar!](${user.displayAvatarURL({ size: 1024, dynamic: true })})`)
+                            .setDescription(`[Click me to download this avatar!](${user.displayAvatarURL({ size: 1024, format: 'png' })})`)
                             .setFooter("Selected Format: .png");
                         msg.edit({ embeds: [embed2] })
                         collected.deferUpdate()
@@ -116,9 +134,27 @@ module.exports = {
                     case "jpg":
                         const embed3 = avatarEmbed
                             .setImage(`${user.displayAvatarURL({ size: 1024, format: 'jpg' })}`)
-                            .setDescription(`[Click me to download this avatar!](${user.displayAvatarURL({ size: 1024, dynamic: true })})`)
+                            .setDescription(`[Click me to download this avatar!](${user.displayAvatarURL({ size: 1024, format: 'jpg' })})`)
                             .setFooter("Selected Format: .jpg");
                         msg.edit({ embeds: [embed3] })
+                        collected.deferUpdate()
+                        break;
+
+                    case "jpeg":
+                        const embed4 = avatarEmbed
+                            .setImage(`${user.displayAvatarURL({ size: 1024, format: 'jpeg' })}`)
+                            .setDescription(`[Click me to download this avatar!](${user.displayAvatarURL({ size: 1024, format: 'jpeg' })})`)
+                            .setFooter("Selected Format: .jpeg");
+                        msg.edit({ embeds: [embed4] })
+                        collected.deferUpdate()
+                        break;
+
+                    case "gif":
+                        const embed5 = avatarEmbed
+                            .setImage(`${user.displayAvatarURL({ size: 1024, format: 'gif', dynamic: true })}`)
+                            .setDescription(`[Click me to download this avatar!](${user.displayAvatarURL({ size: 1024, dynamic: true, format: "gif" })})`)
+                            .setFooter("Selected Format: .gif");
+                        msg.edit({ embeds: [embed5] })
                         collected.deferUpdate()
                         break;
 
