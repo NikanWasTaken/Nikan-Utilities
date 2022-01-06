@@ -18,9 +18,8 @@ module.exports = {
 
         const code = args.join(' ');
         if (!code) return message.reply({ embeds: [wrongUsage] });
+
         let danger = false;
-
-
         if (
             code?.includes(".destroy") ||
             code?.includes(".exit") ||
@@ -54,7 +53,7 @@ module.exports = {
 
         try {
 
-            if (danger = false) {
+            if (danger === false) {
 
                 let evaled = eval(code);
 
@@ -81,7 +80,7 @@ module.exports = {
 
                 }
 
-            } else if (danger = true) {
+            } else if (danger === true) {
 
                 const embedDanger = new MessageEmbed()
                     .setAuthor({ name: `${client.user.username}`, iconURL: `${client.user.displayAvatarURL()}` })
