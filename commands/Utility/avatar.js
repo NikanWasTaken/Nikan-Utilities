@@ -112,6 +112,9 @@ module.exports = {
         collector.on('collect', (collected) => {
 
             if (collected.customId === "avatar") {
+
+                if (collected.user.id !== message.author.id) return collected.reply({ content: "This menu isn't for you!", ephemeral: true })
+
                 switch (collected.values[0]) {
                     case "webp":
                         const embed1 = avatarEmbed
