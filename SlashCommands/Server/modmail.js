@@ -137,7 +137,7 @@ module.exports = {
                         .setAuthor(`${client.guilds.cache.get(serverId).name}`, `${interaction.guild.iconURL({ dynamic: true })}`)
                         .setTitle("Thread Deletion Confimred").setURL(`${client.server.invite}`)
                         .setColor(`${client.color.success}`)
-                        .setDescription(`${client.emoji.loading} Saving the transcript...`)
+                        .setDescription(`${client.emoji.load} Saving the transcript...`)
                         .setFooter(`${client.user.username}`, `${client.user.displayAvatarURL()}`)
                         .setTimestamp()
 

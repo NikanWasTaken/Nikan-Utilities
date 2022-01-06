@@ -1,4 +1,4 @@
-const { WebhookClient, Collection } = require("discord.js")
+const { Collection } = require("discord.js")
 /**
  * @param {Client} client
  */
@@ -31,9 +31,8 @@ module.exports = async (client) => {
     // emoijs
     client.emoji = {
         success: "<:success:920918055813533746> ",
-        loading: "<a:NUloading:894087871626084352>",
-        failed: "<:failed:920917857670422599> ",
-        bot: "<:NUbot:875668173419073546>",
+        load: "<a:NUloading:894087871626084352>",
+        fail: "<:failed:920917857670422599> ",
     }
 
     // Nikan's World
@@ -44,38 +43,10 @@ module.exports = async (client) => {
         appeal: "https://forms.gle/dW8RGLA65ycC4vcM7"
     }
 
-    // Webhooks
-    client.webhook = {
-        moderation: new WebhookClient({ id: `910100385501433887`, token: `WDxlbcSouTKN5dKX65UaNvajh64Wb2OsXiKtDdmZgyS6Y9VtO22kD3E6YxrpgYMkVi5y` }),
-        automod: new WebhookClient({ id: `910104675716571136`, token: `mJQ3F73THOBgvp4E5QHQhJfL28k581qM1IDW88ctLyGLgozKF9U26ygQ_ahwIq4tHwpG` }),
-        autoaction: new WebhookClient({ id: `917408937756741662`, token: `92dznvZixjZrgHLBYgERwS1ngRWcDSdldvhaaNlPpjHYyBDuwl6TbNyU4InU9nqTJIw8` }),
-    }
-
     // Capatilize first latter
     client.cap = function capatilize(string) {
         if (!string) throw new Error("You need to provide a string for capatilize function to work!");
         return `${string[0].toUpperCase()}${string.slice(1).toLowerCase()}`
-    }
-
-    // Delete Functions
-    let deleteMessageFunction = function (message, msg) {
-
-        setTimeout(() => {
-            message?.delete()
-            msg?.delete()
-        }, 5000)
-    }
-
-    let deleteInteractionFunction = function (interaction) {
-
-        setTimeout(() => {
-            interaction?.deleteReply()
-        }, 5000)
-    }
-
-    client.delete = {
-        message: deleteMessageFunction,
-        interaction: deleteInteractionFunction
     }
 
 

@@ -353,24 +353,15 @@ module.exports = {
                 await interaction.deleteReply()
                 let msg = await interaction.channel.send({ embeds: [embed] })
 
-                const log = new MessageEmbed()
-                    .setAuthor(`${client.user.username}`, `${client.user.displayAvatarURL()}`)
-                    .setTitle(`➜ Punishment Removal`).setURL(`${client.server.invite}`)
-                    .setColor(`${client.color.remove}`)
-                    .addField("➜ User", `• ${user}\n• ${user.tag}\n• ${user.id}`, true)
-                    .addField("➜ Moderator", `• ${interaction.user}\n• ${interaction.user.tag}\n• ${interaction.user.id}`, true)
-                    .addField("➜ Punishment", `• ID: ${data?._id}\n• Type: ${data?.type}\n• Reason: ${data?.reason}\n• Moderator: ${(await client.users.fetch(`${data?.moderatorId}`))?.tag || "I can't find them."}`, false)
-
-                const rowlog = new MessageActionRow().addComponents(
-
-                    new MessageButton()
-                        .setLabel("Jump to the action")
-                        .setStyle("LINK")
-                        .setURL(`https://discord.com/channels/${msg.guild.id}/${msg.channel.id}/${msg.id}`)
-
-                )
-
-                client.webhook.moderation.send({ embeds: [log], components: [rowlog] })
+                client.log.action({
+                    type: "Punishment Remove",
+                    color: "DELETE",
+                    user: `${user.id}`,
+                    moderator: `${interaction.user.id}`,
+                    reason: `• ID: ${data?._id}\n• Type: ${data?.type}\n• Reason: ${data?.reason}\n• Moderator: ${(await client.users.fetch(`${data?.moderatorId}`))?.tag || "I can't find them."}`,
+                    id: `${data._id}`,
+                    url: `https://discord.com/channels/${interaction.guildId}/${interaction.channelId}/${msg.id}`
+                })
 
             } catch (error) {
 
@@ -378,7 +369,7 @@ module.exports = {
                     .setDescription(`A punishment with that ID doesn't exist in the database!`)
                     .setColor(`RED`)
 
-                return interaction.followUp({ embeds: [embed] }).then((msg) => {
+                return interaction.followUp({ embeds: [embed] }).then(() => {
                     setTimeout(() => {
                         interaction.deleteReply()
                     }, 5000)

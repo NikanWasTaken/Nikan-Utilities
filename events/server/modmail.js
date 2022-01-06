@@ -69,7 +69,7 @@ client.on("messageCreate", async (message) => {
                     .catch(() => {
                         return message.channel.send({ content: "This person has closed his dms, couldn't dm them!" }),
                             message.reactions.removeAll(),
-                            message.react(`${client.emoji.failed}`)
+                            message.react(`${client.emoji.fail}`)
                     })
             await message.react(`${client.emoji.success}`)
 

@@ -14,17 +14,13 @@ client.on("messageCreate", async (message) => {
 
     finaldataAutomod.forEach(async (data) => {
 
-        const embed = new MessageEmbed()
-            .setAuthor({ name: "Automatic Actions", iconURL: client.user.displayAvatarURL() })
-            .setColor(`${client.color.expire}`)
-            .setTitle(`➜ Punishment Expired`).setURL(`${client.server.invite}`)
-            .addField("User", `• ${await client.users.fetch(`${data?.userId}`) || "I couldn't find them!"}`, true)
-            .addField("User Tag", `• ${(await client.users.fetch(`${data?.userId}`)).tag || "I couldn't find them!"}`, true)
-            .addField("User ID", `• ${(await client.users.fetch(`${data?.userId}`)).id || "I couldn't find them!"}`, true)
-            .addField("Reason", `${data?.type} auto moderation warn expired!`)
-            .setFooter(`ID: ${data?._id}`)
+        client.log.autoAction({
+            type: "Punishment Expire",
+            color: "EXPIRE",
+            user: `${data?.userId}`,
+            reason: `${data?.type} auto moderation warn expired!`
+        });
 
-        client.webhook.autoaction.send({ embeds: [embed] })
         data.delete()
     })
 
@@ -35,17 +31,13 @@ client.on("messageCreate", async (message) => {
 
     finaldataNormal.forEach(async (data) => {
 
-        const embed = new MessageEmbed()
-            .setAuthor({ name: "Automatic Actions", iconURL: client.user.displayAvatarURL() })
-            .setColor(`${client.color.expire}`)
-            .setTitle(`➜ Punishment Expired`).setURL(`${client.server.invite}`)
-            .addField("User", `• ${await client.users.fetch(`${data?.userId}`) || "I couldn't find them!"}`, true)
-            .addField("User Tag", `• ${(await client.users.fetch(`${data?.userId}`)).tag || "I couldn't find them!"}`, true)
-            .addField("User ID", `• ${(await client.users.fetch(`${data?.userId}`)).id || "I couldn't find them!"}`, true)
-            .addField("Reason", `Normal ${data?.type} expired!`)
-            .setFooter(`ID: ${data?._id}`)
+        client.log.autoAction({
+            type: "Punishment Expire",
+            color: "EXPIRE",
+            user: `${data?.userId}`,
+            reason: `Normal ${data?.type} expired!`
+        });
 
-        client.webhook.autoaction.send({ embeds: [embed] })
         data.delete()
     })
 

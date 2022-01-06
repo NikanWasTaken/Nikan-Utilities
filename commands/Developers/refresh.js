@@ -60,7 +60,7 @@ module.exports = {
                 const refresh = new MessageEmbed()
                     .setAuthor(`${client.user.username}`, `${client.user.displayAvatarURL()}`)
                     .setColor(`${client.color.loading}`)
-                    .addField(`Refreshing`, `${client.emoji.loading} Refreshing the client...`)
+                    .addField(`Refreshing`, `${client.emoji.load} Refreshing the client...`)
 
                 let msg = await message.channel.send({ embeds: [refresh] })
                 await client.destroy()

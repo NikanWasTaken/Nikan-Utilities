@@ -28,8 +28,9 @@ require("./handler")(client);
 
 // exporting other functions
 require("./functions/client.js")(client); // client functions
-require("./functions/send.js")(client); // this.send() functions
 require("./functions/embeds.js")(client) // embeds
-require("./functions/log.js")(client)
+require("./functions/log.js")(client) // log embeds
+require("./functions/delete.js")(client) // Delete functions 
+require("./functions/convert.js")(client) // A function that converts timestamps to dates and times
 
 client.login(`${process.env.TOKEN}`);

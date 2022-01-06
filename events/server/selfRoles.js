@@ -2,7 +2,7 @@ const { MessageEmbed, MessageActionRow, MessageButton } = require("discord.js");
 const client = require("../../index.js")
 
 const add = client.emoji.success;
-const remove = client.emoji.failed;
+const remove = client.emoji.fail;
 
 const giveaways = '831754757932580895';
 const events = '880401182131114024';
