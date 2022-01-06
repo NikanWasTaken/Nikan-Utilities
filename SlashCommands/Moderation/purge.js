@@ -46,41 +46,40 @@ module.exports = {
         })
 
 
-    if (user) {
+    try {
 
-      const messages = interaction.channel.messages.fetch({ limit: clear })
-      const filtered = (await messages).filter(m => m.author.id === user.id)
+      if (user) {
 
-      await interaction.channel.bulkDelete(filtered)
+        const messages = interaction.channel.messages.fetch({ limit: clear })
+        const filtered = (await messages).filter(m => m.author.id === user.id)
 
-      let embeda = new MessageEmbed()
-        .setDescription(`Cleared \`${clear}\` messages from \`${user.user.tag}\``)
-        .setColor(`${client.color.moderation}`)
+        await interaction.channel.bulkDelete(filtered)
 
-      interaction.channel.send({ embeds: [embeda] })
-        .then((msg) => {
-          setTimeout(() => {
-            msg.delete(), message.delete()
-          }, 5000)
-        })
+        let embeda = new MessageEmbed()
+          .setDescription(`Cleared \`${clear}\` messages from \`${user.user.tag}\``)
+          .setColor(`${client.color.moderation}`)
 
-
-    } else if (!user) {
-
-      let msgs = message.channel.messages.fetch({ limit: clear })
-      message.channel.bulkDelete((await msgs))
-
-      let embeda = new MessageEmbed()
-        .setDescription(`Cleared ${clear} messages in ${interaction.channel}`)
-        .setColor(`${client.color.moderation}`)
-
-      interaction.channel.send({ embeds: [embeda] })
-        .then((msg) => { setTimeout(() => { msg.delete(), message.delete() }, 5000) })
+        interaction.channel.send({ embeds: [embeda] })
+          .then((msg) => {
+            setTimeout(() => {
+              msg.delete(), message.delete()
+            }, 5000)
+          })
 
 
-    }
+      } else if (!user) {
 
+        let msgs = message.channel.messages.fetch({ limit: clear })
+        message.channel.bulkDelete((await msgs))
 
+        let embeda = new MessageEmbed()
+          .setDescription(`Cleared ${clear} messages in ${interaction.channel}`)
+          .setColor(`${client.color.moderation}`)
 
+        interaction.channel.send({ embeds: [embeda] })
+          .then((msg) => { setTimeout(() => { msg.delete(), message.delete() }, 5000) })
+
+      }
+    } catch (error) { }
   }
 }

@@ -43,6 +43,7 @@ client.on("threadCreate", async (t) => {
 
 client.on("messageCreate", async (message) => {
 
+
   if (message.content.includes(process.env.TOKEN) || message.content.includes(process.env.MONGOOSE)) {
 
     if (message.editable) {
@@ -58,15 +59,16 @@ client.on("messageCreate", async (message) => {
         .setDescription("Omg omg a secret ➜ || your mum ||").setColor("RED")
       return message.edit({ embeds: [embed], content: " ", components: [row] })
     } else if (!message.editable) {
-      if (!message.deletable) return
+      if (!message.deletable) return;
       return message.delete()
     }
   }
 
+
   // Client Mention Codes
 
   const clientMentionEmbed = new MessageEmbed()
-    .setAuthor(`${client.user.username}`, client.user.displayAvatarURL({ dynamic: true }))
+    .setAuthor({ name: `${client.user.username}`, iconURL: client.user.displayAvatarURL({ dynamic: true }) })
     .setDescription(
       [
         `👋 Hey I'm ${client.user.username}.`,
