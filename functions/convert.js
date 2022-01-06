@@ -28,7 +28,7 @@ module.exports = async (client) => {
         let finalDays = (parseInt(days) > 0 ? `**${days}** days •` : '');
         let finalHours = (parseInt(hours) === 0 && parseInt(days) === 0 ? '' : ` **${hours}** hours •`);
         let finalMinutes = (parseInt(minutes) === 0 && parseInt(hours) === 0 && parseInt(days) === 0 ? '' : ` **${minutes}** minutes `);
-        let finalSeconds = (parseInt(seconds) === 0 ? '' : `• **${seconds}** seconds`)
+        let finalSeconds = (parseInt(seconds) === 0 ? '' : parseInt(minutes) === 0 && parseInt(hours) === 0 && parseInt(days) === 0 ? `**${seconds}** seconds` : `• **${seconds}** seconds`)
         return finalDays + finalHours + finalMinutes + finalSeconds;
     }
 
