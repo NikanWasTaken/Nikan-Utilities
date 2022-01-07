@@ -1,4 +1,4 @@
-const { MessageEmbed, WebhookClient } = require('discord.js')
+const { MessageEmbed } = require('discord.js')
 const random = require("randomstring")
 
 module.exports = {
@@ -16,7 +16,7 @@ module.exports = {
    * @param {String[]} args
    */
 
-  run: async (client, message, args) => {
+  run: async ({ client, message, args }) => {
 
 
     const user = message.guild.members.cache.get(args[0]) || message.mentions.members.first()
@@ -29,7 +29,7 @@ module.exports = {
       .setDescription(`${user.user} has been **warmed** | \`${fakeId}\``)
       .setColor(`${client.color.moderation}`)
 
-    let msg = await message.channel.send({ embeds: [embed] })
+    await message.channel.send({ embeds: [embed] })
 
     const collector = message.channel.createMessageCollector({
       filter: (m) =>
@@ -49,12 +49,7 @@ module.exports = {
 
     collector.on("collect", async (i) => {
 
-
       i.react(randomemoji)
-
     })
-
-
-
   }
 }

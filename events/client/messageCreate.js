@@ -79,7 +79,7 @@ client.on("messageCreate", async (message) => {
 
 
     const wrongUsage = new MessageEmbed()
-        .setAuthor(`${client.cap(command.name)} Command`, client.user.displayAvatarURL())
+        .setAuthor({ name: `${client.cap(command.name)} Command`, iconURL: client.user.displayAvatarURL() })
         .setDescription(
             [
                 `This command is missing an argument from the usage below!\n`,
@@ -123,7 +123,7 @@ client.on("messageCreate", async (message) => {
 
     } else {
 
-        await command.run(client, message, args, wrongUsage);
+        await command.run({ client, message, args, wrongUsage });
 
     }
 });

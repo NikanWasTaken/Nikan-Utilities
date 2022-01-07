@@ -12,27 +12,16 @@ module.exports = async (client) => {
         invisible: "#2F3136",
         moderationRed: "#b3666c",
         moderation: "#dbca95", // last = #e6cc93 , halloween = #f29455
-        logGreen: "#85ef93",
-        logYellow: "#fae673",
-        logAqua: "#87a7ec",
-        logRed: "#db504c",
         modDm: "#f5d765",
         botBlue: "#3d81f5",
-        cool: "#905de3",
-        logs: "#f5d765",
-        mute: "#fae673",
-        ban: "#b3666c",
-        unmute: "#87a7ec",
-        remove: "#85ef93",
-        expire: "#905de3",
-        warn: "#f5d765",
+        serverPurple: "#905de3",
     }
 
     // emoijs
     client.emoji = {
-        success: "<:success:920918055813533746> ",
+        success: "<:success:920918055813533746>",
         load: "<a:NUloading:894087871626084352>",
-        fail: "<:failed:920917857670422599> ",
+        fail: "<:failed:920917857670422599>",
     }
 
     // Nikan's World

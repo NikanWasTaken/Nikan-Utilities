@@ -16,7 +16,7 @@ module.exports = {
      * @param {String[]} args
      */
 
-    run: async (client, message, args, wrongUsage) => {
+    run: async ({ message, args, wrongUsage }) => {
 
         var color = args[0]
 
@@ -44,8 +44,5 @@ module.exports = {
             .setImage(json.image_gradient, true)
             .setColor(json.hex)
         message.reply({ embeds: [embed] })
-
-
-
     }
 }

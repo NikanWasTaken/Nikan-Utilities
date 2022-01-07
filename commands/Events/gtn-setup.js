@@ -1,4 +1,4 @@
-const { MessageEmbed, Message, MessageActionRow, MessageButton } = require('discord.js')
+const { MessageEmbed, Message, MessageActionRow, MessageButton, Client } = require('discord.js')
 const database = require("../../models/guessTheN.js")
 
 module.exports = {
@@ -14,7 +14,7 @@ module.exports = {
      * @param {String[]} args
      */
 
-    run: async (client, message, args, wrongUsage) => {
+    run: async ({ client, message }) => {
 
 
         if (!message.member.roles.cache.get("880409157969256518"))

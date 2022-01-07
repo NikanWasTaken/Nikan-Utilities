@@ -59,7 +59,7 @@ client.on("interactionCreate", async (interaction) => {
           .setAuthor(`${interaction.guild.name}`, interaction.guild.iconURL({ dynamic: true }))
           .setTitle("Select a role using the buttons below to add or remove it")
           .setDescription("➜ Re-clicking a role that you already have will get it removed!\n\n** **")
-          .setColor(`${client.color.cool}`)
+          .setColor(`${client.color.serverPurple}`)
           .addFields(
             {
               name: "• Giveaways Ping",
@@ -118,7 +118,7 @@ client.on("interactionCreate", async (interaction) => {
           .setAuthor(`${interaction.guild.name}`, interaction.guild.iconURL({ dynamic: true }))
           .setTitle("Select a role using the buttons below to add or remove it")
           .setDescription("➜ Re-clicking a role that you already have will get it removed!")
-          .setColor(`${client.color.cool}`)
+          .setColor(`${client.color.serverPurple}`)
 
 
         interaction.reply({ embeds: [e2], components: [row3], ephemeral: true });

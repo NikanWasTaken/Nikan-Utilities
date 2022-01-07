@@ -1,4 +1,4 @@
-const { MessageEmbed, WebhookClient } = require('discord.js')
+const { MessageEmbed, Message, Client } = require('discord.js')
 
 module.exports = {
     name: 'suggest',
@@ -14,7 +14,7 @@ module.exports = {
      * @param {String[]} args
      */
 
-    run: async (client, message, args, wrongUsage) => {
+    run: async ({ client, message, args }) => {
 
         const suggestchannel = client.channels.cache.get("851317000868462633")
         const suggestion = args.join(" ")
@@ -27,7 +27,7 @@ module.exports = {
         message.delete()
 
         const embed = new MessageEmbed()
-            .setAuthor(`${message.author.tag}`, message.author.displayAvatarURL({ dynamic: true }))
+            .setAuthor({ name: `${message.author.tag}`, iconURL: message.author.displayAvatarURL({ dynamic: true }) })
             .setTitle("New Suggestion")
             .setURL(`${client.server.invite}`)
             .setColor("YELLOW")
@@ -42,8 +42,5 @@ module.exports = {
             msg.react("<a:NUdownvote:902915218353569802>")
 
         })
-
-
-
     }
 }

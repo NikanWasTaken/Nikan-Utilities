@@ -1,4 +1,4 @@
-const { MessageEmbed, Message } = require('discord.js')
+const { MessageEmbed, Message, Clinet } = require('discord.js')
 
 module.exports = {
     name: 'event-start',
@@ -14,7 +14,7 @@ module.exports = {
      * @param {String[]} args
      */
 
-    run: async (client, message, args, wrongUsage) => {
+    run: async ({ client, message }) => {
 
 
         var noChannel = new MessageEmbed()

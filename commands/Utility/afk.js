@@ -1,4 +1,4 @@
-const { MessageEmbed } = require('discord.js')
+const { MessageEmbed, Message, Client } = require('discord.js')
 
 module.exports = {
     name: 'afk',
@@ -14,7 +14,7 @@ module.exports = {
      * @param {String[]} args
      */
 
-    run: async (client, message, args) => {
+    run: async ({ client, message, args }) => {
 
         let reason = args.join(" ") || "AFK"
 
@@ -30,7 +30,7 @@ module.exports = {
             }, 5000)
         })
 
-        message.member.setNickname(`[AFK] ${message.author.username}`).catch(e => { return })
+        message.member.setNickname(`[AFK] ${message.author.username}`).catch(() => { return })
 
 
     }

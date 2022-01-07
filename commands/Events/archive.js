@@ -1,4 +1,4 @@
-const { Client, MessageEmbed, Message } = require('discord.js')
+const { Client, Message, MessageEmbed } = require('discord.js')
 
 module.exports = {
     name: 'event-archive',
@@ -13,7 +13,7 @@ module.exports = {
      * @param {String[]} args
      */
 
-    run: async (client, message, args, wrongUsage) => {
+    run: async ({ client, message }) => {
 
         var noChannel = new MessageEmbed()
             .setDescription(`You may only use this command in the threads created in the <#880401081497157643> channel.`)

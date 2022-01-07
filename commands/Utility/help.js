@@ -16,7 +16,7 @@ module.exports = {
    * @param {String[]} args
    */
 
-  run: async (client, message, args) => {
+  run: async ({ client, message, args }) => {
 
 
     if (!args.length) {
@@ -25,7 +25,7 @@ module.exports = {
       let moderation = client.commands.filter(c => c.category === "moderation" && c.visible !== false)
       let other = client.commands.filter(c => c.category !== "moderation" && c.visible !== false && c.category !== "Secret" && c.category !== "Events")
       let mainembed = new MessageEmbed()
-        .setAuthor(`${client.user.username}`, `${client.user.displayAvatarURL()}`)
+        .setAuthor({ name: `${client.user.username}`, iconURL: `${client.user.displayAvatarURL()}` })
         .setDescription(`[** Vote for ${client.guilds.cache.get(client.server.id).name}**](https://top.gg/servers/${client.server.id}) • [**Subreddit**](https://www.reddit.com/r/NikanWorld/) `)
         .addField(`**Moderation [${moderation.size}]**`, `${moderation.map(c => `\`${c.name}\``).join(" • ")}`)
         .addField(`**Other [${other.size}]**`, `${other.map(c => `\`${c.name}\``).join(" • ")}`)
@@ -111,7 +111,7 @@ module.exports = {
             if (collected.user.id !== message.author.id) return collected.reply({ content: "This is not your menu!", ephemeral: true })
 
             const no = new MessageEmbed()
-              .setAuthor(`${client.user.username}`, `${client.user.displayAvatarURL()}`)
+              .setAuthor({ name: `${client.user.username}`, iconURL: `${client.user.displayAvatarURL()}` })
               .setDescription("The FitnessGram™ Pacer Test is a multistage aerobic client.capacity test that progressively gets more difficult as it continues. The 20 meter pacer test will begin in 30 seconds. Line up at the start. The running speed starts slowly, but gets faster each minute after you hear this signal. [Beep] A single lap should be completed each time you hear this sound. Remember to run in a straight line, and run as long as possible. The second time you fail to complete a lap before the sound, your test is over.")
               .addField("** **", "Well, nice wasting your time reading that. Whoops, I forgot to say you need staff to see this page!")
               .setTimestamp()
@@ -119,7 +119,7 @@ module.exports = {
             if (!message.member.permissions.has("MANAGE_MESSAGES")) return collected.reply({ embeds: [no], ephemeral: true })
 
             const embed = new MessageEmbed()
-              .setAuthor(`${client.user.username}`, client.user.displayAvatarURL())
+              .setAuthor({ name: `${client.user.username}`, iconURL: `${client.user.displayAvatarURL()}` })
               .setColor(`${client.color.moderation}`)
               .setTitle("Moderation Guide™️").setURL(`https://discord.com/channels/${client.server.id}/881803011503058944`)
               .setDescription(`Hey dear moderator, this page is made for you to learn more about me! We've made alot of channels for you to understand everything about me! Now it's my turn to tell you somethings!\nFirst of all, let's start with my commands, these are all of my commands, you need to learn to use them correctly as a staff member!`)
@@ -138,7 +138,7 @@ module.exports = {
             if (collected.user.id !== message.author.id) return collected.reply({ content: "This is not your menu!", ephemeral: true })
 
             const no = new MessageEmbed()
-              .setAuthor(`${client.user.username}`, `${client.user.displayAvatarURL()}`)
+              .setAuthor({ name: `${client.user.username}`, iconURL: `${client.user.displayAvatarURL()}` })
               .setDescription("The FitnessGram™ Pacer Test is a multistage aerobic client.capacity test that progressively gets more difficult as it continues. The 20 meter pacer test will begin in 30 seconds. Line up at the start. The running speed starts slowly, but gets faster each minute after you hear this signal. [Beep] A single lap should be completed each time you hear this sound. Remember to run in a straight line, and run as long as possible. The second time you fail to complete a lap before the sound, your test is over.")
               .addField("** **", "Well, nice wasting your time reading that. Whoops, I guess I forgot to say only event hosts can see this page!")
               .setTimestamp()
@@ -147,7 +147,7 @@ module.exports = {
             if (!message.member.roles.cache.get("880409157969256518")) return collected.reply({ embeds: [no], ephemeral: true })
 
             const embed = new MessageEmbed()
-              .setAuthor(`${client.user.username}`, client.user.displayAvatarURL())
+              .setAuthor({ name: `${client.user.username}`, iconURL: `${client.user.displayAvatarURL()}` })
               .setColor(`#deba04`)
               .setTitle("Events™️").setURL(`https://discord.com/channels/${client.server.id}/904601285985185792`)
               .setDescription(`Hello dear event host! You are a huge part of this server as you host many events in the server! I wanted to show you alot of my feature that we've made for you!`)
@@ -175,7 +175,7 @@ module.exports = {
             )
 
             const embed = new MessageEmbed()
-              .setAuthor(`${client.user.username}`, client.user.displayAvatarURL())
+              .setAuthor({ name: `${client.user.username}`, iconURL: `${client.user.displayAvatarURL()}` })
               .setTitle("My Commands").setURL(`${client.server.invite}`)
               .setDescription("Wow, I see we're finally here! The commands accessable by everyone in this server?\nWait, let me show you all the commands that I haven't showed you!")
               .addField("Server Commands", `${client.commands.filter(c => c.visible !== false && c.category === "server").map(c => `\`${c.name}\``).join(" • ")}`)
@@ -220,7 +220,7 @@ module.exports = {
       }
 
       const emb3 = new MessageEmbed()
-        .setAuthor(`${client.cap(command.name)} Command`, client.user.displayAvatarURL())
+        .setAuthor({ name: `${client.cap(command.name)} Command`, iconURL: client.user.displayAvatarURL() })
         .setDescription(
           [
             `> ** Name:** ${command.name ? client.cap(command.name) : 'No name'}`,
@@ -237,7 +237,5 @@ module.exports = {
         embeds: [emb3]
       })
     }
-
-
   },
 };

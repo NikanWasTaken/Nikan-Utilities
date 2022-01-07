@@ -15,7 +15,7 @@ module.exports = {
    */
 
 
-  run: async (client, message, args, wrongUsage) => {
+  run: async ({ client, message, args, wrongUsage }) => {
 
     var reason = args.slice(1).join(" ") || "No reason provided"
 
@@ -37,7 +37,7 @@ module.exports = {
       })
 
       var hii = new MessageEmbed()
-        .setAuthor("Server Unlocked", client.user.displayAvatarURL({ dynamic: null }))
+        .setAuthor({ name: "Server Unlocked", iconURL: client.user.displayAvatarURL({ dynamic: null }) })
         .setDescription("This server has been unlocked by a staff member.\nYou may star chatting now!")
         .setColor(`${client.color.moderation}`)
         .addFields({
@@ -75,7 +75,7 @@ module.exports = {
         });
 
         var hii = new MessageEmbed()
-          .setAuthor("Channel Unlocked", client.user.displayAvatarURL({ dynamic: null }))
+          .setAuthor({ name: "Channel Unlocked", iconURL: client.user.displayAvatarURL({ dynamic: null }) })
           .setDescription("This channel has been Unlocked by a staff member.\nYou may start chatting now!")
           .setColor(`${client.color.moderation}`)
           .addFields({

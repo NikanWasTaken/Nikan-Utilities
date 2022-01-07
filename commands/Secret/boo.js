@@ -17,7 +17,7 @@ module.exports = {
    * @param {String[]} args
    */
 
-  run: async (client, message, args) => {
+  run: async ({ message }) => {
 
     const array = [
       "https://i2.wp.com/www.swiss-miss.com/wp-content/uploads/2015/10/tattly_mike_lowery_boo_who_web_design_01_grande-480x480.jpg?ssl=1",
@@ -54,6 +54,5 @@ module.exports = {
       i.react(randomemoji)
 
     })
-
   }
 }

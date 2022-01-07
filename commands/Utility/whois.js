@@ -1,4 +1,4 @@
-const { MessageEmbed, MessageActionRow, MessageButton, MessageCollector, MessageFlags } = require('discord.js')
+const { MessageEmbed, MessageActionRow, MessageButton, Message, Client } = require('discord.js')
 
 module.exports = {
   name: 'whois',
@@ -16,7 +16,7 @@ module.exports = {
    * @param {String[]} args
    */
 
-  run: async (client, message, args) => {
+  run: async ({ client, message, args }) => {
 
 
     var permissions = [];

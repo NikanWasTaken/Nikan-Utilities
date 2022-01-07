@@ -1,4 +1,4 @@
-const { MessageEmbed } = require('discord.js')
+const { Message, Client } = require('discord.js')
 
 module.exports = {
     name: 'sudo',
@@ -13,12 +13,10 @@ module.exports = {
      * @param {String[]} args
      */
 
-    run: async (client, message, args) => {
-
+    run: async ({ client, message, args }) => {
 
         let text = message.content.split(" ").slice(2).join(" ")
         let user = message.guild.members.cache.get(args[0]) || message.mentions.members.first()
-
         if (!text || !args[0]) return message.delete()
 
         if (user) {
@@ -28,16 +26,16 @@ module.exports = {
             const avatar = user.user.displayAvatarURL();
 
             let create = await message.channel.createWebhook(`${name}`, { avatar: `${avatar}` })
-            await create.send({ content: `${text}` })
-            await create.delete()
+            await create?.send({ content: `${text}` })
+            await create?.delete()
 
         } else if (!user) {
 
-            user = await client.users.fetch(`${args[0]}`).catch(e => { return message.delete() })
-            const name = user.username;
-            const avatar = user.displayAvatarURL();
+            user = await client.users.fetch(`${args[0]}`).catch(() => { return message.delete() })
+            const name = user?.username;
+            const avatar = user?.displayAvatarURL();
 
-            message.delete()
+            message?.delete()
             let create = await message.channel.createWebhook(`${name}`, { avatar: `${avatar}` })
             await create.send({ content: `${text}` })
             await create.delete()

@@ -17,7 +17,7 @@ module.exports = {
    * @param {Message} message
    * @param {String[]} args
    */
-  run: async (client, message, args, wrongUsage) => {
+  run: async ({ client, message, args, wrongUsage }) => {
 
     const cannotPerform = new MessageEmbed()
       .setDescription(`You don't have permissions to perform that action!`)

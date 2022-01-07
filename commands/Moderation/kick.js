@@ -16,7 +16,7 @@ module.exports = {
    * @param {String[]} args
    */
 
-  run: async (client, message, args, wrongUsage) => {
+  run: async ({ client, message, args, wrongUsage }) => {
 
     var user = message.guild.members.cache.get(args[0]) || message.mentions.members.first()
     if (!args[0]) return message.reply({ embeds: [wrongUsage] })
@@ -54,13 +54,13 @@ module.exports = {
 
 
     var dmyes = new MessageEmbed()
-      .setAuthor(`${client.user.username}`, client.user.displayAvatarURL({ dynamic: true }))
+      .setAuthor({ name: `${client.user.username}`, iconURL: client.user.displayAvatarURL({ dynamic: true }) })
       .setTitle(`You've been kicked from ${message.guild.name}`)
       .setColor(`${client.color.modDm}`)
       .setTimestamp()
       .addField("Punishment ID", `${data._id}`, true)
       .addField("Reason", reason, false)
-    user.send({ embeds: [dmyes] }).catch(e => { return })
+    user.send({ embeds: [dmyes] }).catch(() => { return })
 
     user.kick({
       reason: reason,

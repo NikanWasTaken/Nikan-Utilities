@@ -15,7 +15,7 @@ module.exports = {
      * @param {String[]} args
      */
 
-    run: async (client, message, args) => {
+    run: async ({ client, message, args }) => {
 
 
         const snipes = client.snipes.get(message.channel.id);
@@ -28,7 +28,7 @@ module.exports = {
         const { msg, time, image } = target;
 
         let embed = new MessageEmbed()
-            .setAuthor(msg.author.tag, msg.author.displayAvatarURL({ dynamic: true }))
+            .setAuthor({ name: msg.author.tag, iconURL: msg.author.displayAvatarURL({ dynamic: true }) })
             .setColor("RANDOM")
             .setImage(image)
             .setDescription(msg.content)

@@ -1,4 +1,4 @@
-const { MessageEmbed, Message } = require('discord.js')
+const { MessageEmbed, Message, Client } = require('discord.js')
 const database = require("../../models/guessTheN.js")
 
 module.exports = {
@@ -14,7 +14,7 @@ module.exports = {
      * @param {String[]} args
      */
 
-    run: async (client, message, args, wrongUsage) => {
+    run: async ({ client, message, args, wrongUsage }) => {
 
 
         var noChannel = new MessageEmbed()
@@ -61,7 +61,7 @@ module.exports = {
             const finddata = await database.findById(token)
             if (!finddata) return message.reply("Your event token is not valid!")
 
-            await database.findByIdAndUpdate(token, { $set: { channelId: `${message.channel.id}` } }, async (data, err) => {
+            await database.findByIdAndUpdate(token, { $set: { channelId: `${message.channel.id}` } }, async () => {
             })
 
             const tete = await database.findById(token)
@@ -69,7 +69,7 @@ module.exports = {
             const eventchannel = client.channels.cache.get(`${tete.channelId}`)
 
             const embed = new MessageEmbed()
-                .setAuthor(`${message.guild.name}`, message.guild.iconURL({ dynamic: true }))
+                .setAuthor({ name: `${message.guild.name}`, iconURL: message.guild.iconURL({ dynamic: true }) })
                 .setTitle("Guess The Number Event")
                 .setURL(`${client.server.invite}`)
                 .addField("How this works?", `Basically guess the number is an event that you need to guess and write random numbers in the chat, it's based on your luck and your brain <:bigbrain:903363568420937799>\nThe bot have its eyes on the chat, if you write the right number, it will automaticlly lock the channel and announce the winner!\nEverytime the event is starting the bot will send a message like this and informations and hints will be sent below this message! `)
@@ -78,7 +78,7 @@ module.exports = {
                 .setColor("RANDOM")
 
 
-            await database.findByIdAndUpdate(token, { $set: { status: `Starting...` } }, async (data, err) => {
+            await database.findByIdAndUpdate(token, { $set: { status: `Starting...` } }, async () => {
             })
 
             eventchannel.send({ embeds: [embed] })
@@ -101,8 +101,5 @@ module.exports = {
             console.log(error)
             message.reply("Your event token in not valid!")
         }
-
-
-
     }
 }

@@ -1,4 +1,4 @@
-const { MessageEmbed } = require('discord.js')
+const { MessageEmbed, Client, Message } = require('discord.js')
 const translate = require("@iamtraction/google-translate")
 
 
@@ -18,7 +18,7 @@ module.exports = {
    * @param {String[]} args
    */
 
-  run: async (client, message, args, wrongUsage) => {
+  run: async ({ message, args, wrongUsage }) => {
 
     let query = message.content.split(" ").slice(2).join(" ")
     let language = args[0]

@@ -62,7 +62,7 @@ module.exports = {
 
         const first = new MessageEmbed()
             .setAuthor(`${client.user.username}`, `${client.user.displayAvatarURL()}`)
-            .setColor(`${client.color.cool}`)
+            .setColor(`${client.color.serverPurple}`)
             .addField("Normal Warnings", `These are the warnings given to you by moderators!`)
             .addField("Automod Warnings", `These are the warnings given to you by auto moderation!`)
             .setFooter("Please select your warnings type using the buttons below!")

@@ -1,4 +1,4 @@
-const { MessageEmbed } = require('discord.js')
+const { MessageEmbed, Message, Client } = require('discord.js')
 
 module.exports = {
   name: 'membercount',
@@ -14,13 +14,13 @@ module.exports = {
    * @param {String[]} args
    */
 
-  run: async (client, message, args) => {
+  run: async ({ client, message }) => {
 
 
     const statuses = ["dnd", "online", "idle"]
 
     var bb = new MessageEmbed()
-      .setAuthor("Member Count", client.user.displayAvatarURL({ dynamic: true }))
+      .setAuthor({ name: "Member Count", iconURL: client.user.displayAvatarURL({ dynamic: true }) })
       .setDescription(`There are **${message.guild.members.cache.size}** members in this server`)
       .setColor("#a8bd91")
       .addFields({
@@ -33,11 +33,16 @@ module.exports = {
         inline: true
       }, {
         name: "Online Members",
-        value: `${message.guild.members.cache.filter(m => m.presence !== null).size}`,
+        value: `${message.guild.members.cache.filter((m) => statuses?.includes(m.presence?.status)).size}`,
         inline: true,
       }, {
         name: "Advanced Counts",
-        value: `<:NUonline:886215547249913856> • Online: ${message.guild.members.cache.filter(m => m?.presence?.status === "online").size}\n<:NUidle:906867112612601866> • Idle: ${message.guild.members.cache.filter(m => m?.presence?.status === "idle").size}\n<:NUdnd:906867112222531614> • Do not disturb: ${message.guild.members.cache.filter(m => m?.presence?.status === "dnd").size}\n<:NUoffline:906867114126770186> • Offline/Invisible: ${message.guild.members.cache.filter((m) => !statuses?.includes(m.presence?.status)).size}\n`,
+        value: [
+          `<:NUonline:886215547249913856> • Online: ${message.guild.members.cache.filter(m => m?.presence?.status === "online").size}`,
+          `<:NUidle:906867112612601866> • Idle: ${message.guild.members.cache.filter(m => m?.presence?.status === "idle").size}`,
+          `<:NUdnd:906867112222531614> • Do not disturb: ${message.guild.members.cache.filter(m => m?.presence?.status === "dnd").size}`,
+          `<: NUoffline: 906867114126770186 > • Offline / Invisible: ${message.guild.members.cache.filter((m) => !statuses?.includes(m.presence?.status)).size}`
+        ].join("\n"),
         inline: false,
       })
 

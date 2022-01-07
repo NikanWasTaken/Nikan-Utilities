@@ -14,7 +14,7 @@ module.exports = {
    * @param {Message} message
    * @param {String[]} args
    */
-  run: async (client, message, args, wrongUsage) => {
+  run: async ({ message, args, wrongUsage }) => {
 
     const user = args.join(" ")
     if (!user) return message.reply({ embeds: [wrongUsage] });
@@ -37,7 +37,7 @@ module.exports = {
     });
 
     const embed = new MessageEmbed()
-      .setAuthor(`${message.guild.name} ● Searching for ${user}`, message.guild.iconURL({ dynamic: true }))
+      .setAuthor({ name: `${message.guild.name} ● Searching for ${user}`, iconURL: message.guild.iconURL({ dynamic: true }) })
       .setColor("RANDOM")
       .setDescription(array.join("\n") || "<a:red_x:872203367718457424> No Results - Can't Find Any User!")
       .setFooter(array.length == 0 ? "No Result" : array.length == 1 ? `${array.length} Result` : `${array.length} Results`)
@@ -45,12 +45,10 @@ module.exports = {
       .setThumbnail("https://cdn.discordapp.com/attachments/870637449158742057/874944240290005042/bloodbros-search.gif")
 
     message.reply({ embeds: [embed] })
-      .catch(e => {
+      .catch(() => {
         message.reply({
           content: "There are too many search results, can't show them all in a single message!"
         })
       })
-
-
   },
 };

@@ -13,7 +13,7 @@ module.exports = {
      * @param {String[]} args
      */
 
-    run: async (client, message, args) => {
+    run: async ({ client, message }) => {
 
 
         let embed = new MessageEmbed()
@@ -21,7 +21,7 @@ module.exports = {
             .addField("<:ping:894097855759912970> Client", `• \`${Date.now() - message.createdTimestamp}ms\``, true)
             .addField("<:ping:894097855759912970> API", `• \`${Math.round(client.ws.ping)}ms\``, true)
             .addField("🕐 Uptime", `${client.convert.time(process.uptime())}`)
-            .setColor(`${client.color.cool}`)
+            .setColor(`${client.color.serverPurple}`)
 
         message.reply({ embeds: [embed] })
 

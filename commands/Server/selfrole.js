@@ -1,4 +1,4 @@
-const { MessageEmbed, MessageActionRow, MessageButton, WebhookClient } = require('discord.js')
+const { MessageEmbed, MessageActionRow, MessageButton, WebhookClient, Client, Message } = require('discord.js')
 
 module.exports = {
     name: 'selfrole',
@@ -13,7 +13,7 @@ module.exports = {
      * @param {String[]} args
      */
 
-    run: async (client, message, args) => {
+    run: async ({ client, message, args }) => {
 
         if (message.author.id !== client.config.owner) return message?.delete()
 
@@ -28,7 +28,7 @@ module.exports = {
                 .setAuthor({ name: `${message.guild.name}`, iconURL: message.guild.iconURL({ dynamic: true }) })
                 .setTitle("Select a category below for a list of roles to choose from!")
                 .setDescription("➜ Re-clicking a role that you already have will get it removed!\n\n** **")
-                .setColor(`${client.color.cool}`)
+                .setColor(`${client.color.serverPurple}`)
                 .addFields(
                     {
                         name: "• Ping Roles",

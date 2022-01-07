@@ -14,7 +14,7 @@ module.exports = {
    * @param {String[]} args
    */
 
-  run: async (client, message, args, wrongUsage) => {
+  run: async ({ client, message, args, wrongUsage }) => {
 
     var reason = args.slice(1).join(" ")
 
@@ -41,7 +41,7 @@ module.exports = {
       await msg.edit({ content: "Server Locked!" })
 
       var hii = new MessageEmbed()
-        .setAuthor("Server Locked", client.user.displayAvatarURL({ dynamic: true }))
+        .setAuthor({ name: "Server Locked", iconURL: client.user.displayAvatarURL({ dynamic: true }) })
         .setDescription("__**You're not muted!**__\nThe server has been locked by a staff memeber, more information will be sent here!")
         .setColor(`${client.color.moderation}`)
         .setTimestamp()
@@ -59,7 +59,7 @@ module.exports = {
 
       if (channel.type === "GUILD_VOICE") {
 
-        let msg = await message.reply({ content: "Channel Locked!" })
+        await message.reply({ content: "Channel Locked!" })
 
         channel.permissionOverwrites.edit(message.guild.roles.everyone, {
           CONNECT: false
@@ -78,7 +78,7 @@ module.exports = {
         await msg.edit({ content: "Channel Locked!" })
 
         var hii = new MessageEmbed()
-          .setAuthor("Channel Locked", client.user.displayAvatarURL({ dynamic: true }))
+          .setAuthor({ name: "Channel Locked", iconURL: client.user.displayAvatarURL({ dynamic: true }) })
           .setDescription("This channel has been locked by a staff member. You are not muted.\nMore information will be sent here eventually.")
           .setColor(`${client.color.moderation}`)
           .setTimestamp()
@@ -89,11 +89,7 @@ module.exports = {
 
         await channel.send({ embeds: [hii] })
 
-
       }
-
     }
-
-
   }
 }

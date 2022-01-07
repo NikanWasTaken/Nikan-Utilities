@@ -16,8 +16,7 @@ module.exports = {
      * @param {String[]} args
      */
 
-    run: async (client, message, args) => {
-
+    run: async ({ client, message }) => {
 
         const components = new MessageActionRow().addComponents(
             new MessageButton()
@@ -35,15 +34,14 @@ module.exports = {
         )
 
         const embed = new MessageEmbed()
-            .setAuthor(`${client.user.username}`, `${client.user.displayAvatarURL()}`)
-            .setColor(`${client.color.cool}`)
+            .setAuthor({ name: `${client.user.username}`, iconURL: `${client.user.displayAvatarURL()}` })
+            .setColor(`${client.color.serverPurple}`)
             .addField("Refresh Client", `If you want to refresh the bot's client`)
             .addField("Refresh Commands", `If you want to refresh commands and slash commands.`)
             .setTimestamp()
 
         let msg = await message.channel.send({ embeds: [embed], components: [components] })
         message.delete()
-
 
         const collector = msg.createMessageComponentCollector({
             componentType: "BUTTON",
@@ -58,14 +56,21 @@ module.exports = {
 
                 collector.stop()
                 const refresh = new MessageEmbed()
-                    .setAuthor(`${client.user.username}`, `${client.user.displayAvatarURL()}`)
+                    .setAuthor({ name: `${client.user.username}`, iconURL: `${client.user.displayAvatarURL()}` })
                     .setColor(`${client.color.loading}`)
                     .addField(`Refreshing`, `${client.emoji.load} Refreshing the client...`)
 
                 let msg = await message.channel.send({ embeds: [refresh] })
                 await client.destroy()
                 await client.login(`${process.env.TOKEN}`)
-                await msg.edit({ embeds: [refresh.addField("Refreshed", `${client.emoji.success} The client has been refreshed!`).setColor(`${client.color.success}`).setTimestamp()] }).then((msgg) => {
+                await msg.edit({
+                    embeds: [
+                        refresh
+                            .addField("Refreshed", `${client.emoji.success} The client has been refreshed!`)
+                            .setColor(`${client.color.success}`)
+                            .setTimestamp()
+                    ]
+                }).then((msgg) => {
                     setTimeout(() => {
                         msgg.delete()
                     }, 2000)
@@ -75,57 +80,48 @@ module.exports = {
             } else if (collected.customId === "reload") {
 
                 if (collected.user.id !== message.author.id) return collected.reply({ content: "This menu is not for you!", ephemeral: true })
-
                 collector.stop()
 
                 const reload = new MessageEmbed()
-                    .setAuthor(`${client.user.username}`, `${client.user.displayAvatarURL()}`)
+                    .setAuthor({ name: `${client.user.username}`, iconURL: `${client.user.displayAvatarURL()}` })
                     .setColor(`${client.color.loading}`)
-
                 let msg = await message.channel.send({ embeds: [reload] })
 
                 client.commands.sweep(() => true)
-
                 glob(`${__dirname}/../**/*.js`, async (err, filePaths) => {
 
                     if (err) return console.log(err);
                     filePaths.forEach((file) => {
                         delete require.cache[require.resolve(file)];
-
-                        const pull = require(file);
-
+                        const pull = require(file); s
                         if (pull.name) {
-
                             client.commands.set(pull.name, pull);
                         }
-
-
                     });
-
                 });
 
                 msg.edit({
                     embeds: [
-                        reload.addField("Reloaded Message Commands", `${client.emoji.success} Reloaded the message commands!`)
+                        reload
+                            .addField("Reloaded Message Commands", `${client.emoji.success} Reloaded the message commands!`)
                             .setColor(`${client.color.success}`)
                     ]
                 })
 
-
-                msg.edit({ embeds: [reload.addField("Reloaded Slash Commands", `${client.emoji.success} Reloaded the slash commands!`).setColor(`${client.color.success}`)] }).then((msgg) => {
+                msg.edit({
+                    embeds: [
+                        reload.
+                            addField("Reloaded Slash Commands", `${client.emoji.success} Reloaded the slash commands!`)
+                            .setColor(`${client.color.success}`)]
+                }).then((msgg) => {
                     setTimeout(() => {
                         msgg.delete()
                     }, 2000)
                 })
-
             }
-
         })
-
         collector.on("end", async () => {
             msg.delete()
         })
-
-
     }
 }

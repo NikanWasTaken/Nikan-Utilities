@@ -17,7 +17,7 @@ module.exports = {
      * @param {Message} message
      * @param {String[]} args
      */
-    run: async (client, message, args, wrongUsage) => {
+    run: async ({ message, args, wrongUsage }) => {
 
         const punishid = args[0]
 
@@ -32,7 +32,7 @@ module.exports = {
         const date = `${moment(warnfind.timestamp).format("LT")} ${moment(warnfind.timestamp).format("LL")}`
 
         const embed = new MessageEmbed()
-            .setAuthor(`Punishment Information`, message.guild.iconURL({ dynamic: true }))
+            .setAuthor({ name: `Punishment Information`, iconURL: message.guild.iconURL({ dynamic: true }) })
             .setDescription(`Information for the punishment Id: \`${punishid}\``)
             .setColor("RANDOM")
             .addField("● Punishment Type", `${type}`, true)

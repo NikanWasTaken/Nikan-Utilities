@@ -15,7 +15,7 @@ module.exports = {
      * @param {String[]} args
      */
 
-    run: async (client, message, args) => {
+    run: async ({ client, message, args }) => {
 
         const user = message.mentions.users.first() || await client.users.fetch(`${args[0] || message.author.id}`)
 

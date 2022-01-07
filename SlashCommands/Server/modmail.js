@@ -241,7 +241,7 @@ module.exports = {
 
                     let log = new MessageEmbed()
                         .setAuthor(`BlackList Added`, interaction.guild.iconURL({ dynamic: true }))
-                        .setColor(`${client.color.logAqua}`)
+                        .setColor('AQUA')
                         .addField('Member Info', `● ${user.user}\n> __Tag:__ ${user.user.tag}\n> __ID:__ ${user.user.id}`, true)
                         .addField("Mod Info", `● ${interaction.member.user}\n> __Tag:__ ${interaction.member.user.tag}\n> __ID:__ ${interaction.member.user.id}`, true)
                         .addField("● Information", `> Reason: ${reason}`, false)
@@ -267,7 +267,7 @@ module.exports = {
 
                 let log = new MessageEmbed()
                     .setAuthor(`BlackList Removed`, interaction.guild.iconURL({ dynamic: true }))
-                    .setColor(`${client.color.logGreen}`)
+                    .setColor("GREEN")
                     .addField('Member Info', `● ${user.user}\n> __Tag:__ ${user.user.tag}\n> __ID:__ ${user.user.id}`, true)
                     .addField("Mod Info", `● ${interaction.member.user}\n> __Tag:__ ${interaction.member.user.tag}\n> __ID:__ ${interaction.member.user.id}`, true)
                     .addField("● Information", `> Reason: ${reason}`, false)

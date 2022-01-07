@@ -17,7 +17,7 @@ module.exports = {
    * @param {String[]} args
    */
 
-  run: async (client, message, args, wrongUsage) => {
+  run: async ({ client, message, args, wrongUsage }) => {
 
     if (!args[0]) return message.reply({ embeds: [wrongUsage] })
     let userID = args[0]

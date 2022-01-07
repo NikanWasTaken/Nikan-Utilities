@@ -16,7 +16,7 @@ module.exports = {
      * @param {String[]} args
      */
 
-    run: async (client, message, args, wrongUsage) => {
+    run: async ({ client, message, args, wrongUsage }) => {
 
 
         if (!args.length) return message.reply({ embeds: [wrongUsage] })
@@ -41,7 +41,7 @@ module.exports = {
                     let emoji = await message.guild.emojis.create(`${url}`, name)
 
                     const embed = new MessageEmbed()
-                        .setAuthor(`${client.user.username}`, `${client.user.displayAvatarURL()}`)
+                        .setAuthor({ name: `${client.user.username}`, iconURL: `${client.user.displayAvatarURL()}` })
                         .setTitle("Emoji Added")
                         .setColor("GREEN")
                         .setURL(`https://discord.com/emojis/${emoji.id}`)
@@ -54,7 +54,7 @@ module.exports = {
                 } catch (error) {
 
                     const embed = new MessageEmbed()
-                        .setAuthor(`${client.user.username}`, `${client.user.displayAvatarURL()}`)
+                        .setAuthor({ name: `${client.user.username}`, iconURL: `${client.user.displayAvatarURL()}` })
                         .setTitle("Steal Failed!")
                         .setColor("RED")
                         .addField("Action Failed", `The emoji add action has been failed, this might happen if\n> ➜ The server has reached max emoji alots\n> ➜ The file size is more than standard\n> ➜ Other reasons...`, false)
@@ -71,7 +71,7 @@ module.exports = {
                     let emoji = await message.guild.emojis.create(`${newemoji}`, name)
 
                     const embed = new MessageEmbed()
-                        .setAuthor(`${client.user.username}`, `${client.user.displayAvatarURL()}`)
+                        .setAuthor({ name: `${client.user.username}`, iconURL: `${client.user.displayAvatarURL()}` })
                         .setTitle("Emoji Added")
                         .setColor("GREEN")
                         .setURL(`https://discord.com/emojis/${emoji.id}`)
@@ -84,7 +84,7 @@ module.exports = {
                 } catch (error) {
 
                     const embed = new MessageEmbed()
-                        .setAuthor(`${client.user.username}`, `${client.user.displayAvatarURL()}`)
+                        .setAuthor({ name: `${client.user.username}`, iconURL: `${client.user.displayAvatarURL()}` })
                         .setTitle("Steal Failed!")
                         .setColor("RED")
                         .addField("Action Failed", `The emoji add action has been failed, this might happen if\n> ➜ The server has reached max emoji alots\n> ➜ The file size is more than standard\n> ➜ Other reasons...`, false)
@@ -105,7 +105,7 @@ module.exports = {
                 const emoji = await message.guild.emojis.create(`${newemoji}`, name)
 
                 const embed = new MessageEmbed()
-                    .setAuthor(`${client.user.username}`, `${client.user.displayAvatarURL()}`)
+                    .setAuthor({ name: `${client.user.username}`, iconURL: `${client.user.displayAvatarURL()}` })
                     .setTitle("Emoji Added")
                     .setColor("GREEN")
                     .setURL(`https://discord.com/emojis/${emoji.id}`)
@@ -118,7 +118,7 @@ module.exports = {
             } catch (error) {
 
                 const embed = new MessageEmbed()
-                    .setAuthor(`${client.user.username}`, `${client.user.displayAvatarURL()}`)
+                    .setAuthor({ name: `${client.user.username}`, iconURL: `${client.user.displayAvatarURL()}` })
                     .setTitle("Steal Failed!")
                     .setColor("RED")
                     .addField("Action Failed", `The emoji add action has been failed, this might happen if\n> ➜ The server has reached max emoji alots\n> ➜ The file size is more than standard\n> ➜ Other reasons...`, true)
@@ -187,7 +187,7 @@ module.exports = {
 
         // const embed = new MessageEmbed()
         //     .setAuthor(`${message.guild.name}`, `${message.guild.iconURL({ dynamic: true })}`)
-        //     .setColor(`${client.color.cool}`)
+        //     .setColor(`${client.color.serverPurple}`)
 
         // if (added?.length)
         //     embed.addField(`Added [${added.length}]`, `${added.map(e => e) || "no"}`)
