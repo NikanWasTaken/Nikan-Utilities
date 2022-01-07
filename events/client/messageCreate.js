@@ -96,13 +96,13 @@ client.on("messageCreate", async (message) => {
     if (
         command.cooldown &&
         !message.member?.permissions?.has("ADMINISTRATOR") &&
-        message.author.id !== client.config.owner
+        message.user.id !== client.config.owner
     ) {
 
         let cooldownRemaining = `${~~(Timeout.get(`${command.name}${message.author.id}`) - Date.now())}`
         let cooldownEmbed = new MessageEmbed()
             .setColor(`${client.color.invisible}`)
-            .setDescription(`You need to wait \`${ms(parseInt(cooldownRemaining), { long: true })}\` to use the \`${command.name}\` command again.`);
+            .setDescription(`You need to wait \`${client.convert.time(parseInt(~~(cooldownRemaining / 1000)))}\` to use the \`${command.name}\` command again.`);
 
         if (Timeout.has(`${command.name}${message.author.id}`))
             return message.reply({ embeds: [cooldownEmbed] })

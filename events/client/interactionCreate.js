@@ -40,13 +40,14 @@ client.on("interactionCreate", async (interaction) => {
     if (
       cmd.cooldown &&
       !interaction.member?.permissions?.has("ADMINISTRATOR") &&
-      interaction.user.id !== client.config.owner) {
+      interaction.user.id !== client.config.owner
+    ) {
 
       let cooldownRemaining = `${~~(Timeout.get(`${cmd.name}${interaction.user.id}`) - Date.now())}`
 
       let cooldownEmbed = new MessageEmbed()
         .setColor(`${client.color.invisible}`)
-        .setDescription(`You need to wait \`${ms(parseInt(cooldownRemaining), { long: true })}\` to use this slash command again.`);
+        .setDescription(`You need to wait \`${client.convert.time(parseInt(~~(cooldownRemaining / 1000)))}\` to use this slash command again.`);
 
       if (Timeout.has(`${cmd.name}${interaction.member.user.id}`))
         return interaction.reply({ embeds: [cooldownEmbed], ephemeral: true })
