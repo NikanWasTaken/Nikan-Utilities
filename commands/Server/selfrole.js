@@ -17,10 +17,15 @@ module.exports = {
 
         if (message.author.id !== client.config.owner) return message?.delete()
 
+        const channel = new WebhookClient({
+            token: "CByVo3PaAmO02vOp9GM3fJ-q1hZkR0GJVkeb4EKA-Oppe81Ai2stHb6Sb-NiHE0yg91x",
+            id: "921116075423334491"
+        })
+
         if (args[0] == "1") {
 
             const embed = new MessageEmbed()
-                .setAuthor(`${message.guild.name}`, message.guild.iconURL({ dynamic: true }))
+                .setAuthor({ name: `${message.guild.name}`, iconURL: message.guild.iconURL({ dynamic: true }) })
                 .setTitle("Select a category below for a list of roles to choose from!")
                 .setDescription("➜ Re-clicking a role that you already have will get it removed!\n\n** **")
                 .setColor(`${client.color.cool}`)
@@ -75,12 +80,6 @@ module.exports = {
             const embed = new MessageEmbed()
                 .setDescription("Not sure about your current self roles? Click the button below!")
                 .setColor("ORANGE")
-
-
-            const channel = new WebhookClient({
-                token: "CByVo3PaAmO02vOp9GM3fJ-q1hZkR0GJVkeb4EKA-Oppe81Ai2stHb6Sb-NiHE0yg91x",
-                id: "921116075423334491"
-            })
 
             channel.send({ embeds: [embed], components: [row] })
 
