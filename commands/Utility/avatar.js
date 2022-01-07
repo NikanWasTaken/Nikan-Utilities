@@ -20,7 +20,7 @@ module.exports = {
         const userCheck = message.mentions.members.first() || message.guild.members.cache.get(`${args[0]}`)
 
         if (userCheck) {
-            const user = message.mentions.user.first() || message.guild.members.cache.get(`${args[0]}`).user;
+            const user = message.mentions.users.first() || message.guild.members.cache.get(`${args[0]}`).user;
 
             var rowNoNitro = new MessageActionRow().addComponents(
                 new MessageSelectMenu()
