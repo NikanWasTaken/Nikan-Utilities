@@ -28,45 +28,43 @@ module.exports = {
       client.delete.message(message, msg);
     })
 
-    try {
 
 
-      if (args[1]) {
+    if (args[1]) {
 
-        const noUser = new MessageEmbed()
-          .setDescription(`I couldn't find that user!`)
-          .setColor("RED")
-        if (!user) return message.reply({ embeds: [noUser] }).then((msg) => {
+      const noUser = new MessageEmbed()
+        .setDescription(`I couldn't find that user!`)
+        .setColor("RED")
+      if (!user) return message.reply({ embeds: [noUser] }).then((msg) => {
+        client.delete.message(message, msg);
+      })
+
+      const messages = message.channel.messages.fetch({ limit: clear })
+      const filtered = (await messages).filter(m => m.author.id === user.user.id)
+
+      message.channel.bulkDelete(filtered)
+      let embeda = new MessageEmbed()
+        .setDescription(`Cleared \`${clear}\` messages from \`${user.user.tag}\``)
+        .setColor(`${client.color.moderation}`)
+      message.channel.send({ embeds: [embeda] })
+        .then((msg) => {
           client.delete.message(message, msg);
         })
 
-        const messages = message.channel.messages.fetch({ limit: clear })
-        const filtered = (await messages).filter(m => m.author.id === user.user.id)
 
-        message.channel.bulkDelete(filtered)
-        let embeda = new MessageEmbed()
-          .setDescription(`Cleared \`${clear}\` messages from \`${user.user.tag}\``)
-          .setColor(`${client.color.moderation}`)
-        message.channel.send({ embeds: [embeda] })
-          .then((msg) => {
-            client.delete.message(message, msg);
-          })
+    } else if (!args[1]) {
 
+      let msgs = message.channel.messages.fetch({ limit: clear })
 
-      } else if (!args[1]) {
+      message.channel.bulkDelete((await msgs))
+      let embeda = new MessageEmbed()
+        .setDescription(`Cleared ${clear} messages in ${message.channel}.`)
+        .setColor(`${client.color.moderation}`)
 
-        let msgs = message.channel.messages.fetch({ limit: clear })
-
-        message.channel.bulkDelete((await msgs))
-        let embeda = new MessageEmbed()
-          .setDescription(`Cleared ${clear} messages in ${message.channel}.`)
-          .setColor(`${client.color.moderation}`)
-
-        message.channel.send({ embeds: [embeda] })
-          .then((msg) => {
-            client.delete.message(message, msg);
-          })
-      }
-    } catch (error) { }
+      message.channel.send({ embeds: [embeda] })
+        .then((msg) => {
+          client.delete.message(message, msg);
+        })
+    }
   }
 }

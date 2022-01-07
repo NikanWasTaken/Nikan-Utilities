@@ -24,7 +24,7 @@ module.exports = {
         if (args[0] && !user) {
 
 
-            await client.users.fetch(`${args[0]}`).catch(e => {
+            await client.users.fetch(`${args[0]}`).catch(() => {
                 const eo = new MessageEmbed()
                     .setDescription("This user doesn't exist!")
                     .setColor(`RED`)
@@ -61,7 +61,7 @@ module.exports = {
         ]
 
         const first = new MessageEmbed()
-            .setAuthor(`${client.user.username}`, `${client.user.displayAvatarURL()}`)
+            .setAuthor({ name: `${client.user.username}`, iconURL: `${client.user.displayAvatarURL()}` })
             .setColor(`${client.color.serverPurple}`)
             .addField("Normal Warnings", `These are the warnings given to you by moderators!`)
             .addField("Automod Warnings", `These are the warnings given to you by auto moderation!`)
@@ -151,7 +151,7 @@ module.exports = {
 
 
                         const embed = new MessageEmbed()
-                            .setAuthor(`${user2.tag}`, user2.displayAvatarURL({ dynamic: true }))
+                            .setAuthor({ name: `${user2.tag}`, iconURL: user2.displayAvatarURL({ dynamic: true }) })
                             .setThumbnail(user2.displayAvatarURL({ dynamic: true }))
                             .setDescription(`These are all the punishments for **${user2.tag}**.\n\n${embedDescription}`)
                             .setColor("BLURPLE")
@@ -175,10 +175,6 @@ module.exports = {
 
                     const embedDescription = userWarnings.map((warn, i) => {
 
-                        // const moderator = message.guild.members.cache.get(
-                        //     warn.moderatorId
-                        // );
-
                         return [
                             `\`${i + 1}\`. **${warn.type}** | **ID:** \`${warn._id}\``,
                             `> Date: <t:${~~(warn.timestamp / 1000)}:f>`,
@@ -188,7 +184,7 @@ module.exports = {
                     }).join("\n\n");
 
                     const embed = new MessageEmbed()
-                        .setAuthor(`${message.author.tag}`, message.author.displayAvatarURL({ dynamic: true }))
+                        .setAuthor({ name: `${message.author.tag}`, iconURL: message.author.displayAvatarURL({ dynamic: true }) })
                         .setThumbnail(message.author.displayAvatarURL({ dynamic: true }))
                         .setDescription(`These are all the punishments for ${message.author}.\n\n${embedDescription}`)
                         .setColor("BLURPLE")
@@ -229,7 +225,7 @@ module.exports = {
 
 
                         const embed = new MessageEmbed()
-                            .setAuthor(`${user.user.tag}`, user.user.displayAvatarURL({ dynamic: true }))
+                            .setAuthor({ name: `${user.user.tag}`, iconURL: user.user.displayAvatarURL({ dynamic: true }) })
                             .setThumbnail(user.user.displayAvatarURL({ dynamic: true }))
                             .setDescription(`These are all the automod punishments for ${user.user}.\n\n${embedDescription}`)
                             .setColor("BLURPLE")
@@ -262,7 +258,7 @@ module.exports = {
 
 
                         const embed = new MessageEmbed()
-                            .setAuthor(`${user2.tag}`, user.user.displayAvatarURL({ dynamic: true }))
+                            .setAuthor({ name: `${user2.tag}`, iconURL: user.user.displayAvatarURL({ dynamic: true }) })
                             .setThumbnail(user2.displayAvatarURL({ dynamic: true }))
                             .setDescription(`These are all the automod punishments for **${user2.tag}**.\n\n${embedDescription}`)
                             .setColor("BLURPLE")
@@ -295,7 +291,7 @@ module.exports = {
                     }).join("\n\n");
 
                     const embed = new MessageEmbed()
-                        .setAuthor(`${message.author.tag}`, message.author.displayAvatarURL({ dynamic: true }))
+                        .setAuthor({ name: `${message.author.tag}`, iconURL: message.author.displayAvatarURL({ dynamic: true }) })
                         .setThumbnail(message.author.displayAvatarURL({ dynamic: true }))
                         .setDescription(`These are all the punishments automod for ${message.author}.\n\n${embedDescription}`)
                         .setColor("BLURPLE")
@@ -306,12 +302,10 @@ module.exports = {
 
                 }
             }
-
-
         })
 
-        collector.on("end", async (collected) => { msg.edit({ components: components(true) }) })
-
-
+        collector.on("end", async () => {
+            msg.edit({ components: components(true) })
+        })
     }
 }

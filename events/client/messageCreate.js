@@ -89,8 +89,9 @@ client.on("messageCreate", async (message) => {
             ].join("\n")
         )
         .setColor(`${client.color.moderationRed}`)
-        .setFooter(`[] = required" • <> = optional`)
+        .setFooter(`[] = required • <> = optional`)
         .setTimestamp()
+
 
     if (
         command.cooldown &&
@@ -112,7 +113,7 @@ client.on("messageCreate", async (message) => {
                     }, 5000)
                 });
 
-        command.run(client, message, args, wrongUsage);
+        command.run({ client, message, args, wrongUsage });
         Timeout.set(
             `${command.name}${message.author.id}`,
             Date.now() + command.cooldown
@@ -122,8 +123,8 @@ client.on("messageCreate", async (message) => {
         }, command.cooldown);
 
     } else {
-
-        await command.run({ client, message, args, wrongUsage });
-
+        command.run({ client, message, args, wrongUsage });
     }
+
+
 });
