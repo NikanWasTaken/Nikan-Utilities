@@ -96,7 +96,7 @@ client.on("messageCreate", async (message) => {
     if (
         command.cooldown &&
         !message.member?.permissions?.has("ADMINISTRATOR") &&
-        message.user.id !== client.config.owner
+        message.author.id !== client.config.owner
     ) {
 
         let cooldownRemaining = `${~~(Timeout.get(`${command.name}${message.author.id}`) - Date.now())}`
