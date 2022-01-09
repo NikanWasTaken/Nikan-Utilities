@@ -104,7 +104,7 @@ module.exports = {
         .setAuthor({ name: `${member.user.tag}`, iconURL: member.user.displayAvatarURL({ dynamic: true }) })
         .setDescription(`${member.user} • ID: ${member.user.id}`)
         .setColor("RANDOM")
-        .setThumbnail(`${member.user.displayAvatarURL()}`)
+        .setThumbnail(`${member.user.displayAvatarURL({ dynamic: true })}`)
         .addFields(
           [
             {
@@ -164,7 +164,7 @@ module.exports = {
               .setAuthor({ name: `${member.user.tag}`, iconURL: member.user.displayAvatarURL({ dynamic: true }) })
               .setDescription(`${member.user} • ID: ${member.user.id}`)
               .setColor("RANDOM")
-              .setThumbnail(`${member.user.displayAvatarURL()}`)
+              .setThumbnail(`${member.user.displayAvatarURL({ dynamic: true })}`)
               .addFields(
                 [
                   {
@@ -193,7 +193,7 @@ module.exports = {
               .setAuthor({ name: `${member.user.tag}`, iconURL: member.user.displayAvatarURL({ dynamic: true }) })
               .setDescription(`${member.user} • ID: ${member.user.id}\n\n**Roles [${roles.size}]**\n${roles.size ? roles.map(role => role).join(' ') : "No roles"}`)
               .setColor("RANDOM")
-              .setThumbnail(`${member.user.displayAvatarURL()}`)
+              .setThumbnail(`${member.user.displayAvatarURL({ dynamic: true })}`)
 
             msg.edit({
               embeds: [embedRoles],
@@ -211,7 +211,7 @@ module.exports = {
               .setAuthor({ name: `${member.user.tag}`, iconURL: member.user.displayAvatarURL({ dynamic: true }) })
               .setDescription(`${member.user} • ID: ${member.user.id}\n\n**Permissions [${permissions.length}]**\n${permissions.length ? `${PermissionsArray.join(", ")}` : "No Permissions"}`)
               .setColor("RANDOM")
-              .setThumbnail(`${member.user.displayAvatarURL()}`)
+              .setThumbnail(`${member.user.displayAvatarURL({ dynamic: true })}`)
 
             msg.edit({
               embeds: [embedPermissions],
