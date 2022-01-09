@@ -10,6 +10,7 @@ module.exports = {
   usage: `<command name>`,
   botCommand: true,
 
+
   /**
    * @param {Client} client
    * @param {Message} message
