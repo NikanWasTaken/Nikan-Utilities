@@ -121,7 +121,7 @@ module.exports = {
             {
               name: "Profile Picture",
               value: [
-                `• **Animated:** ${member.user.displayAvatarURL().endsWith(".gif") ? `${client.emoji.success}` : `${client.emoji.fail}`}`,
+                `• **Animated:** ${member.user.displayAvatarURL({ dynamic: true }).endsWith(".gif") ? `${client.emoji.success}` : `${client.emoji.fail}`}`,
                 `• **Formats:** ${AvatarFormatCheck(member.user)}`,
                 `• **Download:** [Click Here](${downloadLinkFormatCheck(member.user)})`
               ].join("\n")
