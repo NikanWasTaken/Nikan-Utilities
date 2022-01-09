@@ -78,7 +78,7 @@ module.exports = {
                 label: "Events",
                 value: "events",
                 description: "Everything about event commands!",
-                emoji: "<a:SR_giveaways:897844189096722532>"
+                emoji: "<:HYPESQUAD_EVENTS:899171458599755796> "
               },
               {
                 label: "Others",
@@ -127,7 +127,7 @@ module.exports = {
               .addField("Moderation", `Well, the next thing I want to talk about is how to moderate and [rules](https://discord.com/channels/${client.server.id}/882245740221591563) for it!\nI can't describe and tell you all of them here because of my laziness, but, Nikan has written them down [**here**](https://discord.com/channels/${client.server.id}/882245740221591563) for you!`)
               .addField("Your duties", `Exactly like the rules, I'm too lazy to write your responsibilities here, but thanks to Nikan for writing them, I can just give you a link to them!\nJust check them out [**here**](https://discord.com/channels/${client.server.id}/882718002162839582)`)
               .addField("Other useful channels", `These channels are useful for you as a moderator too! Make sure to check them out at the staff category channels!`)
-              .setFooter(`Moderation Guide™️`)
+              .setFooter({ name: `Moderation Guide` })
               .setTimestamp()
 
             collected.reply({ embeds: [embed], ephemeral: true })
@@ -232,7 +232,7 @@ module.exports = {
           ].join("\n")
         )
         .setColor(`${client.color.botBlue} `)
-        .setFooter(`[] = required" • <> = optional`)
+        .setFooter({ name: `[] = required" • <> = optional` })
       message.reply({
         embeds: [emb3]
       })

@@ -1,4 +1,4 @@
-const { Client, ContextMenuInteraction, MessageEmbed, MessageButton, MessageActionRow } = require("discord.js");
+const { Client, MessageEmbed, MessageButton, MessageActionRow } = require("discord.js");
 
 module.exports = {
   name: "User Info",
@@ -10,7 +10,7 @@ module.exports = {
    * @param {ContextMenuInteraction} interaction
    * @param {String[]} args
    */
-  run: async (client, interaction, args) => {
+  run: async ({ client, interaction }) => {
 
 
     const member = await interaction.guild.members.cache.get(
@@ -131,7 +131,7 @@ module.exports = {
 
 
       const eyes = new MessageEmbed()
-        .setAuthor(`${member.user.tag}`, member.user.displayAvatarURL({ dynamic: true }))
+        .setAuthor({ name: `${member.user.tag}`, iconURL: member.user.displayAvatarURL({ dynamic: true }) })
         .setColor("RANDOM")
         .setThumbnail(`${member.user.displayAvatarURL({ dynamic: true })}`)
         .setTimestamp()
@@ -153,7 +153,7 @@ module.exports = {
           if (collected.user.id !== interaction.user.id) return collected.reply({ content: "This menu is not for you!", ephemeral: true })
 
           const moreinfoembed = new MessageEmbed()
-            .setAuthor(`${member.user.tag}`, member.user.displayAvatarURL({ dynamic: true }))
+            .setAuthor({ name: `${member.user.tag}`, iconURL: member.user.displayAvatarURL({ dynamic: true }) })
             .setColor("RANDOM")
             .setThumbnail(`${member.user.displayAvatarURL({ dynamic: true })}`)
             .setTimestamp()
@@ -167,7 +167,7 @@ module.exports = {
 
       })
 
-      collector.on("end", async (i) => { msg.edit({ components: components(true) }) })
+      collector.on("end", async () => { msg.edit({ components: components(true) }) })
 
 
     } else {
@@ -175,7 +175,7 @@ module.exports = {
       const devices = member.presence.clientStatus || {}
 
       const eyes = new MessageEmbed()
-        .setAuthor(`${member.user.tag}`, member.user.displayAvatarURL({ dynamic: true }))
+        .setAuthor({ name: `${member.user.tag}`, iconURL: member.user.displayAvatarURL({ dynamic: true }) })
         .setColor("RANDOM")
         .setThumbnail(`${member.user.displayAvatarURL({ dynamic: true })}`)
         .setTimestamp()
@@ -200,7 +200,7 @@ module.exports = {
           if (collected.user.id !== interaction.user.id) return collected.reply({ content: "This menu is not for you!", ephemeral: true })
 
           const moreinfoembed = new MessageEmbed()
-            .setAuthor(`${member.user.tag}`, member.user.displayAvatarURL({ dynamic: true }))
+            .setAuthor({ name: `${member.user.tag}`, iconURL: member.user.displayAvatarURL({ dynamic: true }) })
             .setColor("RANDOM")
             .setThumbnail(`${member.user.displayAvatarURL({ dynamic: true })}`)
             .setTimestamp()
@@ -211,12 +211,8 @@ module.exports = {
           collected.reply({ embeds: [moreinfoembed], ephemeral: true })
 
         }
-
       })
-
-      collector.on("end", async (i) => { msg.edit({ components: components(true) }) })
-
-
+      collector.on("end", async () => { msg.edit({ components: components(true) }) })
     }
   }
 }

@@ -1,5 +1,4 @@
-const { Client, CommandInteraction, Message, MessageEmbed, MessageActionRow, MessageButton } = require("discord.js");
-
+const { Client, MessageEmbed } = require("discord.js");
 
 
 module.exports = {
@@ -25,8 +24,6 @@ module.exports = {
           description: "Ends the lockdown and inlocks all the channels in the guild!"
         }
       ]
-
-
     },
     {
       name: "reason",
@@ -42,7 +39,7 @@ module.exports = {
    * @param {CommandInteraction} interaction
    * @param {String[]} args
    */
-  run: async (client, interaction, args) => {
+  run: async ({ client, interaction }) => {
 
     const action = interaction.options.getString("action")
     var reason = interaction.options.getString("reason")
@@ -64,7 +61,7 @@ module.exports = {
       })
 
       var hii = new MessageEmbed()
-        .setAuthor("Server Locked", client.user.displayAvatarURL({ dynamic: true }))
+        .setAuthor({ name: "Server Locked", iconURL: client.user.displayAvatarURL({ dynamic: true }) })
         .setDescription("This server has been locked by a staff member. You are not muted.\nMore information will be sent here eventually.")
         .setColor(`${client.color.moderation}`)
         .setTimestamp()
@@ -95,7 +92,7 @@ module.exports = {
       })
 
       var hii = new MessageEmbed()
-        .setAuthor("Server Unlocked", client.user.displayAvatarURL({ dynamic: true }))
+        .setAuthor({ name: "Server Unlocked", iconURL: client.user.displayAvatarURL({ dynamic: true }) })
         .setDescription("This server has been unlocked by a staff member.\nYou may start chatting now!")
         .setColor(`${client.color.moderation}`)
         .addField("Reason", `${reason}`)
@@ -105,8 +102,6 @@ module.exports = {
 
       await msg.edit({ content: "Server unlocked!" })
 
-
     }
-
   }
 }

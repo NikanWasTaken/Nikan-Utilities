@@ -1,4 +1,4 @@
-const { Client, CommandInteraction, MessageEmbed, MessageActionRow, MessageButton } = require("discord.js");
+const { Client, MessageEmbed, MessageActionRow, MessageButton } = require("discord.js");
 const warnModel = require("../../models/Punishments.js")
 const ms = require("ms")
 
@@ -64,7 +64,7 @@ module.exports = {
    * @param {CommandInteraction} interaction
    * @param {String[]} args
    */
-  run: async (client, interaction, args) => {
+  run: async ({ client, interaction }) => {
 
     const subs = interaction.options.getSubcommand(["add", "remove", 'list'])
 
@@ -139,7 +139,8 @@ module.exports = {
         data.save()
 
         var hmm = new MessageEmbed()
-          .setDescription(`${user.user} has been **banned** | \`${data._id}\``).setColor(`${client.color.moderationRed}`)
+          .setDescription(`${user.user} has been **banned** | \`${data._id}\``)
+          .setColor(`${client.color.moderationRed}`)
         await interaction.deleteReply()
         let msg = await interaction.channel.send({ embeds: [hmm] })
 

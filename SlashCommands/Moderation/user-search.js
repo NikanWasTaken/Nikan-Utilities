@@ -21,7 +21,7 @@ module.exports = {
    * @param {CommandInteraction} interaction
    * @param {String[]} args
    */
-  run: async (client, interaction, args) => {
+  run: async ({ interaction }) => {
 
     const user = interaction.options.getString("user")
     const array = [];
@@ -45,18 +45,19 @@ module.exports = {
     });
 
     const embed = new MessageEmbed()
-      .setAuthor(`${interaction.guild.name} ● Searching for ${user}`, interaction.guild.iconURL({ dynamic: true }))
+      .setAuthor({
+        name: `${interaction.guild.name} ● Searching for ${user}`,
+        iconURL: interaction.guild.iconURL({ dynamic: true })
+      })
       .setColor("RANDOM")
       .setDescription(array.join("\n") || "<a:red_x:872203367718457424> No Results - Can't Find Any User!")
-      .setFooter(array.length == 0 ? "No Result" : array.length == 1 ? `${array.length} Result` : `${array.length} Results`)
+      .setFooter({ name: array.length == 0 ? "No Result" : array.length == 1 ? `${array.length} Result` : `${array.length} Results` })
       .setTimestamp()
       .setThumbnail("https://cdn.discordapp.com/attachments/870637449158742057/874944240290005042/bloodbros-search.gif")
 
     interaction.followUp({ embeds: [embed] })
-      .catch(e => { interaction.followUp("There are too many search results, can't show them all in a single interaction!") })
-
-
-
-
+      .catch(() => {
+        interaction.followUp("There are too many search results, can't show them all in a single interaction!")
+      })
   }
 }

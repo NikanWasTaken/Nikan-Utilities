@@ -1,4 +1,4 @@
-const { Client, CommandInteraction, MessageEmbed } = require("discord.js");
+const { Client, MessageEmbed } = require("discord.js");
 
 
 
@@ -17,24 +17,24 @@ module.exports = {
         },
     ],
 
-
     /**
      *
      * @param {Client} client
      * @param {CommandInteraction} interaction
      * @param {String[]} args
      */
-    run: async (client, interaction, args) => {
+    run: async ({ client, interaction }) => {
 
         const suggestchannel = client.channels.cache.get("851317000868462633")
         const suggestion = interaction.options.getString("suggestion")
 
         const thanks = new MessageEmbed()
-            .setDescription(`${interaction.member.displayName}, thanks for your suggestion, it has been posted in <#851317000868462633>!`).setColor(`${client.color.botBlue}`)
+            .setDescription(`${interaction.member.displayName}, thanks for your suggestion, it has been posted in <#851317000868462633>!`)
+            .setColor(`${client.color.botBlue}`)
         interaction.followUp({ embeds: [thanks] })
 
         const embed = new MessageEmbed()
-            .setAuthor(`${interaction.user.tag}`, interaction.user.displayAvatarURL({ dynamic: true }))
+            .setAuthor({ name: `${interaction.user.tag}`, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) })
             .setTitle("New Suggestion")
             .setURL(`${client.server.invite}`)
             .setColor("YELLOW")
@@ -44,7 +44,11 @@ module.exports = {
 
         suggestchannel.send({ embeds: [embed] }).then((msg) => {
 
-            msg.edit({ embeds: [embed.setFooter(`Suggestion ID: ${msg.id}`)] })
+            msg.edit({
+                embeds: [
+                    embed.setFooter({ name: `Suggestion ID: ${msg.id}` })
+                ]
+            })
             msg.react("<a:NUupvote:902915217829273661>")
             msg.react("<a:NUdownvote:902915218353569802>")
 

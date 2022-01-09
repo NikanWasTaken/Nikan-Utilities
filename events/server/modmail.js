@@ -157,7 +157,7 @@ client.on("messageCreate", async (message) => {
                     const embed = new MessageEmbed()
                         .setAuthor({ name: `${client.guilds.cache.get(serverId).name}`, iconURL: `${client.guilds.cache.get(serverId).iconURL({ dynamic: true })}` })
                         .setTitle("Ticket Creation Has Been Canceled").setURL(`${client.server.invite}`)
-                        .setColor(`${client.color.failed}`)
+                        .setColor(`${client.color.fail}`)
                         .setDescription("Your ticket creation has been cancelled according to your button choice!")
                         .setFooter(`${client.user.username}`, `${client.user.displayAvatarURL()}`)
                         .setTimestamp()

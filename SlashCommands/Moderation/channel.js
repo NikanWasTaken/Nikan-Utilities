@@ -1,4 +1,4 @@
-const { Client, CommandInteraction, MessageEmbed } = require("discord.js");
+const { Client, MessageEmbed } = require("discord.js");
 
 
 module.exports = {
@@ -56,7 +56,7 @@ module.exports = {
    * @param {CommandInteraction} interaction
    * @param {String[]} args
    */
-  run: async (client, interaction, args) => {
+  run: async ({ client, interaction }) => {
 
     const subs = interaction.options.getSubcommand(["lock", "unlock"])
 
@@ -71,8 +71,7 @@ module.exports = {
           CONNECT: false
         });
 
-        let msg2 = await interaction.followUp({ content: "Channel Locked!" })
-
+        await interaction.followUp({ content: "Channel Locked!" })
 
       } else {
 
@@ -83,7 +82,7 @@ module.exports = {
         });
 
         var hii = new MessageEmbed()
-          .setAuthor("Channel Locked", client.user.displayAvatarURL({ dynamic: true }))
+          .setAuthor({ name: "Channel Locked", iconURL: client.user.displayAvatarURL({ dynamic: true }) })
           .setDescription("This channel has been locked by a staff member. You are not muted.\nMore information will be sent here eventually.")
           .setColor(`${client.color.moderation}`)
           .setTimestamp()
@@ -123,7 +122,7 @@ module.exports = {
         });
 
         var hii = new MessageEmbed()
-          .setAuthor("Channel Unlocked", client.user.displayAvatarURL({ dynamic: true }))
+          .setAuthor({ name: "Channel Unlocked", iconURL: client.user.displayAvatarURL({ dynamic: true }) })
           .setDescription("This channel has been Unlocked by a staff member.\nYou may start chatting now!")
           .setColor(`${client.color.moderation}`)
           .addFields({

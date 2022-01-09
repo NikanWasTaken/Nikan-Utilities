@@ -1,4 +1,4 @@
-const { Client, CommandInteraction, MessageEmbed, Message } = require("discord.js");
+const { Client, MessageEmbed } = require("discord.js");
 
 
 module.exports = {
@@ -23,16 +23,19 @@ module.exports = {
    * @param {CommandInteraction} interaction
    * @param {String[]} args
    */
-  run: async (client, interaction, args) => {
-
+  run: async ({ client, interaction }) => {
 
     let reason = interaction.options.getString("reason") || "AFK"
 
     client.afk.set(interaction.member.user.id, [Date.now(), reason])
 
-    let no = new MessageEmbed().setDescription(`You are now afk for the reason: ${reason}`).setColor(`${client.color.botBlue}`)
+    let no = new MessageEmbed()
+      .setDescription(`You are now afk for the reason: ${reason}`).
+      setColor(`${client.color.botBlue}`)
+
     interaction.followUp({ embeds: [no] })
-    interaction.member.setNickname(`[AFK] ${interaction.member.user.username}`).catch(e => { return })
+    interaction.member.setNickname(`[AFK] ${interaction.member.user.username}`)
+      .catch(() => { })
 
   }
 }

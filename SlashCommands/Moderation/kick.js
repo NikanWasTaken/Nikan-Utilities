@@ -1,8 +1,6 @@
-const { Client, CommandInteraction, MessageEmbed, ReactionUserManager } = require("discord.js");
+const { Client, MessageEmbed } = require("discord.js");
 const warnModel = require("../../models/Punishments.js")
 const ms = require("ms")
-
-
 
 module.exports = {
   name: "kick",
@@ -32,7 +30,7 @@ module.exports = {
    * @param {CommandInteraction} interaction
    * @param {String[]} args
    */
-  run: async (client, interaction, args) => {
+  run: async ({ client, interaction }) => {
 
     var user = interaction.options.getMember("user")
     var reason = interaction.options.getString("reason") || "No reason provided"
@@ -88,8 +86,5 @@ module.exports = {
       id: `${data._id}`,
       url: `https://discord.com/channels/${interaction.guildId}/${interaction.channelId}/${msg.id}`
     })
-
-
-
   }
 }

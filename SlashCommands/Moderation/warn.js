@@ -1,4 +1,4 @@
-const { MessageEmbed, Client, CommandInteraction, MessageButton, MessageActionRow } = require("discord.js");
+const { MessageEmbed, Client, MessageButton, MessageActionRow } = require("discord.js");
 const warnModel = require("../../models/Punishments.js")
 const automodModel = require("../../models/automod.js")
 const moment = require("moment")
@@ -104,7 +104,7 @@ module.exports = {
      * @param {String[]} args
      */
 
-    run: async (client, interaction, args) => {
+    run: async ({ client, interaction }) => {
 
 
         const subs = interaction.options.getSubcommand(["add", "remove", "list", "info"])
@@ -133,9 +133,7 @@ module.exports = {
                     .setColor("RED")
 
                 return interaction.followUp({ embeds: [embed] }).then(() => {
-                    setTimeout(() => {
-                        interaction.deleteReply()
-                    }, 10000)
+                    client.delete.interaction(interaction)
                 })
 
             }
@@ -411,7 +409,7 @@ module.exports = {
                     }).join("\n\n");
 
                     const embed = new MessageEmbed()
-                        .setAuthor(`${user.user.tag}`, user.user.displayAvatarURL({ dynamic: true }))
+                        .setAuthor({ name: `${user.user.tag}`, iconURL: user.user.displayAvatarURL({ dynamic: true }) })
                         .setThumbnail(user.user.displayAvatarURL({ dynamic: true }))
                         .setDescription(`These are all the punishments for ${user.user}.\n\n${embedDescription}`)
                         .setColor("BLURPLE")
@@ -421,7 +419,8 @@ module.exports = {
 
                 } else {
 
-                    var botcmd = new MessageEmbed().setDescription('You may only use this command in bot command channels!').setColor(`${client.color.moderationRed}`)
+                    var botcmd = new MessageEmbed().setDescription('You may only use this command in bot command channels!')
+                        .setColor(`${client.color.moderationRed}`)
                     if (!interaction.channel.name.includes("command")) return interaction.followUp({ embeds: [botcmd] })
 
                     const userWarnings = await warnModel.find({
@@ -432,9 +431,6 @@ module.exports = {
                     if (!userWarnings?.length) return interaction.followUp({ content: "You don't have any normal punishments, completely clean!" })
 
                     const embedDescription = userWarnings.map((warn, i) => {
-                        const moderator = interaction.guild.members.cache.get(
-                            warn.moderatorId
-                        );
 
                         return [
                             `\`${i + 1}\`. **${warn.type}** | **ID:** \`${warn._id}\``,
@@ -445,7 +441,7 @@ module.exports = {
                     }).join("\n\n");
 
                     const embed = new MessageEmbed()
-                        .setAuthor(`${interaction.user.tag}`, interaction.user.displayAvatarURL({ dynamic: true }))
+                        .setAuthor({ name: `${interaction.user.tag}`, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) })
                         .setThumbnail(interaction.user.displayAvatarURL({ dynamic: true }))
                         .setDescription(`These are all the punishments for ${interaction.user}.\n\n${embedDescription}`)
                         .setColor("BLURPLE")
@@ -480,7 +476,7 @@ module.exports = {
                     }).join("\n\n");
 
                     const embed = new MessageEmbed()
-                        .setAuthor(`${user.user.tag}`, user.user.displayAvatarURL({ dynamic: true }))
+                        .setAuthor({ name: `${user.user.tag}`, iconURL: user.user.displayAvatarURL({ dynamic: true }) })
                         .setThumbnail(user.user.displayAvatarURL({ dynamic: true }))
                         .setDescription(`These are all the punishments for ${user.user}.\n\n${embedDescription}`)
                         .setColor("BLURPLE")
@@ -490,15 +486,21 @@ module.exports = {
 
                 } else {
 
-                    var botcmd = new MessageEmbed().setDescription('You may only use this command in bot command channels!').setColor(`${client.color.moderationRed}`)
-                    if (!interaction.channel.name.includes("command")) return interaction.followUp({ embeds: [botcmd] })
+                    var botcmd = new MessageEmbed()
+                        .setDescription('You may only use this command in bot command channels!')
+                        .setColor(`${client.color.moderationRed}`)
+                    if (!interaction.channel.name.includes("command"))
+                        return interaction.followUp({ embeds: [client.embeds.botCommand] })
 
                     const userWarnings = await automodModel.find({
                         userId: interaction.user.id,
                         guildId: interaction.guildId,
                     });
 
-                    if (!userWarnings?.length) return interaction.followUp({ content: "You don't have any automod punishments, completely clean!" })
+                    if (!userWarnings?.length)
+                        return interaction.followUp({
+                            content: "You don't have any automod punishments, completely clean!"
+                        })
 
                     const embedDescription = userWarnings.map((warn, i) => {
 
@@ -511,7 +513,7 @@ module.exports = {
                     }).join("\n\n");
 
                     const embed = new MessageEmbed()
-                        .setAuthor(`${interaction.user.tag}`, interaction.user.displayAvatarURL({ dynamic: true }))
+                        .setAuthor({ name: `${interaction.user.tag}`, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) })
                         .setThumbnail(interaction.user.displayAvatarURL({ dynamic: true }))
                         .setDescription(`These are all the punishments for ${interaction.user}.\n\n${embedDescription}`)
                         .setColor("BLURPLE")
@@ -527,11 +529,11 @@ module.exports = {
 
         } else if (subs == "info") {
 
-            if (!interaction.member.permissions.has("BAN_MEMBERS")) return interaction.followUp({ embeds: [client.embeds.noPermissions] }).then((msg) => {
-                setTimeout(() => {
-                    interaction.deleteReply()
-                }, 5000)
-            })
+            if (!interaction.member.permissions.has("BAN_MEMBERS"))
+                return interaction.followUp({ embeds: [client.embeds.noPermissions] })
+                    .then(() => {
+                        client.delete.interaction(interaction)
+                    })
 
             const punishid = interaction.options.getString("warn-id")
 
@@ -544,7 +546,7 @@ module.exports = {
             const date = `${moment(warnfind.timestamp).format("LT")} ${moment(warnfind.timestamp).format("LL")}`
 
             const embed = new MessageEmbed()
-                .setAuthor(`Punishment Information`, interaction.guild.iconURL({ dynamic: true }))
+                .setAuthor({ name: `Punishment Information`, iconURL: interaction.guild.iconURL({ dynamic: true }) })
                 .setDescription(`Information for the punishment Id: \`${punishid}\``)
                 .setColor("RANDOM")
                 .addField("● Punishment Type", `${type}`, true)
@@ -556,6 +558,5 @@ module.exports = {
             interaction.followUp({ embeds: [embed] })
 
         }
-
     },
 };

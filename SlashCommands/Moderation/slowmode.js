@@ -1,6 +1,4 @@
-const { Client, CommandInteraction, Me, interactionEmbed } = require("discord.js");
-const ms = require("ms")
-
+const { Client } = require("discord.js");
 
 module.exports = {
   name: "slowmode",
@@ -23,7 +21,7 @@ module.exports = {
    * @param {CommandInteraction} interaction
    * @param {String[]} args
    */
-  run: async (client, interaction, args) => {
+  run: async ({ interaction }) => {
 
 
     const rate = interaction.options.getInteger("rate")
@@ -33,11 +31,15 @@ module.exports = {
       switch (interaction.channel.rateLimitPerUser) {
 
         case 0:
-          interaction.followUp({ content: "There is no slowmode on this channel!" })
+          interaction.followUp({
+            content: "There is no slowmode on this channel!"
+          })
           break
 
         default:
-          interaction.followUp({ content: `There is currently a **${interaction.channel.rateLimitPerUser} second** slowmode!` })
+          interaction.followUp({
+            content: `There is currently a **${interaction.channel.rateLimitPerUser} second** slowmode!`
+          })
           break;
       }
 
@@ -47,28 +49,34 @@ module.exports = {
       let limit = rate;
 
       if (limit > 21601) {
-        return interaction.followUp("You can't set the slowmode to more than 6 hours!").then((msg) => {
-          setTimeout(() => {
-            interaction.deleteReply()
-          }, 5000)
-        })
+        return interaction.followUp("You can't set the slowmode to more than 6 hours!")
+          .then(() => {
+            client.delete.interaction(interaction)
+          })
       }
 
       if (limit == interaction.channel.rateLimitPerUser) {
-        return interaction.followUp(`The current slowmode is **${interaction.channel.rateLimitPerUser} second**, nothing changed!`)
+        return interaction.followUp({
+          content: `The current slowmode is **${interaction.channel.rateLimitPerUser} second**, nothing changed!`
+        })
       }
 
       if (limit == 0) {
-        return interaction.followUp("Slowmode has been turned off, woo hoo!")
-          .then(() => interaction.channel.setRateLimitPerUser("0"))
+        return interaction.followUp({ content: "Slowmode has been turned off, woo hoo!" })
+          .then(() => {
+            interaction.channel.setRateLimitPerUser("0")
+          })
       }
 
-      interaction.followUp(limit == 1 ? `Slowmode has been changed to **${limit} second**!` : `Slowmode has been changed to **${limit} seconds**!`)
-        .then(() => interaction.channel.setRateLimitPerUser(limit))
+      interaction.followUp(
+        limit == 1 ?
+          { content: `Slowmode has been changed to **${limit} second**!` } :
+          { content: `Slowmode has been changed to **${limit} seconds**!` }
+      )
+        .then(() => {
+          interaction.channel.setRateLimitPerUser(limit)
+        })
 
     }
-
-
-
   }
 }

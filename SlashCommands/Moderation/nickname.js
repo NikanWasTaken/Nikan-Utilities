@@ -1,6 +1,5 @@
-const { Client, CommandInteraction, MessageEmbed } = require("discord.js");
+const { Client, MessageEmbed } = require("discord.js");
 const randomnick = require("randomstring")
-
 
 module.exports = {
   name: "nickname",
@@ -39,7 +38,6 @@ module.exports = {
           required: true
         }
       ]
-
     },
     {
       name: "moderate",
@@ -63,7 +61,7 @@ module.exports = {
    * @param {CommandInteraction} interaction
    * @param {String[]} args
    */
-  run: async (client, interaction, args) => {
+  run: async ({ client, interaction }) => {
 
     const subs = interaction.options.getSubcommand(["edit", "reset", "moderate"])
     const user = interaction.options.getMember("user")
@@ -78,18 +76,17 @@ module.exports = {
           user.roles.highest.position >= interaction.member.roles.highest.position ||
           user.user.id === client.config.owner ||
           user.user.bot)
-          return interaction.followUp({ embeds: [failed] }).then((msg) => {
-            setTimeout(() => {
-              interaction.deleteReply()
-            }, 5000)
+          return interaction.followUp({ embeds: [failed] }).then(() => {
+            client.delete.interaction(interaction)
           })
 
-        const failedtochange1 = new MessageEmbed().setDescription("This user doesn't have a nickname!").setColor("RED")
+        const failedtochange1 = new MessageEmbed()
+          .setDescription("This user doesn't have a nickname!")
+          .setColor("RED")
+
         if (user.displayName === user.user.username)
-          return interaction.channel.send({ embeds: [failedtochange1] }).then((msg) => {
-            setTimeout(() => {
-              interaction.deleteReply()
-            }, 5000)
+          return interaction.channel.send({ embeds: [failedtochange1] }).then(() => {
+            client.delete.interaction(interaction)
           })
 
         const embed1 = new MessageEmbed()
@@ -102,15 +99,16 @@ module.exports = {
         break;
       case "moderate":
 
-        const failed1 = new MessageEmbed().setDescription(`You don't have permissions to perform that action!`).setColor("RED")
+        const failed1 = new MessageEmbed()
+          .setDescription(`You don't have permissions to perform that action!`)
+          .setColor("RED")
+
         if (user.roles.highest.position >= interaction.guild.me.roles.highest.position ||
           user.roles.highest.position >= interaction.member.roles.highest.position ||
           user.user.id === client.config.owner ||
           user.user.bot)
-          return interaction.followUp({ embeds: [failed1] }).then((msg) => {
-            setTimeout(() => {
-              interaction.deleteReply()
-            }, 5000)
+          return interaction.followUp({ embeds: [failed1] }).then(() => {
+            client.delete.interaction(interaction)
           })
 
         const nicknamegen = randomnick.generate({
@@ -122,53 +120,49 @@ module.exports = {
         const embed2 = new MessageEmbed()
           .setDescription(`${user.user} nickname has been moderated!`)
           .setColor(`${client.color.moderation}`)
-
         interaction.followUp({ embeds: [embed2] })
-
         user.setNickname(`${nickname1}`)
 
         break;
       case "edit":
 
-        const failed2 = new MessageEmbed().setDescription(`You don't have permissions to perform that action!`).setColor("RED")
+        const failed2 = new MessageEmbed()
+          .setDescription(`You don't have permissions to perform that action!`)
+          .setColor("RED")
+
         if (user.roles.highest.position >= interaction.guild.me.roles.highest.position ||
           user.roles.highest.position >= interaction.member.roles.highest.position ||
           user.user.id === client.config.owner ||
           user.user.bot)
-          return interaction.followUp({ embeds: [failed2] }).then((msg) => {
-            setTimeout(() => {
-              interaction.deleteReply()
-            }, 5000)
+          return interaction.followUp({ embeds: [failed2] }).then(() => {
+            client.delete.interaction(interaction)
           })
 
         const name = interaction.options.getString("nickname")
-        const failedtochange2 = new MessageEmbed().setDescription("You provided this user's current nickname!").setColor("RED")
+        const failedtochange2 = new MessageEmbed()
+          .setDescription("You provided this user's current nickname!")
+          .setColor("RED")
+
         if (user.displayName === name)
-          return message.channel.send({ embeds: [failedtochange2] }).then((msg) => {
-            setTimeout(() => {
-              interaction?.deleteReply()
-            }, 5000)
+          return message.channel.send({ embeds: [failedtochange2] }).then(() => {
+            client.delete.interaction(interaction)
           })
 
-        const failedtochange3 = new MessageEmbed().setDescription("Nickname should be fewer than 32 characters in length!").setColor("RED")
+        const failedtochange3 = new MessageEmbed()
+          .setDescription("Nickname should be fewer than 32 characters in length!")
+          .setColor("RED")
         if (name.length > 32)
-          return message.channel.send({ embeds: [failedtochange3] }).then((msg) => {
-            setTimeout(() => {
-              interaction?.deleteReply()
-            }, 5000)
+          return message.channel.send({ embeds: [failedtochange3] }).then(() => {
+            client.delete.interaction(interaction)
           })
 
         const embed4 = new MessageEmbed()
           .setDescription(`${user.user} nickname has been changed to \`${name}\``)
           .setColor(`${client.color.moderation}`)
-
         interaction.followUp({ embeds: [embed4] })
         user.setNickname(`${name}`)
 
         break;
     }
-
-
-
   }
 }

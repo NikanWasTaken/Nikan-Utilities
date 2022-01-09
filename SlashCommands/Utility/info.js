@@ -50,13 +50,15 @@ module.exports = {
    * @param {CommandInteraction} interaction
    * @param {String[]} args
    */
-  run: async (client, interaction, args) => {
+  run: async ({ client, interaction, args }) => {
 
 
     let subs = interaction.options.getSubcommand(["role", "user", "color"]);
 
 
     if (subs === "user") {
+
+      return interaction.followUp({ content: "Command is on a progress at the moment, try again later..." })
 
       const badges = {
         "EARLY_SUPPORTER": "<:EARLY_SUPPORTER:899171458297774160> ",

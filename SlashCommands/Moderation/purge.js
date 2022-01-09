@@ -1,4 +1,4 @@
-const { Client, CommandInteraction, MessageEmbed } = require("discord.js");
+const { Client, MessageEmbed } = require("discord.js");
 
 
 module.exports = {
@@ -29,20 +29,20 @@ module.exports = {
    * @param {CommandInteraction} interaction
    * @param {String[]} args
    */
-  run: async (client, interaction, args) => {
+  run: async ({ client, interaction }) => {
 
     var clear = interaction.options.getInteger("amount")
     var user = interaction.options.getMember("user")
 
 
-    let heh = new MessageEmbed().setDescription(`You need to provide a number between 1 and 100 to purge.`).setColor(`RED`)
+    let heh = new MessageEmbed()
+      .setDescription(`You need to provide a number between 1 and 100 to purge.`)
+      .setColor(`RED`)
 
     if (isNaN(clear) || clear > 100 || clear < 1)
       return interaction.followUp({ embeds: [heh] })
-        .then((msg) => {
-          setTimeout(() => {
-            interaction.deleteReply()
-          }, 5000)
+        .then(() => {
+          client.delete.interaction(interaction)
         })
 
 
@@ -60,10 +60,8 @@ module.exports = {
           .setColor(`${client.color.moderation}`)
 
         interaction.channel.send({ embeds: [embeda] })
-          .then((msg) => {
-            setTimeout(() => {
-              msg.delete(), message.delete()
-            }, 5000)
+          .then(() => {
+            client.delete.interaction(interaction)
           })
 
 
@@ -77,8 +75,9 @@ module.exports = {
           .setColor(`${client.color.moderation}`)
 
         interaction.channel.send({ embeds: [embeda] })
-          .then((msg) => { setTimeout(() => { msg.delete(), message.delete() }, 5000) })
-
+          .then(() => {
+            client.delete.interaction(interaction)
+          })
       }
     } catch (error) { }
   }

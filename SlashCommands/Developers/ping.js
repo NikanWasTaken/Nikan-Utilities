@@ -1,4 +1,4 @@
-const { Client, CommandInteraction, MessageEmbed } = require("discord.js");
+const { Client, MessageEmbed } = require("discord.js");
 
 
 module.exports = {
@@ -14,7 +14,7 @@ module.exports = {
      * @param {CommandInteraction} interaction
      * @param {String[]} args
      */
-    run: async (client, interaction, args) => {
+    run: async ({ client, interaction }) => {
 
         let embed = new MessageEmbed()
             .setAuthor({ name: `${client.user.username}`, iconURL: client.user.displayAvatarURL() })

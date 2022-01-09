@@ -18,7 +18,7 @@ module.exports = {
 
 
     var bb = new MessageEmbed()
-      .setAuthor("Member Count", client.user.displayAvatarURL({ dynamic: true }))
+      .setAuthor({ name: "Member Count", iconURL: client.user.displayAvatarURL({ dynamic: true }) })
       .setDescription(`There are **${interaction.guild.members.cache.size}** members in this server`)
       .setColor("#a8bd91")
       .addFields({
@@ -35,7 +35,12 @@ module.exports = {
         inline: true,
       }, {
         name: "Advanced Counts",
-        value: `<:NUonline:886215547249913856> • Online: ${interaction.guild.members.cache.filter(m => m?.presence?.status === "online").size}\n<:NUidle:906867112612601866> • Idle: ${interaction.guild.members.cache.filter(m => m?.presence?.status === "idle").size}\n<:NUdnd:906867112222531614> • Do not disturb: ${interaction.guild.members.cache.filter(m => m?.presence?.status === "dnd").size}\n<:NUoffline:906867114126770186> • Offline/Invisible: ${interaction.guild.members.cache.filter(m => m.presence === null).size}\n`,
+        value: [
+          `<:NUonline:886215547249913856> • Online: ${message.guild.members.cache.filter(m => m?.presence?.status === "online").size}`,
+          `<:NUidle:906867112612601866> • Idle: ${message.guild.members.cache.filter(m => m?.presence?.status === "idle").size}`,
+          `<:NUdnd:906867112222531614> • Do not disturb: ${message.guild.members.cache.filter(m => m?.presence?.status === "dnd").size}`,
+          `<: NUoffline: 906867114126770186 > • Offline / Invisible: ${message.guild.members.cache.filter((m) => !statuses?.includes(m.presence?.status)).size}`
+        ].join("\n"),
         inline: false,
       })
 

@@ -1,4 +1,4 @@
-const { Client, CommandInteraction, MessageEmbed } = require("discord.js");
+const { Client, MessageEmbed } = require("discord.js");
 
 
 module.exports = {
@@ -65,7 +65,7 @@ module.exports = {
      * @param {CommandInteraction} interaction
      * @param {String[]} args
      */
-    run: async (client, interaction, args) => {
+    run: async ({ client, interaction }) => {
 
         const cannotPerform = new MessageEmbed()
             .setDescription(`You don't have permissions to perform that action!`)
@@ -88,10 +88,8 @@ module.exports = {
                     role.permissions.has("BAN_MEMBERS") ||
                     role.managed
                 )
-                    return interaction.followUp({ embeds: [cannotPerform] }).then((msg) => {
-                        setTimeout(() => {
-                            interaction?.deleteReply()
-                        }, 5000)
+                    return interaction.followUp({ embeds: [cannotPerform] }).then(() => {
+                        client.delete.interaction(interaction)
                     })
 
                 let embed = new MessageEmbed()
@@ -107,10 +105,8 @@ module.exports = {
                     interaction.member.roles.highest.position <= user.roles.highest.position ||
                     role.managed
                 )
-                    return interaction.followUp({ embeds: [cannotPerform] }).then((msg) => {
-                        setTimeout(() => {
-                            interaction?.deleteReply()
-                        }, 5000)
+                    return interaction.followUp({ embeds: [cannotPerform] }).then(() => {
+                        client.delete.interaction(interaction)
                     })
 
                 let embed = new MessageEmbed()
@@ -128,7 +124,7 @@ module.exports = {
             const roles = user.roles.cache.sort((a, b) => b.position - a.position).filter(r => r.id !== interaction.guild.id);
 
             const embed = new MessageEmbed()
-                .setAuthor(`${user.user.tag}`, user.user.displayAvatarURL({ dynamic: true }))
+                .setAuthor({ name: `${user.user.tag}`, iconURL: user.user.displayAvatarURL({ dynamic: true }) })
                 .setColor(`${client.color.moderation}`)
                 .setTitle(`Role List for ${user.displayName}`)
                 .setDescription(roles ?
@@ -138,7 +134,7 @@ module.exports = {
                         ]
                     }).join("\n")}
                     ` : "This user doesn't have any roles!")
-                .setFooter(`Total Roles: ${roles.size}`)
+                .setFooter({ name: `Total Roles: ${roles.size}` })
             interaction.followUp({ embeds: [embed] })
         }
 

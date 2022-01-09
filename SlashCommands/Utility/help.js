@@ -1,4 +1,4 @@
-const { MessageEmbed, Client, MessageActionRow, MessageSelectMenu, Message, CommandInteraction, MessageButton } = require("discord.js");
+const { MessageEmbed, Client, MessageActionRow, MessageSelectMenu, MessageButton } = require("discord.js");
 const config = require("../../config.json");
 const ms = require("ms");
 
@@ -23,15 +23,16 @@ module.exports = {
    * @param {CommandInteraction} interaction
    * @param {String[]} args
    */
-  run: async (client, interaction, args) => {
+  run: async ({ client, interaction }) => {
 
-    if (!args.length) {
+    let string = interaction.options.getString("command")
 
+    if (!string) {
 
       let moderation = client.commands.filter(c => c.category === "moderation" && c.visible !== false)
       let other = client.commands.filter(c => c.category !== "moderation" && c.visible !== false && c.category !== "Secret" && c.category !== "Events")
       let mainembed = new MessageEmbed()
-        .setAuthor(`${client.user.username}`, `${client.user.displayAvatarURL()}`)
+        .setAuthor({ name: `${client.user.username}`, iconURL: `${client.user.displayAvatarURL()}` })
         .setDescription(`[** Vote for ${client.guilds.cache.get(client.server.id).name}**](https://top.gg/servers/${client.server.id}) • [**Subreddit**](https://www.reddit.com/r/NikanWorld/) `)
         .addField(`**Moderation [${moderation.size}]**`, `${moderation.map(c => `\`${c.name}\``).join(" • ")}`)
         .addField(`**Other [${other.size}]**`, `${other.map(c => `\`${c.name}\``).join(" • ")}`)
@@ -84,7 +85,7 @@ module.exports = {
                 label: "Events",
                 value: "events",
                 description: "Everything about event commands!",
-                emoji: "<a:SR_giveaways:897844189096722532>"
+                emoji: "<:HYPESQUAD_EVENTS:899171458599755796>"
               },
               {
                 label: "Others",
@@ -117,7 +118,7 @@ module.exports = {
             if (collected.user.id !== interaction.user.id) return collected.reply({ content: "This is not your menu!", ephemeral: true })
 
             const no = new MessageEmbed()
-              .setAuthor(`${client.user.username}`, `${client.user.displayAvatarURL()}`)
+              .setAuthor({ name: `${client.user.username}`, iconURL: `${client.user.displayAvatarURL()}` })
               .setDescription("The FitnessGram™ Pacer Test is a multistage aerobic client.capacity test that progressively gets more difficult as it continues. The 20 meter pacer test will begin in 30 seconds. Line up at the start. The running speed starts slowly, but gets faster each minute after you hear this signal. [Beep] A single lap should be completed each time you hear this sound. Remember to run in a straight line, and run as long as possible. The second time you fail to complete a lap before the sound, your test is over.")
               .addField("** **", "Well, nice wasting your time reading that. Whoops, I forgot to say you need staff to see this page!")
               .setTimestamp()
@@ -125,7 +126,7 @@ module.exports = {
             if (!interaction.member.permissions.has("MANAGE_MESSAGES")) return collected.reply({ embeds: [no], ephemeral: true })
 
             const embed = new MessageEmbed()
-              .setAuthor(`${client.user.username}`, client.user.displayAvatarURL())
+              .setAuthor({ name: `${client.user.username}`, iconURL: `${client.user.displayAvatarURL()}` })
               .setColor(`${client.color.moderation}`)
               .setTitle("Moderation Guide™️").setURL(`https://discord.com/channels/${client.server.id}/881803011503058944`)
               .setDescription(`Hey dear moderator, this page is made for you to learn more about me! We've made alot of channels for you to understand everything about me! Now it's my turn to tell you somethings!\nFirst of all, let's start with my commands, these are all of my commands, you need to learn to use them correctly as a staff member!`)
@@ -133,7 +134,7 @@ module.exports = {
               .addField("Moderation", `Well, the next thing I want to talk about is how to moderate and [rules](https://discord.com/channels/${client.server.id}/882245740221591563) for it!\nI can't describe and tell you all of them here because of my laziness, but, Nikan has written them down [**here**](https://discord.com/channels/${client.server.id}/882245740221591563) for you!`)
               .addField("Your duties", `Exactly like the rules, I'm too lazy to write your responsibilities here, but thanks to Nikan for writing them, I can just give you a link to them!\nJust check them out [**here**](https://discord.com/channels/${client.server.id}/882718002162839582)`)
               .addField("Other useful channels", `These channels are useful for you as a moderator too! Make sure to check them out at the staff category channels!`)
-              .setFooter(`Moderation Guide™️`)
+              .setFooter({ name: `Moderation Guide` })
               .setTimestamp()
 
             collected.reply({ embeds: [embed], ephemeral: true })
@@ -144,7 +145,7 @@ module.exports = {
             if (collected.user.id !== interaction.user.id) return collected.reply({ content: "This is not your menu!", ephemeral: true })
 
             const no = new MessageEmbed()
-              .setAuthor(`${client.user.username}`, `${client.user.displayAvatarURL()}`)
+              .setAuthor({ name: `${client.user.username}`, iconURL: `${client.user.displayAvatarURL()}` })
               .setDescription("The FitnessGram™ Pacer Test is a multistage aerobic client.capacity test that progressively gets more difficult as it continues. The 20 meter pacer test will begin in 30 seconds. Line up at the start. The running speed starts slowly, but gets faster each minute after you hear this signal. [Beep] A single lap should be completed each time you hear this sound. Remember to run in a straight line, and run as long as possible. The second time you fail to complete a lap before the sound, your test is over.")
               .addField("** **", "Well, nice wasting your time reading that. Whoops, I guess I forgot to say only event hosts can see this page!")
               .setTimestamp()
@@ -153,7 +154,7 @@ module.exports = {
             if (!interaction.member.roles.cache.get("880409157969256518")) return collected.reply({ embeds: [no], ephemeral: true })
 
             const embed = new MessageEmbed()
-              .setAuthor(`${client.user.username}`, client.user.displayAvatarURL())
+              .setAuthor({ name: `${client.user.username}`, iconURL: `${client.user.displayAvatarURL()}` })
               .setColor(`#deba04`)
               .setTitle("Events™️").setURL(`https://discord.com/channels/${client.server.id}/904601285985185792`)
               .setDescription(`Hello dear event host! You are a huge part of this server as you host many events in the server! I wanted to show you alot of my feature that we've made for you!`)
@@ -181,7 +182,7 @@ module.exports = {
             )
 
             const embed = new MessageEmbed()
-              .setAuthor(`${client.user.username}`, client.user.displayAvatarURL())
+              .setAuthor({ name: `${client.user.username}`, iconURL: `${client.user.displayAvatarURL()}` })
               .setTitle("My Commands").setURL(`${client.server.invite}`)
               .setDescription("Wow, I see we're finally here! The commands accessable by everyone in this server?\nWait, let me show you all the commands that I haven't showed you!")
               .addField("Server Commands", `${client.commands.filter(c => c.visible !== false && c.category === "server").map(c => `\`${c.name}\``).join(" • ")}`)
@@ -204,7 +205,6 @@ module.exports = {
 
     } else {
 
-      let string = interaction.options.getString("command")
       const command =
         client.commands.filter(c => c.visible !== false).get(string.toLowerCase()) ||
         client.commands.filter(c => c.visible !== false).find(
@@ -217,16 +217,14 @@ module.exports = {
 
         return interaction.followUp({
           embeds: [emb2]
-        }).then((msg) => {
-          setTimeout(() => {
-            interaction?.deleteReply()
-          }, 5000)
+        }).then(() => {
+          client.delete.interaction(interaction)
         })
 
       }
 
       const emb3 = new MessageEmbed()
-        .setAuthor(`${client.cap(command.name)} Command`, client.user.displayAvatarURL())
+        .setAuthor({ name: `${client.cap(command.name)} Command`, iconURL: client.user.displayAvatarURL() })
         .setDescription(
           [
             `> ** Name:** ${command.name ? client.cap(command.name) : 'No name'}`,
@@ -238,11 +236,10 @@ module.exports = {
           ].join("\n")
         )
         .setColor(`${client.color.botBlue}`)
-        .setFooter(`[] = required" • <> = optional`)
+        .setFooter({ name: `[] = required" • <> = optional` })
       interaction.followUp({
         embeds: [emb3]
       })
     }
-
   },
 };

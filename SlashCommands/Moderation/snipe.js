@@ -1,4 +1,4 @@
-const { Client, CommandInteraction, Message, MessageEmbed } = require("discord.js");
+const { Client, CommandInteraction, MessageEmbed } = require("discord.js");
 const moment = require("moment")
 
 
@@ -22,28 +22,30 @@ module.exports = {
    * @param {CommandInteraction} interaction
    * @param {String[]} args
    */
-  run: async (client, interaction, args) => {
+  run: async ({ client, interaction }) => {
 
 
     const snipes = client.snipes.get(interaction.channel.id);
-    if (!snipes) return interaction.followUp("There is no recently deleted interactions in this channel!")
+    if (!snipes) return interaction.followUp({
+      content: "There is no recently deleted interactions in this channel!"
+    })
 
-    const snipe = +args[0] - 1 || 0;
+    const optionArgs = interaction.options.getInteger("sniped-message-number");
+    const snipe = +optionArgs - 1 || 0;
     const target = snipes[snipe];
-    if (!target) return interaction.followUp(`Thire is only ${snipes.length} sniped messages!`)
+    if (!target) return interaction.followUp({
+      content: `There is only ${snipes.length} sniped messages!`
+    })
 
     const { msg, time, image } = target;
 
     let embed = new MessageEmbed()
-      .setAuthor(msg.author.tag, msg.author.displayAvatarURL({ dynamic: true }))
+      .setAuthor({ name: msg.author.tag, iconURL: msg.author.displayAvatarURL({ dynamic: true }) })
       .setColor("RANDOM")
       .setImage(image)
       .setDescription(msg.content)
-      .setFooter(`${moment(time).fromNow()} | ${snipe + 1} / ${snipes.length}`)
+      .setFooter({ name: `${moment(time).fromNow()} | ${snipe + 1} / ${snipes.length}` })
 
     interaction.followUp({ embeds: [embed] })
-
-
-
   }
 }

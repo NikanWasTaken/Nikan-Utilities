@@ -1,4 +1,4 @@
-const { Client, CommandInteraction, MessageEmbed } = require("discord.js");
+const { Client, MessageEmbed } = require("discord.js");
 
 
 
@@ -69,7 +69,7 @@ module.exports = {
      * @param {CommandInteraction} interaction
      * @param {String[]} args
      */
-    run: async (client, interaction, args) => {
+    run: async ({ client, interaction }) => {
 
         const subs = interaction.options.getSubcommand(["accept", "deny", "pend"])
 
@@ -85,12 +85,12 @@ module.exports = {
 
                 const data = oldembed.embeds[0]
                 const embed = new MessageEmbed()
-                    .setAuthor(`${data.author.name}`, `${data.author.iconURL}`)
+                    .setAuthor({ name: `${data.author.name}`, iconURL: `${data.author.iconURL}` })
                     .setTitle("Suggestion Approved")
                     .setColor("GREEN")
-                    .setFooter(`Suggestion ID: ${oldembed.id}`)
                     .addField(`${data.fields[0].name}`, `${data.fields[0].value}`)
                     .addField(`Reason from ${interaction.user.tag}`, `${suggestionReason}`)
+                    .setFooter({ name: `Suggestion ID: ${oldembed.id}` })
                     .setTimestamp()
 
                 oldembed.edit({ embeds: [embed] })
@@ -116,10 +116,10 @@ module.exports = {
 
                 const data = oldembed.embeds[0]
                 const embed = new MessageEmbed()
-                    .setAuthor(`${data.author.name}`, `${data.author.iconURL}`)
+                    .setAuthor({ name: `${data.author.name}`, iconURL: `${data.author.iconURL}` })
                     .setColor("RED")
                     .setTitle("Suggestion Denied")
-                    .setFooter(`Suggestion ID: ${oldembed.id}`)
+                    .setFooter({ name: `Suggestion ID: ${oldembed.id}` })
                     .addField(`${data.fields[0].name}`, `${data.fields[0].value}`)
                     .addField(`Reason from ${interaction.user.tag}`, `${suggestionReason}`)
                     .setTimestamp()
@@ -147,12 +147,12 @@ module.exports = {
 
                 const data = oldembed.embeds[0]
                 const embed = new MessageEmbed()
-                    .setAuthor(`${data.author.name}`, `${data.author.iconURL}`)
+                    .setAuthor({ name: `${data.author.name}`, iconURL: `${data.author.iconURL}` })
                     .setTitle("New Suggestion")
                     .setURL(`${client.server.invite}`)
                     .setColor("YELLOW")
                     .addField("Suggestion", `${data.fields[0].value}`)
-                    .setFooter(`Suggestion ID: ${oldembed.id}`)
+                    .setFooter({ name: `Suggestion ID: ${oldembed.id}` })
                     .addField(`Status`, `<a:loading:800626613980495872> Pending...`)
                     .setTimestamp()
 
@@ -164,9 +164,6 @@ module.exports = {
                 console.log(error)
                 interaction.followUp("Can't find a suggestion with the specified ID!")
             }
-
-
         }
-
     }
 }

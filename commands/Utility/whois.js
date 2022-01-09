@@ -16,9 +16,11 @@ module.exports = {
    * @param {String[]} args
    */
 
-  run: async ({ client, message, args }) => {
+  run: async (client, message, args) => {
 
+    return interaction.followUp({ content: "Command is on a progress at the moment, try again later..." })
 
+    message.member.permissions?.toArray().map(e => e.replace)
     var permissions = [];
     var know = "None"
     let member = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
@@ -43,80 +45,14 @@ module.exports = {
 
     if (member) {
 
+      if (
+        member.permissions.has("BAN_MEMBERS") ||
+        member.permissions.has("MANAGE_MESSAGES") ||
+        member.permissions.has("KICK_MEMBERS")
+      ) { know = "Moderator" };
 
-      if (member.permissions.has("ADMINISTRATOR")) {
-        permissions.push("Administrator");
-      }
-
-      if (member.permissions.has("MANAGE_ROLES")) {
-        permissions.push("Manage Roles");
-      }
-
-      if (member.permissions.has("MANAGE_CHANNELS")) {
-        permissions.push("Manage Channels");
-      }
-
-      if (member.permissions.has("MANAGE_MESSAGES")) {
-        permissions.push("Manage Messages");
-      }
-
-      if (member.permissions.has("MANAGE_WEBHOOKS")) {
-        permissions.push("Manage Webhooks");
-      }
-
-      if (member.permissions.has("MANAGE_NICKNAMES")) {
-        permissions.push("Manage Nicknames");
-      }
-
-      if (member.permissions.has("MANAGE_EMOJIS_AND_STICKERS")) {
-        permissions.push("Manage Emojis And Stickers");
-      }
-
-      if (member.permissions.has("KICK_MEMBERS")) {
-        permissions.push("Kick Members");
-      }
-
-      if (member.permissions.has("BAN_MEMBERS")) {
-        permissions.push("Ban Members");
-      }
-
-      if (member.permissions.has("MENTION_EVERYONE")) {
-        permissions.push("Mention Everyone");
-      }
-
-
-      if (permissions.length == 0) {
-        permissions.push("No Key Permissions Found");
-      }
-
-
-      //---------------------------------------------------------------
-
-      if (member.permissions.has("VIEW_AUDIT_LOG")) {
-        know = "Server Bot Developer";
-      }
-
-      if (member.permissions.has("MANAGE_MESSAGES")) {
-        know = "Server Trainee Moderator";
-      }
-
-      if (member.permissions.has("BAN_MEMBERS")) {
-        know = "Server Moderator";
-      }
-
-      if (member.permissions.has("MANAGE_ROLES")) {
-        know = "Server Head Moderator";
-      }
-
-      if (member.permissions.has("ADMINISTRATOR")) {
-        know = "Server Admin";
-      }
-
-
-      if (member.user.id == (await message.guild.fetchOwner()).id) {
-        know = 'Server Owner';
-      }
-
+      if (member.permissions.has("ADMINISTRATOR")) { know = "Administrator" };
+      if (member.user.id === (await message.guild.fetchOwner()).id) { know = 'Server Owner' };
 
       // --------------------------------- 
 

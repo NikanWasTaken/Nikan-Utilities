@@ -1,4 +1,4 @@
-const { Client, CommandInteraction, MessageEmbed } = require("discord.js");
+const { Client, MessageEmbed } = require("discord.js");
 const ms = require("ms")
 const db = require("../../models/MemberRoles.js")
 const warnModel = require("../../models/Punishments.js")
@@ -58,7 +58,7 @@ module.exports = {
    * @param {CommandInteraction} interaction
    * @param {String[]} args
    */
-  run: async (client, interaction, args) => {
+  run: async ({ client, interaction }) => {
 
     const subs = interaction.options.getSubcommand(["add", "remove"])
 

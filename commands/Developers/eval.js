@@ -138,7 +138,7 @@ module.exports = {
             const embed = new MessageEmbed()
                 .setAuthor({ name: `${client.user.username}`, iconURL: client.user.displayAvatarURL() })
                 .setTitle(`Error While Evoluting`).setURL(`${client.server.invite}`)
-                .setColor(`${client.color.failed}`)
+                .setColor(`${client.color.fail}`)
                 .addField("Code", `\`\`\`js\n${code}\n\`\`\``)
                 .addField("Error Message", `\`\`\`xl\n${err.message}\n\`\`\``)
                 .setTimestamp()

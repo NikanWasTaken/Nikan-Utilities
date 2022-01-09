@@ -1,4 +1,4 @@
-const { Client, CommandInteraction, MessageEmbed, Message, MessageActionRow, MessageButton, WebhookClient } = require("discord.js");
+const { Client, MessageEmbed, MessageActionRow, MessageButton, WebhookClient } = require("discord.js");
 const modmailconfig = require("../../json/modmail.json");
 const categoryId = modmailconfig.category;
 const blacklist = require("../../models/modmail-blacklist.js")
@@ -6,7 +6,7 @@ const sourcebin = require("sourcebin")
 let loghook = new WebhookClient({
     id: `${modmailconfig.hookId}`,
     token: `${modmailconfig.hookToken}`,
-}); // https://discord.com/api/webhooks/910091774180081704/Reqy5hiVvGPp4HzaqnLNrhOQIt7X__2QwvQuNp2FzeetqZeEHbkbecPFNGdHyJ_QG6Ra
+});
 
 
 
@@ -20,15 +20,6 @@ module.exports = {
             name: "close",
             description: "Closes a modmail channel!",
             type: "SUB_COMMAND",
-            options: [
-                {
-                    name: "reason",
-                    description: "The reason you're closing this thread",
-                    type: "STRING",
-                    required: true
-                }
-            ]
-
         },
         {
             name: "blacklist",
@@ -74,18 +65,22 @@ module.exports = {
      * @param {CommandInteraction} interaction
      * @param {String[]} args
      */
-    run: async (client, interaction, args) => {
+    run: async ({ client, interaction }) => {
 
-        const serverId = client.server.id
         const subs = interaction.options.getSubcommand(["close", "blacklist"])
 
         if (subs == "close") {
-            const reason = interaction.options.getString("reason") || "No reason provided";
+
 
             const channelblock = new MessageEmbed()
-                .setDescription("You may only use this command in tickets channel from modmail category!").setColor(`${client.color.moderationRed}`);
+                .setDescription("You may only use this command in tickets channel from modmail category!")
+                .setColor(`${client.color.moderationRed}`);
 
-            if (interaction.channel.parentId !== categoryId || interaction.channel.id === "880538350740725850" || interaction.channel.id === "885266382235795477") return interaction.followUp({ embeds: [channelblock] })
+            if (
+                interaction.channel.parentId !== categoryId ||
+                interaction.channel.id === "880538350740725850" ||
+                interaction.channel.id === "885266382235795477"
+            ) return interaction.followUp({ embeds: [channelblock] })
 
             const buttons = new MessageActionRow().addComponents(
 
@@ -101,7 +96,7 @@ module.exports = {
             )
 
             const areusure = new MessageEmbed()
-                .setAuthor(`${interaction.guild.name}`, interaction.guild.iconURL({ dynamic: true }))
+                .setAuthor({ name: `${interaction.guild.name}`, iconURL: interaction.guild.iconURL({ dynamic: true }) })
                 .setColor(`${client.color.botBlue}`)
                 .setTitle("Are you sure that you want to close this thread?").setURL(`${client.server.invite}`)
                 .setDescription("By accepting to close this thread, this channel will be deleted and you can't undo this action!\nAre you sure?")
@@ -120,11 +115,12 @@ module.exports = {
                     if (collected.user.id !== interaction.user.id) return collected.reply({ content: "This menu is not for you!", ephemeral: true })
 
                     const embed = new MessageEmbed()
-                        .setAuthor(`${interaction.guild.name}`, `${interaction.guild.iconURL({ dynamic: true })}`)
+
+                        .setAuthor({ name: `${interaction.guild.name}`, iconURL: interaction.guild.iconURL({ dynamic: true }) })
                         .setTitle("Ticket Deletion Has Been Canceled").setURL(`${client.server.invite}`)
-                        .setColor(`${client.color.failed}`)
+                        .setColor(`${client.color.fail}`)
                         .setDescription("The ticket deletion has been cancelled according to your button choice!")
-                        .setFooter(`${client.user.username}`, `${client.user.displayAvatarURL()}`)
+                        .setFooter({ name: `${client.user.username}`, iconURL: `${client.user.displayAvatarURL()}` })
                         .setTimestamp()
 
                     await msg?.edit({ embeds: [embed], components: [] })
@@ -134,11 +130,11 @@ module.exports = {
                     if (collected.user.id !== interaction.user.id) return collected.reply({ content: "This menu is not for you!", ephemeral: true })
 
                     const createdembed = new MessageEmbed()
-                        .setAuthor(`${client.guilds.cache.get(serverId).name}`, `${interaction.guild.iconURL({ dynamic: true })}`)
+                        .setAuthor({ name: `${interaction.guild.name}`, iconURL: interaction.guild.iconURL({ dynamic: true }) })
                         .setTitle("Thread Deletion Confimred").setURL(`${client.server.invite}`)
                         .setColor(`${client.color.success}`)
                         .setDescription(`${client.emoji.load} Saving the transcript...`)
-                        .setFooter(`${client.user.username}`, `${client.user.displayAvatarURL()}`)
+                        .setFooter({ name: `${client.user.username}`, iconURL: `${client.user.displayAvatarURL()}` })
                         .setTimestamp()
 
                     await msg?.edit({ embeds: [createdembed], components: [] })
@@ -181,8 +177,8 @@ module.exports = {
                     )
 
                     const logembed = new MessageEmbed()
-                        .setAuthor(`Ticket Closed`, interaction.guild.iconURL({ dynamic: true }))
-                        .setColor(`${client.color.logYellow}`)
+                        .setAuthor({ name: `Ticket Closed`, iconURL: interaction.guild.iconURL({ dynamic: true }) })
+                        .setColor('YELLOW')
                         .addField('Ticket Opened By', `● ${user.user}\n> __Tag:__ ${user.user.tag}\n> __ID:__ ${user.user.id}`, true)
                         .addField("Mod Info", `● ${interaction.member.user}\n> __Tag:__ ${interaction.member.user.tag}\n> __ID:__ ${interaction.member.user.id}`, true)
                         .setTimestamp()
@@ -190,19 +186,20 @@ module.exports = {
 
                     await msg.edit({
                         embeds: [
-                            createdembed.setDescription(`${client.emoji.success} Trascript Saved! This channel is going to be deleted in 10 seconds!`)
+                            createdembed
+                                .setDescription(`${client.emoji.success} Trascript Saved! This channel is going to be deleted in 10 seconds!`)
                         ]
                     })
-                        .then((msg) => { setTimeout(() => { interaction?.channel?.delete() }, 10000) })
+                        .then(() => { setTimeout(() => { interaction?.channel?.delete() }, 10000) })
 
                 }
 
             })
 
-            collector.on("end", async (collected) => {
+            collector.on("end", async () => {
 
                 const emobed = new MessageEmbed()
-                    .setAuthor(`${interaction.guild.name}`, interaction.guild.iconURL({ dynamic: true }))
+                    .setAuthor({ name: `${interaction.guild.name}`, iconURL: interaction.guild.iconURL({ dynamic: true }) })
                     .setTitle("Thread Deletion Timed Out!").setURL(`${client.server.invite}`)
                     .setDescription("The thread deletion has been timed out and canceled due to your late respond! If you want to delete this thread, please run the \`/modmail close\` command again!")
                     .setColor("RED")
@@ -240,7 +237,7 @@ module.exports = {
                     interaction.followUp({ embeds: [embed] })
 
                     let log = new MessageEmbed()
-                        .setAuthor(`BlackList Added`, interaction.guild.iconURL({ dynamic: true }))
+                        .setAuthor({ name: `BlackList Added`, iconURL: interaction.guild.iconURL({ dynamic: true }) })
                         .setColor('AQUA')
                         .addField('Member Info', `● ${user.user}\n> __Tag:__ ${user.user.tag}\n> __ID:__ ${user.user.id}`, true)
                         .addField("Mod Info", `● ${interaction.member.user}\n> __Tag:__ ${interaction.member.user.tag}\n> __ID:__ ${interaction.member.user.id}`, true)
@@ -266,7 +263,7 @@ module.exports = {
                 interaction.followUp({ embeds: [embed] })
 
                 let log = new MessageEmbed()
-                    .setAuthor(`BlackList Removed`, interaction.guild.iconURL({ dynamic: true }))
+                    .setAuthor({ name: `BlackList Removed`, iconURL: interaction.guild.iconURL({ dynamic: true }) })
                     .setColor("GREEN")
                     .addField('Member Info', `● ${user.user}\n> __Tag:__ ${user.user.tag}\n> __ID:__ ${user.user.id}`, true)
                     .addField("Mod Info", `● ${interaction.member.user}\n> __Tag:__ ${interaction.member.user.tag}\n> __ID:__ ${interaction.member.user.id}`, true)
@@ -275,10 +272,7 @@ module.exports = {
 
                 loghook.send({ embeds: [log] })
 
-
             }
-
         }
-
     }
 }

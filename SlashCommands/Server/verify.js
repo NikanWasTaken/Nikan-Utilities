@@ -13,7 +13,7 @@ module.exports = {
      * @param {CommandInteraction} interaction
      * @param {String[]} args
      */
-    run: async (client, interaction, args) => {
+    run: async ({ client, interaction }) => {
 
         const textarray = [
             `${interaction.user} just showed up!`,
@@ -53,7 +53,8 @@ module.exports = {
         const randomemojis = emojiarray[~~(Math.random() * emojiarray.length)];
 
 
-        if (interaction.member.roles.cache.get("793410990535999508")) return interaction.followUp({ content: "You're already verified!" })
+        if (interaction.member.roles.cache.get("793410990535999508"))
+            return interaction.followUp({ content: "You're already verified!" })
 
         const captcha = new Captcha();
         captcha.async = true;
@@ -64,12 +65,12 @@ module.exports = {
         var attachment = new MessageAttachment(await captcha.png, "captcha.png")
 
         let embed = new MessageEmbed()
-            .setAuthor(`${interaction.guild.name}`, interaction.guild.iconURL({ dynamic: true }))
+            .setAuthor({ name: `${interaction.guild.name}`, iconURL: interaction.guild.iconURL({ dynamic: true }) })
             .setTitle(`Solve the captcha!`).setURL(`${client.server.invite}`)
             .setDescription("Please solve the captcha that you see below! Send the letters you see in the currect channel!")
             .setColor(`${client.color.botBlue}`)
             .setImage("attachment://captcha.png")
-            .setFooter(`You have 20 seconds to solve this captcha!`, `${client.user.displayAvatarURL()}`)
+            .setFooter({ name: `You have 20 seconds to solve this captcha!`, iconURL: `${client.user.displayAvatarURL()}` })
 
         await interaction.followUp({ embeds: [embed], files: [attachment] })
 
@@ -103,7 +104,7 @@ module.exports = {
                 await channel.send({ content: `${randomemojis} ${randomtexts} \`[#${interaction.guild.memberCount}]\``, allowedMentions: { parse: ["users"] } })
 
                 let embedcorrect = new MessageEmbed()
-                    .setAuthor(`${interaction.guild.name}`, interaction.guild.iconURL({ dynamic: true }))
+                    .setAuthor({ name: `${interaction.guild.name}`, iconURL: interaction.guild.iconURL({ dynamic: true }) })
                     .setTitle("Answer was correct!").setURL(`${client.server.invite}`)
                     .setColor(`${client.color.success}`)
                     .setDescription("Congratulation! You have solved the captcha and entered the server!")
@@ -119,9 +120,9 @@ module.exports = {
                 m.delete()
 
                 let embedwrong = new MessageEmbed()
-                    .setAuthor(`${interaction.guild.name}`, interaction.guild.iconURL({ dynamic: true }))
+                    .setAuthor({ name: `${interaction.guild.name}`, iconURL: interaction.guild.iconURL({ dynamic: true }) })
                     .setTitle("Answer was wrong!").setURL(`${client.server.invite}`)
-                    .setColor(`${client.color.failed}`)
+                    .setColor(`${client.color.fail}`)
                     .setDescription("You've answered the captcha wrong! Please run \`/verify\` and try again!")
                     .addField(`Correct Answer`, `➜ **${captcha.text}**`)
                     .setImage("attachment://captcha.png")
@@ -135,16 +136,15 @@ module.exports = {
         collector.on("end", async (m) => {
 
             const emo = new MessageEmbed()
-                .setAuthor(`${interaction.guild.name}`, interaction.guild.iconURL({ dynamic: true }))
+                .setAuthor({ name: `${interaction.guild.name}`, iconURL: interaction.guild.iconURL({ dynamic: true }) })
                 .setTitle(`Verification Timed Out!`).setURL(`${client.server.invite}`)
                 .setDescription("The verificaton timed out due to your late respond! Please run \`/verify\` again to start the verification.")
                 .setColor(`RED`)
                 .addField(`Correct Answer`, `➜ **${captcha.text}**`)
                 .setImage("attachment://captcha.png")
-                .setFooter(`Captcha Timed Out`, `${client.user.displayAvatarURL()}`)
+                .setFooter({ name: `Captcha Timed Out`, iconURL: `${client.user.displayAvatarURL()}` })
 
             await interaction.editReply({ embeds: [emo], components: [] })
         })
-
     }
 }

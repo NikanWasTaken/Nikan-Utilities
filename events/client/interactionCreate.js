@@ -1,7 +1,6 @@
 const client = require("../../index");
 const { Collection, MessageEmbed } = require("discord.js");
 const Timeout = new Collection();
-const ms = require("ms")
 
 const noPermissions = new MessageEmbed()
   .setDescription("You don't have permissions to run this command.")
@@ -47,14 +46,14 @@ client.on("interactionCreate", async (interaction) => {
 
       let cooldownEmbed = new MessageEmbed()
         .setColor(`${client.color.invisible}`)
-        .setDescription(`You need to wait \`${client.convert.time(parseInt(~~(cooldownRemaining / 1000)))}\` to use this slash command again.`);
+        .setDescription(`You need to wait \`${client.convert.time(parseInt(~~(cooldownRemaining / 1000)))}\` to use this command again.`);
 
       if (Timeout.has(`${cmd.name}${interaction.member.user.id}`))
         return interaction.reply({ embeds: [cooldownEmbed], ephemeral: true })
 
       await interaction.deferReply({ ephemeral: false || cmd.ephemeral })
 
-      cmd.run(client, interaction, args);
+      cmd.run({ client, interaction, args });
       Timeout.set(
         `${cmd.name}${interaction.member.user.id}`,
         Date.now() + cmd.cooldown
@@ -82,7 +81,7 @@ client.on("interactionCreate", async (interaction) => {
       );
 
 
-      cmd.run(client, interaction, args);
+      cmd.run({ client, interaction, args });
 
     }
 
@@ -94,6 +93,6 @@ client.on("interactionCreate", async (interaction) => {
   if (interaction.isContextMenu()) {
     const command = client.slashCommands.get(interaction.commandName);
     await interaction.deferReply({ ephemeral: false || command.ephemeral });
-    if (command) command.run(client, interaction);
+    if (command) command.run({ client, interaction });
   }
 });

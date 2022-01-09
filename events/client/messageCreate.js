@@ -1,5 +1,4 @@
 const client = require("../../index");
-const ms = require("ms")
 const config = client.config
 const { Collection, MessageEmbed } = require("discord.js")
 const Timeout = new Collection();
@@ -85,7 +84,7 @@ client.on("messageCreate", async (message) => {
                 `This command is missing an argument from the usage below!\n`,
                 `> **Usage:** ${command.usage ? `\`${config.prefix + command.name + ` ${command.usage}`}\`` : "No Usage found!"}`,
                 `> **Aliases:** ${command.aliases ? `\`${command.aliases.join("` `")}\`` : "No Aliases Available"}`,
-                `> **Cooldown:** ${command.cooldown ? ms(command.cooldown, { long: true }) : "No Cooldown"}`,
+                `> **Cooldown:** ${command.cooldown ? client.convert.time(command.cooldown / 1000) : "No Cooldown"}`,
             ].join("\n")
         )
         .setColor(`${client.color.moderationRed}`)
@@ -102,7 +101,7 @@ client.on("messageCreate", async (message) => {
         let cooldownRemaining = `${~~(Timeout.get(`${command.name}${message.author.id}`) - Date.now())}`
         let cooldownEmbed = new MessageEmbed()
             .setColor(`${client.color.invisible}`)
-            .setDescription(`You need to wait \`${client.convert.time(parseInt(~~(cooldownRemaining / 1000)))}\` to use the \`${command.name}\` command again.`);
+            .setDescription(`You need to wait \`${client.convert.time(parseInt(~~(cooldownRemaining / 1000)))}\` to use this command again.`);
 
         if (Timeout.has(`${command.name}${message.author.id}`))
             return message.reply({ embeds: [cooldownEmbed] })
