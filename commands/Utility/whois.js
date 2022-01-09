@@ -20,7 +20,6 @@ module.exports = {
 
     const devServer = client.guilds.cache.get("869805946854068281");
     const badgesArray = [];
-    const PermissionsArray = [];
     let acknowments = "None";
     let member = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
     if (!args[0])
@@ -143,6 +142,8 @@ module.exports = {
       })
 
       collector.on("collect", (collected) => {
+
+        const PermissionsArray = [];
 
         if (collected.user.id !== message.author.id) return collected.reply({
           content: "This menu isn't for you!",
