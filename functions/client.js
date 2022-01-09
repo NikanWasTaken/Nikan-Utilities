@@ -7,7 +7,7 @@ module.exports = async (client) => {
     // colors
     client.color = {
         success: "#65b385",
-        failed: "#de564c",
+        fail: "#de564c",
         loading: "#d5a538",
         invisible: "#2F3136",
         moderationRed: "#b3666c",

@@ -20,9 +20,8 @@ module.exports = {
 
     return message.reply({ content: "Command is on a progress at the moment, try again later..." })
 
-    message.member.permissions?.toArray().map(e => e.replace)
     var permissions = [];
-    var know = "None"
+    let acknowments = "None";
     let member = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
     if (!args[0])
       member = message.member;
@@ -49,19 +48,16 @@ module.exports = {
         member.permissions.has("BAN_MEMBERS") ||
         member.permissions.has("MANAGE_MESSAGES") ||
         member.permissions.has("KICK_MEMBERS")
-      ) { know = "Moderator" };
+      ) { acknowments = "Moderator" };
 
-      if (member.permissions.has("ADMINISTRATOR")) { know = "Administrator" };
-      if (member.user.id === (await message.guild.fetchOwner()).id) { know = 'Server Owner' };
-
-      // --------------------------------- 
+      if (member.permissions.has("ADMINISTRATOR")) { acknowments = "Administrator" };
+      if (member.user.id === (await message.guild.fetchOwner()).id) { acknowments = 'Server Owner' };
 
       const flags = member.user.flags?.toArray()
 
+
       const components = (state) => [
-
         new MessageActionRow().addComponents(
-
           new MessageButton()
             .setLabel("More Information")
             .setStyle("SECONDARY")
@@ -80,7 +76,7 @@ module.exports = {
           .setThumbnail(`${member.user.displayAvatarURL({ dynamic: true })}`)
           .setTimestamp()
           .addField("__Account Information__", `**ID:** ${member.user.id}\n**Username:** ${member.user.username} • **Discriminator:** #${member.user.discriminator}\n**Registered:** <t:${Math.floor(member.user.createdAt / 1000)}:f> [<t:${Math.floor(member.user.createdAt / 1000)}:R>]\n**Avatar:** [JPG](${member.user.displayAvatarURL({ format: 'jpg' })}) • [PNG](${member.user.displayAvatarURL({ format: 'png' })}) • [WEBP](${member.user.displayAvatarURL()}) • [GIF](${member.user.displayAvatarURL({ format: 'gif', dynamic: true })})\n**Badges:** ${flags?.length ? `${flags.map(flag => badges[flag]).join(' ')}` : 'No Badges!'}`)
-          .addField("__Server Member Info__", `**Joined:** <t:${~~(member.joinedAt / 1000)}:f> [<t:${~~(member.joinedAt / 1000)}:R>]\n**Booting since:** ${member.premiumSinceTimestamp ? `<t:${Math.floor(member.premiumSinceTimestamp / 1000)}:D>` : 'Not a server booster!'}\n**Nickname:** ${member.displayName === member.user.username ? "No Nickname" : `${member.displayName}`}\n**Highest Role:** ${member.roles.highest.id === message.guild.id ? "Doesn't have any role!" : member.roles.highest}\n**Acknowledgements:** ${know}\n\n\n`)
+          .addField("__Server Member Info__", `**Joined:** <t:${~~(member.joinedAt / 1000)}:f> [<t:${~~(member.joinedAt / 1000)}:R>]\n**Booting since:** ${member.premiumSinceTimestamp ? `<t:${Math.floor(member.premiumSinceTimestamp / 1000)}:D>` : 'Not a server booster!'}\n**Nickname:** ${member.displayName === member.user.username ? "No Nickname" : `${member.displayName}`}\n**Highest Role:** ${member.roles.highest.id === message.guild.id ? "Doesn't have any role!" : member.roles.highest}\n**Acknowments:** ${know}\n\n\n`)
 
         const msg = await message.reply({ embeds: [eyes], components: components(false) })
 
@@ -124,7 +120,7 @@ module.exports = {
           .setThumbnail(`${member.user.displayAvatarURL({ dynamic: true })}`)
           .setTimestamp()
           .addField("__Account Information__", `**ID:** ${member.user.id}\n**Username:** ${member.user.username} • **Discriminator:** #${member.user.discriminator}\n**Registered:** <t:${Math.floor(member.user.createdAt / 1000)}:f> [<t:${Math.floor(member.user.createdAt / 1000)}:R>]\n**Avatar:** [JPG](${member.user.displayAvatarURL({ format: 'jpg' })}) • [PNG](${member.user.displayAvatarURL({ format: 'png' })}) • [WEBP](${member.user.displayAvatarURL()}) • [GIF](${member.user.displayAvatarURL({ format: 'gif', dynamic: true })})\n**Badges:** ${flags?.length ? `${flags.map(flag => badges[flag]).join(' ')}` : 'No Badges!'}`)
-          .addField("__Server Member Info__", `**Joined:** <t:${~~(member.joinedAt / 1000)}:f> [<t:${~~(member.joinedAt / 1000)}:R>]\n**Booting since:** ${member.premiumSinceTimestamp ? `<t:${Math.floor(member.premiumSinceTimestamp / 1000)}:D>` : 'Not a server booster!'}\n**Nickname:** ${member.displayName === member.user.username ? "No Nickname" : `${member.displayName}`}\n**Highest Role:** ${member.roles.highest.id === message.guild.id ? "Doesn't have any role!" : member.roles.highest}\n**Acknowledgements:** ${know}\n\n\n`)
+          .addField("__Server Member Info__", `**Joined:** <t:${~~(member.joinedAt / 1000)}:f> [<t:${~~(member.joinedAt / 1000)}:R>]\n**Booting since:** ${member.premiumSinceTimestamp ? `<t:${Math.floor(member.premiumSinceTimestamp / 1000)}:D>` : 'Not a server booster!'}\n**Nickname:** ${member.displayName === member.user.username ? "No Nickname" : `${member.displayName}`}\n**Highest Role:** ${member.roles.highest.id === message.guild.id ? "Doesn't have any role!" : member.roles.highest}\n**Acknowments:** ${know}\n\n\n`)
           .addField("__Presence Information__", `**Status:** ${client.cap(member.presence.status)}\n**Devices [${Object.entries(devices).length}]:** ${Object.entries(devices).map((value) => `${value[0][0].toUpperCase()}${value[0].slice(1)}`).join(", ")}`)
 
         const msg = await message.reply({ embeds: [eyes], components: components(false) })
