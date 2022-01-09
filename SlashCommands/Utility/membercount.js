@@ -14,7 +14,7 @@ module.exports = {
    * @param {CommandInteraction} interaction
    * @param {String[]} args
    */
-  run: async (client, interaction, args) => {
+  run: async ({ client, interaction }) => {
 
 
     var bb = new MessageEmbed()
