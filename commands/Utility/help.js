@@ -71,7 +71,7 @@ module.exports = {
 
       const collector = initialMessage.createMessageComponentCollector({
         componentType: "SELECT_MENU",
-        time: 3000,
+        time: 30000,
       });
 
       collector.on('collect', (collected) => {
