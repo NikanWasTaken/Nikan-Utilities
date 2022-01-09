@@ -16,9 +16,9 @@ module.exports = {
    * @param {String[]} args
    */
 
-  run: async (client, message, args) => {
+  run: async ({ client, message, args }) => {
 
-    return interaction.followUp({ content: "Command is on a progress at the moment, try again later..." })
+    return message.reply({ content: "Command is on a progress at the moment, try again later..." })
 
     message.member.permissions?.toArray().map(e => e.replace)
     var permissions = [];

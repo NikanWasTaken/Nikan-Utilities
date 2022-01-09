@@ -39,67 +39,40 @@ module.exports = {
         .setColor(`${client.color.botBlue}`)
 
 
-      const components = new MessageActionRow().addComponents(
-        new MessageSelectMenu()
-          .setCustomId('help')
-          .setPlaceholder("Please select an option!")
-          .addOptions(
-            [
-              {
-                label: "Moderation",
-                value: "moderation",
-                description: "Everything about moderation!",
-                emoji: "<:DISCORD_EMPLOYEE:899171458050306058>"
-              },
-              {
-                label: "Events",
-                value: "events",
-                description: "Everything about event commands!",
-                emoji: "<a:SR_giveaways:897844189096722532>"
-              },
-              {
-                label: "Others",
-                value: "other",
-                description: "Commands accessable by everyone!",
-                emoji: "<a:NUdiscord:914784249012424734>"
-              }
-            ]
-          )
-      )
-
-
-      const ended = new MessageActionRow().addComponents(
-        new MessageSelectMenu()
-          .setCustomId('help')
-          .setPlaceholder("Timed Out!")
-          .setDisabled(true)
-          .addOptions(
-            [
-              {
-                label: "Moderation",
-                value: "moderation",
-                description: "Everything about moderation!",
-                emoji: "<:DISCORD_EMPLOYEE:899171458050306058>"
-              },
-              {
-                label: "Events",
-                value: "events",
-                description: "Everything about event commands!",
-                emoji: "<:HYPESQUAD_EVENTS:899171458599755796>"
-              },
-              {
-                label: "Others",
-                value: "other",
-                description: "Commands accessable by everyone!",
-                emoji: "<a:NUdiscord:914784249012424734>"
-              }
-            ]
-          )
-      )
+      const components = (state, options) => [
+        new MessageActionRow().addComponents(
+          new MessageSelectMenu()
+            .setCustomId('help')
+            .setDisabled(options.disable)
+            .setPlaceholder(`${state}`)
+            .addOptions(
+              [
+                {
+                  label: "Moderation",
+                  value: "moderation",
+                  description: "Everything about moderation!",
+                  emoji: "<:DISCORD_EMPLOYEE:899171458050306058>"
+                },
+                {
+                  label: "Events",
+                  value: "events",
+                  description: "Everything about event commands!",
+                  emoji: "<:HYPESQUAD_EVENTS:899171458599755796>"
+                },
+                {
+                  label: "Others",
+                  value: "other",
+                  description: "Commands accessable by everyone!",
+                  emoji: "<a:NUdiscord:914784249012424734>"
+                }
+              ]
+            )
+        )
+      ]
 
       const initialMessage = await interaction.followUp({
         embeds: [mainembed],
-        components: [components]
+        components: components("Please select an option", { disable: false })
       });
 
 
@@ -137,8 +110,10 @@ module.exports = {
               .setFooter({ name: `Moderation Guide` })
               .setTimestamp()
 
-            collected.reply({ embeds: [embed], ephemeral: true })
-
+            collected.reply({
+              embeds: [embed],
+              ephemeral: true
+            })
 
           } else if (collected.values[0] === "events") {
 
@@ -199,7 +174,9 @@ module.exports = {
 
       collector.on('end', () => {
 
-        initialMessage.edit({ components: [ended] })
+        initialMessage.edit({
+          components: components("Timed Out!", { disable: false })
+        })
 
       })
 

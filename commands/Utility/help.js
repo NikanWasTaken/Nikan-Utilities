@@ -32,73 +32,46 @@ module.exports = {
         .setColor(`${client.color.botBlue}`)
 
 
-      const components = new MessageActionRow().addComponents(
-        new MessageSelectMenu()
-          .setCustomId('help')
-          .setPlaceholder("Please select an option!")
-          .addOptions(
-            [
-              {
-                label: "Moderation",
-                value: "moderation",
-                description: "Everything about moderation!",
-                emoji: "<:DISCORD_EMPLOYEE:899171458050306058>"
-              },
-              {
-                label: "Events",
-                value: "events",
-                description: "Everything about event commands!",
-                emoji: "<a:SR_giveaways:897844189096722532>"
-              },
-              {
-                label: "Others",
-                value: "other",
-                description: "Commands accessable by everyone!",
-                emoji: "<a:NUdiscord:914784249012424734>"
-              }
-            ]
-          )
-      )
-
-
-      const ended = new MessageActionRow().addComponents(
-        new MessageSelectMenu()
-          .setCustomId('help')
-          .setPlaceholder("Timed Out!")
-          .setDisabled(true)
-          .addOptions(
-            [
-              {
-                label: "Moderation",
-                value: "moderation",
-                description: "Everything about moderation!",
-                emoji: "<:DISCORD_EMPLOYEE:899171458050306058>"
-              },
-              {
-                label: "Events",
-                value: "events",
-                description: "Everything about event commands!",
-                emoji: "<:HYPESQUAD_EVENTS:899171458599755796> "
-              },
-              {
-                label: "Others",
-                value: "other",
-                description: "Commands accessable by everyone!",
-                emoji: "<a:NUdiscord:914784249012424734>"
-              }
-            ]
-          )
-      )
+      const components = (state, options) => [
+        new MessageActionRow().addComponents(
+          new MessageSelectMenu()
+            .setCustomId('help')
+            .setDisabled(options.disable)
+            .setPlaceholder(`${state}`)
+            .addOptions(
+              [
+                {
+                  label: "Moderation",
+                  value: "moderation",
+                  description: "Everything about moderation!",
+                  emoji: "<:DISCORD_EMPLOYEE:899171458050306058>"
+                },
+                {
+                  label: "Events",
+                  value: "events",
+                  description: "Everything about event commands!",
+                  emoji: "<:HYPESQUAD_EVENTS:899171458599755796>"
+                },
+                {
+                  label: "Others",
+                  value: "other",
+                  description: "Commands accessable by everyone!",
+                  emoji: "<a:NUdiscord:914784249012424734>"
+                }
+              ]
+            )
+        )
+      ]
 
       const initialMessage = await message.reply({
         embeds: [mainembed],
-        components: [components]
+        components: components("Please select an option!", { disable: false })
       });
 
 
       const collector = initialMessage.createMessageComponentCollector({
         componentType: "SELECT_MENU",
-        time: 30000,
+        time: 3000,
       });
 
       collector.on('collect', (collected) => {
@@ -184,16 +157,14 @@ module.exports = {
 
             collected.reply({ embeds: [embed], ephemeral: true, components: [row] })
 
-
           }
         }
-
       });
 
       collector.on('end', () => {
-
-        initialMessage.edit({ components: [ended] })
-
+        initialMessage.edit({
+          components: components("Timed Out!", { disable: true })
+        })
       })
 
     } else {
@@ -211,10 +182,7 @@ module.exports = {
         return message.reply({
           embeds: [emb2]
         }).then((msg) => {
-          setTimeout(() => {
-            msg?.delete()
-            message?.delete()
-          }, 5000)
+          client.delete.message(message, msg)
         })
 
       }
