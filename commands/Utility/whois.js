@@ -203,7 +203,7 @@ module.exports = {
             break;
 
           case "whois-permissions":
-            const permissions = message.member.permissions?.toArray();
+            const permissions = member.permissions?.toArray();
             permissions.forEach(role => {
               PermissionsArray.push(`${client.cap(role.toString().replaceAll("_", ' '))}`);
             })
