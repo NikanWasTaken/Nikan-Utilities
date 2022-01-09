@@ -70,7 +70,7 @@ module.exports = {
             .setDescription("Please solve the captcha that you see below! Send the letters you see in the currect channel!")
             .setColor(`${client.color.botBlue}`)
             .setImage("attachment://captcha.png")
-            .setFooter({ name: `You have 20 seconds to solve this captcha!`, iconURL: `${client.user.displayAvatarURL()}` })
+            .setFooter({ text: `You have 20 seconds to solve this captcha!`, iconURL: `${client.user.displayAvatarURL()}` })
 
         await interaction.followUp({ embeds: [embed], files: [attachment] })
 
@@ -142,7 +142,7 @@ module.exports = {
                 .setColor(`RED`)
                 .addField(`Correct Answer`, `➜ **${captcha.text}**`)
                 .setImage("attachment://captcha.png")
-                .setFooter({ name: `Captcha Timed Out`, iconURL: `${client.user.displayAvatarURL()}` })
+                .setFooter({ text: `Captcha Timed Out`, iconURL: `${client.user.displayAvatarURL()}` })
 
             await interaction.editReply({ embeds: [emo], components: [] })
         })

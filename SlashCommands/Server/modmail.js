@@ -120,7 +120,7 @@ module.exports = {
                         .setTitle("Ticket Deletion Has Been Canceled").setURL(`${client.server.invite}`)
                         .setColor(`${client.color.fail}`)
                         .setDescription("The ticket deletion has been cancelled according to your button choice!")
-                        .setFooter({ name: `${client.user.username}`, iconURL: `${client.user.displayAvatarURL()}` })
+                        .setFooter({ text: `${client.user.username}`, iconURL: `${client.user.displayAvatarURL()}` })
                         .setTimestamp()
 
                     await msg?.edit({ embeds: [embed], components: [] })
@@ -134,7 +134,7 @@ module.exports = {
                         .setTitle("Thread Deletion Confimred").setURL(`${client.server.invite}`)
                         .setColor(`${client.color.success}`)
                         .setDescription(`${client.emoji.load} Saving the transcript...`)
-                        .setFooter({ name: `${client.user.username}`, iconURL: `${client.user.displayAvatarURL()}` })
+                        .setFooter({ text: `${client.user.username}`, iconURL: `${client.user.displayAvatarURL()}` })
                         .setTimestamp()
 
                     await msg?.edit({ embeds: [createdembed], components: [] })

@@ -46,7 +46,7 @@ module.exports = {
 
             msg.edit({
                 embeds: [
-                    embed.setFooter({ name: `Suggestion ID: ${msg.id}` })
+                    embed.setFooter({ text: `Suggestion ID: ${msg.id}` })
                 ]
             })
             msg.react("<a:NUupvote:902915217829273661>")

@@ -51,7 +51,7 @@ module.exports = {
       })
       .setColor("RANDOM")
       .setDescription(array.join("\n") || "<a:red_x:872203367718457424> No Results - Can't Find Any User!")
-      .setFooter({ name: array.length == 0 ? "No Result" : array.length == 1 ? `${array.length} Result` : `${array.length} Results` })
+      .setFooter({ text: array.length == 0 ? "No Result" : array.length == 1 ? `${array.length} Result` : `${array.length} Results` })
       .setTimestamp()
       .setThumbnail("https://cdn.discordapp.com/attachments/870637449158742057/874944240290005042/bloodbros-search.gif")
 

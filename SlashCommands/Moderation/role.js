@@ -134,7 +134,7 @@ module.exports = {
                         ]
                     }).join("\n")}
                     ` : "This user doesn't have any roles!")
-                .setFooter({ name: `Total Roles: ${roles.size}` })
+                .setFooter({ text: `Total Roles: ${roles.size}` })
             interaction.followUp({ embeds: [embed] })
         }
 

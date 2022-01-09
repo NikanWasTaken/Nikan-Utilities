@@ -90,7 +90,7 @@ module.exports = {
                     .setColor("GREEN")
                     .addField(`${data.fields[0].name}`, `${data.fields[0].value}`)
                     .addField(`Reason from ${interaction.user.tag}`, `${suggestionReason}`)
-                    .setFooter({ name: `Suggestion ID: ${oldembed.id}` })
+                    .setFooter({ text: `Suggestion ID: ${oldembed.id}` })
                     .setTimestamp()
 
                 oldembed.edit({ embeds: [embed] })
@@ -119,7 +119,7 @@ module.exports = {
                     .setAuthor({ name: `${data.author.name}`, iconURL: `${data.author.iconURL}` })
                     .setColor("RED")
                     .setTitle("Suggestion Denied")
-                    .setFooter({ name: `Suggestion ID: ${oldembed.id}` })
+                    .setFooter({ text: `Suggestion ID: ${oldembed.id}` })
                     .addField(`${data.fields[0].name}`, `${data.fields[0].value}`)
                     .addField(`Reason from ${interaction.user.tag}`, `${suggestionReason}`)
                     .setTimestamp()
@@ -152,7 +152,7 @@ module.exports = {
                     .setURL(`${client.server.invite}`)
                     .setColor("YELLOW")
                     .addField("Suggestion", `${data.fields[0].value}`)
-                    .setFooter({ name: `Suggestion ID: ${oldembed.id}` })
+                    .setFooter({ text: `Suggestion ID: ${oldembed.id}` })
                     .addField(`Status`, `<a:loading:800626613980495872> Pending...`)
                     .setTimestamp()
 

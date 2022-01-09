@@ -78,15 +78,15 @@ module.exports = {
 
         if (avatarURL.endsWith(".gif")) {
           return [
-            `[[WEBP]](${user?.displayAvatarURL({ dynamic: true, format: 'webp', size: 1024 })})`,
-            `[[GIF]](${user?.displayAvatarURL({ dynamic: true, format: 'gif', size: 1024 })})`,
+            `[WEBP](${user?.displayAvatarURL({ dynamic: true, format: 'webp', size: 1024 })})`,
+            `[GIF](${user?.displayAvatarURL({ dynamic: true, format: 'gif', size: 1024 })})`,
           ].join(" • ")
         } else {
           return [
-            `[[WEBP]](${user?.displayAvatarURL({ format: 'webp', size: 1024 })})`,
-            `[[JPEG]](${user?.displayAvatarURL({ format: 'jpeg', size: 1024 })})`,
-            `[[JPG]](${user?.displayAvatarURL({ format: 'jpg', size: 1024 })})`,
-            `[[PNG]](${user?.displayAvatarURL({ format: 'png', size: 1024 })})`,
+            `[WEBP](${user?.displayAvatarURL({ format: 'webp', size: 1024 })})`,
+            `[JPEG](${user?.displayAvatarURL({ format: 'jpeg', size: 1024 })})`,
+            `[JPG](${user?.displayAvatarURL({ format: 'jpg', size: 1024 })})`,
+            `[PNG](${user?.displayAvatarURL({ format: 'png', size: 1024 })})`,
           ].join(" • ")
         }
       }
@@ -171,7 +171,7 @@ module.exports = {
                     value: [
                       `• **Joined:** <t:${~~(member.joinedAt / 1000)}:f> [<t:${~~(member.joinedAt / 1000)}:R>]`,
                       `• **Nickname:** ${member.displayName === member.user.username ? "No Nickname" : `${member.displayName}`}`,
-                      `• **Booster**: ${member.premiumSinceTimestamp ? `${client.emoji.success}` : `${client.emoji.fail}`}`,
+                      `• **Booster:** ${member.premiumSinceTimestamp ? `${client.emoji.success}` : `${client.emoji.fail}`}`,
                       `• **Boosting Since:** ${member.premiumSinceTimestamp ? `<t:${~~(member.premiumSinceTimestamp / 1000)}:f> [<t:${~~(member.premiumSinceTimestamp / 1000)}:R>]` : "Not boosting the server!"}`,
                       `• **Acknowments:** ${acknowments}`
                     ].join("\n")
@@ -190,7 +190,7 @@ module.exports = {
             const roles = member.roles.cache.sort((a, b) => b.position - a.position).filter(r => r.id !== message.guildId);
             const embedRoles = new MessageEmbed()
               .setAuthor({ name: `${member.user.tag}`, iconURL: member.user.displayAvatarURL({ dynamic: true }) })
-              .setDescription(`${member.user} • ID: ${member.user.id}\n\n**Roles [${roles.size}]**\n${roles.size ? roles.map(role => role).join('') : "No roles"}`)
+              .setDescription(`${member.user} • ID: ${member.user.id}\n\n**Roles [${roles.size}]**\n${roles.size ? roles.map(role => role).join(' ') : "No roles"}`)
               .setColor("RANDOM")
               .setThumbnail(`${member.user.displayAvatarURL()}`)
 
@@ -227,7 +227,7 @@ module.exports = {
             style1: "SECONDARY",
             style2: "SECONDARY",
             style3: "SECONDARY",
-            style4: "SECONDARY",
+            style: "SECONDARY",
             disable: true
           })
         })

@@ -44,7 +44,7 @@ module.exports = {
       .setColor("RANDOM")
       .setImage(image)
       .setDescription(msg.content)
-      .setFooter({ name: `${moment(time).fromNow()} | ${snipe + 1} / ${snipes.length}` })
+      .setFooter({ text: `${moment(time).fromNow()} | ${snipe + 1} / ${snipes.length}` })
 
     interaction.followUp({ embeds: [embed] })
   }
