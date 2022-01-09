@@ -227,7 +227,7 @@ module.exports = {
             style1: "SECONDARY",
             style2: "SECONDARY",
             style3: "SECONDARY",
-            style: "SECONDARY",
+            style4: "SECONDARY",
             disable: true
           })
         })
