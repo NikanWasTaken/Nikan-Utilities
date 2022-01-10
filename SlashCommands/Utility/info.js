@@ -281,6 +281,7 @@ module.exports = {
                 disable4: false,
               })
             })
+
             collected.deferUpdate()
             break;
 
