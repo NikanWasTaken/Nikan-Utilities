@@ -78,25 +78,25 @@ module.exports = {
         new MessageActionRow().addComponents(
           new MessageButton()
             .setLabel("Account")
-            .setStyle(options.style1)
+            .setStyle(options.style1 || "SECONDARY")
             .setDisabled(options.disable1 ? options.disable1 : false)
             .setCustomId("whois-account"),
 
           new MessageButton()
             .setLabel("Guild")
-            .setStyle(options.style2)
+            .setStyle(options.style2 || "SECONDARY")
             .setDisabled(options.disable2 ? options.disable2 : false)
             .setCustomId("whois-guild"),
 
           new MessageButton()
             .setLabel("Roles")
-            .setStyle(options.style3)
+            .setStyle(options.style3 || "SECONDARY")
             .setDisabled(options.disable3 ? options.disable3 : false)
             .setCustomId("whois-roles"),
 
           new MessageButton()
             .setLabel("Permissions")
-            .setStyle(options.style4)
+            .setStyle(options.style4 || "SECONDARY")
             .setDisabled(options.disable4 ? options.disable4 : false)
             .setCustomId("whois-permissions"),
         )
@@ -183,7 +183,7 @@ module.exports = {
       let msg = await interaction.followUp({
         embeds: [embed],
         components: components({
-          style1: "SUCCESS",
+          style1: "PRIMARY",
           style2: "SECONDARY",
           style3: "SECONDARY",
           style4: "SECONDARY",
