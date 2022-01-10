@@ -114,7 +114,7 @@ module.exports = {
                 .addField(
                     `${emojis.database} Database`,
                     [
-                        `• **Name:** [MongoDb](https://www.mongodb.com/)`,
+                        `• **Name:** [MongoDB](https://www.mongodb.com/)`,
                         `• **Status:** ${switchTo(connection.readyState)}`,
                         `• **Total Data:** ${totalEntries}`
                     ].join("\n")
