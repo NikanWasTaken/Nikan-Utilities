@@ -16,6 +16,7 @@ module.exports = {
    */
   run: async ({ client, interaction }) => {
 
+    const statuses = ["dnd", "online", "idle"]
 
     var bb = new MessageEmbed()
       .setAuthor({ name: "Member Count", iconURL: client.user.displayAvatarURL({ dynamic: true }) })
