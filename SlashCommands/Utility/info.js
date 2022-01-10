@@ -78,26 +78,26 @@ module.exports = {
         new MessageActionRow().addComponents(
           new MessageButton()
             .setLabel("Account")
-            .setStyle(options.style1 || "PRIMARY")
-            .setDisabled(options.disable ? options.disable : false)
+            .setStyle(options.style1 || "SECONDARY")
+            .setDisabled(options.disable1 ? options.disable1 : false)
             .setCustomId("whois-account"),
 
           new MessageButton()
             .setLabel("Guild")
-            .setStyle(options.style2 || "PRIMARY")
-            .setDisabled(options.disable ? options.disable : false)
+            .setStyle(options.style2 || "SECONDARY")
+            .setDisabled(options.disable2 ? options.disable2 : false)
             .setCustomId("whois-guild"),
 
           new MessageButton()
             .setLabel("Roles")
-            .setStyle(options.style3 || "PRIMARY")
-            .setDisabled(options.disable ? options.disable : false)
+            .setStyle(options.style3 || "SECONDARY")
+            .setDisabled(options.disable3 ? options.disable3 : false)
             .setCustomId("whois-roles"),
 
           new MessageButton()
             .setLabel("Permissions")
-            .setStyle(options.style4 || "PRIMARY")
-            .setDisabled(options.disable ? options.disable : false)
+            .setStyle(options.style4 || "SECONDARY")
+            .setDisabled(options.disable4 ? options.disable4 : false)
             .setCustomId("whois-permissions"),
         )
       ]
@@ -145,13 +145,13 @@ module.exports = {
                 `• **Username:** ${user?.username}`,
                 `• **Discriminator:** #${user?.discriminator}`,
                 `• **Registered:** <t:${~~(user?.createdAt / 1000)}:f> [<t:${~~(user?.createdAt / 1000)}:R>]`,
-                `• **Bot:** ${user?.bot ? `${client.emoji.success}` : `${client.emoji.fail}`}`
+                `• **Bot:** ${user?.bot ? `${client.emoji.PRIMARY}` : `${client.emoji.fail}`}`
               ].join("\n")
             },
             {
               name: "Profile Picture",
               value: [
-                `• **Animated:** ${user?.displayAvatarURL({ dynamic: true }).endsWith(".gif") ? `${client.emoji.success}` : `${client.emoji.fail}`}`,
+                `• **Animated:** ${user?.displayAvatarURL({ dynamic: true }).endsWith(".gif") ? `${client.emoji.PRIMARY}` : `${client.emoji.fail}`}`,
                 `• **Formats:** ${AvatarFormatCheck(user)}`,
                 `• **Download:** [Click Here](${downloadLinkFormatCheck(user)})`
               ].join("\n")
@@ -182,7 +182,7 @@ module.exports = {
 
       let msg = await interaction.followUp({
         embeds: [embed],
-        components: components({ style1: "SUCCESS" })
+        components: components({ style1: "PRIMARY", disable1: true })
       })
 
       const collector = msg.createMessageComponentCollector({
@@ -203,7 +203,16 @@ module.exports = {
           case "whois-account":
             msg.edit({
               embeds: [embed],
-              components: components({ style1: "SUCCESS", style2: "PRIMARY", style3: "PRIMARY", style4: "PRIMARY" })
+              components: components({
+                style1: "PRIMARY",
+                style2: "SECONDARY",
+                style3: "SECONDARY",
+                style4: "SECONDARY",
+                disable1: true,
+                disable2: false,
+                disable3: false,
+                disable4: false,
+              })
             })
             collected.deferUpdate()
             break;
@@ -237,7 +246,7 @@ module.exports = {
                       value: [
                         `• ** Joined:** <t:${~~(member.joinedAt / 1000)}:f> [<t:${~~(member.joinedAt / 1000)}:R>]`,
                         `• **Nickname:** ${member.displayName === member.user?.username ? "No Nickname" : `${member.displayName}`}`,
-                        `• **Booster:** ${member.premiumSinceTimestamp ? `${client.emoji.success}` : `${client.emoji.fail}`}`,
+                        `• **Booster:** ${member.premiumSinceTimestamp ? `${client.emoji.PRIMARY}` : `${client.emoji.fail}`}`,
                         `• **Boosting Since:** ${member.premiumSinceTimestamp ? `<t:${~~(member.premiumSinceTimestamp / 1000)}:f> [<t:${~~(member.premiumSinceTimestamp / 1000)}:R>]` : "Not boosting the server!"}`,
                         `• **Acknowments:** ${acknowments}`
                       ].join("\n")
@@ -261,7 +270,16 @@ module.exports = {
 
             msg.edit({
               embeds: [embedServer],
-              components: components({ style1: "PRIMARY", style2: "SUCCESS", style3: "PRIMARY", style4: "PRIMARY" })
+              components: components({
+                style1: "SECONDARY",
+                style2: "PRIMARY",
+                style3: "SECONDARY",
+                style4: "SECONDARY",
+                disable1: false,
+                disable2: true,
+                disable3: false,
+                disable4: false,
+              })
             })
             collected.deferUpdate()
             break;
@@ -297,7 +315,16 @@ module.exports = {
 
             msg.edit({
               embeds: [embedRoles],
-              components: components({ style1: "PRIMARY", style2: "PRIMARY", style3: "SUCCESS", style4: "PRIMARY" })
+              components: components({
+                style1: "SECONDARY",
+                style2: "SECONDARY",
+                style3: "PRIMARY",
+                style4: "SECONDARY",
+                disable1: false,
+                disable2: false,
+                disable3: true,
+                disable4: false,
+              })
             })
             collected.deferUpdate()
             break;
@@ -335,7 +362,16 @@ module.exports = {
 
             msg.edit({
               embeds: [embedPermissions],
-              components: components({ style1: "PRIMARY", style2: "PRIMARY", style3: "PRIMARY", style4: "SUCCESS" })
+              components: components({
+                style1: "SECONDARY",
+                style2: "SECONDARY",
+                style3: "SECONDARY",
+                style4: "PRIMARY",
+                disable1: false,
+                disable2: false,
+                disable3: false,
+                disable4: true,
+              })
             })
             collected.deferUpdate()
             break;
@@ -349,7 +385,10 @@ module.exports = {
             style2: "SECONDARY",
             style3: "SECONDARY",
             style4: "SECONDARY",
-            disable: true
+            disable1: true,
+            disable2: true,
+            disable3: true,
+            disable4: true,
           })
         })
       })
