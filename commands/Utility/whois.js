@@ -160,6 +160,7 @@ module.exports = {
       time: 30000
     })
 
+
     collector.on("collect", (collected) => {
 
       const PermissionsArray = [];
