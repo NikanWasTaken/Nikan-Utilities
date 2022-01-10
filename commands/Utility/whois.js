@@ -350,12 +350,7 @@ module.exports = {
 
     collector.on("end", () => {
       msg.edit({
-        components: components({
-          disable1: true,
-          disable2: true,
-          disable3: true,
-          disable4: true,
-        })
+        components: []
       })
     })
   }
