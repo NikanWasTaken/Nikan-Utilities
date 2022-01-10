@@ -78,25 +78,25 @@ module.exports = {
         new MessageActionRow().addComponents(
           new MessageButton()
             .setLabel("Account")
-            .setStyle(options.style1 || "SECONDARY")
+            .setStyle(options.style1 || "PRIMARY")
             .setDisabled(options.disable1 ? options.disable1 : false)
             .setCustomId("whois-account"),
 
           new MessageButton()
             .setLabel("Guild")
-            .setStyle(options.style2 || "SECONDARY")
+            .setStyle(options.style2 || "PRIMARY")
             .setDisabled(options.disable2 ? options.disable2 : false)
             .setCustomId("whois-guild"),
 
           new MessageButton()
             .setLabel("Roles")
-            .setStyle(options.style3 || "SECONDARY")
+            .setStyle(options.style3 || "PRIMARY")
             .setDisabled(options.disable3 ? options.disable3 : false)
             .setCustomId("whois-roles"),
 
           new MessageButton()
             .setLabel("Permissions")
-            .setStyle(options.style4 || "SECONDARY")
+            .setStyle(options.style4 || "PRIMARY")
             .setDisabled(options.disable4 ? options.disable4 : false)
             .setCustomId("whois-permissions"),
         )
@@ -183,10 +183,10 @@ module.exports = {
       let msg = await interaction.followUp({
         embeds: [embed],
         components: components({
-          style1: "PRIMARY",
-          style2: "SECONDARY",
-          style3: "SECONDARY",
-          style4: "SECONDARY",
+          style1: "SUCCESS",
+          style2: "PRIMARY",
+          style3: "PRIMARY",
+          style4: "PRIMARY",
           disable1: true
         })
       })
@@ -210,10 +210,10 @@ module.exports = {
             msg.edit({
               embeds: [embed],
               components: components({
-                style1: "PRIMARY",
-                style2: "SECONDARY",
-                style3: "SECONDARY",
-                style4: "SECONDARY",
+                style1: "SUCCESS",
+                style2: "PRIMARY",
+                style3: "PRIMARY",
+                style4: "PRIMARY",
                 disable1: true,
                 disable2: false,
                 disable3: false,
@@ -277,10 +277,10 @@ module.exports = {
             msg.edit({
               embeds: [embedServer],
               components: components({
-                style1: "SECONDARY",
-                style2: "PRIMARY",
-                style3: "SECONDARY",
-                style4: "SECONDARY",
+                style1: "PRIMARY",
+                style2: "SUCCESS",
+                style3: "PRIMARY",
+                style4: "PRIMARY",
                 disable1: false,
                 disable2: true,
                 disable3: false,
@@ -323,10 +323,10 @@ module.exports = {
             msg.edit({
               embeds: [embedRoles],
               components: components({
-                style1: "SECONDARY",
-                style2: "SECONDARY",
-                style3: "PRIMARY",
-                style4: "SECONDARY",
+                style1: "PRIMARY",
+                style2: "PRIMARY",
+                style3: "SUCCESS",
+                style4: "PRIMARY",
                 disable1: false,
                 disable2: false,
                 disable3: true,
@@ -370,10 +370,10 @@ module.exports = {
             msg.edit({
               embeds: [embedPermissions],
               components: components({
-                style1: "SECONDARY",
-                style2: "SECONDARY",
-                style3: "SECONDARY",
-                style4: "PRIMARY",
+                style1: "PRIMARY",
+                style2: "PRIMARY",
+                style3: "PRIMARY",
+                style4: "SUCCESS",
                 disable1: false,
                 disable2: false,
                 disable3: false,

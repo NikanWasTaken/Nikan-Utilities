@@ -34,12 +34,11 @@ module.exports = {
     var clear = interaction.options.getInteger("amount")
     var user = interaction.options.getMember("user")
 
-
     let heh = new MessageEmbed()
       .setDescription(`You need to provide a number between 1 and 100 to purge.`)
       .setColor(`RED`)
 
-    if (isNaN(clear) || clear > 100 || clear < 1)
+    if (clear > 100 || clear < 1)
       return interaction.followUp({ embeds: [heh] })
         .then(() => {
           client.delete.interaction(interaction)
@@ -59,9 +58,12 @@ module.exports = {
           .setDescription(`Cleared \`${clear}\` messages from \`${user.user.tag}\``)
           .setColor(`${client.color.moderation}`)
 
+        await interaction.deleteReply()
         interaction.channel.send({ embeds: [embeda] })
           .then(() => {
-            client.delete.interaction(interaction)
+            setInterval(() => {
+              msg?.delete()
+            }, 5000);
           })
 
 
@@ -74,9 +76,12 @@ module.exports = {
           .setDescription(`Cleared ${clear} messages in ${interaction.channel}`)
           .setColor(`${client.color.moderation}`)
 
+        await interaction.deleteReply()
         interaction.channel.send({ embeds: [embeda] })
           .then(() => {
-            client.delete.interaction(interaction)
+            setInterval(() => {
+              msg?.delete()
+            }, 5000);
           })
       }
     } catch (error) { }

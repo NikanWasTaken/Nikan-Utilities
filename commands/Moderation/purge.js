@@ -24,9 +24,13 @@ module.exports = {
     let heh = new MessageEmbed()
       .setDescription(`You need to provide a number between 1 and 100 to purge.`)
       .setColor(`RED`)
-    if (isNaN(clear) || clear > 100 || clear < 1) return message.reply({ embeds: [heh] }).then((msg) => {
-      client.delete.message(message, msg);
-    })
+    if (isNaN(clear) || clear > 100 || clear < 1) return message.reply({ embeds: [heh] })
+      .then((msg) => {
+        setInterval(() => {
+          msg?.delete()
+          message?.delete()
+        }, 5000);
+      })
 
 
 
@@ -35,9 +39,13 @@ module.exports = {
       const noUser = new MessageEmbed()
         .setDescription(`I couldn't find that user!`)
         .setColor("RED")
-      if (!user) return message.reply({ embeds: [noUser] }).then((msg) => {
-        client.delete.message(message, msg);
-      })
+      if (!user) return message.reply({ embeds: [noUser] })
+        .then((msg) => {
+          setInterval(() => {
+            msg?.delete()
+            message?.delete()
+          }, 5000);
+        })
 
       const messages = message.channel.messages.fetch({ limit: clear })
       const filtered = (await messages).filter(m => m.author.id === user.user.id)
@@ -48,7 +56,10 @@ module.exports = {
         .setColor(`${client.color.moderation}`)
       message.channel.send({ embeds: [embeda] })
         .then((msg) => {
-          client.delete.message(message, msg);
+          message?.delete()
+          setInterval(() => {
+            msg?.delete()
+          }, 5000);
         })
 
 
@@ -63,7 +74,10 @@ module.exports = {
 
       message.channel.send({ embeds: [embeda] })
         .then((msg) => {
-          client.delete.message(message, msg);
+          message?.delete()
+          setInterval(() => {
+            msg?.delete()
+          }, 5000);
         })
     }
   }
