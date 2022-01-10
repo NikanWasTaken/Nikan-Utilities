@@ -175,7 +175,7 @@ module.exports = {
       collector.on('end', () => {
 
         initialMessage.edit({
-          components: components("Timed Out!", { disable: false })
+          components: components("Timed Out!", { disable: true })
         })
 
       })
