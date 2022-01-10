@@ -22,7 +22,10 @@ module.exports = {
     let user;
     let member = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
     if (member) user = message.mentions.users.first() || message.guild.members.cache.get(args[0]).user
-    if (!member) user = await client.users.fetch(`${args[0]}`).catch(() => { return message.reply("This user doesn't exist!") })
+    if (!member) user = await client.users.fetch(`${args[0]}`)
+      .catch(() => {
+        return message.reply("This user doesn't exist!");
+      })
     if (!args[0]) {
       member = message.member,
         user = message.author;
@@ -30,7 +33,7 @@ module.exports = {
 
     const badgesArray = [];
 
-    user.flags?.toArray().forEach(badge => {
+    user?.flags?.toArray().forEach(badge => {
       const findEmoji = devServer.emojis.cache.find(emoji => emoji.name == badge)
       badgesArray.push(`${findEmoji} • ${client.cap(badge.toString().replaceAll("_", " "))}`)
     })
@@ -86,33 +89,33 @@ module.exports = {
       const avatar = user?.displayAvatarURL()
 
       if (avatar.endsWith(".gif")) {
-        return `${user.displayAvatarURL({ dynamic: true, format: 'gif', size: 1024 })}`
+        return `${user?.displayAvatarURL({ dynamic: true, format: 'gif', size: 1024 })}`
       } else {
-        return `${user.displayAvatarURL({ dynamic: true, format: 'png', size: 1024 })}`
+        return `${user?.displayAvatarURL({ dynamic: true, format: 'png', size: 1024 })}`
       }
     }
 
     const embed = new MessageEmbed()
-      .setAuthor({ name: `${user.tag}`, iconURL: user.displayAvatarURL({ dynamic: true }) })
-      .setDescription(`${user} • ID: ${user.id}`)
+      .setAuthor({ name: `${user?.tag}`, iconURL: user?.displayAvatarURL({ dynamic: true }) })
+      .setDescription(`${user} • ID: ${user?.id}`)
       .setColor("RANDOM")
-      .setThumbnail(`${user.displayAvatarURL({ dynamic: true })}`)
+      .setThumbnail(`${user?.displayAvatarURL({ dynamic: true })}`)
       .addFields(
         [
           {
             name: "Account Information",
             value: [
-              `• **ID:** ${user.id}`,
-              `• **Username:** ${user.username}`,
-              `• **Discriminator:** #${user.discriminator}`,
-              `• **Registered:** <t:${~~(user.createdAt / 1000)}:f> [<t:${~~(user.createdAt / 1000)}:R>]`,
-              `• **Bot:** ${user.bot ? `${client.emoji.success}` : `${client.emoji.fail}`}`
+              `• **ID:** ${user?.id}`,
+              `• **Username:** ${user?.username}`,
+              `• **Discriminator:** #${user?.discriminator}`,
+              `• **Registered:** <t:${~~(user?.createdAt / 1000)}:f> [<t:${~~(user?.createdAt / 1000)}:R>]`,
+              `• **Bot:** ${user?.bot ? `${client.emoji.success}` : `${client.emoji.fail}`}`
             ].join("\n")
           },
           {
             name: "Profile Picture",
             value: [
-              `• **Animated:** ${user.displayAvatarURL({ dynamic: true }).endsWith(".gif") ? `${client.emoji.success}` : `${client.emoji.fail}`}`,
+              `• **Animated:** ${user?.displayAvatarURL({ dynamic: true }).endsWith(".gif") ? `${client.emoji.success}` : `${client.emoji.fail}`}`,
               `• **Formats:** ${AvatarFormatCheck(user)}`,
               `• **Download:** [Click Here](${downloadLinkFormatCheck(user)})`
             ].join("\n")
@@ -155,7 +158,7 @@ module.exports = {
 
       const PermissionsArray = [];
 
-      if (collected.user.id !== message.author.id) return collected.reply({
+      if (collected.user?.id !== message.author.id) return collected.reply({
         content: "This menu isn't for you!",
         ephemeral: true
       })
@@ -171,10 +174,10 @@ module.exports = {
 
         case "whois-guild":
           const embedServer = new MessageEmbed()
-            .setAuthor({ name: `${user.tag}`, iconURL: user.displayAvatarURL({ dynamic: true }) })
-            .setDescription(`${user} • ID: ${user.id}`)
+            .setAuthor({ name: `${user?.tag}`, iconURL: user?.displayAvatarURL({ dynamic: true }) })
+            .setDescription(`${user} • ID: ${user?.id}`)
             .setColor("RANDOM")
-            .setThumbnail(`${user.displayAvatarURL({ dynamic: true })}`)
+            .setThumbnail(`${user?.displayAvatarURL({ dynamic: true })}`)
 
           if (member) {
 
@@ -188,7 +191,7 @@ module.exports = {
             if (member.permissions.has("MANAGE_EVENTS")) { acknowments = "Event Manager" };
             if (member.permissions.has("MANAGE_GUILD")) { acknowments = "Server Manager" };
             if (member.permissions.has("ADMINISTRATOR")) { acknowments = "Administrator" };
-            if (user.id === message.guild.ownerId) { acknowments = 'Server Owner' }
+            if (user?.id === message.guild.ownerId) { acknowments = 'Server Owner' }
 
             ; embedServer
               .addFields(
@@ -197,7 +200,7 @@ module.exports = {
                     name: `Information in ${message.guild.name}`,
                     value: [
                       `• ** Joined:** <t:${~~(member.joinedAt / 1000)}:f> [<t:${~~(member.joinedAt / 1000)}:R>]`,
-                      `• **Nickname:** ${member.displayName === member.user.username ? "No Nickname" : `${member.displayName}`}`,
+                      `• **Nickname:** ${member.displayName === member.user?.username ? "No Nickname" : `${member.displayName}`}`,
                       `• **Booster:** ${member.premiumSinceTimestamp ? `${client.emoji.success}` : `${client.emoji.fail}`}`,
                       `• **Boosting Since:** ${member.premiumSinceTimestamp ? `<t:${~~(member.premiumSinceTimestamp / 1000)}:f> [<t:${~~(member.premiumSinceTimestamp / 1000)}:R>]` : "Not boosting the server!"}`,
                       `• **Acknowments:** ${acknowments}`
@@ -230,21 +233,21 @@ module.exports = {
         case "whois-roles":
 
           const embedRoles = new MessageEmbed()
-            .setAuthor({ name: `${user.tag}`, iconURL: user.displayAvatarURL({ dynamic: true }) })
+            .setAuthor({ name: `${user?.tag}`, iconURL: user?.displayAvatarURL({ dynamic: true }) })
             .setColor("RANDOM")
-            .setThumbnail(`${user.displayAvatarURL({ dynamic: true })}`)
+            .setThumbnail(`${user?.displayAvatarURL({ dynamic: true })}`)
 
           if (member) {
 
             const roles = member.roles.cache.sort((a, b) => b.position - a.position).filter(r => r.id !== message.guildId);
 
             embedRoles
-              .setDescription(`${user} • ID: ${user.id}\n\n**Roles [${roles.size}]**\n${roles.size ? roles.map(role => role).join(' ') : "No roles"}`)
+              .setDescription(`${user} • ID: ${user?.id}\n\n**Roles [${roles.size}]**\n${roles.size ? roles.map(role => role).join(' ') : "No roles"}`)
 
           } else if (!member) {
 
             embedRoles
-              .setDescription(`${user} • ID: ${user.id}`)
+              .setDescription(`${user} • ID: ${user?.id}`)
               .addFields(
                 [
                   {
@@ -266,9 +269,9 @@ module.exports = {
         case "whois-permissions":
 
           const embedPermissions = new MessageEmbed()
-            .setAuthor({ name: `${user.tag}`, iconURL: user.displayAvatarURL({ dynamic: true }) })
+            .setAuthor({ name: `${user?.tag}`, iconURL: user?.displayAvatarURL({ dynamic: true }) })
             .setColor("RANDOM")
-            .setThumbnail(`${user.displayAvatarURL({ dynamic: true })}`)
+            .setThumbnail(`${user?.displayAvatarURL({ dynamic: true })}`)
 
           if (member) {
 
@@ -278,12 +281,12 @@ module.exports = {
             })
 
             embedPermissions
-              .setDescription(`${member.user} • ID: ${member.user.id}\n\n**Permissions [${permissions.length}]**\n${permissions.length ? `${PermissionsArray.join(", ")}` : "No Permissions"}`)
+              .setDescription(`${member.user} • ID: ${member.user?.id}\n\n**Permissions [${permissions.length}]**\n${permissions.length ? `${PermissionsArray.join(", ")}` : "No Permissions"}`)
 
           } else if (!member) {
 
             embedPermissions
-              .setDescription(`${user} • ID: ${user.id}`)
+              .setDescription(`${user} • ID: ${user?.id}`)
               .addFields(
                 [
                   {
