@@ -60,11 +60,12 @@ module.exports = {
       let user;
       let member = interaction.options.getMember("member")
       if (member) user = interaction.options.getUser("member")
-      if (!member) user = await client.users.fetch(`${interaction.options.getString("user-id")}`).catch(() => { return interaction.followUp("This user doesn't exist!") })
-      if (!args[0]) {
+      if (!member) user = await client.users.fetch(`${interaction.options.getString("user-id")}`).catch(() => { })
+      if (!interaction.options.getMember("member") && !interaction.options.getString("user-id")) {
         member = interaction.member,
-          user = interaction.author;
+          user = interaction.user;
       }
+      if (user === null || user === undefined) return interaction.followUp("This user doesn't exist!")
 
       const badgesArray = [];
 

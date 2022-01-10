@@ -22,14 +22,14 @@ module.exports = {
     let user;
     let member = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
     if (member) user = message.mentions.users.first() || message.guild.members.cache.get(args[0]).user
-    if (!member) user = await client.users.fetch(`${args[0]}`)
-      .catch(() => {
-        return message.reply("This user doesn't exist!");
-      })
+    if (!member) {
+      user = await client.users.fetch(`${args[0]}`).catch(() => { })
+    }
     if (!args[0]) {
       member = message.member,
         user = message.author;
     }
+    if (!member && !user) return message.reply("This user doesn't exist!")
 
     const badgesArray = [];
 
