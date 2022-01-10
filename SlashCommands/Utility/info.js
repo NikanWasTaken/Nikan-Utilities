@@ -145,13 +145,13 @@ module.exports = {
                 `• **Username:** ${user?.username}`,
                 `• **Discriminator:** #${user?.discriminator}`,
                 `• **Registered:** <t:${~~(user?.createdAt / 1000)}:f> [<t:${~~(user?.createdAt / 1000)}:R>]`,
-                `• **Bot:** ${user?.bot ? `${client.emoji.PRIMARY}` : `${client.emoji.fail}`}`
+                `• **Bot:** ${user?.bot ? `${client.emoji.success}` : `${client.emoji.fail}`}`
               ].join("\n")
             },
             {
               name: "Profile Picture",
               value: [
-                `• **Animated:** ${user?.displayAvatarURL({ dynamic: true }).endsWith(".gif") ? `${client.emoji.PRIMARY}` : `${client.emoji.fail}`}`,
+                `• **Animated:** ${user?.displayAvatarURL({ dynamic: true }).endsWith(".gif") ? `${client.emoji.success}` : `${client.emoji.fail}`}`,
                 `• **Formats:** ${AvatarFormatCheck(user)}`,
                 `• **Download:** [Click Here](${downloadLinkFormatCheck(user)})`
               ].join("\n")
@@ -252,7 +252,7 @@ module.exports = {
                       value: [
                         `• ** Joined:** <t:${~~(member.joinedAt / 1000)}:f> [<t:${~~(member.joinedAt / 1000)}:R>]`,
                         `• **Nickname:** ${member.displayName === member.user?.username ? "No Nickname" : `${member.displayName}`}`,
-                        `• **Booster:** ${member.premiumSinceTimestamp ? `${client.emoji.PRIMARY}` : `${client.emoji.fail}`}`,
+                        `• **Booster:** ${member.premiumSinceTimestamp ? `${client.emoji.success}` : `${client.emoji.fail}`}`,
                         `• **Boosting Since:** ${member.premiumSinceTimestamp ? `<t:${~~(member.premiumSinceTimestamp / 1000)}:f> [<t:${~~(member.premiumSinceTimestamp / 1000)}:R>]` : "Not boosting the server!"}`,
                         `• **Acknowments:** ${acknowments}`
                       ].join("\n")
