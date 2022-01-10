@@ -345,10 +345,6 @@ module.exports = {
     collector.on("end", () => {
       msg.edit({
         components: components({
-          style1: "SECONDARY",
-          style2: "SECONDARY",
-          style3: "SECONDARY",
-          style4: "SECONDARY",
           disable1: true,
           disable2: true,
           disable3: true,
