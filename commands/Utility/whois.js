@@ -120,7 +120,7 @@ module.exports = {
               `• **Download:** [Click Here](${downloadLinkFormatCheck(user)})`
             ].join("\n")
           }, {
-            name: "Badges",
+            name: `Badges [${badgesArray.length}]`,
             value: `${badgesArray.length ? `${badgesArray.join("\n")}` : "No badges found"}`
           }
         ]
