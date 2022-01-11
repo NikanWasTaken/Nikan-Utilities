@@ -45,7 +45,7 @@ module.exports = async (client) => {
 
   client.on("ready", async () => {
 
-    const guild = client.guilds.cache.get(`888760200620834876`)
+    const guild = client.guilds.cache.get(`${client.server.id}`)
     await guild.commands.set(arrayOfSlashCommands)
 
       .then((cmd) => {
