@@ -15,7 +15,7 @@ module.exports = {
    * @param {String[]} args
    */
 
-  run: async ({ client, message, args, wrongUsage }) => {
+  run: async (client, message, args, wrongUsage) => {
 
     var clear = args[0]
     var user = message.guild.members.cache.get(args[1]) || message.mentions.members.first()
@@ -55,12 +55,6 @@ module.exports = {
         .setDescription(`Cleared \`${clear}\` messages from \`${user.user.tag}\``)
         .setColor(`${client.color.moderation}`)
       message.channel.send({ embeds: [embeda] })
-        .then((msg) => {
-          message?.delete()
-          setInterval(() => {
-            msg?.delete()
-          }, 5000);
-        })
 
 
     } else if (!args[1]) {

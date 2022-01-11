@@ -15,7 +15,7 @@ module.exports = {
      * @param {String[]} args
      */
 
-    run: async ({ client, message, args }) => {
+    run: async (client, message, args) => {
 
         const userCheck = message.mentions.members.first() || message.guild.members.cache.get(`${args[0]}`)
 
@@ -74,23 +74,6 @@ module.exports = {
                                 description: `${user.username} avatar in .gif format`,
                                 emoji: "🖼️"
                             },
-                        ]
-                    )
-            )
-
-            var rowEnded = new MessageActionRow().addComponents(
-                new MessageSelectMenu()
-                    .setCustomId("avatar")
-                    .setPlaceholder("Timed Out!")
-                    .setDisabled(true)
-                    .setOptions(
-                        [
-                            {
-                                label: "Timed Out!",
-                                value: "timeout",
-                                description: `This select menu has timed out!`,
-                                emoji: "❌"
-                            }
                         ]
                     )
             )
@@ -491,9 +474,8 @@ module.exports = {
                 })
 
                 collector.on("end", () => {
-                    msg.edit({ components: [rowEnded] })
+                    msg.edit({ components: [] })
                 })
-
             }
         }
     }

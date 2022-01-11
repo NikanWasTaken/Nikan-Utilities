@@ -16,7 +16,7 @@ module.exports = {
    * @param {String[]} args
    */
 
-  run: async ({ client, message, args }) => {
+  run: async (client, message, args, wrongUsage) => {
 
 
     const user = message.guild.members.cache.get(args[0]) || message.mentions.members.first()

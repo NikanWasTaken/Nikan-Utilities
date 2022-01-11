@@ -16,7 +16,7 @@ module.exports = {
      * @param {String[]} args
      */
 
-    run: async ({ client, message }) => {
+    run: async (client, message) => {
 
         const { totalMemMb, usedMemMb, freeMemPercentage } = await mem.info()
         const values = Object.values(models);

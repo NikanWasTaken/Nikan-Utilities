@@ -1,6 +1,8 @@
-const { MessageEmbed, MessageButton, MessageActionRow } = require('discord.js')
+const { MessageEmbed, MessageButton, MessageActionRow, Message, Client } = require('discord.js')
 require("dotenv").config()
-const glob = require("glob");
+const { glob } = require("glob");
+const { promisify } = require("util");
+const globPromise = promisify(glob);
 
 module.exports = {
     name: 'refresh',
@@ -16,7 +18,7 @@ module.exports = {
      * @param {String[]} args
      */
 
-    run: async ({ client, message }) => {
+    run: async (client, message) => {
 
         const components = new MessageActionRow().addComponents(
             new MessageButton()
@@ -37,10 +39,13 @@ module.exports = {
             .setAuthor({ name: `${client.user.username}`, iconURL: `${client.user.displayAvatarURL()}` })
             .setColor(`${client.color.serverPurple}`)
             .addField("Refresh Client", `If you want to refresh the bot's client`)
-            .addField("Refresh Commands", `If you want to refresh commands and slash commands.`)
+            .addField("Refresh Commands", `If you want to refresh legacy commands and slash commands.`)
             .setTimestamp()
 
-        let msg = await message.channel.send({ embeds: [embed], components: [components] })
+        let msg = await message.channel.send({
+            embeds: [embed],
+            components: [components]
+        })
         message.delete()
 
         const collector = msg.createMessageComponentCollector({
@@ -61,7 +66,7 @@ module.exports = {
                     .addField(`Refreshing`, `${client.emoji.load} Refreshing the client...`)
 
                 let msg = await message.channel.send({ embeds: [refresh] })
-                await client.destroy()
+                client.destroy()
                 await client.login(`${process.env.TOKEN}`)
                 await msg.edit({
                     embeds: [
@@ -70,16 +75,18 @@ module.exports = {
                             .setColor(`${client.color.success}`)
                             .setTimestamp()
                     ]
-                }).then((msgg) => {
+                }).then((msg) => {
                     setTimeout(() => {
-                        msgg.delete()
+                        msg.delete()
                     }, 2000)
                 })
 
-
             } else if (collected.customId === "reload") {
 
-                if (collected.user.id !== message.author.id) return collected.reply({ content: "This menu is not for you!", ephemeral: true })
+                if (collected.user.id !== message.author.id) return collected.reply({
+                    content: "This menu is not for you!",
+                    ephemeral: true
+                })
                 collector.stop()
 
                 const reload = new MessageEmbed()
@@ -93,7 +100,7 @@ module.exports = {
                     if (err) return console.log(err);
                     filePaths.forEach((file) => {
                         delete require.cache[require.resolve(file)];
-                        const pull = require(file); s
+                        const pull = require(file);
                         if (pull.name) {
                             client.commands.set(pull.name, pull);
                         }
@@ -103,10 +110,61 @@ module.exports = {
                 msg.edit({
                     embeds: [
                         reload
-                            .addField("Reloaded Message Commands", `${client.emoji.success} Reloaded the message commands!`)
+                            .addField("Reloaded legacy commands", `${client.emoji.success} Reloaded the legacy commands!`)
                             .setColor(`${client.color.success}`)
                     ]
                 })
+
+                const guild = client.guilds.cache.get(`888760200620834876`)
+                await guild.commands.set([])
+                const arrayOfSlashCommands = [];
+                const slashCommands = await globPromise(
+                    `${process.cwd()}/SlashCommands/*/*.js`
+                );
+                slashCommands.map((value) => {
+                    const file = require(value);
+                    if (!file?.name) return;
+                    client.slashCommands.set(file.name, file);
+
+                    if (["MESSAGE", "USER"].includes(file.type)) delete file.description;
+                    if (file.permissions) file.defaultPermission = false
+                    arrayOfSlashCommands.push(file);
+                });
+
+                await guild.commands.set(arrayOfSlashCommands)
+                    .then((cmd) => {
+                        const getRoles = (commandName) => {
+                            const permissions = arrayOfSlashCommands.find(x => x.name === commandName).permissions;
+                            if (!permissions) return null;
+                            return guild.roles.cache.filter(x => x.permissions.has(permissions) && !x.managed)
+                        }
+                        const fullPermissions = cmd.reduce((accumulator, x) => {
+                            const roles = getRoles(x.name)
+                            if (!roles) return accumulator
+
+                            const permissions = roles.reduce((a, v) => {
+                                return [
+                                    ...a, {
+                                        id: v.id,
+                                        type: "ROLE",
+                                        permission: true
+                                    }
+                                ]
+                            }, [])
+                            return [
+                                ...accumulator,
+                                {
+                                    id: x.id,
+                                    permissions,
+                                }
+                            ]
+                        }, [])
+
+                        guild.commands.permissions.set({
+                            fullPermissions
+                        })
+
+                    })
 
                 msg.edit({
                     embeds: [

@@ -14,7 +14,7 @@ module.exports = {
    * @param {String[]} args
    */
 
-  run: async ({ client, message }) => {
+  run: async (client, message) => {
 
     const statuses = ["dnd", "online", "idle"]
 

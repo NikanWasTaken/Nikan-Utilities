@@ -84,8 +84,6 @@ client.on("interactionCreate", async (interaction) => {
       cmd.run({ client, interaction, args });
 
     }
-
-
   }
 
 
@@ -93,6 +91,28 @@ client.on("interactionCreate", async (interaction) => {
   if (interaction.isContextMenu()) {
     const command = client.slashCommands.get(interaction.commandName);
     await interaction.deferReply({ ephemeral: false || command.ephemeral });
-    if (command) command.run({ client, interaction });
+    if (command) command.run(client, interaction);
+  }
+
+
+  // auto complete
+  if (interaction?.isAutocomplete()) {
+    if (interaction.commandName === "help") {
+      const focused = interaction.options.getFocused(true);
+
+      let choices;
+
+      if (focused?.name === "command") {
+        choices = [
+          ...new Set(client.commands.filter(c => c.visible !== false).map((cmd) => cmd.name))
+        ]
+      }
+
+      const filtered = choices.filter((choice) => choice.startsWith(focused.value)).slice(0, 24).sort();
+
+      await interaction.respond(
+        filtered.map((choice) => ({ name: choice, value: choice })),
+      ).catch(console.error);
+    }
   }
 });

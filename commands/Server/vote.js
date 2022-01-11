@@ -14,7 +14,7 @@ module.exports = {
      * @param {String[]} args
      */
 
-    run: async ({ client, message }) => {
+    run: async (client, message, args, wrongUsage) => {
 
         const server = client.guilds.cache.get(client.server.id)
 

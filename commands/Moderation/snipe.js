@@ -1,4 +1,4 @@
-	const { MessageEmbed } = require('discord.js')
+const { MessageEmbed } = require('discord.js')
 const moment = require("moment")
 
 module.exports = {
@@ -15,7 +15,7 @@ module.exports = {
      * @param {String[]} args
      */
 
-    run: async ({ client, message, args }) => {
+    run: async (client, message, args, wrongUsage) => {
 
 
         const snipes = client.snipes.get(message.channel.id);

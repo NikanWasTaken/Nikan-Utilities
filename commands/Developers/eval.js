@@ -14,8 +14,7 @@ module.exports = {
      * @param {String[]} args
      */
 
-    run: async ({ client, message, args, wrongUsage }) => {
-
+    run: async (client, message, args, wrongUsage) => {
 
         const code = args.join(' ');
         if (!code) return message.reply({ embeds: [wrongUsage] });
@@ -51,7 +50,6 @@ module.exports = {
                 .setCustomId("eval-no")
         )
 
-
         try {
 
             if (danger === false) {
@@ -70,8 +68,9 @@ module.exports = {
                         .setColor(`${client.color.success}`)
                         .addField("Code", `\`\`\`js\n${code}\n\`\`\``)
                         .setTimestamp()
-
-                    return message.channel.send({ embeds: [embed] })
+                    return message.channel.send({
+                        embeds: [embed]
+                    })
 
                 } else {
 
@@ -87,9 +86,12 @@ module.exports = {
                     .setAuthor({ name: `${client.user.username}`, iconURL: `${client.user.displayAvatarURL()}` })
                     .setColor("RED")
                     .addField("Are you sure?", "Are you sure that you want to do this evolution? This action has triggered the bot's secrets reveal system")
-                    .setFooter("Choose your action using the buttons!")
+                    .setFooter({ text: "Choose your action using the buttons!" })
 
-                let msg = await message.reply({ embeds: [embedDanger], components: [row] })
+                let msg = await message.reply({
+                    embeds: [embedDanger],
+                    components: [row]
+                })
 
                 const collector = msg.createMessageComponentCollector({
                     componentType: "BUTTON",
@@ -115,7 +117,10 @@ module.exports = {
                                 .addField("Code", `\`\`\`js\n${code}\n\`\`\``)
                                 .setTimestamp()
 
-                            return msg.edit({ embeds: [embed], components: [] })
+                            return msg.edit({
+                                embeds: [embed],
+                                components: []
+                            })
 
                         } else {
 
@@ -128,7 +133,11 @@ module.exports = {
 
                     } else if (collected.customId === "eval-no") {
 
-                        msg.edit({ embeds: [], content: "Canceled.", components: [] })
+                        msg.edit({
+                            embeds: [],
+                            content: "Canceled.",
+                            components: []
+                        })
 
                     }
                 })
@@ -147,7 +156,6 @@ module.exports = {
             message.channel.send({
                 embeds: [embed]
             });
-
         }
     }
 }

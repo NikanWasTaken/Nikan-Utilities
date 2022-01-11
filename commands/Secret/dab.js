@@ -16,7 +16,7 @@ module.exports = {
      * @param {String[]} args
      */
 
-    run: async ({ message }) => {
+    run: async (client, message, args, wrongUsage) => {
 
         const one = "\\o>";
         const two = "<o/";

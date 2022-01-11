@@ -15,7 +15,7 @@ module.exports = {
      * @param {Message} message
      * @param {String[]} args
      */
-    run: async ({ client, message, args, wrongUsage }) => {
+    run: async (client, message, args, wrongUsage) => {
 
         const warnId = args[0]
         if (!warnId) return message.reply({ embeds: [wrongUsage] })

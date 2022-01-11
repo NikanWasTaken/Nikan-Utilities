@@ -16,7 +16,7 @@ module.exports = {
      * @param {String[]} args
      */
 
-    run: async ({ message, args, wrongUsage }) => {
+    run: async (client, message, args, wrongUsage) => {
 
         var color = args[0]
 

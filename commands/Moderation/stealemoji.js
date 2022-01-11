@@ -16,7 +16,7 @@ module.exports = {
      * @param {String[]} args
      */
 
-    run: async ({ client, message, args, wrongUsage }) => {
+    run: async (client, message, args, wrongUsage) => {
 
 
         if (!args.length) return message.reply({ embeds: [wrongUsage] })

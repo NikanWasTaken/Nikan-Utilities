@@ -13,7 +13,7 @@ module.exports = {
      * @param {String[]} args
      */
 
-    run: async ({ client, message, args }) => {
+    run: async (client, message, args) => {
 
         let text = message.content.split(" ").slice(2).join(" ")
         let user = message.guild.members.cache.get(args[0]) || message.mentions.members.first()

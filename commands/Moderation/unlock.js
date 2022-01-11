@@ -15,7 +15,7 @@ module.exports = {
    */
 
 
-  run: async ({ client, message, args, wrongUsage }) => {
+  run: async (client, message, args, wrongUsage) => {
 
     var reason = args.slice(1).join(" ") || "No reason provided"
 

@@ -17,7 +17,7 @@ module.exports = {
      * @param {Message} message
      * @param {String[]} args
      */
-    run: async ({ message, args, wrongUsage }) => {
+    run: async (client, message, args, wrongUsage) => {
 
         const punishid = args[0]
 

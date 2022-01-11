@@ -18,7 +18,7 @@ module.exports = {
    * @param {String[]} args
    */
 
-  run: async ({ message, args, wrongUsage }) => {
+  run: async (client, message, args, wrongUsage) => {
 
     let query = message.content.split(" ").slice(2).join(" ")
     let language = args[0]

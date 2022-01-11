@@ -14,7 +14,7 @@ module.exports = {
    * @param {String[]} args
    */
 
-  run: async ({ client, message, args, wrongUsage }) => {
+  run: async (client, message, args, wrongUsage) => {
 
     var reason = args.slice(1).join(" ")
 

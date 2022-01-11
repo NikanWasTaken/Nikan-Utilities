@@ -14,7 +14,7 @@ module.exports = {
      * @param {String[]} args
      */
 
-    run: async ({ message }) => {
+    run: async (client, message, args, wrongUsage) => {
         const array = [
             "champy",
             "champ",

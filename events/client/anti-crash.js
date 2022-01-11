@@ -35,6 +35,7 @@ process.on("uncaughtException", (err, origin) => {
         .setFooter(`${client.user.username} Error Handling`, client.user.displayAvatarURL({ dynamic: true }))
         .setColor(`${client.color.invisible}`)
 
+    console.log(err)
     return errorHandlerChannel.send({ embeds: [embed] })
 
 });
@@ -51,6 +52,7 @@ process.on("uncaughtExceptionMonitor", (err, origin) => {
         .setFooter(`${client.user.username} Error Handling`, client.user.displayAvatarURL({ dynamic: true }))
         .setColor(`${client.color.invisible}`)
 
+    console.log(err)
     return errorHandlerChannel.send({ embeds: [embed] })
 
 });

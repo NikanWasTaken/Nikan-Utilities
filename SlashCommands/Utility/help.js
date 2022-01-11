@@ -13,7 +13,7 @@ module.exports = {
       description: "The command you want to get information about",
       required: false,
       type: "STRING",
-
+      autocomplete: true,
     }
   ],
 

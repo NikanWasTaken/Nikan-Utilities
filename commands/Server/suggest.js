@@ -14,7 +14,7 @@ module.exports = {
      * @param {String[]} args
      */
 
-    run: async ({ client, message, args }) => {
+    run: async (client, message, args, wrongUsage) => {
 
         const suggestchannel = client.channels.cache.get("851317000868462633")
         const suggestion = args.join(" ")

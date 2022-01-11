@@ -112,7 +112,7 @@ client.on("messageCreate", async (message) => {
                     }, 5000)
                 });
 
-        command.run({ client, message, args, wrongUsage });
+        command.run(client, message, args, wrongUsage);
         Timeout.set(
             `${command.name}${message.author.id}`,
             Date.now() + command.cooldown
@@ -122,7 +122,7 @@ client.on("messageCreate", async (message) => {
         }, command.cooldown);
 
     } else {
-        command.run({ client, message, args, wrongUsage });
+        command.run(client, message, args, wrongUsage);
     }
 
 

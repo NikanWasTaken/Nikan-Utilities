@@ -14,7 +14,7 @@ module.exports = {
      * @param {String[]} args
      */
 
-    run: async ({ client, message, args }) => {
+    run: async (client, message, args) => {
 
         let reason = args.join(" ") || "AFK"
 
@@ -24,17 +24,11 @@ module.exports = {
             .setDescription(`✅ I set your AFK for the reason: ${reason}`)
             .setColor("GREEN")
         message.reply({ embeds: [no] }).then((msg) => {
-            setTimeout(() => {
-                msg.delete()
-                message.delete()
-            }, 5000)
+            client.delete.message(message, msg)
         })
 
-        message.member.setNickname(`[AFK] ${message.author.username}`).catch(() => { return })
-
+        message.member.setNickname(`[AFK] ${message.author.username}`)
+            .catch(() => { return })
 
     }
-
-
-
 }

@@ -33,10 +33,16 @@ module.exports = async (client) => {
     }
 
     // Capatilize first latter
-    client.cap = function capatilize(string) {
-        if (!string) throw new Error("You need to provide a string for capatilize function to work!");
-        return `${string[0].toUpperCase()}${string.slice(1).toLowerCase()}`
-    }
+    client.cap = function (str) {
+        str = str.replace(/\_/g, ' ');
+        const split = str.trim().split(" ")
+        const splitFixed = [];
+        split.forEach((e) => {
+            e = e.charAt(0).toUpperCase() + e.slice(1).toLocaleLowerCase();
+            splitFixed.push(e);
+        });
+        return splitFixed.join(' ');
+    };
 
 
     // other functions 

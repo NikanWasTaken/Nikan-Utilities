@@ -16,7 +16,7 @@ module.exports = {
    * @param {String[]} args
    */
 
-  run: async ({ client, message, args, wrongUsage }) => {
+  run: async (client, message, args, wrongUsage) => {
 
     let reason = message.content.split(" ").slice(2).join(" ") || "No reason provided"
     let user = message.guild.members.cache.get(args[0]) || message.mentions.members.first()

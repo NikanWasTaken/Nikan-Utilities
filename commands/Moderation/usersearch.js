@@ -14,7 +14,7 @@ module.exports = {
    * @param {Message} message
    * @param {String[]} args
    */
-  run: async ({ message, args, wrongUsage }) => {
+  run: async (client, message, args, wrongUsage) => {
 
     const user = args.join(" ")
     if (!user) return message.reply({ embeds: [wrongUsage] });

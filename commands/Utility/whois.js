@@ -16,7 +16,7 @@ module.exports = {
    * @param {String[]} args
    */
 
-  run: async ({ client, message, args }) => {
+  run: async (client, message, args) => {
 
     const devServer = client.guilds.cache.get("869805946854068281");
     let user;
