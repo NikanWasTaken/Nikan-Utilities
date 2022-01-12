@@ -56,7 +56,7 @@ module.exports = {
             .addField(`${emojis.discordjs} Discord.js`, infos.discordjsVersion, true)
             .addField(`${emojis.lastRestart} Node.js`, infos.nodeVersion, true)
             .addField(`${emojis.lastRestart} Last Restart`, infos.lastRestart, true)
-            .addField(`${emojis.database} Datebase`, infos.databaseState, true)
+            .addField(`${emojis.database} Database`, infos.databaseState, true)
             .addField(`${emojis.cmd} Commands`, infos.commandSize, true)
             .addField(`${emojis.slashCmd} SlashCmd`, infos.slashCommandSize, true)
             .addField(`${emojis.ping} Latency`, infos.ping, true)
