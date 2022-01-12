@@ -20,7 +20,7 @@ module.exports = {
 
         await message.channel.sendTyping()
 
-        const { freeMemPercentage } = await mem.info()
+        const { freeMemPercentage, freeMemMb, usedMemMb, totalMemMb } = await mem.info()
         const values = Object.values(models);
         const totalEntries = await values.reduce(async (accumulator, model) => {
             const counts = await model.countDocuments();
@@ -123,9 +123,9 @@ module.exports = {
                 .addField(
                     `${emojis.memory} Memory`,
                     [
-                        `• **Total Memory:** ${client.convert.byte(process.memoryUsage().heapTotal)}`,
-                        `• **Used Memory:** ${client.convert.byte(`${process.memoryUsage().heapUsed}`)} \`|\` ${100 - freeMemPercentage}%`,
-                        `• **Free Memory:** ${client.convert.byte(process.memoryUsage().heapTotal - process.memoryUsage().heapUsed)} \`|\` ${freeMemPercentage}%`,
+                        `• **Total Memory:** ${totalMemMb}MB`,
+                        `• **Used Memory:** ${usedMemMb}MB \`|\` ${100 - freeMemPercentage}%`,
+                        `• **Free Memory:** ${freeMemMb}MB \`|\` ${freeMemPercentage}%`,
                     ].join("\n")
                 )
 
