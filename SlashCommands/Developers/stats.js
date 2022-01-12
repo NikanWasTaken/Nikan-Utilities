@@ -123,9 +123,9 @@ module.exports = {
                 .addField(
                     `${emojis.memory} Memory`,
                     [
-                        `• **Total Memory:** ${client.convert.byte(`${mem.totalMem}`)}`,
-                        `• **Used Memory:** ${client.convert.byte(`${mem.used}`)} \`|\` ${100 - freeMemPercentage}%`,
-                        `• **Free Memory:** ${client.convert.byte(`${mem.totalMem - mem.used}`)} \`|\` ${freeMemPercentage}%`,
+                        `• **Total Memory:** ${client.convert.byte(`${mem.totalMem()}`)}`,
+                        `• **Used Memory:** ${client.convert.byte(`${await mem.used()}`)} \`|\` ${100 - freeMemPercentage}%`,
+                        `• **Free Memory:** ${client.convert.byte(`${mem.totalMem() - await mem.used()}`)} \`|\` ${freeMemPercentage}%`,
                     ].join("\n")
                 )
 
