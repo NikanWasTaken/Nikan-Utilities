@@ -124,7 +124,7 @@ module.exports = {
                     [
                         `• **Total Memory:** ${client.convert.byte(`${totalMemMb}`)}`,
                         `• **Used Memory:** ${client.convert.byte(`${usedMemMb}`)} \`|\` ${100 - freeMemPercentage}%`,
-                        `• **Free Memory:** ${client.convert.byte(`${totalMemMb = usedMemMb}`)} \`|\` ${freeMemPercentage}%`,
+                        `• **Free Memory:** ${client.convert.byte(`${totalMemMb - usedMemMb}`)} \`|\` ${freeMemPercentage}%`,
                     ].join("\n")
                 )
 
