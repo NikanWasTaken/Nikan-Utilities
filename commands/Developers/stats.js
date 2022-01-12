@@ -18,6 +18,8 @@ module.exports = {
 
     run: async (client, message) => {
 
+        await message.channel.sendTyping()
+
         const { freeMemPercentage } = await mem.info()
         const values = Object.values(models);
         const totalEntries = await values.reduce(async (accumulator, model) => {
@@ -74,7 +76,6 @@ module.exports = {
             )
         ]
 
-        await message.channel.sendTyping()
         let msg = await message.reply({ embeds: [embed], components: components(false) })
 
 
