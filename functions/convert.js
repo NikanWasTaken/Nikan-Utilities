@@ -1,4 +1,4 @@
-// Converts a timestamp to seconds, minutes, hours and days
+// Converts stuff lol 
 
 /**
  * @param {Client} client
@@ -6,7 +6,7 @@
 module.exports = async (client) => {
 
 
-    let theFunction = function (time, options) {
+    let timeFunction = function (time, options) {
 
         let join = options?.join ? options?.join : "and";
         let bold = options?.bold ? options?.bold : false;
@@ -67,8 +67,17 @@ module.exports = async (client) => {
         }
     }
 
+    let bytesFunction = function (bytes) {
+        if (bytes === 0) return '0 Bytes';
+        const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(1024));
+        return `${parseFloat((bytes / Math.pow(1024, i)).toFixed(2))} ${sizes[i]}`;
+    }
+
+
     client.convert = {
-        time: theFunction
+        time: timeFunction,
+        byte: bytesFunction
     }
 
 }

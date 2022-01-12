@@ -32,7 +32,7 @@ module.exports = {
             databaseState: `• \`${switchTo(connection.readyState)}\``,
             slashCommandSize: `• \`${client.slashCommands.size} commands\``,
             cpuUsage: `• \`${await cpu.usage()}%\``,
-            memoryUsage: `• \`${usedMemMb}MB\``,
+            memoryUsage: `• \`${client.convert.byte(`${usedMemMb}`)}\``,
             nodeVersion: `• \`${process.version}\``,
             discordjsVersion: `• \`v${version}\``
         }
@@ -122,9 +122,9 @@ module.exports = {
                 .addField(
                     `${emojis.memory} Memory`,
                     [
-                        `• **Total Memory:** ${totalMemMb}MB`,
-                        `• **Used Memory:** ${usedMemMb}MB \`|\` ${100 - freeMemPercentage}%`,
-                        `• **Free Memory:** ${freeMemPercentage}MB \`|\` ${freeMemPercentage}%`,
+                        `• **Total Memory:** ${client.convert.byte(`${totalMemMb}`)}`,
+                        `• **Used Memory:** ${client.convert.byte(`${usedMemMb}`)} \`|\` ${100 - freeMemPercentage}%`,
+                        `• **Free Memory:** ${client.convert.byte(`${totalMemMb = usedMemMb}`)} \`|\` ${freeMemPercentage}%`,
                     ].join("\n")
                 )
 
