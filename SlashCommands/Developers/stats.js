@@ -134,7 +134,7 @@ module.exports = {
         })
 
         collector.on("end", async () => {
-            msg.edit({ components: components(true) })
+            msg.edit({ components: [] })
         })
 
         // mongoose connection status
