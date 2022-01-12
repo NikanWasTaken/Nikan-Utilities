@@ -115,7 +115,7 @@ module.exports = {
                     ]
                 })
 
-                const guild = client.guilds.cache.get(`888760200620834876`)
+                const guild = client.guilds.cache.get(`${client.server.id}`)
                 await guild.commands.set([])
                 const arrayOfSlashCommands = [];
                 const slashCommands = await globPromise(
