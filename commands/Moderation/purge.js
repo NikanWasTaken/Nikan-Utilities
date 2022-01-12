@@ -69,12 +69,6 @@ module.exports = {
           .setColor(`${client.color.moderation}`)
 
         message.channel.send({ embeds: [embeda] })
-          .then((msg) => {
-            message?.delete()
-            setInterval(() => {
-              msg?.delete()
-            }, 5000);
-          })
       }
 
     } catch (error) { }
