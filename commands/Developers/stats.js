@@ -1,5 +1,5 @@
 const { MessageEmbed, MessageActionRow, MessageButton, version, Message, Client } = require('discord.js')
-const { cpu, mem } = require('node-os-utils');
+const { cpu, mem, proc } = require('node-os-utils');
 const os = require("os")
 const { models, connection } = require("mongoose")
 
@@ -123,9 +123,9 @@ module.exports = {
                 .addField(
                     `${emojis.memory} Memory`,
                     [
-                        `• **Total Memory:** ${client.convert.byte(`${mem.totalMem()}`)}`,
+                        `• **Total Memory:** ${client.convert.byte(process.memoryUsage().heapTotal)}`,
                         `• **Used Memory:** ${client.convert.byte(`${process.memoryUsage().heapUsed}`)} \`|\` ${100 - freeMemPercentage}%`,
-                        `• **Free Memory:** ${client.convert.byte(mem.totalMem() - process.memoryUsage().heapUsed)} \`|\` ${freeMemPercentage}%`,
+                        `• **Free Memory:** ${client.convert.byte(process.memoryUsage().heapTotal - process.memoryUsage().heapUsed)} \`|\` ${freeMemPercentage}%`,
                     ].join("\n")
                 )
 
