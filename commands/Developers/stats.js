@@ -18,7 +18,7 @@ module.exports = {
 
     run: async (client, message) => {
 
-        const { totalMemMb, usedMemMb, freeMemPercentage } = await mem.info()
+        const { freeMemPercentage } = await mem.info()
         const values = Object.values(models);
         const totalEntries = await values.reduce(async (accumulator, model) => {
             const counts = await model.countDocuments();
@@ -32,7 +32,7 @@ module.exports = {
             databaseState: `• \`${switchTo(connection.readyState)}\``,
             slashCommandSize: `• \`${client.slashCommands.size} commands\``,
             cpuUsage: `• \`${await cpu.usage()}%\``,
-            memoryUsage: `• \`${client.convert.byte(`${usedMemMb}`)}\``,
+            memoryUsage: `• \`${100 - freeMemPercentage}%\``,
             nodeVersion: `• \`${process.version}\``,
             discordjsVersion: `• \`v${version}\``
         }
@@ -122,9 +122,9 @@ module.exports = {
                 .addField(
                     `${emojis.memory} Memory`,
                     [
-                        `• **Total Memory:** ${client.convert.byte(`${totalMemMb}`)}`,
-                        `• **Used Memory:** ${client.convert.byte(`${usedMemMb}`)} \`|\` ${100 - freeMemPercentage}%`,
-                        `• **Free Memory:** ${client.convert.byte(`${totalMemMb - usedMemMb}`)} \`|\` ${freeMemPercentage}%`,
+                        `• **Total Memory:** ${client.convert.byte(`${mem.totalMem}`)}`,
+                        `• **Used Memory:** ${client.convert.byte(`${mem.used}`)} \`|\` ${100 - freeMemPercentage}%`,
+                        `• **Free Memory:** ${client.convert.byte(`${mem.totalMem - mem.used}`)} \`|\` ${freeMemPercentage}%`,
                     ].join("\n")
                 )
 
