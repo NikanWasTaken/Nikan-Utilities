@@ -123,8 +123,8 @@ module.exports = {
                     `${emojis.memory} Memory`,
                     [
                         `• **Total Memory:** ${client.convert.byte(`${mem.totalMem()}`)}`,
-                        `• **Used Memory:** ${client.convert.byte(`${await mem.used()}`)} \`|\` ${100 - freeMemPercentage}%`,
-                        `• **Free Memory:** ${client.convert.byte(`${mem.totalMem() - await mem.used()}`)} \`|\` ${freeMemPercentage}%`,
+                        `• **Used Memory:** ${client.convert.byte(`${process.memoryUsage().heapUsed}`)} \`|\` ${100 - freeMemPercentage}%`,
+                        `• **Free Memory:** ${client.convert.byte(mem.totalMem() - process.memoryUsage().heapUsed)} \`|\` ${freeMemPercentage}%`,
                     ].join("\n")
                 )
 
