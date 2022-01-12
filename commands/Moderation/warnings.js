@@ -65,7 +65,7 @@ module.exports = {
             .setColor(`${client.color.serverPurple}`)
             .addField("Normal Warnings", `These are the warnings given to you by moderators!`)
             .addField("Automod Warnings", `These are the warnings given to you by auto moderation!`)
-            .setFooter("Please select your warnings type using the buttons below!")
+            .setFooter({ text: "Please select your warnings type using the buttons below!" })
 
         const msg = await message.reply({ embeds: [first], components: components(false) })
 
@@ -113,7 +113,7 @@ module.exports = {
 
 
                         const embed = new MessageEmbed()
-                            .setAuthor(`${user.user.tag}`, user.user.displayAvatarURL({ dynamic: true }))
+                            .setAuthor({ name: `${user.user.tag}`, iconURL: user.user.displayAvatarURL({ dynamic: true }) })
                             .setThumbnail(user.user.displayAvatarURL({ dynamic: true }))
                             .setDescription(`These are all the punishments for ${user.user}.\n\n${embedDescription}`)
                             .setColor("BLURPLE")

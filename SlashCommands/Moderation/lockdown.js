@@ -39,7 +39,7 @@ module.exports = {
    * @param {CommandInteraction} interaction
    * @param {String[]} args
    */
-  run: async ({ client, interaction }) => {
+  run: async (client, interaction) => {
 
     const action = interaction.options.getString("action")
     var reason = interaction.options.getString("reason")

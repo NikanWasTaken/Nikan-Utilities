@@ -1,5 +1,4 @@
 const { MessageEmbed, Client, MessageActionRow, MessageSelectMenu, MessageButton } = require("discord.js");
-const config = require("../../config.json");
 const ms = require("ms");
 
 module.exports = {
@@ -23,7 +22,9 @@ module.exports = {
    * @param {CommandInteraction} interaction
    * @param {String[]} args
    */
-  run: async ({ client, interaction }) => {
+  run: async (client, interaction) => {
+
+    const config = client.config
 
     let string = interaction.options.getString("command")
 
@@ -52,12 +53,6 @@ module.exports = {
                   value: "moderation",
                   description: "Everything about moderation!",
                   emoji: "<:DISCORD_EMPLOYEE:899171458050306058>"
-                },
-                {
-                  label: "Events",
-                  value: "events",
-                  description: "Everything about event commands!",
-                  emoji: "<:HYPESQUAD_EVENTS:899171458599755796>"
                 },
                 {
                   label: "Others",
@@ -115,30 +110,30 @@ module.exports = {
               ephemeral: true
             })
 
-          } else if (collected.values[0] === "events") {
+            // } else if (collected.values[0] === "events") {
 
-            if (collected.user.id !== interaction.user.id) return collected.reply({ content: "This is not your menu!", ephemeral: true })
+            //   if (collected.user.id !== interaction.user.id) return collected.reply({ content: "This is not your menu!", ephemeral: true })
 
-            const no = new MessageEmbed()
-              .setAuthor({ name: `${client.user.username}`, iconURL: `${client.user.displayAvatarURL()}` })
-              .setDescription("The FitnessGram™ Pacer Test is a multistage aerobic client.capacity test that progressively gets more difficult as it continues. The 20 meter pacer test will begin in 30 seconds. Line up at the start. The running speed starts slowly, but gets faster each minute after you hear this signal. [Beep] A single lap should be completed each time you hear this sound. Remember to run in a straight line, and run as long as possible. The second time you fail to complete a lap before the sound, your test is over.")
-              .addField("** **", "Well, nice wasting your time reading that. Whoops, I guess I forgot to say only event hosts can see this page!")
-              .setTimestamp()
-              .setColor("RED")
+            //   const no = new MessageEmbed()
+            //     .setAuthor({ name: `${client.user.username}`, iconURL: `${client.user.displayAvatarURL()}` })
+            //     .setDescription("The FitnessGram™ Pacer Test is a multistage aerobic client.capacity test that progressively gets more difficult as it continues. The 20 meter pacer test will begin in 30 seconds. Line up at the start. The running speed starts slowly, but gets faster each minute after you hear this signal. [Beep] A single lap should be completed each time you hear this sound. Remember to run in a straight line, and run as long as possible. The second time you fail to complete a lap before the sound, your test is over.")
+            //     .addField("** **", "Well, nice wasting your time reading that. Whoops, I guess I forgot to say only event hosts can see this page!")
+            //     .setTimestamp()
+            //     .setColor("RED")
 
-            if (!interaction.member.roles.cache.get("880409157969256518")) return collected.reply({ embeds: [no], ephemeral: true })
+            //   if (!interaction.member.roles.cache.get("880409157969256518")) return collected.reply({ embeds: [no], ephemeral: true })
 
-            const embed = new MessageEmbed()
-              .setAuthor({ name: `${client.user.username}`, iconURL: `${client.user.displayAvatarURL()}` })
-              .setColor(`#deba04`)
-              .setTitle("Events™️").setURL(`https://discord.com/channels/${client.server.id}/904601285985185792`)
-              .setDescription(`Hello dear event host! You are a huge part of this server as you host many events in the server! I wanted to show you alot of my feature that we've made for you!`)
-              .addField("Guide", `Let me start with the guide! I dont need to talk about these alot because Nikan has already written them down for ya!\nJust check them out [**here**](https://discord.com/channels/${client.server.id}/904601285985185792)`)
-              .addField("Commands", `It's time for me to show you all of my commands that will be useful for you while hosting events!\n\n${client.commands.filter(c => c.category === "Events").map((c) => {
-                return [`> ➜ **${client.config.prefix}${c.name}** : ${c.description}`]
-              }).join("\n")}`)
+            //   const embed = new MessageEmbed()
+            //     .setAuthor({ name: `${client.user.username}`, iconURL: `${client.user.displayAvatarURL()}` })
+            //     .setColor(`#deba04`)
+            //     .setTitle("Events™️").setURL(`https://discord.com/channels/${client.server.id}/904601285985185792`)
+            //     .setDescription(`Hello dear event host! You are a huge part of this server as you host many events in the server! I wanted to show you alot of my feature that we've made for you!`)
+            //     .addField("Guide", `Let me start with the guide! I dont need to talk about these alot because Nikan has already written them down for ya!\nJust check them out [**here**](https://discord.com/channels/${client.server.id}/904601285985185792)`)
+            //     .addField("Commands", `It's time for me to show you all of my commands that will be useful for you while hosting events!\n\n${client.commands.filter(c => c.category === "Events").map((c) => {
+            //       return [`> ➜ **${client.config.prefix}${c.name}** : ${c.description}`]
+            //     }).join("\n")}`)
 
-            collected.reply({ embeds: [embed], ephemeral: true })
+            //   collected.reply({ embeds: [embed], ephemeral: true })
 
           } else if (collected.values[0] === "other") {
 
@@ -213,7 +208,7 @@ module.exports = {
           ].join("\n")
         )
         .setColor(`${client.color.botBlue}`)
-        .setFooter({ text: `[] = required" • <> = optional` })
+        .setFooter({ text: `[] = required • <> = optional` })
       interaction.followUp({
         embeds: [emb3]
       })

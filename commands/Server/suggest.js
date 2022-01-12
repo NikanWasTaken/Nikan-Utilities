@@ -1,4 +1,4 @@
-const { MessageEmbed, Message, Client } = require('discord.js')
+const { MessageEmbed, Message, Client, WebhookClient } = require('discord.js')
 
 module.exports = {
     name: 'suggest',
@@ -14,7 +14,8 @@ module.exports = {
      * @param {String[]} args
      */
 
-    run: async (client, message, args, wrongUsage) => {
+    run: async (client, message, args) => {
+
 
         const suggestchannel = client.channels.cache.get("851317000868462633")
         const suggestion = args.join(" ")
@@ -22,9 +23,9 @@ module.exports = {
         if (!suggestion) return message.reply("Please state your suggestion!")
 
         const thanks = new MessageEmbed()
-            .setDescription(`${message.member.displayName}, thanks for your suggestion, it has been posted in <#851317000868462633>!`).setColor("BLUE")
+            .setDescription(`${message.member.displayName}, thanks for your suggestion, it has been posted in <#851317000868462633>!`)
+            .setColor("PURPLE")
         message.channel.send({ embeds: [thanks] })
-        message.delete()
 
         const embed = new MessageEmbed()
             .setAuthor({ name: `${message.author.tag}`, iconURL: message.author.displayAvatarURL({ dynamic: true }) })
@@ -37,7 +38,9 @@ module.exports = {
 
         suggestchannel.send({ embeds: [embed] }).then((msg) => {
 
-            msg.edit({ embeds: [embed.setFooter(`Suggestion ID: ${msg.id}`)] })
+            msg.edit({
+                embeds: [embed.setFooter({ text: `Suggestion ID: ${msg.id}` })]
+            })
             msg.react("<a:NUupvote:902915217829273661>")
             msg.react("<a:NUdownvote:902915218353569802>")
 

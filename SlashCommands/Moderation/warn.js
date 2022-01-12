@@ -1,4 +1,4 @@
-const { MessageEmbed, Client, MessageButton, MessageActionRow } = require("discord.js");
+const { MessageEmbed, Client, MessageButton, MessageActionRow, CommandInteraction } = require("discord.js");
 const warnModel = require("../../models/Punishments.js")
 const automodModel = require("../../models/automod.js")
 const moment = require("moment")
@@ -104,7 +104,7 @@ module.exports = {
      * @param {String[]} args
      */
 
-    run: async ({ client, interaction }) => {
+    run: async (client, interaction) => {
 
 
         const subs = interaction.options.getSubcommand(["add", "remove", "list", "info"])

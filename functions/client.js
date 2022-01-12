@@ -51,7 +51,7 @@ module.exports = async (client) => {
     client.slashCommands = new Collection();
     client.snipes = new Collection();
     client.afk = new Collection()
-    client.config = require("../config.json");
+    client.config = require("../json/config.json");
     client.warncooldown = new Collection();
 
 

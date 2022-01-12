@@ -50,7 +50,7 @@ module.exports = {
    * @param {CommandInteraction} interaction
    * @param {String[]} args
    */
-  run: async ({ client, interaction, args }) => {
+  run: async (client, interaction) => {
 
     let subs = interaction.options.getSubcommand(["role", "user", "color"]);
 
@@ -411,7 +411,7 @@ module.exports = {
       let embed = new MessageEmbed()
         .setTitle(json.name)
         .addField("RGB", json.rgb || "Not found!", true)
-        .addField("Brightness", json.brightness ? "Not Found!" : json.brightness, true)
+        .addField("Brightness", json.brightness ? `${json.brightness}%` : "Not found!", true)
         .addField("Hex", json.hex || "Not Found!", true)
         .setThumbnail(json.image)
         .setImage(json.image_gradient, true)

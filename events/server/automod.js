@@ -1,8 +1,6 @@
 let { MessageEmbed, WebhookClient } = require("discord.js")
 let client = require("../../index.js")
-const warnModel = require("../../models/Punishments.js")
 const automodModel = require("../../models/automod.js")
-const MemberRoles = require("../../models/MemberRoles.js")
 const prohibitedwords = require("../../json/bad-words.json")
 const ms = require("ms")
 const logschannel = new WebhookClient({
@@ -27,7 +25,7 @@ function isValidURL(string) {
 
 // edit
 
-client.on('messageUpdate', async (oldMessage, newMessage) => {
+client.on('messageUpdate', async (newMessage) => {
 
   if (newMessage?.author?.bot) return
   if (!newMessage?.content?.length) return
@@ -78,7 +76,7 @@ client.on("messageCreate", async (message) => {
       automod.save()
 
       let dm = new MessageEmbed()
-        .setAuthor(client.user.username, client.user.displayAvatarURL({ dynamic: true }))
+        .setAuthor({ name: client.user.username, iconURL: client.user.displayAvatarURL({ dynamic: true }) })
         .setTitle(`You've been Warned in ${message.guild.name}`)
         .addField("Punishment ID", `${automod._id}`, true)
         .addField("Expires", "in 2 days", true)
@@ -90,7 +88,7 @@ client.on("messageCreate", async (message) => {
       }).catch(e => { return })
 
       const log = new MessageEmbed()
-        .setAuthor("Auto Moderation", client.user.displayAvatarURL())
+        .setAuthor({ name: "Auto Moderation", iconURL: client.user.displayAvatarURL() })
         .setTitle("Prohibited Words")
         .setDescription(`Punishment ID • \`${automod._id}\``)
         .setColor(`${client.color.logYellow}`)
@@ -143,17 +141,17 @@ client.on("messageCreate", async (message) => {
       automod.save()
 
       let dm = new MessageEmbed()
-        .setAuthor(client.user.username, client.user.displayAvatarURL({ dynamic: true }))
+        .setAuthor({ name: client.user.username, iconURL: client.user.displayAvatarURL({ dynamic: true }) })
         .setTitle(`You've been Warned in ${message.guild.name}`)
         .addField("Punishment ID", `${automod._id}`, true)
         .addField("Expires", "in 2 days", true)
         .addField("Reason", "[Automod] Sending discord server invite links in the chat.", false)
         .setColor(`${client.color.modDm}`)
         .setTimestamp()
-      message.member.send({ embeds: [dm] }).catch(e => { return })
+      message.member.send({ embeds: [dm] }).catch(() => { return })
 
       const log = new MessageEmbed()
-        .setAuthor("Auto Moderation", client.user.displayAvatarURL())
+        .setAuthor({ name: "Auto Moderation", iconURL: client.user.displayAvatarURL() })
         .setTitle("Discord Invite")
         .setDescription(`Punishment ID • \`${automod._id}\``)
         .setColor(`${client.color.logYellow}`)
@@ -204,7 +202,7 @@ client.on("messageCreate", async (message) => {
         automod.save()
 
         let dm = new MessageEmbed()
-          .setAuthor(client.user.username, client.user.displayAvatarURL({ dynamic: true }))
+          .setAuthor({ name: client.user.username, iconURL: client.user.displayAvatarURL({ dynamic: true }) })
           .setTitle(`You've been Warned in ${message.guild.name}`)
           .addField("Punishment ID", `${automod._id}`, true)
           .addField("Expires", "in 2 days", true)
@@ -213,10 +211,10 @@ client.on("messageCreate", async (message) => {
           .setTimestamp()
         message.member.send({
           embeds: [dm]
-        }).catch(e => { return });
+        }).catch(() => { return });
 
         const log = new MessageEmbed()
-          .setAuthor("Auto Moderation", client.user.displayAvatarURL())
+           .setAuthor({ name: "Auto Moderation", iconURL: client.user.displayAvatarURL() })
           .setTitle("Link")
           .setDescription(`Punishment ID • \`${automod._id}\``)
           .setColor(`${client.color.logYellow}`)
@@ -269,7 +267,7 @@ client.on("messageCreate", async (message) => {
     automod.save()
 
     let dm = new MessageEmbed()
-      .setAuthor(client.user.username, client.user.displayAvatarURL({ dynamic: true }))
+      .setAuthor({ name: client.user.username, iconURL: client.user.displayAvatarURL({ dynamic: true }) })
       .setTitle(`You've been Warned in ${message.guild.name}`)
       .addField("Punishment ID", `${automod._id}`, true)
       .addField("Expires", "in 2 days", true)
@@ -278,10 +276,10 @@ client.on("messageCreate", async (message) => {
       .setTimestamp()
     message.member.send({
       embeds: [dm]
-    }).catch(e => { return })
+    }).catch(() => { return })
 
     const log = new MessageEmbed()
-      .setAuthor("Auto Moderation", client.user.displayAvatarURL())
+      .setAuthor({ name: "Auto Moderation", iconURL: client.user.displayAvatarURL() })
       .setTitle("Large Message")
       .setDescription(`Punishment ID • \`${automod._id}\``)
       .setColor(`${client.color.logYellow}`)
@@ -323,7 +321,7 @@ client.on("messageCreate", async (message) => {
       automod.save()
 
       let dm = new MessageEmbed()
-        .setAuthor(client.user.username, client.user.displayAvatarURL({ dynamic: true }))
+        .setAuthor({ name: client.user.username, iconURL: client.user.displayAvatarURL({ dynamic: true }) })
         .setTitle(`You've been Warned in ${message.guild.name}`)
         .addField("Punishment ID", `${automod._id}`, true)
         .addField("Expires", "in 2 days", true)
@@ -332,10 +330,10 @@ client.on("messageCreate", async (message) => {
         .setTimestamp()
       message.member.send({
         embeds: [dm]
-      }).catch(e => { return });
+      }).catch(() => { return });
 
       const log = new MessageEmbed()
-        .setAuthor("Auto Moderation", client.user.displayAvatarURL())
+        .setAuthor({ name: "Auto Moderation", iconURL: client.user.displayAvatarURL() })
         .setTitle("Mass Mentioning")
         .setDescription(`Punishment ID • \`${automod._id}\``)
         .setColor(`${client.color.logYellow}`)
@@ -349,8 +347,6 @@ client.on("messageCreate", async (message) => {
       })
 
     }
-
-
 })
 
 
@@ -416,7 +412,7 @@ client.on("messageCreate", async (message) => {
 //               automod.save()
 
 //               let dm = new MessageEmbed()
-//                 .setAuthor(client.user.username, client.user.displayAvatarURL({ dynamic: true }))
+//                 .setAuthor({ name: client.user.username, iconURL: client.user.displayAvatarURL({ dynamic: true }) })
 //                 .setTitle(`You've been Warned in ${message.guild.name}`)
 //                 .addField("Punishment ID", `${automod._id}`, true)
 //                 .addField("Expires", "in 2 days", true)
@@ -426,7 +422,7 @@ client.on("messageCreate", async (message) => {
 //               message.member.send({ embeds: [dm] }).catch(e => { return })
 
 //               const log = new MessageEmbed()
-//               .setAuthor("Auto Moderation", client.user.displayAvatarURL())
+//                .setAuthor({ name: "Auto Moderation", iconURL: client.user.displayAvatarURL() })
 //               .setTitle("Spamming")
 //               .setDescription(`Punishment ID • \`${automod._id}\``)
 //               .setColor(`${client.color.logYellow}`)

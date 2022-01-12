@@ -14,7 +14,7 @@ process.on("unhandledRejection", (reason, promise) => {
         .addField("Error", `\`\`\`${reason.stack.length >= 1024 ? `The full error is too long to show.\n\n${reason}` : reason.stack}\`\`\``)
         .addField("Promise", `\`\`\`${promise}\`\`\``)
         .setTimestamp()
-        .setFooter(`${client.user.username} Error Handling`, client.user.displayAvatarURL({ dynamic: true }))
+        .setFooter({ text: `${client.user.username} Error Handling`, iconURL: client.user.displayAvatarURL({ dynamic: true }) })
         .setColor(`${client.color.invisible}`)
 
     console.log(reason)
@@ -32,7 +32,7 @@ process.on("uncaughtException", (err, origin) => {
         .addField("Error", `\`\`\`${err.stack.length >= 1024 ? `The full error is too long to show.\n\n${err}` : err.stack}\`\`\``)
         .addField("Origin", `\`\`\`${origin}\`\`\``)
         .setTimestamp()
-        .setFooter(`${client.user.username} Error Handling`, client.user.displayAvatarURL({ dynamic: true }))
+        .setFooter({ text: `${client.user.username} Error Handling`, iconURL: client.user.displayAvatarURL({ dynamic: true }) })
         .setColor(`${client.color.invisible}`)
 
     console.log(err)
@@ -49,7 +49,7 @@ process.on("uncaughtExceptionMonitor", (err, origin) => {
         .addField("Error", `\`\`\`${err.stack.length >= 1024 ? `The full error is too long to show.\n\n${err}` : err.stack}\`\`\``)
         .addField("Origin", `\`\`\`${origin}\`\`\``)
         .setTimestamp()
-        .setFooter(`${client.user.username} Error Handling`, client.user.displayAvatarURL({ dynamic: true }))
+        .setFooter({ text: `${client.user.username} Error Handling`, iconURL: client.user.displayAvatarURL({ dynamic: true }) })
         .setColor(`${client.color.invisible}`)
 
     console.log(err)

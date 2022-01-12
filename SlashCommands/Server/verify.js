@@ -13,7 +13,7 @@ module.exports = {
      * @param {CommandInteraction} interaction
      * @param {String[]} args
      */
-    run: async ({ client, interaction }) => {
+    run: async (client, interaction) => {
 
         const textarray = [
             `${interaction.user} just showed up!`,
@@ -133,7 +133,7 @@ module.exports = {
 
         });
 
-        collector.on("end", async (m) => {
+        collector.on("end", async () => {
 
             const emo = new MessageEmbed()
                 .setAuthor({ name: `${interaction.guild.name}`, iconURL: interaction.guild.iconURL({ dynamic: true }) })

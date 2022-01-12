@@ -35,7 +35,6 @@ module.exports = {
         .setThumbnail("https://cdn.discordapp.com/attachments/870637449158742057/870637829045239868/Translate_Icon.png")
         .setDescription(`**Language:** ${language}\n**Sentence** - ${query}\n**Translated** - ${(await translated).text}\n`)
         .setColor("#5894f4")
-        .setFooter(`Requested by ${message.member.user.username}`, message.member.user.avatarURL({ dynamic: true }))
       message.reply("Translating...").then((message) => message.edit({ embeds: [translateEmbed] }))
 
 
@@ -47,8 +46,5 @@ module.exports = {
       message.reply({ embeds: [wrong] })
     }
 
-
   }
-
-
 }

@@ -1,6 +1,5 @@
-const { MessageEmbed, MessageAttachment, MessageActionRow, MessageButton, WebhookClient, Collection } = require("discord.js");
+const { MessageEmbed, MessageActionRow, MessageButton, WebhookClient, Collection } = require("discord.js");
 const client = require("../../index.js");
-const prefix = client.config.prefix;
 const modmailconfig = require("../../json/modmail.json");
 const categoryId = modmailconfig.category;
 const blacklist = require("../../models/modmail-blacklist.js")
@@ -25,7 +24,7 @@ client.on("channelDelete", (channel) => {
             .setTitle("Thread Closed").setURL(`${client.server.invite}`)
             .setDescription(`Your thread has been closed by a staff member, thanks for contacting ${client.guilds.cache.get(serverId).name}. If you got more problems, feel free to open a thread and ask your question again!`)
             .setColor(`${client.color.botBlue}`)
-            .setFooter(`Thread has been closed`)
+            .setFooter({ text: `Thread has been closed` })
             .setTimestamp()
 
         return person.send({ embeds: [embed] }).catch(() => { return })
@@ -65,12 +64,12 @@ client.on("messageCreate", async (message) => {
                 .setImage(message.attachments.first()?.proxyURL || null)
                 .setColor(`${client.color.botBlue}`)
 
-                ; (await member).send({ embeds: [respondembed] })
-                    .catch(() => {
-                        return message.channel.send({ content: "This person has closed his dms, couldn't dm them!" }),
-                            message.reactions.removeAll(),
-                            message.react(`${client.emoji.fail}`)
-                    })
+            member.send({ embeds: [respondembed] })
+                .catch(() => {
+                    return message.channel.send({ content: "This person has closed his dms, couldn't dm them!" }),
+                        message.reactions.removeAll(),
+                        message.react(`${client.emoji.fail}`)
+                })
             await message.react(`${client.emoji.success}`)
 
         }
@@ -90,7 +89,7 @@ client.on("messageCreate", async (message) => {
                 .setDescription("Sorry, but you've been blacklisted from opening modmail threads.\nIf you think that this punishment is not fair and you don't deserve it, please contact a head moderator or above!")
                 .addField("Reason", `${await find.reason}`, true)
                 .setColor(`${client.color.moderationRed}`)
-                .setFooter(`${client.user.username}`, `${client.user.displayAvatarURL()}`)
+                .setFooter({ text: `${client.user.username}`, iconURL: `${client.user.displayAvatarURL()}` })
 
             return message.channel.send({ embeds: [edie] })
 
@@ -109,7 +108,7 @@ client.on("messageCreate", async (message) => {
 
             if (cooldown.has(`Modmail${message.author.id}`)) return message.channel.send(`You need to wait **${ms(parseInt(lek), { long: true })}** to open a thread again!`)
 
-            if (!client.guilds.cache.get(serverId).members.cache.get(`${message.author.id}`).roles.cache.get("793410990535999508")) return
+            if (!client.guilds.cache.get(serverId)?.members?.cache.get(`${message.author.id}`).roles?.cache?.get("793410990535999508")) return
             const gtn = await GuessTheNumber.findOne({ hostId: message.author.id, guildId: serverId, status: "In process..." })
             if (gtn) return
 
@@ -133,7 +132,7 @@ client.on("messageCreate", async (message) => {
                 .setDescription("Please open a thread if you're sure that your question is related to an option below!\nCreating tickets for trolling reasons will get you different punishments!")
                 .addField("** **", `**➜ #1 Reporting A User**\nYou can report users for the stuff happened in ${client.guilds.cache.get(serverId).name}! This can include people who are breaking the rules, dm advertising, sending you gore content etc..\n\n**➜ #2 Request Role**\nYou can open a thread if you want to get a role in ${client.guilds.cache.get(serverId)}! These roles can only be the creator roles, giveaways, event host etc.. Please do not open a thread for free staff roles.\n\n**➜ #3 Appeal**\nYou can create a thread if you want to appeal a warning/mute given by a **moderator** to you. You may not ask for auto moderation warns removal as they expire after 2 days!\n\n**➜ #4 Any Other Question**\nYou can create a thread if you want to ask a question about the server. For example: How do I suggest something to the server.`)
                 .setColor(`${client.color.botBlue}`)
-                .setFooter("Please click the buttons below to choose your action!")
+                .setFooter({ text: "Please click the buttons below to choose your action!" })
 
             const comsg = await message.channel.send({ embeds: [areusure], components: [dmbuttons] })
 
@@ -159,7 +158,7 @@ client.on("messageCreate", async (message) => {
                         .setTitle("Ticket Creation Has Been Canceled").setURL(`${client.server.invite}`)
                         .setColor(`${client.color.fail}`)
                         .setDescription("Your ticket creation has been cancelled according to your button choice!")
-                        .setFooter(`${client.user.username}`, `${client.user.displayAvatarURL()}`)
+                        .setFooter({ text: `${client.user.username}`, iconURL: `${client.user.displayAvatarURL()}` })
                         .setTimestamp()
 
                     collector.stop()
@@ -172,7 +171,7 @@ client.on("messageCreate", async (message) => {
                         .setTitle("Thread Created").setURL(`${client.server.invite}`)
                         .setColor(`${client.color.success}`)
                         .setDescription("Your thread has been created!\nPlease write your question here and don't wait for a staff member to tell you about asking the question.\nBe patient & wait for a staff member to respond, we'll get to you as soon as possible!")
-                        .setFooter(`${client.user.username}`, `${client.user.displayAvatarURL()}`)
+                        .setFooter({ text: `${client.user.username}`, iconURL: `${client.user.displayAvatarURL()}` })
                         .setTimestamp()
 
                     collector.stop()
@@ -192,7 +191,7 @@ client.on("messageCreate", async (message) => {
                         .addField("__**Account Information**__", `**Username** • ${message.author.username}\n**ID** • ${message.author.id}\n**discriminator** • #${message.author.discriminator}\n**Tag** • ${message.author.tag}\n**Registered** • <t:${~~(message.author.createdAt / 1000)}:f> [<t:${~~(message.author.createdAt / 1000)}:R>]\n** **`)
                         .addField("__**Server Member Information**__", `**Nickname** • ${message.author.username == client.guilds.cache.get(serverId).members.cache.get(message.author.id).displayName ? `No Nickname in ${client.guilds.cache.get(serverId).name}` : client.guilds.cache.get(serverId).members.cache.get(message.author.id).displayName}\n**Joined** • <t:${~~(client.guilds.cache.get(serverId).members.cache.get(message.author.id).joinedAt / 1000)}:f> [<t:${~~(client.guilds.cache.get(serverId).members.cache.get(message.author.id).joinedAt / 1000)}:R>]`)
                         .setColor(`${client.color.botBlue}`)
-                        .setFooter(`${client.user.username}`, client.user.displayAvatarURL())
+                        .setFooter({ text: `${client.user.username}`, iconURL: `${client.user.displayAvatarURL()}` })
                         .setTimestamp()
 
 
@@ -237,7 +236,7 @@ client.on("messageCreate", async (message) => {
                 .setDescription(`${message.content ? message.content : `No content in this message!`}`)
                 .setImage(message.attachments.first()?.proxyURL || null)
                 .setColor(`${client.color.botBlue}`)
-                .setFooter(`ID: ${message.author.id}`)
+                .setFooter({ text: `ID: ${message.author.id}` })
 
             personticket.send({ embeds: [embed] })
             message.react(`${client.emoji.success}`)

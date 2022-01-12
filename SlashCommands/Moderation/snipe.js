@@ -22,7 +22,7 @@ module.exports = {
    * @param {CommandInteraction} interaction
    * @param {String[]} args
    */
-  run: async ({ client, interaction }) => {
+  run: async (client, interaction) => {
 
 
     const snipes = client.snipes.get(interaction.channel.id);

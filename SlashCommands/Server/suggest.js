@@ -23,7 +23,7 @@ module.exports = {
      * @param {CommandInteraction} interaction
      * @param {String[]} args
      */
-    run: async ({ client, interaction }) => {
+    run: async (client, interaction) => {
 
         const suggestchannel = client.channels.cache.get("851317000868462633")
         const suggestion = interaction.options.getString("suggestion")

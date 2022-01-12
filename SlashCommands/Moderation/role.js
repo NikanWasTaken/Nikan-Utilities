@@ -65,7 +65,7 @@ module.exports = {
      * @param {CommandInteraction} interaction
      * @param {String[]} args
      */
-    run: async ({ client, interaction }) => {
+    run: async (client, interaction) => {
 
         const cannotPerform = new MessageEmbed()
             .setDescription(`You don't have permissions to perform that action!`)

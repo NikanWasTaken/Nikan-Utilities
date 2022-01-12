@@ -1,4 +1,4 @@
-const { Message, Client, MessageEmbed, MessageAttachment } = require('discord.js')
+const { Message, Client, MessageAttachment } = require('discord.js')
 
 module.exports = {
     name: 'dab',
@@ -16,7 +16,7 @@ module.exports = {
      * @param {String[]} args
      */
 
-    run: async (client, message, args, wrongUsage) => {
+    run: async (client, message) => {
 
         const one = "\\o>";
         const two = "<o/";

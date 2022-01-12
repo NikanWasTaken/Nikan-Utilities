@@ -1,4 +1,4 @@
-const { Client } = require("discord.js");
+const { Client, CommandInteraction } = require("discord.js");
 
 module.exports = {
   name: "slowmode",
@@ -21,7 +21,7 @@ module.exports = {
    * @param {CommandInteraction} interaction
    * @param {String[]} args
    */
-  run: async ({ interaction }) => {
+  run: async (client, interaction) => {
 
 
     const rate = interaction.options.getInteger("rate")

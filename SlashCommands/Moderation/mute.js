@@ -58,7 +58,7 @@ module.exports = {
    * @param {CommandInteraction} interaction
    * @param {String[]} args
    */
-  run: async ({ client, interaction }) => {
+  run: async (client, interaction) => {
 
     const subs = interaction.options.getSubcommand(["add", "remove"])
 

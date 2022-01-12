@@ -53,7 +53,7 @@ client.on("interactionCreate", async (interaction) => {
 
       await interaction.deferReply({ ephemeral: false || cmd.ephemeral })
 
-      cmd.run({ client, interaction, args });
+      cmd.run(client, interaction, args);
       Timeout.set(
         `${cmd.name}${interaction.member.user.id}`,
         Date.now() + cmd.cooldown
@@ -81,7 +81,7 @@ client.on("interactionCreate", async (interaction) => {
       );
 
 
-      cmd.run({ client, interaction, args });
+      cmd.run(client, interaction, args);
 
     }
   }

@@ -21,14 +21,14 @@ client.on("messageDelete", async (message) => {
 
 
         const embed = new MessageEmbed()
-            .setAuthor(`${message?.author?.tag}`, `${message?.author?.displayAvatarURL({ dynamic: true })}`)
+            .setAuthor({ name: `${message?.author?.tag}`, iconURL: `${message?.author?.displayAvatarURL({ dynamic: true })}` })
             .setTitle("Message Deleted")
             .setColor(color)
             .setDescription(message?.content ? `${message?.content}` : "No content in this message!")
             .addField("Channel", `${message?.channel}`, true)
             .addField("User", `${message?.author}`, true)
             .addField("Delete At", `<t:${~~(Date.now() / 1000)}:f>`, true)
-            .setFooter(`ID: ${message.id}`)
+            .setFooter({ text: `ID: ${message.id}` })
             .setTimestamp()
 
         if (message?.attachments.first()) {
@@ -45,12 +45,7 @@ client.on("messageDelete", async (message) => {
 
         logs.send({ embeds: [embed] })
 
-    } catch (error) {
-
-    }
-
-
-
+    } catch (error) { }
 })
 
 
@@ -68,7 +63,7 @@ client.on("messageUpdate", async (OldMessage, newMessage) => {
 
 
         const embed = new MessageEmbed()
-            .setAuthor(`${OldMessage?.author?.tag}`, `${OldMessage?.author?.displayAvatarURL({ dynamic: true })}`)
+            .setAuthor({ name: `${OldMessage?.author?.tag}`, iconURL: `${OldMessage?.author?.displayAvatarURL({ dynamic: true })}` })
             .setTitle("Message Edited")
             .setColor(color)
             .addField("Channel", `${OldMessage?.channel}`, true)
@@ -76,7 +71,7 @@ client.on("messageUpdate", async (OldMessage, newMessage) => {
             .addField("Delete At", `<t:${~~(Date.now() / 1000)}:f>`, true)
             .addField("Old Message", OldMessage.content ? `${OldMessage.content.length > 1024 ? "The content is too long to show!" : `${OldMessage.content}`}` : "There is no content in this message!")
             .addField("New Message", newMessage.content ? `${newMessage.content.length > 1024 ? "The content is too long to show!" : `${newMessage.content}`}` : "There is no content in this message!")
-            .setFooter(`ID: ${newMessage.id}`)
+            .setFooter({ text: `ID: ${newMessage.id}` })
             .setTimestamp()
 
         if (OldMessage?.attachments.first()) {
@@ -105,10 +100,5 @@ client.on("messageUpdate", async (OldMessage, newMessage) => {
 
         logs.send({ embeds: [embed] })
 
-    } catch (error) {
-
-    }
-
-
-
+    } catch (error) { }
 })

@@ -13,7 +13,7 @@ module.exports = {
      * @param {String[]} args
      */
 
-    run: async (client, message, args, wrongUsage) => {
+    run: async (client, message, args) => {
 
         if (message.author.id !== client.config.owner) return message?.delete()
 

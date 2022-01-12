@@ -25,6 +25,7 @@ module.exports = {
     let userNotFound = new MessageEmbed()
       .setDescription(`This user is not in this guild!`)
       .setColor(`RED`)
+
     if (!user) return message.reply({ embeds: [userNotFound] }).then((msg) => {
       client.delete.message(message, msg);
     })

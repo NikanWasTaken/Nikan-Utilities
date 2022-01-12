@@ -6,6 +6,7 @@ module.exports = {
     name: "suggestion",
     description: `Suggestion sub commands for the server!`,
     botCommand: true,
+    ephemeral: true,
     cooldown: 3000,
     permissions: ["MOVE_MEMBERS"],
     options: [
@@ -69,7 +70,7 @@ module.exports = {
      * @param {CommandInteraction} interaction
      * @param {String[]} args
      */
-    run: async ({ client, interaction }) => {
+    run: async (client, interaction) => {
 
         const subs = interaction.options.getSubcommand(["accept", "deny", "pend"])
 

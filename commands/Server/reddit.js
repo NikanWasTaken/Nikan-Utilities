@@ -33,7 +33,6 @@ module.exports = {
             new MessageButton()
                 .setLabel("Subreddit Page")
                 .setStyle("LINK")
-                .setEmoji("")
                 .setURL("https://www.reddit.com/r/NikanWorld/")
         )
 

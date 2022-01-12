@@ -1,4 +1,4 @@
-const { MessageEmbed } = require('discord.js')
+const { MessageEmbed, Message, Client } = require('discord.js')
 const random = require("randomstring")
 
 module.exports = {
@@ -16,40 +16,33 @@ module.exports = {
    * @param {String[]} args
    */
 
-  run: async (client, message, args, wrongUsage) => {
+  run: async (client, message, args) => {
 
 
     const user = message.guild.members.cache.get(args[0]) || message.mentions.members.first()
 
-    if (!user) return message.reply({ content: "who?" })
-
+    if (!user) return message?.delete()
     const fakeId = random.generate(24);
 
     const embed = new MessageEmbed()
       .setDescription(`${user.user} has been **warmed** | \`${fakeId}\``)
       .setColor(`${client.color.moderation}`)
-
     await message.channel.send({ embeds: [embed] })
 
     const collector = message.channel.createMessageCollector({
       filter: (m) =>
-        m.content.toLowerCase().includes("warm") && !m.author.bot,
+        m.content.toLowerCase().includes("warm") && !m.author.bot ||
+        m.author.id === user.user.id,
       time: 60000,
       max: 1
     });
 
-    const emojis = [
-      "🔥",
-      "❤️‍🔥",
-      "🌤",
-      "🥰"
-    ]
-
+    const emojis = ["🔥", "❤️‍🔥", "🌤", "🥰"]
     const randomemoji = emojis[~~(Math.random() * emojis.length)];
 
     collector.on("collect", async (i) => {
-
       i.react(randomemoji)
+
     })
   }
 }

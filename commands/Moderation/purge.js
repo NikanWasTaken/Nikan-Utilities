@@ -17,29 +17,16 @@ module.exports = {
 
   run: async (client, message, args, wrongUsage) => {
 
-    var clear = args[0]
-    var user = message.guild.members.cache.get(args[1]) || message.mentions.members.first()
-    if (!clear) return message.reply({ embeds: [wrongUsage] })
+    try {
 
-    let heh = new MessageEmbed()
-      .setDescription(`You need to provide a number between 1 and 100 to purge.`)
-      .setColor(`RED`)
-    if (isNaN(clear) || clear > 100 || clear < 1) return message.reply({ embeds: [heh] })
-      .then((msg) => {
-        setInterval(() => {
-          msg?.delete()
-          message?.delete()
-        }, 5000);
-      })
+      var clear = args[0]
+      var user = message.guild.members.cache.get(args[1]) || message.mentions.members.first()
+      if (!clear) return message.reply({ embeds: [wrongUsage] })
 
-
-
-    if (args[1]) {
-
-      const noUser = new MessageEmbed()
-        .setDescription(`I couldn't find that user!`)
-        .setColor("RED")
-      if (!user) return message.reply({ embeds: [noUser] })
+      let heh = new MessageEmbed()
+        .setDescription(`You need to provide a number between 1 and 100 to purge.`)
+        .setColor(`RED`)
+      if (isNaN(clear) || clear > 100 || clear < 1) return message.reply({ embeds: [heh] })
         .then((msg) => {
           setInterval(() => {
             msg?.delete()
@@ -47,32 +34,49 @@ module.exports = {
           }, 5000);
         })
 
-      const messages = message.channel.messages.fetch({ limit: clear })
-      const filtered = (await messages).filter(m => m.author.id === user.user.id)
-
-      message.channel.bulkDelete(filtered)
-      let embeda = new MessageEmbed()
-        .setDescription(`Cleared \`${clear}\` messages from \`${user.user.tag}\``)
-        .setColor(`${client.color.moderation}`)
-      message.channel.send({ embeds: [embeda] })
 
 
-    } else if (!args[1]) {
+      if (args[1]) {
 
-      let msgs = message.channel.messages.fetch({ limit: clear })
+        const noUser = new MessageEmbed()
+          .setDescription(`I couldn't find that user!`)
+          .setColor("RED")
+        if (!user) return message.reply({ embeds: [noUser] })
+          .then((msg) => {
+            setInterval(() => {
+              msg?.delete()
+              message?.delete()
+            }, 5000);
+          })
 
-      message.channel.bulkDelete((await msgs))
-      let embeda = new MessageEmbed()
-        .setDescription(`Cleared ${clear} messages in ${message.channel}.`)
-        .setColor(`${client.color.moderation}`)
+        const messages = message.channel.messages.fetch({ limit: clear })
+        const filtered = (await messages).filter(m => m.author.id === user.user.id)
 
-      message.channel.send({ embeds: [embeda] })
-        .then((msg) => {
-          message?.delete()
-          setInterval(() => {
-            msg?.delete()
-          }, 5000);
-        })
-    }
+        message.channel.bulkDelete(filtered)
+        let embeda = new MessageEmbed()
+          .setDescription(`Cleared \`${clear}\` messages from \`${user.user.tag}\``)
+          .setColor(`${client.color.moderation}`)
+        message.channel.send({ embeds: [embeda] })
+
+
+      } else if (!args[1]) {
+
+        let msgs = message.channel.messages.fetch({ limit: clear })
+
+        message.channel.bulkDelete((await msgs))
+        let embeda = new MessageEmbed()
+          .setDescription(`Cleared ${clear} messages in ${message.channel}.`)
+          .setColor(`${client.color.moderation}`)
+
+        message.channel.send({ embeds: [embeda] })
+          .then((msg) => {
+            message?.delete()
+            setInterval(() => {
+              msg?.delete()
+            }, 5000);
+          })
+      }
+
+    } catch (error) { }
   }
 }

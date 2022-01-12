@@ -15,7 +15,7 @@ module.exports = {
      * @param {String[]} args
      */
 
-    run: async (client, message, args, wrongUsage) => {
+    run: async (client, message, args) => {
 
 
         const snipes = client.snipes.get(message.channel.id);
@@ -32,7 +32,7 @@ module.exports = {
             .setColor("RANDOM")
             .setImage(image)
             .setDescription(msg.content)
-            .setFooter(`${moment(time).fromNow()} | ${snipe + 1} / ${snipes.length}`)
+            .setFooter({ text: `${moment(time).fromNow()} | ${snipe + 1} / ${snipes.length}` })
 
         message.channel.send({ embeds: [embed] })
 

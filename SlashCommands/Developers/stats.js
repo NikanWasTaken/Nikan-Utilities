@@ -1,4 +1,4 @@
-const { Client, MessageEmbed, MessageActionRow, MessageButton, version } = require("discord.js");
+const { Client, CommandInteraction, MessageEmbed, MessageActionRow, MessageButton, version } = require("discord.js");
 const { mem, cpu } = require('node-os-utils');
 const { models, connection } = require("mongoose")
 const os = require("os")
@@ -15,7 +15,7 @@ module.exports = {
      * @param {CommandInteraction} interaction
      * @param {String[]} args
      */
-    run: async ({ client, interaction }) => {
+    run: async (client, interaction) => {
 
         const { totalMemMb, usedMemMb, freeMemPercentage } = await mem.info()
         const values = Object.values(models);

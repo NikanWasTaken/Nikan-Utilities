@@ -1,4 +1,4 @@
-const { MessageEmbed, BaseGuildTextChannel } = require('discord.js')
+const { MessageEmbed, Message, Client } = require('discord.js')
 
 module.exports = {
     name: 'staff-list',
@@ -15,7 +15,7 @@ module.exports = {
      * @param {String[]} args
      */
 
-    run: async (client, message, args, wrongUsage) => {
+    run: async (client, message) => {
 
 
         const AllStatusStaff =
@@ -34,8 +34,8 @@ module.exports = {
 
         const embed = new MessageEmbed()
             .setAuthor({ name: `Staff Members`, iconURL: message.guild.iconURL({ dynamic: true }) })
-            .setColor("PURPLE")
-            .setFooter(`${message.guild.name}`, message.guild.iconURL({ dynamic: true }))
+            .setColor(`${client.color.serverPurple}`)
+            .setFooter({ text: `${message.guild.name}`, iconURL: message.guild.iconURL({ dynamic: true }) })
 
         if (onlineStaff?.length !== 0) embed.addField("Online", `${onlineStaff?.join(" ")}`)
         if (idleStaff?.length !== 0) embed.addField("Idle", `${idleStaff?.join(" ")}`)

@@ -56,7 +56,7 @@ client.on("interactionCreate", async (interaction) => {
         )
 
         const e1 = new MessageEmbed()
-          .setAuthor(`${interaction.guild.name}`, interaction.guild.iconURL({ dynamic: true }))
+          .setAuthor({ name: `${interaction.guild.name}`, iconURL: interaction.guild.iconURL({ dynamic: true }) })
           .setTitle("Select a role using the buttons below to add or remove it")
           .setDescription("➜ Re-clicking a role that you already have will get it removed!\n\n** **")
           .setColor(`${client.color.serverPurple}`)
@@ -115,7 +115,7 @@ client.on("interactionCreate", async (interaction) => {
 
 
         const e2 = new MessageEmbed()
-          .setAuthor(`${interaction.guild.name}`, interaction.guild.iconURL({ dynamic: true }))
+          .setAuthor({ name: `${interaction.guild.name}`, iconURL: interaction.guild.iconURL({ dynamic: true }) })
           .setTitle("Select a role using the buttons below to add or remove it")
           .setDescription("➜ Re-clicking a role that you already have will get it removed!")
           .setColor(`${client.color.serverPurple}`)
@@ -254,10 +254,10 @@ client.on("interactionCreate", async (interaction) => {
         if (member.cache.get(ask)) array.push(`• ${interaction.guild.roles.cache.get(ask).name}`);
 
         const e3 = new MessageEmbed()
-          .setAuthor(`Current Self Roles`, interaction.guild.iconURL({ dynamic: true }))
-          .setColor("PURPLE")
+          .setAuthor({ name: `Current Self Roles`, iconURL: interaction.guild.iconURL({ dynamic: true }) })
+          .setColor(`${client.color.serverPurple}`)
           .setDescription(array.length ? array.join("\n") : "Looks like you don't have any self roles!")
-          .setFooter(`Count: ${array.length}`)
+          .setFooter({ text: `Count: ${array.length}` })
 
         interaction.reply({ embeds: [e3], ephemeral: true })
         break;

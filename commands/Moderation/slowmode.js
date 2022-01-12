@@ -15,7 +15,7 @@ module.exports = {
      * @param {String[]} args
      */
 
-    run: async (client, message, args, wrongUsage) => {
+    run: async (client, message, args) => {
 
         if (!args[0]) {
 

@@ -40,7 +40,8 @@ module.exports = {
 
         var hmm = new MessageEmbed()
           .setDescription(`**${user2?.tag}** has been **banned** | \`${data._id}\``).setColor(`${client.color.moderationRed}`)
-        let msg = await message.channel.send({ embeds: [hmm] }).then(message.delete())
+        let msg = await message.channel.send({ embeds: [hmm] })
+          .then(message.delete())
 
         client.log.action({
           type: "Ban",

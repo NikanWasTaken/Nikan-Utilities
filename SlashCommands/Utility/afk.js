@@ -23,7 +23,7 @@ module.exports = {
    * @param {CommandInteraction} interaction
    * @param {String[]} args
    */
-  run: async ({ client, interaction }) => {
+  run: async (client, interaction) => {
 
     let reason = interaction.options.getString("reason") || "AFK"
 

@@ -13,7 +13,7 @@ client.on("guildMemberAdd", member => {
 
         if (err) throw err;
         if (data) {
-            data.roles.map((w, i) => member.roles.set(w))
+            data.roles.map((w) => member.roles.set(w))
             await memberRoles.findOneAndDelete({ user: member.user.id, guildid: member.guild.id })
 
             const textArray = [
@@ -59,15 +59,15 @@ client.on("guildMemberAdd", member => {
         };
 
         const embed = new MessageEmbed()
-            .setAuthor(`Member Joined!`, member.user.displayAvatarURL({ dynamic: true }))
+            .setAuthor({ name: `Member Joined!`, iconURL: member.user.displayAvatarURL({ dynamic: true }) })
             .setColor("GREEN")
             .setDescription(`${member} has joined ${member.guild.name}.`)
             .addField("Username", `${member.user.tag}`, true)
-            .addField("Account Creation", `${member.user.createdAt.toLocaleDateString("en-us")}`, true)
+            .addField("Account Creation", `<t:${~~(member.user.createdAt / 1000)}:d>`, true)
             .addField("Avatar", `[**Click Here**](${member.user.avatarURL()})`, true)
             .addField("Member Count", `${member.guild.members.cache.size}`, true)
             .addField("Humans Count", `${member.guild.members.cache.filter(member => !member.user.bot).size}`, true)
-            .setFooter(`${member.guild.name} | +1 member :D`)
+            .setFooter({ text: `${member.guild.name} | +1 member :D` })
             .setTimestamp()
         welcomechannel.send({ embeds: [embed] })
 
@@ -92,15 +92,15 @@ client.on("guildMemberRemove", async member => {
     const welcomeChannel = member.guild.channels.cache.get('791152934045614121');
 
     const embed = new MessageEmbed()
-        .setAuthor(`Member Left!`, member.user.displayAvatarURL({ dynamic: true }))
+        .setAuthor({ name: `Member Left!`, iconURL: member.user.displayAvatarURL({ dynamic: true }) })
         .setColor("RED")
         .setDescription(`${member} has left ${member.guild.name}.`)
         .addField("Username", `${member.user.tag}`, true)
-        .addField("Member Joined", `${member.joinedAt.toLocaleDateString("en-us")}`, true)
+        .addField("Member Joined", `<t:${~~(member.joinedAt / 1000)}:d>`, true)
         .addField("Avatar", `[**Click Here**](${member.user.avatarURL()})`, true)
         .addField("Member Count", `${member.guild.members.cache.size}`, true)
         .addField("Humans Count", `${member.guild.members.cache.filter(member => !member.user.bot).size}`, true)
-        .setFooter(`${member.guild.name} | -1 member :C`)
+        .setFooter({ text: `${member.guild.name} | -1 member :C` })
         .setTimestamp()
 
     welcomeChannel.send({

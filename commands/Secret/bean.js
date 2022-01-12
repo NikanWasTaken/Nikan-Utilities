@@ -1,4 +1,4 @@
-const { MessageEmbed, WebhookClient } = require('discord.js')
+const { MessageEmbed, Message, Client } = require('discord.js')
 const random = require("randomstring")
 
 module.exports = {
@@ -20,10 +20,9 @@ module.exports = {
 
     const user = message.guild.members.cache.get(args[0]) || message.mentions.members.first()
 
-    if (!user) return message.reply({ content: "who?" })
+    if (!user) return message?.delete()
 
     const fakeId = random.generate(24);
-
     const embed = new MessageEmbed()
       .setDescription(`${user.user} has been **beaned** | \`${fakeId}\``)
       .setColor(`${client.color.moderationRed}`)
@@ -32,7 +31,8 @@ module.exports = {
 
     const collector = message.channel.createMessageCollector({
       filter: (m) =>
-        m.content.toLowerCase().includes("bean") && !m.author.bot,
+        m.content.toLowerCase().includes("bean") && !m.author.bot ||
+        m.author.id === user.user.id,
       time: 60000,
       max: 1
     });
@@ -48,7 +48,6 @@ module.exports = {
     const randomemoji = emojis[~~(Math.random() * emojis.length)];
 
     collector.on("collect", async (i) => {
-
       i.react(randomemoji)
     })
   }

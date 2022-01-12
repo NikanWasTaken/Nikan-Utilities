@@ -88,7 +88,7 @@ client.on("messageCreate", async (message) => {
             ].join("\n")
         )
         .setColor(`${client.color.moderationRed}`)
-        .setFooter(`[] = required • <> = optional`)
+        .setFooter({ text: `[] = required • <> = optional` })
         .setTimestamp()
 
 

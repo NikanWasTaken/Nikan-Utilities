@@ -30,7 +30,7 @@ module.exports = {
    * @param {CommandInteraction} interaction
    * @param {String[]} args
    */
-  run: async ({ client, interaction }) => {
+  run: async (client, interaction) => {
 
     var user = interaction.options.getMember("user")
     var reason = interaction.options.getString("reason") || "No reason provided"

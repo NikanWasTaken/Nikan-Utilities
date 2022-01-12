@@ -65,7 +65,7 @@ module.exports = {
      * @param {CommandInteraction} interaction
      * @param {String[]} args
      */
-    run: async ({ client, interaction }) => {
+    run: async (client, interaction) => {
 
         const subs = interaction.options.getSubcommand(["close", "blacklist"])
 
@@ -100,7 +100,7 @@ module.exports = {
                 .setColor(`${client.color.botBlue}`)
                 .setTitle("Are you sure that you want to close this thread?").setURL(`${client.server.invite}`)
                 .setDescription("By accepting to close this thread, this channel will be deleted and you can't undo this action!\nAre you sure?")
-                .setFooter(`You have 60 seconds to answer`, client.user.displayAvatarURL()).setTimestamp()
+                .setFooter({ text: `You have 60 seconds to answer`, iconURL: client.user.displayAvatarURL() }).setTimestamp()
 
             const msg = await interaction.followUp({ embeds: [areusure], components: [buttons] })
 

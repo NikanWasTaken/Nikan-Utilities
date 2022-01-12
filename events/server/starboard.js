@@ -11,6 +11,8 @@ client.on('messageReactionAdd', async (reaction) => {
 
     // if (reaction.message.author.id === user.id && reaction.emoji.name === "⭐") return reaction.message.reactions.resolve("⭐").users.remove(user.id) 
 
+    reaction.fetch()
+    reaction.message.fetch()
     // reqs
     if (reaction.message.channel.type === "DM") return;
     if (reaction.message.guildId !== `${client.server.id}`) return;
@@ -38,9 +40,9 @@ client.on('messageReactionAdd', async (reaction) => {
             )
 
             const embed = new MessageEmbed()
-                .setAuthor(`${reaction.message.member.displayName}`, reaction.message.author.displayAvatarURL({ dynamic: true }))
+                .setAuthor({ name: `${reaction.message.member.displayName}`, iconURL: reaction.message.author.displayAvatarURL({ dynamic: true }) })
                 .addField("Content", `${reaction.message.content || "There is no content is this message!"}`)
-                .setFooter(`ID: ${reaction.message.id}`)
+                .setFooter({ text: `ID: ${reaction.message.id}` })
                 .setTimestamp()
                 .setImage(reaction.message.attachments.first()?.proxyURL || null)
                 .setColor(`${client.color.botBlue}`)
@@ -54,9 +56,11 @@ client.on('messageReactionAdd', async (reaction) => {
 })
 
 
-client.on('messageReactionRemove', async (reaction, user) => {
+client.on('messageReactionRemove', async (reaction) => {
 
 
+    reaction.fetch()
+    reaction.message.fetch()
     const starBoardChannel = client.channels.cache.get(SBchannelId)
 
     // reqs

@@ -27,7 +27,7 @@ module.exports = {
             data.delete()
 
             let embed = new MessageEmbed()
-                .setDescription(`Punnishment \`${data._id}\` has been deleted!`)
+                .setDescription(`Punishment \`${data._id}\` has been deleted!`)
                 .setColor(`${client.color.moderation}`)
             let msg = await message.channel.send({ embeds: [embed] }).then(message.delete())
 
