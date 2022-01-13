@@ -1,7 +1,6 @@
 const client = require("../../index.js");
 const { MessageEmbed, MessageActionRow, MessageButton } = require("discord.js");
-const ms = require("ms");
-const starCount = "2";
+const starCount = 3;
 const SBchannelId = "868358834052296724";
 
 
@@ -9,8 +8,6 @@ const SBchannelId = "868358834052296724";
 client.on('messageReactionAdd', async (reaction) => {
 
     const starBoardChannel = client.channels.cache.get(SBchannelId)
-
-    // if (reaction?.message?.author.id === user.id && reaction?.emoji.name === "⭐") return reaction?.message?.reactions.resolve("⭐").users.remove(user.id) 
 
     reaction?.fetch()
     reaction?.message?.fetch()
