@@ -30,7 +30,7 @@ client.on('messageReactionAdd', async (reaction) => {
 
         if (SentMessage) {
 
-            Sentmessage?.edit(`:star: **${reaction?.count}** ● ${reaction?.message?.channel}`);
+            SentMessage?.edit(`:star: **${reaction?.count}** ● ${reaction?.message?.channel}`);
 
         } else {
 
@@ -72,16 +72,17 @@ client.on('messageReactionRemove', async (reaction) => {
 
         const msgs = await starBoardChannel.messages.fetch({ limit: 50 });
 
-        const SentMessage = msgs.find(msg =>
-            msg.embeds.length === 1 ?
-                (msg.embeds[0].footer.text.endsWith(reaction?.message?.id) ? true : false) : false)
-
+        const SentMessage = msgs?.find(msg =>
+            msg?.embeds?.length === 1 &&
+                msg?.author?.id === client.user.id ?
+                (msg.embeds[0]?.footer?.text?.endsWith(reaction?.message?.id) ? true : false) : false
+        );
 
         if (SentMessage) {
 
             if (reaction?.count >= starCount) {
 
-                await Sentmessage?.edit(`:star: **${reaction?.count}** ● ${reaction?.message?.channel}`);
+                await SentMessage?.edit({ content: `:star: **${reaction?.count}** ● ${reaction?.message?.channel}` });
 
             } else {
 
