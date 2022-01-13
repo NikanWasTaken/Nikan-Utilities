@@ -1,5 +1,6 @@
 const client = require("../../index.js");
 const { MessageEmbed, MessageActionRow, MessageButton } = require("discord.js");
+const ms = require("ms");
 const starCount = "2";
 const SBchannelId = "868358834052296724";
 
@@ -19,11 +20,13 @@ client.on('messageReactionAdd', async (reaction) => {
     if (reaction.message.channel.id === SBchannelId && reaction.message.author.id === `${client.user.id}`) return;
     if (reaction.count >= starCount && reaction.emoji.name === "⭐") {
 
-        const msgs = await starBoardChannel.messages.fetch({ limit: 50 });
+        const msgs = await starBoardChannel.messages.fetch({ limit: 50 })
 
-        const SentMessage = msgs.find(msg =>
-            msg.embeds.length === 1 ?
-                (msg.embeds[0].footer.text.endsWith(reaction.message.id) ? true : false) : false);
+        const SentMessage = msgs?.find(msg =>
+            msg?.embeds?.length === 1 &&
+                msg?.author?.id === client.user.id ?
+                (msg.embeds[0]?.footer?.text?.endsWith(reaction.message.id) ? true : false) : false
+        );
 
         if (SentMessage) {
 
