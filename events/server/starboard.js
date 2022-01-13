@@ -17,7 +17,10 @@ client.on('messageReactionAdd', async (reaction) => {
     // reqs
     if (reaction?.message?.channel.type === "DM") return;
     if (reaction?.message?.guildId !== `${client.server.id}`) return;
-    if (reaction?.message?.channelId === SBchannelId && reaction?.message?.author.id === `${client.user.id}`) return;
+    if (
+        reaction?.message?.channelId === SBchannelId &&
+        reaction?.message?.author?.id === `${client.user.id}`
+    ) return;
     if (reaction?.count >= starCount && reaction?.emoji.name === "⭐") {
 
         const msgs = await starBoardChannel.messages.fetch({ limit: 50 })
