@@ -1,4 +1,4 @@
-const { Client, MessageEmbed } = require("discord.js");
+const { Client, MessageEmbed, ContextMenuInteraction } = require("discord.js");
 const translate = require("@iamtraction/google-translate")
 
 module.exports = {
@@ -11,7 +11,7 @@ module.exports = {
    * @param {ContextMenuInteraction} interaction
    * @param {String[]} args
    */
-  run: async ({ interaction }) => {
+  run: async (client, interaction) => {
     const msg = await interaction.channel.messages.fetch(
       interaction.targetId
     );
