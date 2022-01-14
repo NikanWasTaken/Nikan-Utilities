@@ -1,6 +1,6 @@
 const client = require("../../index.js")
 const { MessageEmbed, WebhookClient } = require("discord.js")
-const json = require("../../json/logs-config.json")
+const json = require("../../json/ignores.json")
 const color = "b59190"
 const logs = new WebhookClient({
     id: "907254708492697610",

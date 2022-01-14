@@ -3,15 +3,6 @@ const config = client.config
 const { Collection, MessageEmbed } = require("discord.js")
 const Timeout = new Collection();
 
-const noPermissions = new MessageEmbed()
-    .setDescription("You don't have permissions to run this command.")
-    .setColor(`${client.color.moderationRed}`)
-
-
-const botCommand = new MessageEmbed()
-    .setDescription('You may only use this command in bot command channels!')
-    .setColor(`${client.color.moderationRed}`)
-
 client.on("messageCreate", async (message) => {
 
     // prefix check
@@ -40,7 +31,7 @@ client.on("messageCreate", async (message) => {
     if (
         command.developer &&
         !client.config.developers.includes(message.author.id)
-    ) return message.reply({ embeds: [noPermissions] })
+    ) return message.reply({ embeds: [client.embeds.noPermissions] })
         .then((msg) => {
             setTimeout(() => {
                 msg?.delete()
@@ -53,7 +44,7 @@ client.on("messageCreate", async (message) => {
     if (
         !message.member.permissions.has(command.permissions || []) &&
         message.author.id !== client.config.owner
-    ) return message.reply({ embeds: [noPermissions] }).then((msg) => {
+    ) return message.reply({ embeds: [client.embeds.noPermissions] }).then((msg) => {
         setTimeout(() => {
             msg?.delete()
             message?.delete()
@@ -68,7 +59,7 @@ client.on("messageCreate", async (message) => {
         !message.member?.permissions?.has("ADMINISTRATOR") &&
         !client.config.developers.includes(message?.author?.id) &&
         message.author.id !== client.config.owner
-    ) return message.reply({ embeds: [botCommand] })
+    ) return message.reply({ embeds: [client.embeds.botCommand] })
         .then((msg) => {
             setTimeout(() => {
                 msg?.delete()

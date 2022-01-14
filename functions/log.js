@@ -1,4 +1,4 @@
-const { WebhookClient, MessageActionRow, MessageButton } = require("discord.js")
+const { WebhookClient, MessageActionRow, MessageButton, Client } = require("discord.js")
 /**
  * @param {Client} client
  */
@@ -16,6 +16,11 @@ module.exports = async (client) => {
             token: `92dznvZixjZrgHLBYgERwS1ngRWcDSdldvhaaNlPpjHYyBDuwl6TbNyU4InU9nqTJIw8`
         })
 
+    const automodLogs = new WebhookClient({
+        id: `910104675716571136`,
+        token: `mJQ3F73THOBgvp4E5QHQhJfL28k581qM1IDW88ctLyGLgozKF9U26ygQ_ahwIq4tHwpG`,
+    });
+
     const colors = {
         "BAN": `#b3666c`,
         "WARN": "#f5d765",
@@ -27,7 +32,8 @@ module.exports = async (client) => {
         "EXPIRE": "#905de3"
     };
 
-    let actionLogFunction = async function (options) {
+
+    async function actionLogFunction(options) {
         const _ = moderationLogs;
         const findUser = await client.users.fetch(`${options?.user}`)
         const findModerator = await client.users.fetch(`${options?.moderator}`)
@@ -68,7 +74,7 @@ module.exports = async (client) => {
         }).catch(() => { });
     }
 
-    let autoActionLogFunction = async function (options) {
+    async function autoActionLogFunction(options) {
         const _ = autoactionLogs;
         const findUser = await client.users.fetch(`${options?.user}`)
         _.send({
@@ -108,9 +114,63 @@ module.exports = async (client) => {
         }).catch((e) => { console.log(e) });
     }
 
+    async function automodLogFuntion(options) {
+        const _ = automodLogs;
+        const findUser = await client.users.fetch(`${options?.user}`)
+        const findChannel = await client.channels.fetch(`${options?.channel}`)
+        _.send({
+            embeds: [
+                {
+                    author: {
+                        iconURL: client.user.displayAvatarURL(),
+                        name: "Auto Moderation",
+                    },
+                    title: `• ${client.cap(options?.type)}`,
+                    color: `${colors[options?.color?.toUpperCase()] || "WARN"}`,
+                    fields: [
+                        {
+                            name: `User`,
+                            value: `• ${findUser}`,
+                            inline: true
+                        },
+                        {
+                            name: `User Tag`,
+                            value: `• ${findUser.tag}`,
+                            inline: true
+                        },
+                        {
+                            name: "User ID",
+                            value: `${options?.user}`,
+                            inline: true
+                        },
+                        {
+                            name: "Channel",
+                            value: `${findChannel}`,
+                            inline: true
+                        },
+                        {
+                            name: "Date & Time",
+                            value: `<t:${options?.date}:f>`,
+                            inline: true
+                        },
+                        {
+                            name: "Content",
+                            value: `${options?.content.length >= 1024 ? `The message content is too long to show!` : options?.content}`,
+                            inline: false
+                        }
+                    ],
+                    footer: {
+                        text: `ID: ${options?.id}`
+                    }
+                }
+            ],
+        }).catch((e) => { console.log(e) });
+    }
+
     client.log = {
         action: actionLogFunction,
-        autoAction: autoActionLogFunction
+        autoAction: autoActionLogFunction,
+        automod: automodLogFuntion
     }
 
 }

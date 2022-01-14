@@ -31,6 +31,6 @@ require("./functions/client.js")(client); // client functions
 require("./functions/embeds.js")(client) // embeds
 require("./functions/log.js")(client) // log embeds
 require("./functions/delete.js")(client) // Delete functions 
-require("./functions/convert.js")(client) // A function that converts timestamps to dates and times
+require("./functions/convert.js")(client)
 
 client.login(`${process.env.TOKEN}`);

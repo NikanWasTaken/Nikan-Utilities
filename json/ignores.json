@@ -1,0 +1,83 @@
+{
+  "logs": {
+    "message-ignores": {
+      "category": [
+        "839384853270233098",
+        "795293982648827904",
+        "868357013606924308",
+        "904603007252070440"
+      ],
+      "channel": [
+        "874245857686487091",
+        "843374781856481290",
+        "870906424442617906"
+      ],
+      "roles": ["800976899337355294"]
+    }
+  },
+  "automod": {
+      "bypass-role": "881628276735483955",
+      "links": {
+          "permissions": [
+              "MANAGE_MESSAGES",
+              "BAN_MEMBERS"
+          ],
+          "channels": [
+              "advertise",
+              "partner",
+              "friend",
+              "staff",
+              "admin",
+              "mod",
+              "music",
+              "stream"
+          ]
+      },
+      "invites": {
+          "permissions": [
+              "MOVE_MEMBERS"
+          ],
+          "channels": [
+              "advertise",
+              "friend",
+              "staff",
+              "partner",
+              "mod",
+              "admin"
+          ]
+      },
+      "badwords": {
+          "permissions": [
+              "ADMINISTRATOR"
+          ],
+          "channels": [
+              "admin",
+              "friend"
+          ]
+      },
+      "large-messages": {
+          "permissions": [
+              "MOVE_MEMBERS"
+          ],
+          "channels": [
+              "advertise",
+              "partner",
+              "stream",
+              "staff",
+              "mod",
+              "admin",
+              "friend"
+          ]
+      },
+      "mass-ping": {
+          "permissions": [
+              "MOVE_MEMBERS"
+          ],
+          "channels": [
+              "staff",
+              "admin",
+              "friend"
+          ]
+      }
+  }
+}
