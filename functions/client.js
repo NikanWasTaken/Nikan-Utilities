@@ -46,7 +46,6 @@ module.exports = async (client) => {
 
 
     // other functions 
-
     client.commands = new Collection();
     client.slashCommands = new Collection();
     client.snipes = new Collection();
