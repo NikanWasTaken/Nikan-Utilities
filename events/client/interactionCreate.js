@@ -21,7 +21,7 @@ client.on("interactionCreate", async (interaction) => {
     // bot command check
     if (
       cmd.botCommand === true &&
-      !interaction.channel.name.includes("command") &&
+      !interaction.channel.name.includes("command") ||
       interaction.channel.name.includes("music") &&
       !interaction.member?.permissions?.has("ADMINISTRATOR") &&
       !client.config.developers.includes(interaction?.user?.id) &&

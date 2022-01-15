@@ -55,7 +55,7 @@ client.on("messageCreate", async (message) => {
     // bot command check
     if (
         command.botCommand === true &&
-        !message.channel.name.includes("command") &&
+        !message.channel.name.includes("command") ||
         interaction.channel.name.includes("music") &&
         !message.member?.permissions?.has("ADMINISTRATOR") &&
         !client.config.developers.includes(message?.author?.id) &&
