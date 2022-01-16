@@ -21,15 +21,15 @@ client.on("interactionCreate", async (interaction) => {
     // bot command check
     function channelCheck(message) {
       if (
-        message.channel.name.includes("command") ||
+        message.channel.name.includes("command") &&
         message.channel.name.includes("music")
       ) return false;
       if (
-        !message.channel.name.includes("command") ||
+        !message.channel.name.includes("command") &&
         !message.channel.name.includes("music")
       ) return false;
       if (
-        message.channel.name.includes("command") ||
+        message.channel.name.includes("command") &&
         !message.channel.name.includes("music")
       ) return true;
     }
