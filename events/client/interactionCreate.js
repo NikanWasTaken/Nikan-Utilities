@@ -19,10 +19,23 @@ client.on("interactionCreate", async (interaction) => {
 
 
     // bot command check
+    function channelCheck(message) {
+      if (
+        message.channel.name.includes("command") ||
+        message.channel.name.includes("music")
+      ) return true;
+      if (
+        !message.channel.name.includes("command") ||
+        !message.channel.name.includes("music")
+      ) return false;
+      if (
+        message.channel.name.includes("command") ||
+        !message.channel.name.includes("music")
+      ) return false;
+    }
     if (
       cmd.botCommand === true &&
-      !interaction.channel.name.includes("command") ||
-      interaction.channel.name.includes("music") &&
+      channelCheck(interaction) &&
       !interaction.member?.permissions?.has("ADMINISTRATOR") &&
       !client.config.developers.includes(interaction?.user?.id) &&
       interaction.user.id !== client.config.owner
