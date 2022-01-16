@@ -5,7 +5,6 @@ module.exports = {
   name: "afk",
   description: 'Set a custom afk for your self.',
   ephemeral: true,
-  botCommand: true,
   cooldown: 15000,
   options: [
     {
