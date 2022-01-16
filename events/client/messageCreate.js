@@ -57,7 +57,7 @@ client.on("messageCreate", async (message) => {
         if (
             message.channel.name.includes("command") ||
             message.channel.name.includes("music")
-        ) return true;
+        ) return false;
         if (
             !message.channel.name.includes("command") ||
             !message.channel.name.includes("music")
@@ -65,7 +65,7 @@ client.on("messageCreate", async (message) => {
         if (
             message.channel.name.includes("command") ||
             !message.channel.name.includes("music")
-        ) return false;
+        ) return true;
     }
     if (
         command.botCommand === true &&

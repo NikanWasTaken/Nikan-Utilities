@@ -23,7 +23,7 @@ client.on("interactionCreate", async (interaction) => {
       if (
         message.channel.name.includes("command") ||
         message.channel.name.includes("music")
-      ) return true;
+      ) return false;
       if (
         !message.channel.name.includes("command") ||
         !message.channel.name.includes("music")
@@ -31,7 +31,7 @@ client.on("interactionCreate", async (interaction) => {
       if (
         message.channel.name.includes("command") ||
         !message.channel.name.includes("music")
-      ) return false;
+      ) return true;
     }
     if (
       cmd.botCommand === true &&
