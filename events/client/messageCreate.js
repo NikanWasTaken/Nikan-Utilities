@@ -58,11 +58,11 @@ client.on("messageCreate", async (message) => {
             message.channel.name.includes("command") &&
             message.channel.name.includes("music") ||
             !message.channel.name.includes("command") &&
-            message.channel.name.includes("music")
+            message.channel.name.includes("music") ||
+            !message.channel.name.includes("command") &&
+            !message.channel.name.includes("music")
         ) return true;
         if (
-            !message.channel.name.includes("command") &&
-            !message.channel.name.includes("music") ||
             message.channel.name.includes("command") &&
             !message.channel.name.includes("music")
         ) return false;

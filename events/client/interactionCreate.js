@@ -24,11 +24,11 @@ client.on("interactionCreate", async (interaction) => {
         message.channel.name.includes("command") &&
         message.channel.name.includes("music") ||
         !message.channel.name.includes("command") &&
-        message.channel.name.includes("music")
+        message.channel.name.includes("music") ||
+        !message.channel.name.includes("command") &&
+        !message.channel.name.includes("music")
       ) return true;
       if (
-        !message.channel.name.includes("command") &&
-        !message.channel.name.includes("music") ||
         message.channel.name.includes("command") &&
         !message.channel.name.includes("music")
       ) return false;
