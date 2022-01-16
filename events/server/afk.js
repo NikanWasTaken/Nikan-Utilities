@@ -18,8 +18,7 @@ client.on('messageCreate', async message => {
             const [timestamp, reason] = data;
             const Timeago = moment(timestamp).fromNow();
 
-            message.reply(`${MentionedMember.user.username} is currently afk for reason: ${reason} ● ${Timeago}`)
-
+            message.channel.send(`${MentionedMember.user} is currently **AFK**: ${reason} • ${Timeago}`)
         }
     }
 
@@ -32,6 +31,8 @@ client.on('messageCreate', async message => {
             }, 5000)
         }).catch(() => { return })
 
-        message.member.setNickname(message.author.username).catch(() => { return })
+        const newNickname = message.member.displayName.replace("[AFK]", '')
+        message.member.setNickname(newNickname)
+            .catch(() => { return })
     }
 })

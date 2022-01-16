@@ -1,11 +1,10 @@
-const { MessageEmbed, Message, Client } = require('discord.js')
+const { Message, Client } = require('discord.js')
 
 module.exports = {
     name: 'afk',
     category: 'utility',
     description: 'Sets a afk',
     cooldown: 15000,
-    botCommand: true,
     usage: `<reason>`,
 
     /**
@@ -20,14 +19,11 @@ module.exports = {
 
         client.afk.set(message.author.id, [Date.now(), reason])
 
-        let no = new MessageEmbed()
-            .setDescription(`✅ I set your AFK for the reason: ${reason}`)
-            .setColor("GREEN")
-        message.reply({ embeds: [no] }).then((msg) => {
+        message.reply({ content: `You are now AFK: ${reason}` }).then((msg) => {
             client.delete.message(message, msg)
         })
 
-        message.member.setNickname(`[AFK] ${message.author.username}`)
+        message.member.setNickname(`[AFK] ${message.member.displayName}`)
             .catch(() => { return })
 
     }
