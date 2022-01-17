@@ -24,7 +24,7 @@ module.exports = {
                 message.author.bot ||
                 config.links.permissions.some(perm => message.member.permissions.has(perm)) ||
                 message.member.roles.cache.get(config["bypass-role"]) ||
-                message.channel.name.includes(config.links.channels)
+                config.links.channels.includes(message.channel.name)
             ) return;
 
             message.delete()
