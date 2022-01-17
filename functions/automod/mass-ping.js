@@ -17,7 +17,7 @@ module.exports = {
                 message.author.bot ||
                 config["mass-ping"].permissions.some(perm => message.member.permissions.has(perm)) ||
                 message.member.roles.cache.get(config["bypass-role"]) ||
-                config["mass-ping"].channels.includes(message.channel.name)
+                config["mass-ping"].channels.some(ch => message?.channel.name.includes(ch))
             ) return;
 
             message.delete()

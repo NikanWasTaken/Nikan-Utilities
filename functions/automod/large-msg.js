@@ -18,7 +18,7 @@ module.exports = {
                 message?.author.bot ||
                 config["large-messages"].permissions.some(perm => message?.member.permissions.has(perm)) ||
                 message?.member.roles.cache.get(config["bypass-role"]) ||
-                config["large-messages"].channels.includes(message.channel.name)
+                config["large-messages"].channels.some(ch => message?.channel.name.includes(ch))
             ) return;
 
 
