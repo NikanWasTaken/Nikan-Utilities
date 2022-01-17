@@ -23,7 +23,7 @@
               "BAN_MEMBERS"
           ],
           "channels": [
-              "advertise",
+              "advertis",
               "partner",
               "friend",
               "staff",
@@ -38,7 +38,7 @@
               "MOVE_MEMBERS"
           ],
           "channels": [
-              "advertise",
+              "advertis",
               "friend",
               "staff",
               "partner",
@@ -60,7 +60,7 @@
               "MOVE_MEMBERS"
           ],
           "channels": [
-              "advertise",
+              "advertis",
               "partner",
               "stream",
               "staff",
