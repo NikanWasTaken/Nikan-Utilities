@@ -1,61 +1,55 @@
-const clientExported = require("../../index.js");
+const client = require("../../index.js");
 const chalk = require("chalk");
 const { mem } = require("node-os-utils");
 const { version } = require("discord.js");
 const os = require("os")
 
 
-clientExported.on("ready", (client) => {
+client.on("ready", (client) => {
 
-  if (os.hostname() == "railway") {
 
-    console.log("Logged in!")
-  } else {
-
-    console.clear();
-    console.log(chalk.green.bold("Connected!"));
-    console.log(
-      chalk.cyan.bold("Logged into"),
-      chalk.yellow(`${client.user.tag}`),
-    );
-    console.log(
-      chalk.white("Serving drinks for"),
-      chalk.red(
-        `${client.guilds.cache.reduce((a, b) => a + b.memberCount, 0)}`,
-      ),
-      chalk.white(
-        `${client.guilds.cache.reduce((a, b) => a + b.memberCount, 0) > 1
-          ? "Members,"
-          : "Member,"
-        }`,
-      ),
-      chalk.red(`${client.guilds.cache.size}`),
-      chalk.white(`${client.guilds.cache.size > 1 ? "Servers" : "Server"}`),
-    );
-    console.log(
-      chalk.white(`Prefix :` + chalk.red(` ${client.config.prefix}`)),
-      chalk.white("||"),
-      chalk.red(`${client.commands.size}`),
-      chalk.white(`Commands`),
-      chalk.white("||"),
-      chalk.red(`${client.slashCommands.size}`),
-      chalk.white("Slashs"),
-    );
-    console.log("");
-    console.log(chalk.red.bold("——————————[Statistics]——————————"));
-    console.log(
-      chalk.cyan.bold(`Node version : ${process.version.replace("v", '')}`),
-    );
-    console.log(
-      chalk.cyan.bold(`Discord.js version : ${version}`),
-    )
-    console.log(
-      chalk.cyan.bold(
-        `Memory : ${client.convert.byte(mem.totalMem())}`
-      ),
-    );
-
-  }
+  console.clear();
+  console.log(chalk.green.bold("Connected!"));
+  console.log(
+    chalk.cyan.bold("Logged into"),
+    chalk.yellow(`${client.user.tag}`),
+  );
+  console.log(
+    chalk.white("Serving drinks for"),
+    chalk.red(
+      `${client.guilds.cache.reduce((a, b) => a + b.memberCount, 0)}`,
+    ),
+    chalk.white(
+      `${client.guilds.cache.reduce((a, b) => a + b.memberCount, 0) > 1
+        ? "Members,"
+        : "Member,"
+      }`,
+    ),
+    chalk.red(`${client.guilds.cache.size}`),
+    chalk.white(`${client.guilds.cache.size > 1 ? "Servers" : "Server"}`),
+  );
+  console.log(
+    chalk.white(`Prefix :` + chalk.red(` ${client.config.prefix}`)),
+    chalk.white("||"),
+    chalk.red(`${client.commands.size}`),
+    chalk.white(`Commands`),
+    chalk.white("||"),
+    chalk.red(`${client.slashCommands.size}`),
+    chalk.white("Slashs"),
+  );
+  console.log("");
+  console.log(chalk.red.bold("——————————[Statistics]——————————"));
+  console.log(
+    chalk.cyan.bold(`Node version : ${process.version.replace("v", '')}`),
+  );
+  console.log(
+    chalk.cyan.bold(`Discord.js version : ${version}`),
+  )
+  console.log(
+    chalk.cyan.bold(
+      `Memory : ${client.convert.byte(mem.totalMem())}`
+    ),
+  );
 
   const statusArray =
     [
