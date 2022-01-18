@@ -1,6 +1,6 @@
 const client = require("../../index.js");
 const { MessageEmbed, MessageActionRow, MessageButton, WebhookClient } = require("discord.js");
-const starCount = 3; s
+const starCount = 3;
 const SBchannelId = "868358834052296724";
 const hook = new WebhookClient({
     id: '932867412460716062',
