@@ -1,5 +1,5 @@
 const { MessageEmbed, MessageActionRow, MessageButton, version, Message, Client } = require('discord.js')
-const { cpu, mem, proc } = require('node-os-utils');
+const { cpu, mem } = require('node-os-utils');
 const os = require("os")
 const { models, connection } = require("mongoose")
 

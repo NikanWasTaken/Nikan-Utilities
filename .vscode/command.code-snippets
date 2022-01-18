@@ -1,0 +1,29 @@
+{
+	"Message Command": {
+		"prefix": "!command",
+		"body": [
+			"const { Client, Message } = require('discord.js');",
+			"",
+			"module.exports = {",
+			"    name: '',",
+			"    category: '',",
+			"    description: '',",
+			"    usage: '',",
+			"    permissions: [],",
+			"    cooldown: 0,",
+			"    developer: false ,",
+			"    visible: true,",
+			"",
+			"    /** ",
+			"     * @param {Client} client",
+			"     * @param {Message} message",
+			"     * @param {String[]} args",
+			"     */",
+			"    run: async (client, message, args, missingpartembed) => {",
+			"",
+			"    }",
+			"}"
+		],
+		"description": "Message Command Handler for Nikan's Utilities"
+	},
+}

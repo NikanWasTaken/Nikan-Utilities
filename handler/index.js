@@ -27,6 +27,7 @@ module.exports = async (client) => {
   const eventFiles = await globPromise(`${process.cwd()}/events/**/*.js`);
   eventFiles.map((value) => require(value));
 
+
   // Slash Commands
   const slashCommands = await globPromise(
     `${process.cwd()}/SlashCommands/*/*.js`
@@ -81,17 +82,14 @@ module.exports = async (client) => {
         })
 
       })
-
-
   });
 
 
   // mongoose
-
   if (!mongooseConnectionString) return;
 
   mongoose.connect(mongooseConnectionString, {
     useUnifiedTopology: true,
     useNewUrlParser: true,
-  }).then(console.log("Connected to mongo.db!"))
+  })
 };

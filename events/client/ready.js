@@ -1,8 +1,9 @@
-const { MessageEmbed, MessageActionRow, MessageButton } = require("discord.js");
-const client = require("../../index.js");
+const clientExported = require("../../index.js");
+const chalk = require("chalk");
+const { mem } = require("node-os-utils");
+const { version } = require("discord.js");
 
-client.on("ready", () => {
-  console.log(`${client.user.tag} ✅`);
+clientExported.on("ready", (client) => {
 
   const statusArray =
     [
@@ -31,63 +32,19 @@ client.on("ready", () => {
     client.user.setActivity(`${name}`, { type: `${type}`, url: "https://twitch.tv/nikanwastaken" })
   }, 10000)
 
-
+  console.log(chalk.greenBright.bold("Connected!"))
+  console.log(
+    [
+      `${chalk.whiteBright.bold("Logged Into:")} ${chalk.blueBright(`${client.user.tag}`)}`,
+      `${chalk.yellow.bold("➜ Registered:")}`,
+      `• ${chalk.cyanBright(`${client.commands.size} commands`)}`,
+      `• ${chalk.cyanBright(`${client.slashCommands.size} slash commands`)}`,
+      chalk.red("——————————[Statistics]——————————"),
+      `${chalk.bgBlueBright.red("• Memory:")} ${chalk.bgBlueBright.blueBright(`${client.convert.byte(mem.totalMem())}`)}`,
+      `${chalk.bgBlueBright.red("• NodeJs:")} ${chalk.bgBlueBright.blueBright(`v${process.version}`)}`,
+      `${chalk.bgBlueBright.red("• DiscordJs:")} ${chalk.bgBlueBright.blueBright(`v${version}`)}`,
+      `${chalk.bgBlueBright.red("• Memory:")} ${chalk.bgBlueBright.blueBright(`${client.convert.byte(mem.totalMem())}`)}`,
+    ].join("\n")
+  )
 });
 
-client.on("threadCreate", async (t) => {
-  if (!t.joinable) return
-  t.join()
-
-})
-
-
-client.on("messageCreate", async (message) => {
-
-
-  if (message.content.includes(process.env.TOKEN) || message.content.includes(process.env.MONGOOSE)) {
-
-    if (message.editable) {
-
-      let row = new MessageActionRow().addComponents(
-        new MessageButton()
-          .setStyle("LINK")
-          .setLabel("Very good website for you")
-          .setURL("http://www.absolutelynothing.com/")
-
-      )
-      const embed = new MessageEmbed()
-        .setDescription("Omg omg a secret ➜ || your mum ||").setColor("RED")
-      return message.edit({ embeds: [embed], content: " ", components: [row] })
-    } else if (!message.editable) {
-      if (!message.deletable) return;
-      return message.delete()
-    }
-  }
-
-
-  // Client Mention Codes
-
-  const clientMentionEmbed = new MessageEmbed()
-    .setAuthor({ name: `${client.user.username}`, iconURL: client.user.displayAvatarURL({ dynamic: true }) })
-    .setDescription(
-      [
-        `👋 Hey I'm ${client.user.username}.`,
-        `My prefixes are \`${client.config.prefix}\` and <:NUslashcommands:897085046710763550> commands.`,
-        `Type \`${client.config.prefix}help\` or \`/help\` in bot command channels to see my commands!`
-      ].join("\n")
-    )
-    .setColor(`${client.color.invisible}`);
-
-  if (
-    message.content === `<@${client.user.id}>` ||
-    message.content === `<@!${client.user.id}>` &&
-    !message.author.bot
-  ) return message.reply({ embeds: [clientMentionEmbed] }).then((msg) => {
-    setTimeout(() => {
-      msg?.delete()
-      message?.delete()
-    }, 20000)
-  })
-
-
-})

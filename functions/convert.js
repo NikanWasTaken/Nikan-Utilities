@@ -1,5 +1,3 @@
-// Converts stuff lol 
-
 /**
  * @param {Client} client
  */

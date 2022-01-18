@@ -3,23 +3,17 @@ require("dotenv").config()
 
 const client = new Client({
     presence: {
-        status: "idle",
+        status: "online",
     },
-    /**
-        ws: {
-            properties: {
-                $browser: "Discord iOS"
-            },
-        },
-        */
     intents: 32767,
     restTimeOffset: 300,
     partials: ['CHANNEL', 'MESSAGE', 'REACTION', 'GUILD_MEMBER', 'USER'],
     allowedMentions: {
         repliedUser: false,
     }
-
 });
+
+client.setMaxListeners(15)
 
 module.exports = client;
 
@@ -32,5 +26,6 @@ require("./functions/embeds.js")(client) // embeds
 require("./functions/log.js")(client) // log embeds
 require("./functions/delete.js")(client) // Delete functions 
 require("./functions/convert.js")(client)
+
 
 client.login(`${process.env.TOKEN}`);

@@ -1,0 +1,33 @@
+{
+	"Slash Command": {
+		"prefix": "!slashCommand",
+		"body": [
+			"const { Client, CommandInteraction } = require('discord.js');",
+			"",
+			"module.exports = {",
+			"    name: '',",
+			"    description: '',",
+			"    permissions: [],",
+			"    cooldown: 0,",
+			"    options: [",
+			"        {",
+			"          name: '',",
+			"          description: '',",
+			"          type: '',",
+			"          required: false,",
+			"        },",
+			"  ],",
+			"",
+			"  /**",
+			"   * @param {Client} client",
+			"   * @param {CommandInteraction} interaction",
+			"   * @param {String[]} args",
+			"   */",
+			"",
+			"  run: async (client, interaction, args) => {",
+			"",
+			"    }",
+			"}"
+		]
+	}
+}
