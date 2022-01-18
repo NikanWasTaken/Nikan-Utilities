@@ -1,9 +1,11 @@
 const client = require("../../index.js");
-const { MessageEmbed, MessageActionRow, MessageButton } = require("discord.js");
-const starCount = 3;
+const { MessageEmbed, MessageActionRow, MessageButton, WebhookClient } = require("discord.js");
+const starCount = 3; s
 const SBchannelId = "868358834052296724";
-
-
+const hook = new WebhookClient({
+    id: '932867412460716062',
+    token: 'vQS935IoFwVo2FxLk7Ku5y0NnNeXC0zZIr3IbJOzKmkdQoha-YDgS1Y4B_bpxzbifHj9'
+});
 
 client.on('messageReactionAdd', async (reaction) => {
 
@@ -20,17 +22,17 @@ client.on('messageReactionAdd', async (reaction) => {
     ) return;
     if (reaction?.count >= starCount && reaction?.emoji.name === "⭐") {
 
-        const msgs = await starBoardChannel.messages.fetch({ limit: 50 })
+        const msgs = await starBoardChannel.messages.fetch({ limit: 20 })
 
         const SentMessage = msgs?.find(msg =>
             msg?.embeds?.length === 1 &&
-                msg?.author?.id === client.user.id ?
+                msg?.author?.id === hook.id ?
                 (msg.embeds[0]?.footer?.text?.endsWith(reaction?.message?.id) ? true : false) : false
         );
 
         if (SentMessage) {
 
-            SentMessage?.edit(`:star: **${reaction?.count}** ● ${reaction?.message?.channel}`);
+            await hook.editMessage(SentMessage.id, { content: `:star: **${reaction?.count}** ● ${reaction?.message?.channel}` });
 
         } else {
 
@@ -50,12 +52,13 @@ client.on('messageReactionAdd', async (reaction) => {
                 .setImage(reaction?.message?.attachments.first()?.proxyURL || null)
                 .setColor(`${client.color.botBlue}`)
 
-            await starBoardChannel.send({ content: `:star: **${reaction?.count}** ● ${reaction?.message?.channel}`, embeds: [embed], components: [jumprow] })
-
+            await hook.send({
+                content: `:star: **${reaction?.count}** ● ${reaction?.message?.channel}`,
+                embeds: [embed],
+                components: [jumprow]
+            })
         }
     }
-
-
 })
 
 
@@ -74,7 +77,7 @@ client.on('messageReactionRemove', async (reaction) => {
 
         const SentMessage = msgs?.find(msg =>
             msg?.embeds?.length === 1 &&
-                msg?.author?.id === client.user.id ?
+                msg?.author?.id === hook.id ?
                 (msg.embeds[0]?.footer?.text?.endsWith(reaction?.message?.id) ? true : false) : false
         );
 
@@ -82,7 +85,7 @@ client.on('messageReactionRemove', async (reaction) => {
 
             if (reaction?.count >= starCount) {
 
-                await SentMessage?.edit({ content: `:star: **${reaction?.count}** ● ${reaction?.message?.channel}` });
+                await hook.editMessage(SentMessage.id, { content: `:star: **${reaction?.count}** ● ${reaction?.message?.channel}` });
 
             } else {
 
