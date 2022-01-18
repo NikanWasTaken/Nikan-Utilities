@@ -22,7 +22,7 @@ client.on('messageReactionAdd', async (reaction) => {
     ) return;
     if (reaction?.count >= starCount && reaction?.emoji.name === "⭐") {
 
-        const msgs = await starBoardChannel.messages.fetch({ limit: 20 })
+        const msgs = await starBoardChannel.messages.fetch({ limit: 30 })
 
         const SentMessage = msgs?.find(msg =>
             msg?.embeds?.length === 1 &&
@@ -73,8 +73,7 @@ client.on('messageReactionRemove', async (reaction) => {
     if (reaction?.message?.channel.type === "DM") return
     if (reaction?.emoji.name === "⭐") {
 
-        const msgs = await starBoardChannel.messages.fetch({ limit: 50 });
-
+        const msgs = await starBoardChannel.messages.fetch({ limit: 30 });
         const SentMessage = msgs?.find(msg =>
             msg?.embeds?.length === 1 &&
                 msg?.author?.id === hook.id ?
@@ -84,12 +83,10 @@ client.on('messageReactionRemove', async (reaction) => {
         if (SentMessage) {
 
             if (reaction?.count >= starCount) {
-
                 await hook.editMessage(SentMessage.id, { content: `:star: **${reaction?.count}** ● ${reaction?.message?.channel}` });
 
             } else {
-
-                await SentMessage?.delete()
+                await hook.deleteMessage(SentMessage.id)
 
             }
         }
