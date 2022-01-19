@@ -57,7 +57,18 @@ module.exports = {
                 let evaled = eval(code);
 
                 if (typeof evaled !== 'string') evaled = require('util').inspect(evaled);
-                if (evaled.length >= 2000) evaled = evaled.slice(0, 2000);
+                if (evaled.length >= 1990) {
+                    const cut = []
+                    let page = 0;
+                    while (page < evaled.length) {
+                        page + 1990
+                        cut.push(evaled.slice(page, 1990))
+                    }
+                    evaled = cut.forEach(e => message.channel.send({
+                        content: `\`\`\`js\n${e}\`\`\``
+                    })
+                    )
+                }
                 const cleaned = clean(evaled);
 
                 if (cleaned === 'Promise { <pending> }') {
@@ -69,7 +80,7 @@ module.exports = {
                         .addField("Code", `\`\`\`js\n${code}\n\`\`\``)
                         .setTimestamp()
                     return message.channel.send({
-                        embeds: [embed]
+                        embeds: [embed],
                     })
 
                 } else {
