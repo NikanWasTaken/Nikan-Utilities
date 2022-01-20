@@ -86,7 +86,9 @@ module.exports = {
                 user.setNickname(`${nickname2}`)
 
             default:
-                const failedtochange2 = new MessageEmbed().setDescription("You provided this user's current nickname!").setColor("RED")
+                const failedtochange2 = new MessageEmbed()
+                    .setDescription("You provided this user's current nickname!")
+                    .setColor("RED")
                 if (user.displayName === name)
                     return message.channel.send({ embeds: [failedtochange2] }).then((msg) => {
                         client.delete.message(message, msg);
@@ -94,7 +96,9 @@ module.exports = {
 
                 const failedtochange3 = new MessageEmbed().setDescription("Nickname should be fewer than 32 characters in length!").setColor("RED")
                 if (name.length > 32)
-                    return message.channel.send({ embeds: [failedtochange3] }).then((msg) => {
+                    return message.channel.send({
+                        embeds: [failedtochange3]
+                    }).then((msg) => {
                         client.delete.message(message, msg);
                     })
 

@@ -73,8 +73,5 @@ module.exports = {
                 .then(() => message.channel.setRateLimitPerUser(limit))
 
         }
-
-
     }
-
 }
