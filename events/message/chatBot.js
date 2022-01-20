@@ -1,5 +1,6 @@
 const client = require("../../index.js")
 const fetch = require("node-fetch")
+const { MessageEmbed } = require("discord.js")
 
 
 client.on("messageCreate", async (message) => {
@@ -21,8 +22,13 @@ client.on("messageCreate", async (message) => {
         })
 
     } catch (error) {
-      return
+      const embed = new MessageEmbed()
+        .setAuthor({ name: "An error has occurred", iconURL: client.user.displayAvatarURL() })
+        .setDescription(`\`\`\`js\n${error}\n\`\`\``)
+        .setColor("RED")
+      message.reply({
+        embeds: [embed]
+      })
     }
-
   }
 })
