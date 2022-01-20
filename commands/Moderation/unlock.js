@@ -17,7 +17,7 @@ module.exports = {
 
   run: async (client, message, args, wrongUsage) => {
 
-    var reason = args.slice(1).join(" ") || "No reason provided"
+    const reason = args.slice(1).join(" ") || "No reason provided"
 
     if (args[0].toLowerCase() == "all") {
 
@@ -29,16 +29,15 @@ module.exports = {
           SEND_MESSAGES: null
         })
       })
-
       message.guild.channels.cache.filter(ch => ch.type === "GUILD_VOICE").forEach(ch => {
         ch.permissionOverwrites.edit(message.guild.roles.everyone, {
           CONNECT: null
         })
       })
 
-      var hii = new MessageEmbed()
-        .setAuthor({ name: "Server Unlocked", iconURL: client.user.displayAvatarURL({ dynamic: null }) })
-        .setDescription("This server has been unlocked by a staff member.\nYou may star chatting now!")
+      var serverUnlockedEmbed = new MessageEmbed()
+        .setAuthor({ name: "Server Unlocked", iconURL: client.user.displayAvatarURL() })
+        .setDescription("This server has been unlocked by a staff member.")
         .setColor(`${client.color.moderation}`)
         .addFields({
           name: "Reason",
@@ -46,7 +45,8 @@ module.exports = {
         })
         .setTimestamp()
 
-      message.guild.channels.cache.get("782837655082631229").send({ embeds: [hii] })
+      message.guild.channels.cache.get(`${client.server.generalChat}`)
+        .send({ embeds: [serverUnlockedEmbed] })
 
       await msg.edit({ content: "Unlocked the server!" })
 
@@ -54,19 +54,22 @@ module.exports = {
     } else {
 
       let channel = message.mentions.channels.first() || message.guild.channels.cache.get(args[0])
+      if (!channel) return wrongUsage(message)
 
-      if (!channel) return message.reply({ embeds: [wrongUsage] })
-      if (channel.type === "GUILD_VOICE") {
+      if (channel.type === "GUILD_VOICE" || channel.type === "GUILD_STAGE_VOICE") {
+
+        let msg = await message.reply("Unlocking the voice channel...")
 
         channel.permissionOverwrites.edit(message.guild.roles.everyone, {
           CONNECT: null
         });
 
-        await message.channel.send("Channel Unlocked!")
+        await msg.edit({
+          content: `Unlocked ${channel}`
+        })
 
 
-      } else {
-
+      } else if (channel.type === "GUILD_TEXT") {
 
         let msg = await message.reply({ content: "Unlocking the channel..." })
 
@@ -74,9 +77,9 @@ module.exports = {
           SEND_MESSAGES: null
         });
 
-        var hii = new MessageEmbed()
-          .setAuthor({ name: "Channel Unlocked", iconURL: client.user.displayAvatarURL({ dynamic: null }) })
-          .setDescription("This channel has been Unlocked by a staff member.\nYou may start chatting now!")
+        var channelUnlocked = new MessageEmbed()
+          .setAuthor({ name: "Channel Unlocked", iconURL: client.user.displayAvatarURL() })
+          .setDescription("This channel has been Unlocked by a staff member.")
           .setColor(`${client.color.moderation}`)
           .addFields({
             name: "Reason",
@@ -84,10 +87,19 @@ module.exports = {
           })
           .setTimestamp()
 
-        channel.send({ embeds: [hii] })
+        await channel.send({ embeds: [channelUnlocked] })
 
         await msg.edit({ content: "Unlocked the channel!" })
 
+      } else {
+        const embed = new MessageEmbed()
+          .setDescription(`Sorry, but you can only unlock text, voice and stage channels. [${channel}]`)
+          .setColor("RED")
+
+        message.reply({ embeds: [embed] })
+          .then(msg => {
+            client.delete.message(message, msg)
+          })
       }
     }
   }

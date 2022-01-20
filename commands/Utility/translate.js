@@ -23,7 +23,7 @@ module.exports = {
     let query = message.content.split(" ").slice(2).join(" ")
     let language = args[0]
 
-    if (!language || !query) return message.reply({ embeds: [wrongUsage] })
+    if (!language || !query) return wrongUsage(message)
 
     try {
 

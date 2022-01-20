@@ -21,7 +21,7 @@ module.exports = {
 
         const punishid = args[0]
 
-        if (!punishid) return message.reply({ embeds: [wrongUsage] })
+        if (!punishid) return wrongUsage(message)
 
         const warnfind = await warnModel.findById(punishid)
         if (!warnfind) return message.reply("Invalid warn ID!")

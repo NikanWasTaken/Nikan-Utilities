@@ -16,13 +16,13 @@ module.exports = {
 
   run: async (client, message, args, wrongUsage) => {
 
-    var reason = args.slice(1).join(" ")
+    const reason = args.slice(1).join(" ")
+    if (!args[0]) return wrongUsage(message)
 
-    if (!args[0]) return message.reply({ embeds: [wrongUsage] })
 
-    if (args[0].toLowerCase() == "all") {
+    if (args[0].toLowerCase() == "all" || args[0].toLowerCase() == "lockdown") {
 
-      if (!reason) return message.reply({ embeds: [wrongUsage] })
+      if (!reason) return wrongUsage(message)
 
       let msg = await message.reply({ content: "Locking the server..." })
 
@@ -31,18 +31,17 @@ module.exports = {
           SEND_MESSAGES: false
         })
       })
-
       message.guild.channels.cache.filter(ch => ch.type === "GUILD_VOICE").forEach(ch => {
         ch.permissionOverwrites.edit(message.guild.roles.everyone, {
           CONNECT: false
         })
       })
+      message.guild.channels.cache.get(`${client.server.verificationChannel}`)
+        .permissionOverwrites.edit(message.guild.roles.everyone, { SEND_MESSAGES: null })
 
-      await msg.edit({ content: "Server Locked!" })
-
-      var hii = new MessageEmbed()
+      const serverLockedEmbed = new MessageEmbed()
         .setAuthor({ name: "Server Locked", iconURL: client.user.displayAvatarURL({ dynamic: true }) })
-        .setDescription("__**You're not muted!**__\nThe server has been locked by a staff memeber, more information will be sent here!")
+        .setDescription("This server is currently on lockdown, please don't dm any staff members about this. more information will be sent here.\n__**You are not muted**__")
         .setColor(`${client.color.moderation}`)
         .setTimestamp()
         .addFields({
@@ -50,24 +49,35 @@ module.exports = {
           value: reason
         })
 
-      await message.guild.channels.cache.get("782837655082631229").send({ embeds: [hii] })
-
+      await message.guild.channels.cache.get(`${client.server.generalChannel}`)
+        .send({
+          embeds: [serverLockedEmbed]
+        })
+      await msg.edit({ content: "Server Locked!" })
 
     } else {
 
       let channel = message.mentions.channels.first() || message.guild.channels.cache.get(args[0])
+      if (!channel) return message.reply({
+        embeds: [{
+          description: "I couldn't find that channel.",
+          color: "RED"
+        }]
+      })
+        .then(msg => { client.delete.message(message, msg) })
 
-      if (channel.type === "GUILD_VOICE") {
+      if (channel.type === "GUILD_VOICE" || channel.type === "GUILD_STAGE_VOICE") {
 
-        await message.reply({ content: "Channel Locked!" })
-
+        let msg = await message.reply({ content: "Locking the voice channel..." })
         channel.permissionOverwrites.edit(message.guild.roles.everyone, {
           CONNECT: false
         });
 
-      } else {
+        await msg.edit({ content: `Locked ${channel}` })
 
-        if (!args[0] || !reason) return message.reply({ embeds: [wrongUsage] })
+      } else if (channel.type === "GUILD_TEXT") {
+
+        if (!args[0] || !reason) return wrongUsage(message)
 
         let msg = await message.reply({ content: "Locking the channel..." })
 
@@ -75,11 +85,9 @@ module.exports = {
           SEND_MESSAGES: false
         });
 
-        await msg.edit({ content: "Channel Locked!" })
-
-        var hii = new MessageEmbed()
+        var channelLockedEmbed = new MessageEmbed()
           .setAuthor({ name: "Channel Locked", iconURL: client.user.displayAvatarURL({ dynamic: true }) })
-          .setDescription("This channel has been locked by a staff member. You are not muted.\nMore information will be sent here eventually.")
+          .setDescription("This channel was locked by a staff member.\nPlease don't dm any staff members about this, __you are not muted__.\n")
           .setColor(`${client.color.moderation}`)
           .setTimestamp()
           .addFields({
@@ -87,8 +95,19 @@ module.exports = {
             value: reason
           })
 
-        await channel.send({ embeds: [hii] })
+        await channel.send({ embeds: [channelLockedEmbed] })
 
+        await msg.edit({ content: "Channel Locked!" })
+
+      } else {
+        const embed = new MessageEmbed()
+          .setDescription(`Sorry, but you can only lock text, voice and stage channels. [${channel}]`)
+          .setColor("RED")
+
+        message.reply({ embeds: [embed] })
+          .then(msg => {
+            client.delete.message(message, msg)
+          })
       }
     }
   }

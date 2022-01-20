@@ -19,21 +19,24 @@ module.exports = {
   run: async (client, message, args, wrongUsage) => {
 
     var user = message.guild.members.cache.get(args[0]) || message.mentions.members.first()
-    if (!args[0]) return message.reply({ embeds: [wrongUsage] })
+    if (!args[0]) return wrongUsage(message)
     var reason = message.content.split(" ").slice(2).join(" ") || "No reason provided"
 
     let userNotFound = new MessageEmbed()
       .setDescription(`This user is not in this guild!`)
       .setColor(`RED`)
 
-    if (!user) return message.reply({ embeds: [userNotFound] }).then((msg) => {
-      client.delete.message(message, msg);
-    })
+    if (!user) return message.reply({ embeds: [userNotFound] })
+      .then((msg) => {
+        client.delete.message(message, msg);
+      })
 
-    if (user.roles.highest.position >= message.guild.me.roles.highest.position ||
+    if (
+      user.roles.highest.position >= message.guild.me.roles.highest.position ||
       user.roles.highest.position >= message.member.roles.highest.position ||
       user.user.id === client.config.owner ||
-      user.user.bot)
+      user.user.bot
+    )
       return message.reply({ embeds: [client.embeds.cannotPerform] })
         .then((msg) => client.delete.message(message, msg))
 
@@ -42,7 +45,7 @@ module.exports = {
       userId: user.user.id,
       guildId: message.guild.id,
       moderatorId: message.author.id,
-      reason,
+      reason: reason,
       timestamp: Date.now(),
       systemExpire: Date.now() + ms("26 weeks")
     })
@@ -51,7 +54,8 @@ module.exports = {
     const embed = new MessageEmbed()
       .setDescription(`${user.user} has been **kicked** | \`${data._id}\``)
       .setColor(`${client.color.moderation}`)
-    let msg = await message.channel.send({ embeds: [embed] }).then(message.delete())
+    let msg = await message.channel.send({ embeds: [embed] })
+      .then(message.delete())
 
 
     var dmyes = new MessageEmbed()

@@ -17,7 +17,7 @@ module.exports = {
     run: async (client, message, args, wrongUsage) => {
 
         const code = args.join(' ');
-        if (!code) return message.reply({ embeds: [wrongUsage] });
+        if (!code) return wrongUsage(message);
 
         let danger = false;
         if (
@@ -57,7 +57,7 @@ module.exports = {
                 let evaled = eval(code);
 
                 if (typeof evaled !== 'string') evaled = require('util').inspect(evaled);
-                if (evaled.length >= 1990) evaled = evaled.slice(0, 1993)
+                if (evaled.length >= 2000) evaled = evaled.slice(0, 1990)
                 const cleaned = clean(evaled);
 
                 if (cleaned === 'Promise { <pending> }') {

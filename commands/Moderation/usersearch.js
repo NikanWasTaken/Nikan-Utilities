@@ -17,7 +17,7 @@ module.exports = {
   run: async (client, message, args, wrongUsage) => {
 
     const user = args.join(" ")
-    if (!user) return message.reply({ embeds: [wrongUsage] });
+    if (!user) return wrongUsage(message);
     let i0 = 0;
     let i1 = totalResultsInPage;
     let page = 1;

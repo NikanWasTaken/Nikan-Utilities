@@ -25,7 +25,7 @@ module.exports = {
     if (!args[1]) time = "6h";
     const reason = message.content.split(" ").slice(3).join(" ") || "No reason provided"
 
-    if (!args[0]) return message.reply({ embeds: [wrongUsage] })
+    if (!args[0]) return wrongUsage(message)
 
     let userNotFound = new MessageEmbed()
       .setDescription("This user isn't in this guild!")
@@ -134,6 +134,5 @@ module.exports = {
       id: `${data2._id}`,
       url: `https://discord.com/channels/${message.guildId}/${message.channelId}/${msg.id}`
     })
-
   }
 }

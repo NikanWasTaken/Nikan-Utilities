@@ -19,12 +19,12 @@ module.exports = {
     run: async (client, message, args, wrongUsage) => {
 
 
-        if (!args.length) return message.reply({ embeds: [wrongUsage] })
+        if (!args.length) return wrongUsage(message)
         const name = args[0]
         const emoji = message.content.split(" ").slice(2).join(" ")
 
-        if (!args[0]) return message.reply({ embeds: [wrongUsage] })
-        if (!args[1] && !message.attachments.first()) return message.reply({ embeds: [wrongUsage] })
+        if (!args[0]) return wrongUsage(message)
+        if (!args[1] && !message.attachments.first()) return wrongUsage(message)
 
 
         if (args[1]) {
@@ -97,7 +97,7 @@ module.exports = {
 
         } else if (!args[1]) {
 
-            if (!message.attachments.first()) return message.reply({ embeds: [wrongUsage] })
+            if (!message.attachments.first()) return wrongUsage(message)
 
             try {
 

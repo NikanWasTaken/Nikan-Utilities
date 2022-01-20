@@ -26,7 +26,7 @@ module.exports = {
     const user = message.guild.members.cache.get(args[0]) || message.mentions.members.first()
     const reason = args.slice(1).join(" ")
 
-    if (!args[0] || !reason) return message.reply({ embeds: [wrongUsage] })
+    if (!args[0] || !reason) return wrongUsage(message)
 
     if (!user) {
       const embed = new MessageEmbed()

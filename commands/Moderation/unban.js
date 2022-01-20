@@ -19,7 +19,7 @@ module.exports = {
 
   run: async (client, message, args, wrongUsage) => {
 
-    if (!args[0]) return message.reply({ embeds: [wrongUsage] })
+    if (!args[0]) return wrongUsage(message)
     let userID = args[0]
     let reason = message.content.split(" ").slice(2).join(" ") || "No reason provided"
 

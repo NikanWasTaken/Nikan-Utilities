@@ -18,7 +18,7 @@ module.exports = {
     run: async (client, message, args, wrongUsage) => {
 
         var user = message.guild.members.cache.get(args[0]) || message.mentions.members.first()
-        if (!args[0]) return message.reply({ embeds: [wrongUsage] })
+        if (!args[0]) return wrongUsage(message)
 
         let erm = new MessageEmbed()
             .setDescription("This user isn't in this guild!")

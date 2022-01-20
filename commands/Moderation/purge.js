@@ -21,7 +21,7 @@ module.exports = {
 
       var clear = args[0]
       var user = message.guild.members.cache.get(args[1]) || message.mentions.members.first()
-      if (!clear) return message.reply({ embeds: [wrongUsage] })
+      if (!clear) return wrongUsage(message)
 
       let heh = new MessageEmbed()
         .setDescription(`You need to provide a number between 1 and 100 to purge.`)

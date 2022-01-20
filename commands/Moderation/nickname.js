@@ -26,7 +26,7 @@ module.exports = {
         var name = message.content.split(" ").slice(2).join(" ")
         var user = message.guild.members.cache.get(args[0]) || message.mentions.members.first()
 
-        if (!user) return message.reply({ embeds: [wrongUsage] })
+        if (!user) return wrongUsage(message)
 
         if (user.roles.highest.position >= message.guild.me.roles.highest.position ||
             user.roles.highest.position >= message.member.roles.highest.position ||

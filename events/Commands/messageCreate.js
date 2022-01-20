@@ -82,20 +82,29 @@ client.on("messageCreate", async (message) => {
         });
 
 
-    const wrongUsage = new MessageEmbed()
-        .setAuthor({ name: `${client.cap(command.name)} Command`, iconURL: client.user.displayAvatarURL() })
-        .setDescription(
-            [
-                `This command is missing an argument from the usage below!\n`,
-                `> **Usage:** ${command.usage ? `\`${config.prefix + command.name + ` ${command.usage}`}\`` : "No Usage found!"}`,
-                `> **Aliases:** ${command.aliases ? `\`${command.aliases.join("` `")}\`` : "No Aliases Available"}`,
-                `> **Cooldown:** ${command.cooldown ? client.convert.time(command.cooldown / 1000) : "No Cooldown"}`,
-            ].join("\n")
-        )
-        .setColor(`${client.color.moderationRed}`)
-        .setFooter({ text: `[] = required • <> = optional` })
-        .setTimestamp()
+    function wrongUsage(message) {
+        const embed = new MessageEmbed()
+            .setAuthor({ name: `${client.cap(command.name)} Command`, iconURL: client.user.displayAvatarURL() })
+            .setDescription(
+                [
+                    `This command is missing an argument from the usage below!\n`,
+                    `> **Usage:** ${command.usage ? `\`${config.prefix + command.name + ` ${command.usage}`}\`` : "No Usage found!"}`,
+                    `> **Aliases:** ${command.aliases ? `\`${command.aliases.join("` `")}\`` : "No Aliases Available"}`,
+                    `> **Cooldown:** ${command.cooldown ? client.convert.time(command.cooldown / 1000) : "No Cooldown"}`,
+                ].join("\n")
+            )
+            .setColor(`${client.color.moderationRed}`)
+            .setFooter({ text: `[] = required • <> = optional` })
+            .setTimestamp()
 
+        return message?.channel.send({ embeds: [embed] })
+            .then(msg => {
+                setTimeout(() => {
+                    message?.delete()
+                    msg?.delete()
+                }, 10000);
+            })
+    }
 
     if (
         command.cooldown &&

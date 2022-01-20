@@ -20,7 +20,7 @@ module.exports = {
 
         var color = args[0]
 
-        if (!color) return message.reply({ embeds: [wrongUsage] })
+        if (!color) return wrongUsage(message)
         if (color.includes("#")) {
             color = args[0].split("#")[1]
         }
