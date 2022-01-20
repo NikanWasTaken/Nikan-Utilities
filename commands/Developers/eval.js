@@ -57,7 +57,8 @@ module.exports = {
                 let evaled = eval(code);
 
                 if (typeof evaled !== 'string') evaled = require('util').inspect(evaled);
-                if (evaled.length >= 2000) evaled = evaled.slice(0, 1990)
+                if (evaled.length >= 2000)
+                    evaled = evaled.slice(0, 1990)
                 const cleaned = clean(evaled);
 
                 if (cleaned === 'Promise { <pending> }') {
