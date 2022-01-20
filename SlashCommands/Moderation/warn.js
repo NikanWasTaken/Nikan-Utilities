@@ -72,12 +72,12 @@ module.exports = {
                     required: false,
                     type: "USER",
                 },
-                // {
-                //     name: "user-id",
-                //     description: "The ID of the user you want to check thier warns! - staff only!",
-                //     required: false,
-                //     type: "STRING",
-                // },
+                {
+                    name: "user-id",
+                    description: "The ID of the user you want to check thier warns! - staff only!",
+                    required: false,
+                    type: "STRING",
+                },
             ]
 
         },
@@ -377,41 +377,53 @@ module.exports = {
 
         } else if (subs == "list") {
 
-            const user = interaction.options.getMember("member")
+            let user;
+            let member = interaction.options.getMember("member")
+            if (member) user = interaction.options.getUser("member")
+            if (!member) user = await client.users.fetch(`${interaction.options.getString("user-id")}`).catch(() => { })
+            if (!interaction.options.getMember("member") && !interaction.options.getString("user-id")) {
+                member = interaction.member,
+                    user = interaction.user;
+            }
+            if (user === null || user === undefined) return interaction.followUp("This user doesn't exist!")
             const type = interaction.options.getString("type")
 
             if (type === "normal") {
 
-                if (user) {
-
-                    let no = new MessageEmbed().setDescription('You can only check your own warnings').setColor(`${client.color.moderationRed}`)
-                    if (!interaction.member.permissions.has("MANAGE_MESSAGES")) return interaction.followUp({ embeds: [no] })
+                if (user.id !== interaction.user.id) {
 
                     const userWarnings = await warnModel.find({
-                        userId: user.user.id,
+                        userId: user.id,
                         guildId: interaction.guildId,
                     });
 
-                    if (!userWarnings?.length) return interaction.followUp({ content: "That user doesn't have any normal warnings." })
+                    if (!userWarnings?.length) return interaction.followUp({
+                        content: "That user doesn't have any normal warnings."
+                    })
 
                     const embedDescription = userWarnings.map((warn, i) => {
-                        const moderator = interaction.guild.members.cache.get(
-                            warn.moderatorId
-                        );
+                        let moderator;
+                        if (interaction.guild.members.cache.get(warn.moderatorId)) moderator = interaction.guild.members.cache.get(warn.moderatorId).user.tag
+                        if (!interaction.guild.members.cache.get(warn.moderatorId)) {
+                            (async () => {
+                                const findMod = await client.users.fetch(`${warn.moderatorId}`).catch(() => { return moderator = "Couldn't find them (deleted account)" })
+                                moderator = `${findMod.tag} [NOT IN THE SERVER]`
+                            })()
+                        }
 
                         return [
                             `\`${i + 1}\`. **${warn.type}** | **ID:** \`${warn._id}\``,
                             `> Date: <t:${~~(warn.timestamp / 1000)}:f>`,
-                            `> Moderator: ${moderator ? moderator.user.tag : "Moderator has left!"}`,
+                            `> Moderator: ${moderator}`,
                             `> Expires: ${warn.expires ? `<t:${~~(warn.expires / 1000)}:R>` : "Permanent"}`,
                             `> Reason: ${warn.reason}`,
                         ].join("\n");
                     }).join("\n\n");
 
                     const embed = new MessageEmbed()
-                        .setAuthor({ name: `${user.user.tag}`, iconURL: user.user.displayAvatarURL({ dynamic: true }) })
-                        .setThumbnail(user.user.displayAvatarURL({ dynamic: true }))
-                        .setDescription(`These are all the punishments for ${user.user}.\n\n${embedDescription}`)
+                        .setAuthor({ name: `${user.tag}`, iconURL: user.displayAvatarURL({ dynamic: true }) })
+                        .setThumbnail(user.displayAvatarURL({ dynamic: true }))
+                        .setDescription(`${user} • ID: ${user?.id}\n\n${embedDescription}`)
                         .setColor("BLURPLE")
 
 
@@ -419,16 +431,14 @@ module.exports = {
 
                 } else {
 
-                    var botcmd = new MessageEmbed().setDescription('You may only use this command in bot command channels!')
-                        .setColor(`${client.color.moderationRed}`)
-                    if (!interaction.channel.name.includes("command")) return interaction.followUp({ embeds: [botcmd] })
-
                     const userWarnings = await warnModel.find({
-                        userId: interaction.user.id,
+                        userId: user.id,
                         guildId: interaction.guildId,
                     });
 
-                    if (!userWarnings?.length) return interaction.followUp({ content: "You don't have any normal punishments, completely clean!" })
+                    if (!userWarnings?.length) return interaction.followUp({
+                        content: "You don't have any normal punishments, completely clean!"
+                    })
 
                     const embedDescription = userWarnings.map((warn, i) => {
 
@@ -441,9 +451,9 @@ module.exports = {
                     }).join("\n\n");
 
                     const embed = new MessageEmbed()
-                        .setAuthor({ name: `${interaction.user.tag}`, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) })
-                        .setThumbnail(interaction.user.displayAvatarURL({ dynamic: true }))
-                        .setDescription(`These are all the punishments for ${interaction.user}.\n\n${embedDescription}`)
+                        .setAuthor({ name: `${user.tag}`, iconURL: user.displayAvatarURL({ dynamic: true }) })
+                        .setThumbnail(user.displayAvatarURL({ dynamic: true }))
+                        .setDescription(`${user} • ID: ${user?.id}\n\n${embedDescription}`)
                         .setColor("BLURPLE")
 
 
@@ -453,13 +463,10 @@ module.exports = {
 
             } else if (type === "automod") {
 
-                if (user) {
-
-                    let no = new MessageEmbed().setDescription('You can only check your own warnings').setColor(`${client.color.moderationRed}`)
-                    if (!interaction.member.permissions.has("MANAGE_MESSAGES")) return interaction.followUp({ embeds: [no] })
+                if (user.id !== interaction.user.id) {
 
                     const userWarnings = await automodModel.find({
-                        userId: user.user.id,
+                        userId: user.id,
                         guildId: interaction.guildId,
                     });
 
@@ -476,9 +483,9 @@ module.exports = {
                     }).join("\n\n");
 
                     const embed = new MessageEmbed()
-                        .setAuthor({ name: `${user.user.tag}`, iconURL: user.user.displayAvatarURL({ dynamic: true }) })
-                        .setThumbnail(user.user.displayAvatarURL({ dynamic: true }))
-                        .setDescription(`These are all the punishments for ${user.user}.\n\n${embedDescription}`)
+                        .setAuthor({ name: `${user.tag}`, iconURL: user.displayAvatarURL({ dynamic: true }) })
+                        .setThumbnail(user.displayAvatarURL({ dynamic: true }))
+                        .setDescription(`${user} • ID: ${user?.id}\n\n${embedDescription}`)
                         .setColor("BLURPLE")
 
 
@@ -486,14 +493,8 @@ module.exports = {
 
                 } else {
 
-                    var botcmd = new MessageEmbed()
-                        .setDescription('You may only use this command in bot command channels!')
-                        .setColor(`${client.color.moderationRed}`)
-                    if (!interaction.channel.name.includes("command"))
-                        return interaction.followUp({ embeds: [client.embeds.botCommand] })
-
                     const userWarnings = await automodModel.find({
-                        userId: interaction.user.id,
+                        userId: user.id,
                         guildId: interaction.guildId,
                     });
 
@@ -513,19 +514,16 @@ module.exports = {
                     }).join("\n\n");
 
                     const embed = new MessageEmbed()
-                        .setAuthor({ name: `${interaction.user.tag}`, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) })
-                        .setThumbnail(interaction.user.displayAvatarURL({ dynamic: true }))
-                        .setDescription(`These are all the punishments for ${interaction.user}.\n\n${embedDescription}`)
+                        .setAuthor({ name: `${user.tag}`, iconURL: interaction.user.displayAvatarURL({ dynamic: true }) })
+                        .setThumbnail(user.displayAvatarURL({ dynamic: true }))
+                        .setDescription(`${user} • ID: ${user?.id}\n\n${embedDescription}`)
                         .setColor("BLURPLE")
 
 
                     interaction.followUp({ embeds: [embed] })
 
                 }
-
             }
-
-
 
         } else if (subs == "info") {
 
@@ -537,7 +535,7 @@ module.exports = {
 
             const punishid = interaction.options.getString("warn-id")
 
-            const warnfind = await warnModel.findById(punishid)
+            const warnfind = await warnModel.findById(punishid).catch(() => { })
             if (!warnfind) return interaction.reply("Invalid warn ID!")
             const type = warnfind.type
             const user = interaction.guild.members.cache.get(warnfind.userId) || "User has left!"

@@ -19,8 +19,8 @@ module.exports = {
   run: async (client, message, args, wrongUsage) => {
 
     let reason = message.content.split(" ").slice(2).join(" ") || "No reason provided"
-    let user = message.guild.members.cache.get(args[0]) || message.mentions.members.first()
     if (!args[0]) return wrongUsage(message)
+    let user = message.guild.members.cache.get(args[0]) || message.mentions.members.first()
 
     if (!user) {
 
@@ -55,7 +55,7 @@ module.exports = {
       client.log.action({
         type: "Ban",
         color: "BAN",
-        user: `${user.id}`,
+        user: `${user2.id}`,
         moderator: `${message.author.id}`,
         reason: `${reason}`,
         id: `${data._id}`,

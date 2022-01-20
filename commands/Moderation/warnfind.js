@@ -23,7 +23,7 @@ module.exports = {
 
         if (!punishid) return wrongUsage(message)
 
-        const warnfind = await warnModel.findById(punishid)
+        const warnfind = await warnModel.findById(punishid).catch(() => { })
         if (!warnfind) return message.reply("Invalid warn ID!")
         const type = warnfind.type
         const user = message.guild.members.cache.get(warnfind.userId) || "User has left!"

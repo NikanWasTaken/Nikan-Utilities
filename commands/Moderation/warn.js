@@ -19,10 +19,6 @@ module.exports = {
    */
   run: async (client, message, args, wrongUsage) => {
 
-    const cannotPerform = new MessageEmbed()
-      .setDescription(`You don't have permissions to perform that action!`)
-      .setColor("RED")
-
     const user = message.guild.members.cache.get(args[0]) || message.mentions.members.first()
     const reason = args.slice(1).join(" ")
 
@@ -40,8 +36,9 @@ module.exports = {
     if (user.roles.highest.position >= message.guild.me.roles.highest.position ||
       user.roles.highest.position >= message.member.roles.highest.position ||
       user.user.id === client.config.owner ||
-      user.user.bot)
-      return message.reply({ embeds: [cannotPerform] }).then((msg) => {
+      user.user.bot
+    )
+      return message.reply({ embeds: [client.embeds.cannotPerform] }).then((msg) => {
         setTimeout(() => {
           msg?.delete()
           message?.delete()
