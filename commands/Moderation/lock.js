@@ -87,7 +87,7 @@ module.exports = {
 
         var channelLockedEmbed = new MessageEmbed()
           .setAuthor({ name: "Channel Locked", iconURL: client.user.displayAvatarURL({ dynamic: true }) })
-          .setDescription("This channel was locked by a staff member.\nPlease don't dm any staff members about this, __you are not muted__.\n")
+          .setDescription("This channel was locked by a staff member.\nPlease don't dm any staff members about this, __you are not muted__.")
           .setColor(`${client.color.moderation}`)
           .setTimestamp()
           .addFields({

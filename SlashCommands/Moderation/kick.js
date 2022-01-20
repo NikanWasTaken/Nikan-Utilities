@@ -35,7 +35,8 @@ module.exports = {
     var user = interaction.options.getMember("user")
     var reason = interaction.options.getString("reason") || "No reason provided"
 
-    if (user.roles.highest.position >= interaction.guild.me.roles.highest.position ||
+    if (
+      user.roles.highest.position >= interaction.guild.me.roles.highest.position ||
       user.roles.highest.position >= interaction.member.roles.highest.position ||
       user.user.id === client.config.owner ||
       user.user.bot

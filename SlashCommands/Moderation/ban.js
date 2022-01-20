@@ -1,4 +1,4 @@
-const { Client, MessageEmbed, MessageActionRow, MessageButton } = require("discord.js");
+const { Client, MessageEmbed, MessageActionRow, MessageButton, CommandInteraction } = require("discord.js");
 const warnModel = require("../../models/Punishments.js")
 const ms = require("ms")
 
@@ -80,6 +80,16 @@ module.exports = {
           const userstring = interaction.options.getString("user-id")
           const user2 = await interaction.guild.members.ban(`${userstring}`, { reason: reason })
 
+
+          const embed = new MessageEmbed()
+            .setDescription(`This user doesn't exist!`)
+            .setColor("RED")
+
+          if (!user2)
+            return interaction.followUp({ embeds: [embed] }).then((msg) => {
+              client.delete.interaction(interaction);
+            })
+
           const data = new warnModel({
             type: "Ban",
             userId: user2?.id,
@@ -121,11 +131,12 @@ module.exports = {
 
       } else if (user) {
 
-        if (user.roles.highest.position >= interaction.guild.me.roles.highest.position ||
+        if (
+          user.roles.highest.position >= interaction.guild.me.roles.highest.position ||
           user.roles.highest.position >= interaction.member.roles.highest.position ||
           user.user.id === client.config.owner ||
           user.user.bot
-        ) return interaction.followUp({ embeds: [cannotPerform] })
+        ) return interaction.followUp({ embeds: [client.embeds.cannotPerform] })
 
         const data = new warnModel({
           type: "Ban",
@@ -158,7 +169,10 @@ module.exports = {
           .setTimestamp()
           .addField("Punishment ID", `${data._id}`, true)
           .addField("Reason", reason, false)
-        user.send({ embeds: [dmyes], components: [row1] }).catch(() => { })
+        user.send({
+          embeds: [dmyes],
+          components: [row1]
+        }).catch(() => { })
 
         user.ban({
           reason: reason,

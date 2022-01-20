@@ -1,4 +1,4 @@
-const { Client, MessageEmbed } = require("discord.js");
+const { Client, MessageEmbed, CommandInteraction } = require("discord.js");
 
 
 module.exports = {
@@ -16,7 +16,7 @@ module.exports = {
           description: "The channel you want to lock!",
           required: true,
           type: "CHANNEL",
-          channelTypes: ["GUILD_TEXT", "GUILD_VOICE"],
+          channelTypes: ["GUILD_TEXT", "GUILD_VOICE", "GUILD_STAGE_VOICE"],
         },
         {
           name: "reason",
@@ -37,7 +37,7 @@ module.exports = {
           description: "The channel you want to lock!",
           required: true,
           type: "CHANNEL",
-          channelTypes: ["GUILD_TEXT", "GUILD_VOICE"],
+          channelTypes: ["GUILD_TEXT", "GUILD_VOICE", "GUILD_STAGE_VOICE"],
         },
         {
           name: "reason",
@@ -65,7 +65,7 @@ module.exports = {
       const channel = interaction.options.getChannel("channel")
       const reason = interaction.options.getString("reason")
 
-      if (channel.type === "GUILD_VOICE") {
+      if (channel.type === "GUILD_VOICE" || channel.type === "GUILD_STAGE_VOICE") {
 
         channel.permissionOverwrites.edit(interaction.guild.roles.everyone, {
           CONNECT: false
@@ -73,7 +73,7 @@ module.exports = {
 
         await interaction.followUp({ content: "Channel Locked!" })
 
-      } else {
+      } else if (channel.type === "GUILD_TEXT") {
 
         let msg = await interaction.followUp({ content: "Locking the channel..." })
 
@@ -83,7 +83,7 @@ module.exports = {
 
         var hii = new MessageEmbed()
           .setAuthor({ name: "Channel Locked", iconURL: client.user.displayAvatarURL({ dynamic: true }) })
-          .setDescription("This channel has been locked by a staff member. You are not muted.\nMore information will be sent here eventually.")
+          .setDescription("This channel was locked by a staff member.\nPlease don't dm any staff members about this, __you are not muted__.\n")
           .setColor(`${client.color.moderation}`)
           .setTimestamp()
           .addFields({
@@ -91,10 +91,8 @@ module.exports = {
             value: reason
           })
 
-        await msg.edit({ content: "Channel Locked!" })
-
         await channel.send({ embeds: [hii] })
-
+        await msg.edit({ content: "Channel Locked!" })
 
       }
 
@@ -103,17 +101,18 @@ module.exports = {
       const channel = interaction.options.getChannel("channel")
       const reason = interaction.options.getString("reason") || "No reason provided"
 
-      if (channel.type === "GUILD_VOICE") {
+      if (channel.type === "GUILD_VOICE" || channel.type === "GUILD_STAGE_VOICE") {
 
+        const msg = await interaction.followUp({ content: "Unlocked The Channel!" })
 
         channel.permissionOverwrites.edit(interaction.guild.roles.everyone, {
           CONNECT: null
         });
 
-        await interaction.followUp({ content: "Unlocked The Channel!" })
+        await msg.edit({ content: `Unlocked ${channel}` })
 
 
-      } else {
+      } else if (channel.type === "GUILD_TEXT") {
 
         let msg = await interaction.followUp({ content: "Unlocking the channel..." })
 
@@ -123,7 +122,7 @@ module.exports = {
 
         var hii = new MessageEmbed()
           .setAuthor({ name: "Channel Unlocked", iconURL: client.user.displayAvatarURL({ dynamic: true }) })
-          .setDescription("This channel has been Unlocked by a staff member.\nYou may start chatting now!")
+          .setDescription("This channel has been Unlocked by a staff member.")
           .setColor(`${client.color.moderation}`)
           .addFields({
             name: "Reason",
@@ -133,7 +132,6 @@ module.exports = {
           .setTimestamp()
 
         await channel.send({ embeds: [hii] })
-
         await msg.edit({ content: "Channel Unlocked!" })
 
 

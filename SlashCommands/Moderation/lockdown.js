@@ -1,4 +1,4 @@
-const { Client, MessageEmbed } = require("discord.js");
+const { Client, MessageEmbed, CommandInteraction } = require("discord.js");
 
 
 module.exports = {
@@ -53,16 +53,17 @@ module.exports = {
           SEND_MESSAGES: false
         })
       })
-
       interaction.guild.channels.cache.filter(ch => ch.type === "GUILD_VOICE").forEach(ch => {
         ch.permissionOverwrites.edit(interaction.guild.roles.everyone, {
           CONNECT: false
         })
       })
+      interaction.guild.channels.cache.get(`${client.server.verificationChannel}`)
+        .permissionOverwrites.edit(message.guild.roles.everyone, { SEND_MESSAGES: null })
 
       var hii = new MessageEmbed()
         .setAuthor({ name: "Server Locked", iconURL: client.user.displayAvatarURL({ dynamic: true }) })
-        .setDescription("This server has been locked by a staff member. You are not muted.\nMore information will be sent here eventually.")
+        .setDescription("This server is currently on lockdown, please don't dm any staff members about this. more information will be sent here.\n__**You are not muted**__")
         .setColor(`${client.color.moderation}`)
         .setTimestamp()
         .addFields({
@@ -70,7 +71,7 @@ module.exports = {
           value: reason
         })
 
-      await interaction.guild.channels.cache.get("782837655082631229").send({ embeds: [hii] })
+      await interaction.guild.channels.cache.get(`${client.server.generalChannel}`).send({ embeds: [hii] })
 
       await msg.edit({ content: "Server Locked!" })
 
@@ -84,7 +85,6 @@ module.exports = {
           SEND_MESSAGES: null
         })
       })
-
       interaction.guild.channels.cache.filter(ch => ch.type === "GUILD_VOICE").forEach(ch => {
         ch.permissionOverwrites.edit(interaction.guild.roles.everyone, {
           CONNECT: null
@@ -93,12 +93,12 @@ module.exports = {
 
       var hii = new MessageEmbed()
         .setAuthor({ name: "Server Unlocked", iconURL: client.user.displayAvatarURL({ dynamic: true }) })
-        .setDescription("This server has been unlocked by a staff member.\nYou may start chatting now!")
+        .setDescription("This server has been unlocked by a staff member.")
         .setColor(`${client.color.moderation}`)
         .addField("Reason", `${reason}`)
         .setTimestamp()
 
-      await interaction.guild.channels.cache.get("782837655082631229").send({ embeds: [hii] })
+      await interaction.guild.channels.cache.get(`${client.server.generalChannel}`).send({ embeds: [hii] })
 
       await msg.edit({ content: "Server unlocked!" })
 
