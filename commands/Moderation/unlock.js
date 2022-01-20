@@ -54,7 +54,13 @@ module.exports = {
     } else {
 
       let channel = message.mentions.channels.first() || message.guild.channels.cache.get(args[0])
-      if (!channel) return wrongUsage(message)
+      if (!channel) return message.reply({
+        embeds: [{
+          description: "I couldn't find that channel.",
+          color: "RED"
+        }]
+      })
+        .then(msg => { client.delete.message(message, msg) })
 
       if (channel.type === "GUILD_VOICE" || channel.type === "GUILD_STAGE_VOICE") {
 
