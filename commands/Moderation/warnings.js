@@ -49,7 +49,7 @@ module.exports = {
 
 
         const first = new MessageEmbed()
-            .setAuthor({ name: `${client.username}`, iconURL: `${client.user.displayAvatarURL()}` })
+            .setAuthor({ name: `${client.user.username}`, iconURL: `${client.user.displayAvatarURL()}` })
             .setColor(`${client.color.serverPurple}`)
             .addField("Normal Warnings", `These are the warnings given to you by moderators!`)
             .addField("Automod Warnings", `These are the warnings given to you by auto moderation!`)
