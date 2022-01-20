@@ -21,11 +21,11 @@ module.exports = {
         let user;
         let member = message.mentions.members.first() || message.guild.members.cache.get(args[0]);
         if (!message.member.permissions.has("MANAGE_MESSAGES")) member = message.member;
+        if (member) user = message.mentions.users.first() || message.guild.members.cache.get(args[0])?.user
         if (!args[0]) {
             member = message.member,
                 user = message.author;
         }
-        if (member) user = message.mentions.users.first() || message.guild.members.cache.get(args[0])?.user
         if (!member) {
             user = await client.users.fetch(`${args[0]}`).catch(() => { })
         }
