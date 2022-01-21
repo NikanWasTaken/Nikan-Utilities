@@ -3,6 +3,7 @@ const prohibitedwords = require("../../json/bad-words.json")
 const config = require("../../json/ignores.json").automod;
 const automodModel = require("../../models/automod.js");
 const ms = require("ms")
+const { MessageEmbed } = require("discord.js")
 
 function isValidInvite(string) {
   var res = string.match(/(https?:\/\/)?(www.)?(discord.(gg|io|me|li|link|plus)|discorda?pp?.com\/invite|invite.gg|dsc.gg|urlcord.cf)\/[^\s/]+?(?=\b)/);

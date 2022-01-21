@@ -4,16 +4,17 @@ const modmailconfig = require("../../json/modmail.json");
 const categoryId = modmailconfig.category;
 const blacklist = require("../../models/modmail-blacklist.js")
 const GuessTheNumber = require("../../models/guessTheN.js")
-const serverId = client.server.id
 const ms = require("ms")
 const cooldown = new Collection()
 let loghook = new WebhookClient({
     id: `${modmailconfig.hookId}`,
     token: `${modmailconfig.hookToken}`,
-}); // https://discord.com/api/webhooks/910091774180081704/Reqy5hiVvGPp4HzaqnLNrhOQIt7X__2QwvQuNp2FzeetqZeEHbkbecPFNGdHyJ_QG6Ra
+});
 
 
 client.on("channelDelete", (channel) => {
+
+    const serverId = client.server.id
 
     if (channel.parentId === categoryId) {
         const person = channel.guild.members.cache.find((x) => x.id == channel.name)
@@ -106,9 +107,10 @@ client.on("messageCreate", async (message) => {
 
             let lek = `${~~(cooldown.get(`Modmail${message.author.id}`) - Date.now())}`
 
-            if (cooldown.has(`Modmail${message.author.id}`)) return message.channel.send(`You need to wait **${ms(parseInt(lek), { long: true })}** to open a thread again!`)
+            if (cooldown.has(`Modmail${message.author.id}`))
+                return message.channel.send(`You need to wait **${ms(parseInt(lek), { long: true })}** to open a thread again!`)
 
-            if (!client.guilds.cache.get(serverId)?.members?.cache.get(`${message.author.id}`).roles?.cache?.get("793410990535999508")) return
+            if (!client.guilds.cache.get(serverId)?.members?.cache.get(`${message.author.id}`).roles?.cache.get("793410990535999508")) return
             const gtn = await GuessTheNumber.findOne({ hostId: message.author.id, guildId: serverId, status: "In process..." })
             if (gtn) return
 

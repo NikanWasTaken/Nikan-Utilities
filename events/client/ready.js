@@ -2,7 +2,6 @@ const client = require("../../index.js");
 const chalk = require("chalk");
 const { mem } = require("node-os-utils");
 const { version } = require("discord.js");
-const os = require("os")
 
 
 client.on("ready", (client) => {
@@ -51,6 +50,9 @@ client.on("ready", (client) => {
     ),
   );
 
+  client.user.setActivity(`${client.guilds.cache.get(`${client.server.id}`).name}`, { type: "WATCHING" })
+  /**
+   *
   const statusArray =
     [
       "Minecraft | PLAYING",
@@ -65,16 +67,18 @@ client.on("ready", (client) => {
       "with my emojis | PLAYING",
       "Dreams zzz | WATCHING",
       "Nightmares 😨 | WATCHING",
-      "Boo nuggies | WATCHING",
       "Fortnite | PLAYING",
     ];
   setInterval(() => {
-
+  
     const random = statusArray[~~(Math.random() * statusArray.length)].split(" | ");
     const name = random[0];
     const type = random[1];
-
+  
     client.user.setActivity(`${name}`, { type: `${type}`, url: "https://twitch.tv/nikanwastaken" })
   }, 10000)
+  
+     */
+
 });
 
