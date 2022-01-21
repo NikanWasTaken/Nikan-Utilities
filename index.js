@@ -3,7 +3,7 @@ require("dotenv").config()
 
 const client = new Client({
     presence: {
-        status: "online",
+        status: "dnd",
     },
     intents: 32767,
     restTimeOffset: 300,

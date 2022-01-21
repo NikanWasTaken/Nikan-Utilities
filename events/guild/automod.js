@@ -18,7 +18,7 @@ client.on("messageCreate", async (message) => {
 
   if (message?.guild?.id !== `${client.server.id}`) return;
 
-  if (message?.content.includes(prohibitedwords)) {
+  if (message?.content.toLowerCase().includes(prohibitedwords)) {
 
     if (
       message?.author.bot ||
