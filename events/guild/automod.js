@@ -19,26 +19,77 @@ client.on("messageCreate", async (message) => {
 
   if (message?.guild?.id !== `${client.server.id}`) return;
 
-  if (message?.content.toLowerCase().includes(prohibitedwords)) {
+  for (b in prohibitedwords) {
+    if (message?.content.toLowerCase().includes(prohibitedwords[b])) {
+
+      if (
+        message?.author.bot ||
+        config.links.permissions.some(perm => message?.member.permissions.has(perm)) ||
+        message?.member.roles.cache.get(config["bypass-role"]) ||
+        config.badwords.channels.some(ch => message?.channel.name.includes(ch))
+      ) return;
+
+      message?.delete()
+      message?.channel.send({
+        content: `${message?.author}, you may not use that word in the chat.`,
+        allowedMentions: { parse: ["users"] }
+      }).then((msg) => { setTimeout(() => { msg.delete() }, 5000) })
+
+      const automod = new automodModel({
+        type: "Prohibited Word",
+        userId: message?.author.id,
+        guildId: message?.guildId,
+        reason: `Sending a message that contains prohibited words, swear words or filtered words.`,
+        date: Date.now(),
+        expires: Date.now() + ms('2 days')
+      })
+      automod.save()
+
+      let dm = new MessageEmbed()
+        .setAuthor({ name: client.user.username, iconURL: client.user.displayAvatarURL({ dynamic: true }) })
+        .setTitle(`You've been Warned in ${message?.guild.name}`)
+        .addField("Punishment ID", `${automod._id}`, true)
+        .addField("Expires", "in 2 days", true)
+        .addField("Reason", "[Automod] Sending prohited and filtered words in the chat", false)
+        .setColor(`${client.color.modDm}`)
+        .setTimestamp()
+      message?.member.send({
+        embeds: [dm]
+      }).catch(() => { return })
+
+      client.log.automod({
+        type: "Prohibited Word",
+        color: "WARN",
+        user: `${message?.author.id}`,
+        date: `${Date.now()}`,
+        channel: `${message?.channelId}`,
+        id: `${automod._id}`,
+        content: `${message?.content}`
+      })
+
+    }
+  }
+
+  if (isValidInvite(message?.content)) {
 
     if (
       message?.author.bot ||
-      config.links.permissions.some(perm => message?.member.permissions.has(perm)) ||
+      config.invites.permissions.some(perm => message?.member.permissions.has(perm)) ||
       message?.member.roles.cache.get(config["bypass-role"]) ||
-      config.badwords.channels.some(ch => message?.channel.name.includes(ch))
+      config.invites.channels.some(ch => message?.channel.name.includes(ch))
     ) return;
 
     message?.delete()
     message?.channel.send({
-      content: `${message?.author}, you may not use that word in the chat.`,
+      content: `${message?.author}, you may not send discord invite links in the chat.`,
       allowedMentions: { parse: ["users"] }
-    }).then((msg) => { setTimeout(() => { msg.delete() }, 5000) })
+    }).then((msg) => { setTimeout(() => { msg.delete() }, 5000) });
 
     const automod = new automodModel({
-      type: "Prohibited Word",
+      type: "Discord Invite",
       userId: message?.author.id,
       guildId: message?.guildId,
-      reason: `Sending a message that contains prohibited words, swear words or filtered words.`,
+      reason: `Sending discord server invite links in the chat.`,
       date: Date.now(),
       expires: Date.now() + ms('2 days')
     })
@@ -49,15 +100,14 @@ client.on("messageCreate", async (message) => {
       .setTitle(`You've been Warned in ${message?.guild.name}`)
       .addField("Punishment ID", `${automod._id}`, true)
       .addField("Expires", "in 2 days", true)
-      .addField("Reason", "[Automod] Sending prohited and filtered words in the chat", false)
+      .addField("Reason", "[Automod] Sending discord server invite links in the chat.", false)
       .setColor(`${client.color.modDm}`)
       .setTimestamp()
-    message?.member.send({
-      embeds: [dm]
-    }).catch(() => { return })
+    message?.member.send({ embeds: [dm] })
+      .catch(() => { return })
 
     client.log.automod({
-      type: "Prohibited Word",
+      type: "Discord Invite",
       color: "WARN",
       user: `${message?.author.id}`,
       date: `${Date.now()}`,
@@ -70,26 +120,26 @@ client.on("messageCreate", async (message) => {
 
   else
 
-    if (isValidInvite(message?.content)) {
-
+    if (message?.content.length > 999) {
       if (
         message?.author.bot ||
-        config.invites.permissions.some(perm => message?.member.permissions.has(perm)) ||
+        config["large-messages"].permissions.some(perm => message?.member.permissions.has(perm)) ||
         message?.member.roles.cache.get(config["bypass-role"]) ||
-        config.invites.channels.some(ch => message?.channel.name.includes(ch))
+        config["large-messages"].channels.some(ch => message?.channel.name.includes(ch))
       ) return;
+
 
       message?.delete()
       message?.channel.send({
-        content: `${message?.author}, you may not send discord invite links in the chat.`,
+        content: `${message?.author}, you may not send very big messages in the chat!`,
         allowedMentions: { parse: ["users"] }
-      }).then((msg) => { setTimeout(() => { msg.delete() }, 5000) });
+      }).then((msg) => { setTimeout(() => { msg.delete() }, 5000) })
 
       const automod = new automodModel({
-        type: "Discord Invite",
+        type: "Large Messages",
         userId: message?.author.id,
         guildId: message?.guildId,
-        reason: `Sending discord server invite links in the chat.`,
+        reason: `Sending a huge amount of characters/large messages in the chat.`,
         date: Date.now(),
         expires: Date.now() + ms('2 days')
       })
@@ -100,14 +150,16 @@ client.on("messageCreate", async (message) => {
         .setTitle(`You've been Warned in ${message?.guild.name}`)
         .addField("Punishment ID", `${automod._id}`, true)
         .addField("Expires", "in 2 days", true)
-        .addField("Reason", "[Automod] Sending discord server invite links in the chat.", false)
+        .addField("Reason", "[Automod] Sending very large messages in the chat.", false)
         .setColor(`${client.color.modDm}`)
         .setTimestamp()
-      message?.member.send({ embeds: [dm] })
-        .catch(() => { return })
+      message?.member.send({
+        embeds: [dm]
+      }).catch(() => { return })
+
 
       client.log.automod({
-        type: "Discord Invite",
+        type: "Large Message",
         color: "WARN",
         user: `${message?.author.id}`,
         date: `${Date.now()}`,
@@ -115,31 +167,83 @@ client.on("messageCreate", async (message) => {
         id: `${automod._id}`,
         content: `${message?.content}`
       })
-
     }
 
     else
 
-      if (message?.content.length > 999) {
+      /**
+if (isValidURL(message.content)) {
+ 
+if (
+  message.author.bot ||
+  config.links.permissions.some(perm => message.member.permissions.has(perm)) ||
+  message.member.roles.cache.get(config["bypass-role"]) ||
+  config.links.channels.some(ch => message?.channel.name.includes(ch))
+) return;
+ 
+message.delete()
+message.channel.send({
+  content: `${message.author}, you may not send links in the chat!`,
+  allowedMentions: { parse: ["users"] }
+}).then((msg) => { setTimeout(() => { msg.delete() }, 5000) });
+ 
+const automod = new automodModel({
+  type: "Links",
+  userId: message.author.id,
+  guildId: message.guildId,
+  reason: `Sending website or other links in the chat.`,
+  date: Date.now(),
+  expires: Date.now() + ms('2 days')
+})
+automod.save()
+ 
+let dm = new MessageEmbed()
+  .setAuthor({ name: client.user.username, iconURL: client.user.displayAvatarURL({ dynamic: true }) })
+  .setTitle(`You've been Warned in ${message.guild.name}`)
+  .addField("Punishment ID", `${automod._id}`, true)
+  .addField("Expires", "in 2 days", true)
+  .addField("Reason", "[Automod] Sending links!", false)
+  .setColor(`${client.color.modDm}`)
+  .setTimestamp()
+message.member.send({
+  embeds: [dm]
+}).catch(() => { return });
+ 
+client.log.automod({
+  type: "Links",
+  color: "WARN",
+  user: `${message.author.id}`,
+  date: `${Date.now()}`,
+  channel: `${message.channelId}`,
+  id: `${automod._id}`,
+  content: `${message.content}`
+})
+ 
+} 
+ 
+else
+*/
+
+      if (message.mentions.users.size > 4) {
+
         if (
-          message?.author.bot ||
-          config["large-messages"].permissions.some(perm => message?.member.permissions.has(perm)) ||
-          message?.member.roles.cache.get(config["bypass-role"]) ||
-          config["large-messages"].channels.some(ch => message?.channel.name.includes(ch))
+          message.author.bot ||
+          config["mass-ping"].permissions.some(perm => message.member.permissions.has(perm)) ||
+          message.member.roles.cache.get(config["bypass-role"]) ||
+          config["mass-ping"].channels.some(ch => message?.channel.name.includes(ch))
         ) return;
 
-
-        message?.delete()
-        message?.channel.send({
-          content: `${message?.author}, you may not send very big messages in the chat!`,
+        message.delete()
+        message.channel.send({
+          content: `${message.author}, you may not mention more then 4 users in the chat!`,
           allowedMentions: { parse: ["users"] }
         }).then((msg) => { setTimeout(() => { msg.delete() }, 5000) })
 
         const automod = new automodModel({
-          type: "Large Messages",
-          userId: message?.author.id,
-          guildId: message?.guildId,
-          reason: `Sending a huge amount of characters/large messages in the chat.`,
+          type: "Mass Mentioning",
+          userId: message.author.id,
+          guildId: message.guildId,
+          reason: `Mentions more than 4 users in the chat!`,
           date: Date.now(),
           expires: Date.now() + ms('2 days')
         })
@@ -147,131 +251,27 @@ client.on("messageCreate", async (message) => {
 
         let dm = new MessageEmbed()
           .setAuthor({ name: client.user.username, iconURL: client.user.displayAvatarURL({ dynamic: true }) })
-          .setTitle(`You've been Warned in ${message?.guild.name}`)
+          .setTitle(`You've been Warned in ${message.guild.name}`)
           .addField("Punishment ID", `${automod._id}`, true)
           .addField("Expires", "in 2 days", true)
-          .addField("Reason", "[Automod] Sending very large messages in the chat.", false)
+          .addField("Reason", "[Automod] Mentioning more than 4 users", false)
           .setColor(`${client.color.modDm}`)
           .setTimestamp()
-        message?.member.send({
+        message.member.send({
           embeds: [dm]
-        }).catch(() => { return })
-
+        }).catch(() => { return });
 
         client.log.automod({
-          type: "Large Message",
+          type: "Mass Mention",
           color: "WARN",
-          user: `${message?.author.id}`,
+          user: `${message.author.id}`,
           date: `${Date.now()}`,
-          channel: `${message?.channelId}`,
+          channel: `${message.channelId}`,
           id: `${automod._id}`,
-          content: `${message?.content}`
+          content: `${message.content}`
         })
+
       }
-
-      else
-
-        /**
-if (isValidURL(message.content)) {
-
-  if (
-    message.author.bot ||
-    config.links.permissions.some(perm => message.member.permissions.has(perm)) ||
-    message.member.roles.cache.get(config["bypass-role"]) ||
-    config.links.channels.some(ch => message?.channel.name.includes(ch))
-  ) return;
-
-  message.delete()
-  message.channel.send({
-    content: `${message.author}, you may not send links in the chat!`,
-    allowedMentions: { parse: ["users"] }
-  }).then((msg) => { setTimeout(() => { msg.delete() }, 5000) });
-
-  const automod = new automodModel({
-    type: "Links",
-    userId: message.author.id,
-    guildId: message.guildId,
-    reason: `Sending website or other links in the chat.`,
-    date: Date.now(),
-    expires: Date.now() + ms('2 days')
-  })
-  automod.save()
-
-  let dm = new MessageEmbed()
-    .setAuthor({ name: client.user.username, iconURL: client.user.displayAvatarURL({ dynamic: true }) })
-    .setTitle(`You've been Warned in ${message.guild.name}`)
-    .addField("Punishment ID", `${automod._id}`, true)
-    .addField("Expires", "in 2 days", true)
-    .addField("Reason", "[Automod] Sending links!", false)
-    .setColor(`${client.color.modDm}`)
-    .setTimestamp()
-  message.member.send({
-    embeds: [dm]
-  }).catch(() => { return });
-
-  client.log.automod({
-    type: "Links",
-    color: "WARN",
-    user: `${message.author.id}`,
-    date: `${Date.now()}`,
-    channel: `${message.channelId}`,
-    id: `${automod._id}`,
-    content: `${message.content}`
-  })
-
-} 
-
-else
-*/
-
-        if (message.mentions.users.size > 4) {
-
-          if (
-            message.author.bot ||
-            config["mass-ping"].permissions.some(perm => message.member.permissions.has(perm)) ||
-            message.member.roles.cache.get(config["bypass-role"]) ||
-            config["mass-ping"].channels.some(ch => message?.channel.name.includes(ch))
-          ) return;
-
-          message.delete()
-          message.channel.send({
-            content: `${message.author}, you may not mention more then 4 users in the chat!`,
-            allowedMentions: { parse: ["users"] }
-          }).then((msg) => { setTimeout(() => { msg.delete() }, 5000) })
-
-          const automod = new automodModel({
-            type: "Mass Mentioning",
-            userId: message.author.id,
-            guildId: message.guildId,
-            reason: `Mentions more than 4 users in the chat!`,
-            date: Date.now(),
-            expires: Date.now() + ms('2 days')
-          })
-          automod.save()
-
-          let dm = new MessageEmbed()
-            .setAuthor({ name: client.user.username, iconURL: client.user.displayAvatarURL({ dynamic: true }) })
-            .setTitle(`You've been Warned in ${message.guild.name}`)
-            .addField("Punishment ID", `${automod._id}`, true)
-            .addField("Expires", "in 2 days", true)
-            .addField("Reason", "[Automod] Mentioning more than 4 users", false)
-            .setColor(`${client.color.modDm}`)
-            .setTimestamp()
-          message.member.send({
-            embeds: [dm]
-          }).catch(() => { return });
-
-          client.log.automod({
-            type: "Mass Mention",
-            color: "WARN",
-            user: `${message.author.id}`,
-            date: `${Date.now()}`,
-            channel: `${message.channelId}`,
-            id: `${automod._id}`,
-            content: `${message.content}`
-          })
-
-        }
 
 })
 
