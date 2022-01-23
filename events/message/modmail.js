@@ -10,11 +10,10 @@ let loghook = new WebhookClient({
     id: `${modmailconfig.hookId}`,
     token: `${modmailconfig.hookToken}`,
 });
+const serverId = client.server.id
 
 
 client.on("channelDelete", (channel) => {
-
-    const serverId = client.server.id
 
     if (channel.parentId === categoryId) {
         const person = channel.guild.members.cache.find((x) => x.id == channel.name)
