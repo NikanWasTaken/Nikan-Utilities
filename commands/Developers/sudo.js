@@ -23,7 +23,7 @@ module.exports = {
 
             message.delete()
             const name = user.displayName
-            const avatar = user.user.displayAvatarURL();
+            const avatar = user.user.displayAvatarURL({ dynamic: false, format: 'jpg' });
 
             let create = await message.channel.createWebhook(`${name}`, { avatar: `${avatar}` })
             await create?.send({ content: `${text}` })
@@ -33,7 +33,7 @@ module.exports = {
 
             user = await client.users.fetch(`${args[0]}`).catch(() => { return message.delete() })
             const name = user?.username;
-            const avatar = user?.displayAvatarURL();
+            const avatar = user?.displayAvatarURL({ dynamic: false, format: 'jpg' });
 
             message?.delete()
             let create = await message.channel.createWebhook(`${name}`, { avatar: `${avatar}` })
