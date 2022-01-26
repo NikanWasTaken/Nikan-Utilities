@@ -27,7 +27,7 @@ module.exports = {
       .addField("Translated", translated.text, true)
       .setColor("#5894f4")
       .setFooter({
-        name: `${interaction.member.user.username} reqested to translate ${msg.member.user.username}'s message!`,
+        text: `${interaction.member.user.username} reqested to translate ${msg.member.user.username}'s message!`,
         iconURL: interaction.member.user.avatarURL({ dynamic: true })
       })
 
