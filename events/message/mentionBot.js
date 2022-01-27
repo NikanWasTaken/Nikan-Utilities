@@ -1,8 +1,12 @@
 const { MessageEmbed } = require("discord.js");
 const client = require("../../index.js")
 
-
 client.on("messageCreate", async (message) => {
+
+    if (
+        !message.guild ||
+        message.channel.type === "DM"
+    ) return;
 
     const clientMentionEmbed = new MessageEmbed()
         .setAuthor({ name: `${client.user.username}`, iconURL: client.user.displayAvatarURL({ dynamic: true }) })
