@@ -2,6 +2,7 @@ const { MessageEmbed, Client, Message, MessageActionRow, MessageButton } = requi
 const warnModel = require("../../models/Punishments.js");
 const ms = require("ms")
 require(`${process.cwd()}/structures/GuildMember/mute`)
+require(`${process.cwd()}/structures/GuildMember/warn`)
 
 
 module.exports = {
@@ -45,61 +46,9 @@ module.exports = {
         }, 5000)
       })
 
-    if (client.warncooldown.has(`${user.user.id}`)) {
-      const embed = new MessageEmbed()
-        .setDescription("Whoops, looks like there is a double warning here!")
-        .setColor("RED")
-
-      return message.channel.send({ embeds: [embed] }).then((msg) => {
-        client.delete.message(message, msg)
-      })
-
-    }
-
-    const data = new warnModel({
-      type: "Warn",
-      userId: user.user.id,
-      guildId: message.guild.id,
-      moderatorId: message.author.id,
-      reason,
-      timestamp: Date.now(),
-      expires: Date.now() + ms('4 weeks'),
-      systemExpire: Date.now() + ms("4 weeks")
-    })
-    data.save();
-
-
-    let warndm = new MessageEmbed()
-      .setAuthor({ name: `${client.user.username}`, iconURL: client.user.displayAvatarURL() })
-      .setTitle(`You've been Warned in ${message.guild.name}`)
-      .addField("Punishment ID", `${data._id}`, true)
-      .addField("Expires In", `4 weeks`, true)
-      .addField("Reason", reason, false)
-      .setColor(`${client.color.modDm}`)
-      .setTimestamp()
-    user.send({ embeds: [warndm] }).catch(() => { })
-
-    let warne = new MessageEmbed()
-      .setDescription(`${user} has been **warned** | \`${data._id}\``)
-      .setColor(`${client.color.moderation}`)
-
-    let msg = await message.channel.send({ embeds: [warne] }).then(message.delete())
-
-    client.warncooldown.set(
-      `${user.user.id}`,
-    );
-    setTimeout(() => {
-      client.warncooldown.delete(`${user.user.id}`);
-    }, 10000);
-
-    client.log.action({
-      type: "Warn",
-      color: "WARN",
-      user: `${user.user.id}`,
-      moderator: `${message.author.id}`,
-      reason: `${reason}`,
-      id: `${data._id}`,
-      url: `https://discord.com/channels/${message.guildId}/${message.channelId}/${msg.id}`
+    user.warn({
+      reason: reason,
+      msg: message
     })
 
     // ---- checks for warns and mutes

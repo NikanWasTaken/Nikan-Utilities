@@ -4,6 +4,7 @@ const automodModel = require("../../models/automod.js")
 const moment = require("moment")
 const ms = require("ms")
 require(`${process.cwd()}/structures/GuildMember/mute`)
+require(`${process.cwd()}/structures/GuildMember/warn`)
 
 
 module.exports = {
@@ -127,60 +128,9 @@ module.exports = {
                     client.delete.interaction(interaction)
                 })
 
-            if (client.warncooldown.has(`${user.user.id}`)) {
-                const embed = new MessageEmbed()
-                    .setDescription("Whoops, looks like there is a double warning here!")
-                    .setColor("RED")
-
-                return interaction.followUp({ embeds: [embed] }).then(() => {
-                    client.delete.interaction(interaction)
-                })
-
-            }
-
-            const data = new warnModel({
-                type: "Warn",
-                userId: user.user.id,
-                guildId: interaction.guildId,
-                moderatorId: interaction.user.id,
+            user.warn({
                 reason: reason,
-                timestamp: Date.now(),
-                expires: Date.now() + ms('4 weeks'),
-                systemExpire: Date.now() + ms("4 weeks"),
-            })
-            data.save();
-
-
-            let warndm = new MessageEmbed()
-                .setAuthor({ name: `${client.user.username}`, iconURL: client.user.displayAvatarURL() })
-                .setTitle(`You've been warned in ${interaction.guild.name}.`)
-                .addField("Punishment ID", `${data._id}`, true)
-                .addField("Expires in", `4 weeks`, true)
-                .addField("Reason", reason, false)
-                .setColor(`${client.color.modDm}`)
-            user.send({ embeds: [warndm] }).catch(() => { })
-
-            let warned = new MessageEmbed()
-                .setDescription(`${user} has been **warned** | \`${data._id}\``)
-                .setColor(`${client.color.moderation}`)
-            interaction.deleteReply()
-            let msg = await interaction.channel.send({ embeds: [warned] })
-
-            client.warncooldown.set(
-                `${user.user.id}`,
-            );
-            setTimeout(() => {
-                client.warncooldown.delete(`${user.user.id}`);
-            }, 5000);
-
-            client.log.action({
-                type: "Warn",
-                color: "WARN",
-                user: `${user.user.id}`,
-                moderator: `${interaction.user.id}`,
-                reason: `${reason}`,
-                id: `${data._id}`,
-                url: `https://discord.com/channels/${message.guildId}/${message.channelId}/${msg.id}`
+                msg: interaction,
             })
 
             // ---- checks for 3 stikes, 6 and 9 strikes...
@@ -196,7 +146,6 @@ module.exports = {
             userWarnings.map((i) => {
                 numberofwarns.push(`${i + 1}`)
             })
-
 
             if (numberofwarns.length == 2) {
 
