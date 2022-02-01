@@ -30,7 +30,7 @@ module.exports = {
         .setDescription(`This user is not in this guild!`)
         .setColor("RED")
       message.reply({ embeds: [embed] }).then((msg) => {
-        client.delete.message(message, msg)
+        client.util.delete.message(message, msg)
       })
     }
 
@@ -39,7 +39,7 @@ module.exports = {
       user.user.id === client.config.owner ||
       user.user.bot
     )
-      return message.reply({ embeds: [client.embeds.cannotPerform] }).then((msg) => {
+      return message.reply({ embeds: [client.util.embed.cannotPerform] }).then((msg) => {
         setTimeout(() => {
           msg?.delete()
           message?.delete()

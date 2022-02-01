@@ -15,7 +15,7 @@ client.on("interactionCreate", async (interaction) => {
     if (
       cmd.developer &&
       !client.config.developers.includes(interaction.user.id)
-    ) return interaction.reply({ embeds: [client.embeds.noPermissions], ephemeral: true })
+    ) return interaction.reply({ embeds: [client.util.embed.noPermissions], ephemeral: true })
 
 
     // bot command check
@@ -39,7 +39,7 @@ client.on("interactionCreate", async (interaction) => {
       !interaction.member?.permissions?.has("ADMINISTRATOR") &&
       !client.config.developers.includes(interaction?.user?.id) &&
       interaction.user.id !== client.config.owner
-    ) return interaction.reply({ embeds: [client.embeds.botCommand], ephemeral: true })
+    ) return interaction.reply({ embeds: [client.util.embed.botCommand], ephemeral: true })
 
 
     if (

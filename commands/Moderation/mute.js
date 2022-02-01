@@ -31,15 +31,15 @@ module.exports = {
       .setColor(`RED`);
 
     if (!user) return message.reply({ embeds: [userNotFound] }).then((msg) => {
-      client.delete.message(message, msg);
+      client.util.delete.message(message, msg);
     });
 
     if (user.roles.highest.position >= message.guild.me.roles.highest.position ||
       user.roles.highest.position >= message.member.roles.highest.position ||
       user.user.id === client.config.owner ||
       user.user.bot
-    ) return message.reply({ embeds: [client.embeds.cannotPerform] }).then((msg) => {
-      client.delete.message(message, msg);
+    ) return message.reply({ embeds: [client.util.embed.cannotPerform] }).then((msg) => {
+      client.util.delete.message(message, msg);
     })
 
     if (!message.guild.roles.cache.get(`${client.server.mutedRole}`)) {
@@ -48,7 +48,7 @@ module.exports = {
         .setDescription(`I couldn't find the muted role! Are you running the command in [${Server.name}](${client.server.invite})?`)
         .setColor("RED")
       return message.reply({ embeds: [embed] }).then((msg) => {
-        client.delete.message(message, msg);
+        client.util.delete.message(message, msg);
       })
     };
 
@@ -58,7 +58,7 @@ module.exports = {
         .setDescription(`This user is already muted!`)
         .setColor("RED")
       return message.reply({ embeds: [embed] }).then((msg) => {
-        client.delete.message(message, msg);
+        client.util.delete.message(message, msg);
       })
     };
 
@@ -68,7 +68,7 @@ module.exports = {
         .setDescription(`I couldn't find out the duration of this mute!`)
         .setColor("RED")
       return message.reply({ embeds: [embed] }).then((msg) => {
-        client.delete.message(message, msg);
+        client.util.delete.message(message, msg);
       })
     };
 
@@ -78,7 +78,7 @@ module.exports = {
         .setDescription(`You can't mute users for more than 27 days!`)
         .setColor("RED")
       return message.reply({ embeds: [embed] }).then((msg) => {
-        client.delete.message(message, msg);
+        client.util.delete.message(message, msg);
       })
     };
 

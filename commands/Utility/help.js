@@ -151,7 +151,7 @@ module.exports = {
         return message.reply({
           embeds: [emb2]
         }).then((msg) => {
-          client.delete.message(message, msg)
+          client.util.delete.message(message, msg)
         })
 
       }

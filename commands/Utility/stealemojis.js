@@ -46,7 +46,7 @@ module.exports = {
 
         if (!added.length && !failed.length)
             return message.channel.send({ embeds: [em] }).then((msg) => {
-                client.delete.message(message, msg)
+                client.util.delete.message(message, msg)
             })
 
         const embed = new MessageEmbed()

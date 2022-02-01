@@ -41,7 +41,7 @@ module.exports = {
                 return message.reply({
                     content: "Slowmode rate must be a number!"
                 }).then((msg) => {
-                    client.delete.message(message, msg);
+                    client.util.delete.message(message, msg);
                 })
             }
 
@@ -49,7 +49,7 @@ module.exports = {
                 return message.reply({
                     content: "You can't set the slowmode to more than 6 hours!"
                 }).then((msg) => {
-                    client.delete.message(message, msg);
+                    client.util.delete.message(message, msg);
                 })
             }
 

@@ -83,8 +83,8 @@ module.exports = {
                     role.permissions.has("BAN_MEMBERS") ||
                     role.managed
                 )
-                    return interaction.followUp({ embeds: [client.embeds.cannotPerform] }).then(() => {
-                        client.delete.interaction(interaction)
+                    return interaction.followUp({ embeds: [client.util.embed.cannotPerform] }).then(() => {
+                        client.util.delete.interaction(interaction)
                     })
 
                 let embed = new MessageEmbed()
@@ -100,8 +100,8 @@ module.exports = {
                     interaction.member.roles.highest.position <= user.roles.highest.position ||
                     role.managed
                 )
-                    return interaction.followUp({ embeds: [client.embeds.cannotPerform] }).then(() => {
-                        client.delete.interaction(interaction)
+                    return interaction.followUp({ embeds: [client.util.embed.cannotPerform] }).then(() => {
+                        client.util.delete.interaction(interaction)
                     })
 
                 let embed = new MessageEmbed()

@@ -116,16 +116,16 @@ module.exports = {
             const reason = interaction.options.getString("reason")
 
             if (!interaction.member.permissions.has("BAN_MEMBERS"))
-                return interaction.followUp({ embeds: [client.embeds.noPermissions] }).then(() => {
-                    client.delete.interaction(interaction);
+                return interaction.followUp({ embeds: [client.util.embed.noPermissions] }).then(() => {
+                    client.util.delete.interaction(interaction);
                 })
 
             if (user.roles.highest.position >= interaction.guild.me.roles.highest.position ||
                 user.roles.highest.position >= interaction.member.roles.highest.position ||
                 user.user.id === client.config.owner ||
                 user.user.bot)
-                return interaction.followUp({ embeds: [client.embeds.cannotPerform] }).then(() => {
-                    client.delete.interaction(interaction)
+                return interaction.followUp({ embeds: [client.util.embed.cannotPerform] }).then(() => {
+                    client.util.delete.interaction(interaction)
                 })
 
             user.warn({
@@ -214,7 +214,7 @@ module.exports = {
         } else if (subs == "remove") {
 
             if (!interaction.member.permissions.has("BAN_MEMBERS"))
-                return interaction.followUp({ embeds: [client.embeds.noPermissions] })
+                return interaction.followUp({ embeds: [client.util.embed.noPermissions] })
 
             const warnId = interaction.options.getString("warn-id")
 
@@ -409,9 +409,9 @@ module.exports = {
         } else if (subs == "info") {
 
             if (!interaction.member.permissions.has("BAN_MEMBERS"))
-                return interaction.followUp({ embeds: [client.embeds.noPermissions] })
+                return interaction.followUp({ embeds: [client.util.embed.noPermissions] })
                     .then(() => {
-                        client.delete.interaction(interaction)
+                        client.util.delete.interaction(interaction)
                     })
 
             const punishid = interaction.options.getString("warn-id")

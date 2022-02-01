@@ -190,7 +190,7 @@ module.exports = {
         return interaction.followUp({
           embeds: [emb2]
         }).then(() => {
-          client.delete.interaction(interaction)
+          client.util.delete.interaction(interaction)
         })
 
       }

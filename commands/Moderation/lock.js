@@ -64,7 +64,7 @@ module.exports = {
           color: "RED"
         }]
       })
-        .then(msg => { client.delete.message(message, msg) })
+        .then(msg => { client.util.delete.message(message, msg) })
 
       if (channel.type === "GUILD_VOICE" || channel.type === "GUILD_STAGE_VOICE") {
 
@@ -106,7 +106,7 @@ module.exports = {
 
         message.reply({ embeds: [embed] })
           .then(msg => {
-            client.delete.message(message, msg)
+            client.util.delete.message(message, msg)
           })
       }
     }

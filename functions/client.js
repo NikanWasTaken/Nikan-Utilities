@@ -53,11 +53,4 @@ module.exports = async (client) => {
     client.snipes = new Collection();
     client.afk = new Collection()
     client.config = require("../json/config.json");
-    client.util = {
-        cooldown: {
-            warn: new Collection()
-        }
-    }
-
-
 }

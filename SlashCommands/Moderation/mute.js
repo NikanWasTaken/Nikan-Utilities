@@ -73,9 +73,9 @@ module.exports = {
         user.roles.highest.position >= interaction.member.roles.highest.position ||
         user.user.id === client.config.owner ||
         user.user.bot)
-        return interaction.followUp({ embeds: [client.embeds.cannotPerform] })
+        return interaction.followUp({ embeds: [client.util.embed.cannotPerform] })
           .then(() => {
-            client.delete.interaction(interaction)
+            client.util.delete.interaction(interaction)
           })
 
 
@@ -85,7 +85,7 @@ module.exports = {
           .setDescription(`I couldn't find the muted role! Are you running the command in [${Server.name}](${client.server.invite})?`)
           .setColor("RED")
         return interaction.followUp({ embeds: [embed] }).then(() => {
-          client.delete.interaction(interaction);
+          client.util.delete.interaction(interaction);
         })
       };
 
@@ -96,7 +96,7 @@ module.exports = {
 
         return interaction.followUp({ embeds: [embed] })
           .then(() => {
-            client.delete.interaction(interaction);
+            client.util.delete.interaction(interaction);
           })
       };
 
@@ -105,7 +105,7 @@ module.exports = {
           .setDescription(`I couldn't find out the duration of this mute!`)
           .setColor("RED")
         return interaction.followUp({ embeds: [embed] }).then(() => {
-          client.delete.interaction(interaction);
+          client.util.delete.interaction(interaction);
         })
 
       };
@@ -115,7 +115,7 @@ module.exports = {
           .setDescription(`You can't mute users for more than 27 days!`)
           .setColor("RED")
         return interaction.followUp({ embeds: [embed] }).then(() => {
-          client.delete.interaction(interaction);
+          client.util.delete.interaction(interaction);
         })
 
       };
@@ -162,7 +162,7 @@ module.exports = {
             .setColor("RED")
           return interaction.followUp({ embeds: [embed] })
             .then(() => {
-              client.delete.interaction(interaction);
+              client.util.delete.interaction(interaction);
             })
         }
       })

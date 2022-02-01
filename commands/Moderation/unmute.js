@@ -25,7 +25,7 @@ module.exports = {
             .setColor(`RED`)
         if (!user) return message.reply({ embeds: [erm] })
             .then((msg) => {
-                client.delete.message(message, msg)
+                client.util.delete.message(message, msg)
             })
 
         db.findOne({ guildId: message.guildId, userId: user.user.id }, async (err, data) => {
@@ -58,7 +58,7 @@ module.exports = {
                     .setDescription(`This user is not muted!`)
                     .setColor("RED")
                 return message.reply({ embeds: [embed] }).then((msg) => {
-                    client.delete.message(message, msg)
+                    client.util.delete.message(message, msg)
                 })
             }
         })

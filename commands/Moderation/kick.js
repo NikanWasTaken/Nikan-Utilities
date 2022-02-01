@@ -28,7 +28,7 @@ module.exports = {
 
     if (!user) return message.reply({ embeds: [userNotFound] })
       .then((msg) => {
-        client.delete.message(message, msg);
+        client.util.delete.message(message, msg);
       })
 
     if (
@@ -37,8 +37,8 @@ module.exports = {
       user.user.id === client.config.owner ||
       user.user.bot
     )
-      return message.reply({ embeds: [client.embeds.cannotPerform] })
-        .then((msg) => client.delete.message(message, msg))
+      return message.reply({ embeds: [client.util.embed.cannotPerform] })
+        .then((msg) => client.util.delete.message(message, msg))
 
     const data = new warnModel({
       type: "Kick",

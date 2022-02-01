@@ -41,9 +41,9 @@ module.exports = {
       user.user.id === client.config.owner ||
       user.user.bot
     )
-      return interaction.followUp({ embeds: [client.embeds.cannotPerform] })
+      return interaction.followUp({ embeds: [client.util.embed.cannotPerform] })
         .then(() => {
-          client.delete.interaction(interaction);
+          client.util.delete.interaction(interaction);
         })
 
 

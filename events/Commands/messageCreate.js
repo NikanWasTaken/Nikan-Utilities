@@ -31,7 +31,7 @@ client.on("messageCreate", async (message) => {
     if (
         command.developer &&
         !client.config.developers.includes(message.author.id)
-    ) return message.reply({ embeds: [client.embeds.noPermissions] })
+    ) return message.reply({ embeds: [client.util.embed.noPermissions] })
         .then((msg) => {
             setTimeout(() => {
                 msg?.delete()
@@ -44,7 +44,7 @@ client.on("messageCreate", async (message) => {
     if (
         !message.member.permissions.has(command.permissions || []) &&
         message.author.id !== client.config.owner
-    ) return message.reply({ embeds: [client.embeds.noPermissions] }).then((msg) => {
+    ) return message.reply({ embeds: [client.util.embed.noPermissions] }).then((msg) => {
         setTimeout(() => {
             msg?.delete()
             message?.delete()
@@ -73,7 +73,7 @@ client.on("messageCreate", async (message) => {
         !message.member?.permissions?.has("ADMINISTRATOR") &&
         !client.config.developers.includes(message?.author?.id) &&
         message.author.id !== client.config.owner
-    ) return message.reply({ embeds: [client.embeds.botCommand] })
+    ) return message.reply({ embeds: [client.util.embed.botCommand] })
         .then((msg) => {
             setTimeout(() => {
                 msg?.delete()

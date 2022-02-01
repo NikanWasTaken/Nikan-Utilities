@@ -32,7 +32,7 @@ module.exports = {
 
       if (!user2)
         return message.reply({ embeds: [embed] }).then((msg) => {
-          client.delete.message(message, msg);
+          client.util.delete.message(message, msg);
         })
 
       const data = new warnModel({
@@ -70,8 +70,8 @@ module.exports = {
         user.user.bot
       )
 
-        return message.reply({ embeds: [client.embeds.cannotPerform] })
-          .then((msg) => client.delete.message(message, msg))
+        return message.reply({ embeds: [client.util.embed.cannotPerform] })
+          .then((msg) => client.util.delete.message(message, msg))
 
       const data = new warnModel({
         type: "Ban",

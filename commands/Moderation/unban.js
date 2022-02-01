@@ -33,7 +33,7 @@ module.exports = {
 
       if (!BannedUser)
         return message.reply({ embeds: [nomemberfound] }).then((msg) => {
-          client.delete.message(message, msg);
+          client.util.delete.message(message, msg);
         })
 
       message.guild.members.unban(BannedUser.user)

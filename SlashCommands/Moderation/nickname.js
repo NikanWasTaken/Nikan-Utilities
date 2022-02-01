@@ -77,7 +77,7 @@ module.exports = {
           user.user.id === client.config.owner ||
           user.user.bot)
           return interaction.followUp({ embeds: [failed] }).then(() => {
-            client.delete.interaction(interaction)
+            client.util.delete.interaction(interaction)
           })
 
         const failedtochange1 = new MessageEmbed()
@@ -86,7 +86,7 @@ module.exports = {
 
         if (user.displayName === user.user.username)
           return interaction.channel.send({ embeds: [failedtochange1] }).then(() => {
-            client.delete.interaction(interaction)
+            client.util.delete.interaction(interaction)
           })
 
         const embed1 = new MessageEmbed()
@@ -108,7 +108,7 @@ module.exports = {
           user.user.id === client.config.owner ||
           user.user.bot)
           return interaction.followUp({ embeds: [failed1] }).then(() => {
-            client.delete.interaction(interaction)
+            client.util.delete.interaction(interaction)
           })
 
         const nicknamegen = randomnick.generate({
@@ -135,7 +135,7 @@ module.exports = {
           user.user.id === client.config.owner ||
           user.user.bot)
           return interaction.followUp({ embeds: [failed2] }).then(() => {
-            client.delete.interaction(interaction)
+            client.util.delete.interaction(interaction)
           })
 
         const name = interaction.options.getString("nickname")
@@ -145,7 +145,7 @@ module.exports = {
 
         if (user.displayName === name)
           return message.channel.send({ embeds: [failedtochange2] }).then(() => {
-            client.delete.interaction(interaction)
+            client.util.delete.interaction(interaction)
           })
 
         const failedtochange3 = new MessageEmbed()
@@ -153,7 +153,7 @@ module.exports = {
           .setColor("RED")
         if (name.length > 32)
           return message.channel.send({ embeds: [failedtochange3] }).then(() => {
-            client.delete.interaction(interaction)
+            client.util.delete.interaction(interaction)
           })
 
         const embed4 = new MessageEmbed()

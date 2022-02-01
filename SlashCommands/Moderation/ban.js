@@ -87,7 +87,7 @@ module.exports = {
 
           if (!user2)
             return interaction.followUp({ embeds: [embed] }).then((msg) => {
-              client.delete.interaction(interaction);
+              client.util.delete.interaction(interaction);
             })
 
           const data = new warnModel({
@@ -124,7 +124,7 @@ module.exports = {
             .setColor(`${client.color.moderationRed}`)
           interaction.followUp({ embeds: [embed] })
             .then(() => {
-              client.delete.interaction(interaction);
+              client.util.delete.interaction(interaction);
             })
 
         }
@@ -136,7 +136,7 @@ module.exports = {
           user.roles.highest.position >= interaction.member.roles.highest.position ||
           user.user.id === client.config.owner ||
           user.user.bot
-        ) return interaction.followUp({ embeds: [client.embeds.cannotPerform] })
+        ) return interaction.followUp({ embeds: [client.util.embed.cannotPerform] })
 
         const data = new warnModel({
           type: "Ban",
@@ -194,7 +194,7 @@ module.exports = {
           .setColor("RED")
         interaction.followUp({ embeds: [embed] })
           .then(() => {
-            client.delete.interaction(interaction)
+            client.util.delete.interaction(interaction)
           })
       }
 
@@ -211,7 +211,7 @@ module.exports = {
           .setColor(`RED`)
         if (!BannedUser) return interaction.followUp({ embeds: [noMemberFound] })
           .then(() => {
-            client.delete.interaction(interaction);
+            client.util.delete.interaction(interaction);
           });
 
         interaction.guild.members.unban(BannedUser.user)

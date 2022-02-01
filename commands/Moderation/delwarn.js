@@ -28,7 +28,7 @@ module.exports = {
 
         if (!data)
             return message.reply({ embeds: [embedDoesntExist] }).then((msg) => {
-                client.delete.message(message, msg);
+                client.util.delete.message(message, msg);
             })
 
         const user = await client.users.fetch(`${data?.userId}`) || "Can't find user!"

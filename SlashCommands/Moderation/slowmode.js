@@ -51,7 +51,7 @@ module.exports = {
       if (limit > 21601) {
         return interaction.followUp("You can't set the slowmode to more than 6 hours!")
           .then(() => {
-            client.delete.interaction(interaction)
+            client.util.delete.interaction(interaction)
           })
       }
 

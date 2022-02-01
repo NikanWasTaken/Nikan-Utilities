@@ -20,7 +20,7 @@ module.exports = {
         client.afk.set(message.author.id, [Date.now(), reason])
 
         message.reply({ content: `You are now AFK: ${reason}` }).then((msg) => {
-            client.delete.message(message, msg)
+            client.util.delete.message(message, msg)
         })
 
         message.member.setNickname(`[AFK] ${message.member.displayName}`)
