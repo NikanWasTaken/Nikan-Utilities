@@ -1,6 +1,6 @@
 const { MessageEmbed, Message, Client } = require('discord.js')
 const ms = require("ms")
-require(`${process.cwd()}/structures/GuildMember/mute`)
+require("../../structures/GuildMember/mute")
 
 module.exports = {
   name: 'mute',

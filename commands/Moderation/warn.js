@@ -1,8 +1,8 @@
 const { MessageEmbed, Client, Message, MessageActionRow, MessageButton } = require("discord.js");
 const warnModel = require("../../models/Punishments.js");
 const ms = require("ms")
-require(`${process.cwd()}/structures/GuildMember/mute`)
-require(`${process.cwd()}/structures/GuildMember/warn`)
+require("../../structures/GuildMember/mute")
+require("../../structures/GuildMember/warn")
 
 
 module.exports = {
