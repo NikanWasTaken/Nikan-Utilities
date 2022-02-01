@@ -33,6 +33,18 @@ GuildMember.prototype.warn = async function (options) {
             return message.user
         }
     }
+    function msgSendType(message, content) {
+        if (
+            message?.followUp === undefined ||
+            message?.followUp === null
+        ) {
+            if (message?.reply) {
+                return message.reply(content)
+            }
+        } else if (message?.followUp) {
+            return message.followUp(content)
+        }
+    }
 
     // Checking if the user in on a warning protection
     if (client.util.cooldown.warn.has(`${this.user.id}`)) {
@@ -40,7 +52,8 @@ GuildMember.prototype.warn = async function (options) {
         const embed = new MessageEmbed()
             .setDescription("Whoops, looks like there is a double warning here!")
             .setColor("RED")
-        return message.channel.send({ embeds: [embed] }).then((msg) => {
+        const content = { embeds: [embed] }
+        return msgSendType(msg, content).then((msg) => {
             setInterval(() => {
                 msgDeleteType(msg)
             }, 5000);
