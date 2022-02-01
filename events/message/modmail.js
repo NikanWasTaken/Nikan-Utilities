@@ -3,7 +3,7 @@ const client = require("../../index.js");
 const modmailconfig = require("../../json/modmail.json");
 const categoryId = modmailconfig.category;
 const blacklist = require("../../models/modmail-blacklist.js")
-const GuessTheNumber = require("../../models/guessTheN.js")
+// const GuessTheNumber = require("../../models/guessTheN.js")
 const ms = require("ms")
 const cooldown = new Collection()
 let loghook = new WebhookClient({
@@ -110,8 +110,8 @@ client.on("messageCreate", async (message) => {
                 return message.channel.send(`You need to wait **${ms(parseInt(lek), { long: true })}** to open a thread again!`)
 
             if (!client.guilds.cache.get(serverId)?.members?.cache.get(`${message.author.id}`).roles?.cache.get("793410990535999508")) return
-            const gtn = await GuessTheNumber.findOne({ hostId: message.author.id, guildId: serverId, status: "In process..." })
-            if (gtn) return
+            // const gtn = await GuessTheNumber.findOne({ hostId: message.author.id, guildId: serverId, status: "In process..." })
+            // if (gtn) return
 
 
             const dmbuttons = new MessageActionRow().addComponents(

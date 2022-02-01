@@ -23,7 +23,7 @@ require("./handler")(client);
 require("./functions/client")(client);
 require("./functions/log")(client)
 require("./functions/convert")(client)
-require("./functions/util")
+require("./functions/util")(client)
 
 
 client.login(`${process.env.TOKEN}`);
