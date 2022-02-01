@@ -20,10 +20,10 @@ module.exports = client;
 require("./handler")(client);
 
 // exporting other functions
-require("./functions/client.js")(client);
-require("./functions/embeds.js")(client)
-require("./functions/log.js")(client)
-require("./functions/convert.js")(client)
+require("./functions/client")(client);
+require("./functions/log")(client)
+require("./functions/convert")(client)
+require("./functions/util")
 
 
 client.login(`${process.env.TOKEN}`);
