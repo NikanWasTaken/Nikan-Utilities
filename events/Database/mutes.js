@@ -15,7 +15,7 @@ client.on("messageCreate", async (message) => {
             type: "Unmute",
             color: "UNMUTE",
             user: `${data?.userId}`,
-            reason: `${data?.reason}`
+            reason: `Unmuted from a temp mute created <t:${data?.until / 1000}:R>`
         });
 
         if (findmember) {
@@ -25,7 +25,7 @@ client.on("messageCreate", async (message) => {
 
         } else if (!findmember) {
 
-            leftRoles.findOneAndUpdate({ guildid: message?.guild?.id, user: `${data?.userId}` }, { $set: { roles: [data.roles.map(e => e)] } })
+            leftRoles.findOneAndUpdate({ guildId: message?.guild?.id, userId: `${data?.userId}` }, { $set: { roles: [data.roles.map(e => e)] } })
             data.delete()
 
         }

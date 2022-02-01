@@ -89,13 +89,15 @@ module.exports = {
         })
       };
 
-      if (user.roles.cache.some(role => role.id === `${client.server.mutedRole}`)) {
-        const embed = new MessageEmbed().setDescription(`This user is already muted!`).setColor("RED")
+      if (user.isCommunicationDisabled() == true) {
+        const embed = new MessageEmbed()
+          .setDescription(`This user is already muted!`)
+          .setColor("RED")
+
         return interaction.followUp({ embeds: [embed] })
           .then(() => {
             client.delete.interaction(interaction);
           })
-
       };
 
       if (ms(time) === undefined) {
@@ -118,55 +120,11 @@ module.exports = {
 
       };
 
-      const duration = ms(time)
-      const data = new db({
-        guildId: interaction.guildId,
-        userId: user.user.id,
-        roles: [user.roles.cache.filter(e => e.id !== interaction.guild.id).map(role => role.id)],
-        reason: `Temp Muted by a moderator for ${ms(duration, { long: true })}`,
-        until: Date.now() + duration
-      })
-      data.save()
-
-      const data2 = new warnModel({
-        type: "Mute",
-        userId: user.user.id,
-        guildId: interaction.guild.id,
-        moderatorId: interaction.user.id,
+      await user.mute({
+        duration: time,
+        msg: interaction,
         reason: reason,
-        timestamp: Date.now(),
-        systemExpire: Date.now() + ms("26 weeks")
-      })
-      data2.save()
-
-      await user.roles.set([`${client.server.mutedRole}`]);
-      await user.timeout(duration, `${reason}`);
-
-      let mue = new MessageEmbed()
-        .setDescription(`${user.user} has been **muted** | \`${data2._id}\``)
-        .setColor(`${client.color.moderation}`)
-      await interaction.deleteReply()
-      let msg = await interaction.channel.send({ embeds: [mue] })
-
-      let mm = new MessageEmbed()
-        .setAuthor({ name: `${client.user.username}`, iconURL: client.user.displayAvatarURL() })
-        .setTitle(`You've been Muted in ${interaction.guild.name}`)
-        .setColor(`${client.color.modDm}`)
-        .setTimestamp()
-        .addField("Punishment ID", `${data2._id}`, true)
-        .addField("Duration", `${ms(duration, { long: true })}`, true)
-        .addField("Reason", `${reason}`, false)
-      user.send({ embeds: [mm] }).catch(() => { return })
-
-
-      client.log.action({
-        type: `${ms(duration, { long: true })} Of Mute`,
-        color: "MUTE",
-        user: `${user.user.id}`,
-        moderator: `${interaction.user.id}`,
-        reason: `${reason}`,
-        id: `${data2._id}`,
-        url: `https://discord.com/channels/${interaction.guildId}/${interaction.channelId}/${msg.id}`
+        auto: false
       })
 
 

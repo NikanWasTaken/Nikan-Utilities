@@ -91,5 +91,5 @@ module.exports = async (client) => {
   mongoose.connect(mongooseConnectionString, {
     useUnifiedTopology: true,
     useNewUrlParser: true,
-  })
+  }).then(console.log("MongoDB connected!"))
 };

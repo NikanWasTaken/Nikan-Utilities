@@ -1,7 +1,5 @@
 const { MessageEmbed, Message, Client } = require('discord.js')
 const ms = require("ms")
-const db = require("../../models/MemberRoles.js")
-const warnModel = require("../../models/Punishments.js")
 
 module.exports = {
   name: 'mute',
@@ -53,7 +51,7 @@ module.exports = {
       })
     };
 
-    if (user.roles.cache.some(role => role.id === `${client.server.mutedRole}`)) {
+    if (user.isCommunicationDisabled == true) {
 
       const embed = new MessageEmbed()
         .setDescription(`This user is already muted!`)
@@ -83,56 +81,11 @@ module.exports = {
       })
     };
 
-    const duration = ms(time)
-    const data = new db({
-      guildId: message.guildId,
-      userId: user.user.id,
-      roles: [user.roles.cache.filter(e => e.id !== message.guild.id).map(role => role.id)],
-      reason: `Temp Muted by a moderator for ${ms(duration, { long: true })}`,
-      until: Date.now() + duration
-    })
-    data.save()
-
-    const data2 = new warnModel({
-      type: "Mute",
-      userId: user.user.id,
-      guildId: message.guild.id,
-      moderatorId: message.author.id,
-      reason,
-      timestamp: Date.now(),
-      systemExpire: Date.now() + ms("26 weeks")
-    })
-    data2.save()
-
-    await user.roles.set([`${client.server.mutedRole}`]);
-    await user.timeout(duration, `${reason}`);
-
-
-    let mue = new MessageEmbed()
-      .setDescription(`${user.user} has been **muted** | \`${data2._id}\``)
-      .setColor(`${client.color.moderation}`)
-    let msg = await message.channel.send({ embeds: [mue] })
-      .then(message.delete())
-
-    let mm = new MessageEmbed()
-      .setAuthor({ name: `${client.user.username}`, iconURL: `${client.user.displayAvatarURL()}` })
-      .setTitle(`You've been Muted in ${message.guild.name}`)
-      .setColor(`${client.color.modDm}`)
-      .setTimestamp()
-      .addField("Punishment ID", `${data2._id}`, true)
-      .addField("Duration", `${ms(duration, { long: true })}`, true)
-      .addField("Reason", `${reason}`, false)
-    user.send({ embeds: [mm] }).catch(() => { return })
-
-
-    client.log.action({
-      type: `${ms(duration, { long: true })} Of Mute`,
-      color: "MUTE",
-      user: `${user.user.id}`,
-      moderator: `${message.author.id}`,
-      reason: `${reason}`,
-      id: `${data2._id}`,
-      url: `https://discord.com/channels/${message.guildId}/${message.channelId}/${msg.id}`
+    await user.mute({
+      duration: time,
+      msg: message,
+      reason: reason,
+      auto: false
     })
   }
 }

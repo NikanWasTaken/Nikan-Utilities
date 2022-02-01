@@ -9,7 +9,7 @@ client.on("guildMemberAdd", member => {
     if (member.guild.id !== `${client.server.id}`) return
     const welcomechannel = client.channels.cache.get('791152934045614121');
 
-    memberRoles.findOne({ guildid: member.guild.id, user: member.user.id }, async (err, data) => {
+    memberRoles.findOne({ guildId: member.guild.id, userId: member.user.id }, async (err, data) => {
 
         if (err) throw err;
         if (data) {
@@ -72,22 +72,22 @@ client.on("guildMemberAdd", member => {
         welcomechannel.send({ embeds: [embed] })
 
     })
-
-
 });
-
 
 client.on("guildMemberRemove", async member => {
 
     if (member.guild.id !== `${client.server.id}`) return
 
-    const data = new memberRoles({
-        guildid: member.guild.id,
-        user: member.user.id,
-        roles: [member.roles.cache.sort((a, b) => b.position - a.position).filter(r => r.id !== member.guild.id).map(role => role.id)],
-        expires: Date.now() + ms('2 weeks')
-    })
-    data.save();
+    const Roles = member.roles.cache.sort((a, b) => b.position - a.position).filter(r => r.id !== member.guild.id).map(role => role.id)
+    if (Roles != []) {
+        const data = new memberRoles({
+            guildId: member.guild.id,
+            userId: member.user.id,
+            roles: [member.roles.cache.sort((a, b) => b.position - a.position).filter(r => r.id !== member.guild.id).map(role => role.id)],
+            expires: Date.now() + ms('2 weeks')
+        })
+        data.save();
+    }
 
     const welcomeChannel = member.guild.channels.cache.get('791152934045614121');
 
@@ -106,7 +106,4 @@ client.on("guildMemberRemove", async member => {
     welcomeChannel.send({
         embeds: [embed]
     })
-
-
-
 })

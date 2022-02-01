@@ -1,6 +1,5 @@
 const { MessageEmbed, Client, Message, MessageActionRow, MessageButton } = require("discord.js");
 const warnModel = require("../../models/Punishments.js");
-const db = require("../../models/MemberRoles.js");
 const ms = require("ms")
 
 
@@ -118,87 +117,21 @@ module.exports = {
 
     if (numberofwarns.length == 2) {
 
-      const data = new db({
-        guildId: message.guild.id,
-        userId: user.user.id,
-        roles: [user.roles.cache.map(role => role.id)],
-        until: Date.now() + ms("2 hours"),
-        reason: "Muted for reaching 2 normal warnings!"
+      await user.mute({
+        duration: "2h",
+        msg: message,
+        reason: reason,
+        auto: true
       })
-      data.save()
-
-      const data2 = new warnModel({
-        type: "Mute",
-        userId: user.user.id,
-        guildId: message.guild.id,
-        moderatorId: `${client.user.id}`,
-        reason: "Reaching 2 Strikes",
-        timestamp: Date.now(),
-        systemExpire: Date.now() + ms("4 weeks"),
-      })
-
-      data2.save()
-      user.roles.set([`${client.server.mutedRole}`])
-
-      let warndm = new MessageEmbed()
-        .setAuthor({ name: `${client.user.username}`, iconURL: client.user.displayAvatarURL() })
-        .setTitle(`You've been Muted in ${message.guild.name}`)
-        .addField("Punishment ID", `${data2._id}`, true)
-        .addField("Duration", "2 hours", true)
-        .addField("Reason", "Reaching 2 strikes", false)
-        .setColor(`${client.color.modDm}`)
-        .setTimestamp()
-      user.send({ embeds: [warndm] }).catch(() => { })
-
-      client.log.autoAction({
-        type: "2 hours of mute",
-        color: "MUTE",
-        user: `${user.user.id}`,
-        reason: `Reaching 2 normal warnings`
-      });
-
 
     } else if (numberofwarns.length == 4) {
 
-      const data = new db({
-        guildId: message.guild.id,
-        userId: user.user.id,
-        roles: [user.roles.cache.map(role => role.id)],
-        until: Date.now() + ms("6 hours"),
-        reason: "Muted for reaching 4 normal warnings!"
+      await user.mute({
+        duration: "6h",
+        msg: message,
+        reason: reason,
+        auto: true
       })
-      data.save()
-
-      const data2 = new warnModel({
-        type: "Mute",
-        userId: user.user.id,
-        guildId: message.guild.id,
-        moderatorId: `${client.user.id}`,
-        reason: "Reaching 4 Strikes",
-        timestamp: Date.now(),
-        systemExpire: Date.now() + ms("4 weeks"),
-      })
-
-      data2.save()
-      user.roles.set([`${client.server.mutedRole}`])
-
-      let warndm = new MessageEmbed()
-        .setAuthor({ name: `${client.user.username}`, iconURL: client.user.displayAvatarURL() })
-        .setTitle(`You've been Muted in ${message.guild.name}`)
-        .addField("Punishment ID", `${data2._id}`, true)
-        .addField("Duration", "6 hours", true)
-        .addField("Reason", "Reaching 4 strikes", false)
-        .setColor(`${client.color.modDm}`)
-        .setTimestamp()
-      user.send({ embeds: [warndm] }).catch(() => { return })
-
-      client.log.autoAction({
-        type: "6 hours of mute",
-        color: "MUTE",
-        user: `${user.user.id}`,
-        reason: `Reaching 4 normal warnings`
-      });
-
 
     } else if (numberofwarns.length == 6) {
 

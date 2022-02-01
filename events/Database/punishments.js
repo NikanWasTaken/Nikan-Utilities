@@ -39,7 +39,7 @@ client.on("messageCreate", async (message) => {
         data.delete()
     })
 
-    // expiriing left member roles
+    // Expiring left member roles
     const dataLeftRoles = leftRoles.find({ guildId: message.guild?.id })
     const finaldata = (await dataLeftRoles)?.filter(c => Date.now() > c.expires)
 
