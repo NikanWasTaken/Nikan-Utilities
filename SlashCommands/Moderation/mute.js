@@ -1,7 +1,7 @@
 const { Client, MessageEmbed, CommandInteraction } = require("discord.js");
 const ms = require("ms")
 const db = require("../../models/MemberRoles.js")
-const warnModel = require("../../models/Punishments.js")
+require(`${process.cwd()}/structures/GuildMember/mute`)
 
 module.exports = {
   name: "mute",

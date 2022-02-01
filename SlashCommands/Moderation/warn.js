@@ -3,6 +3,7 @@ const warnModel = require("../../models/Punishments.js")
 const automodModel = require("../../models/automod.js")
 const moment = require("moment")
 const ms = require("ms")
+require(`${process.cwd()}/structures/GuildMember/mute`)
 
 
 module.exports = {
