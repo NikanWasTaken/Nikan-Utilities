@@ -12,6 +12,7 @@ const client = new Client({
         repliedUser: false,
     }
 });
+
 client.setMaxListeners(15)
 
 module.exports = client;
