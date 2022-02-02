@@ -63,12 +63,6 @@ module.exports = {
           .setStyle(options.style4 || "PRIMARY")
           .setDisabled(options.disable4 ? options.disable4 : false)
           .setCustomId("whois-permissions"),
-
-        new MessageButton()
-          .setLabel("Activities")
-          .setStyle(options.style5 || "PRIMARY")
-          .setDisabled(options.disable5 ? options.disable5 : false)
-          .setCustomId("whois-activities"),
       )
     ]
 
@@ -130,6 +124,24 @@ module.exports = {
           }
         ]
       )
+
+    if (
+      member &&
+      member.presence &&
+      ["dnd", "online", "idle"].includes(member.presence?.status)
+    ) {
+      embed.addFields(
+        [
+          {
+            name: `• Presence`,
+            value: [
+              `**Status:** ${client.cap(member?.presence?.status)}`,
+              `**Devices [${Object.entries(devices).length}]:** ${Object.entries(devices).map((value) => `${value[0][0].toUpperCase()}${value[0].slice(1)}`).join(", ")}`,
+            ].join("\n")
+          }
+        ]
+      )
+    }
 
     let msg = await message.channel.send({
       embeds: [embed],
@@ -333,92 +345,6 @@ module.exports = {
           })
           collected.deferUpdate()
           break;
-
-        case "whois-activities":
-
-          const activitiesEmbed = new MessageEmbed()
-            .setAuthor({ name: `${user?.tag}`, iconURL: user?.displayAvatarURL({ dynamic: true }) })
-            .setColor("RANDOM")
-            .setThumbnail(`${user?.displayAvatarURL({ dynamic: true })}`)
-
-          if (member) {
-
-            if (
-              member &&
-              ["idle", "dnd", "online"]?.includes(member?.presence?.status)
-            ) {
-
-              const devices = member?.presence?.clientStatus || {}
-              activitiesEmbed.addFields(
-                [
-                  {
-                    name: `• Presence`,
-                    value: [
-                      `**Status:** ${client.cap(member?.presence?.status)}`,
-                      `**Devices [${Object.entries(devices).length}]:** ${Object.entries(devices).map((value) => `${value[0][0].toUpperCase()}${value[0].slice(1)}`).join(", ")}`,
-                    ].join("\n")
-                  }
-                ]
-              )
-
-              if (member?.presence?.activities !== []) {
-                activitiesEmbed.addFields(
-                  member?.presence?.activities
-                    ?.map(activity => {
-                      return {
-                        name: `• ${activity.name}`,
-                        value: [
-                          `${activity.type === "CUSTOM" ? '' : activity.details}`,
-                          `${activity.state}`,
-                        ].join("\n")
-                      }
-                    })
-                )
-              }
-
-            } else {
-
-              activitiesEmbed.addFields(
-                [
-                  {
-                    name: "Something went wrong",
-                    value: `Whoops, looks like that person is currently offline or invisible.`
-                  }
-                ]
-              )
-            }
-
-          } else if (!member) {
-
-            activitiesEmbed
-              .setDescription(`${user} • ID: ${user?.id} `)
-              .addFields(
-                [
-                  {
-                    name: "Something went wrong",
-                    value: `I've searched far.. and wide.. but I couldn't find this user in this server!`
-                  }
-                ]
-              )
-          }
-
-          msg.edit({
-            embeds: [activitiesEmbed],
-            components: components({
-              style1: "PRIMARY",
-              style2: "PRIMARY",
-              style3: "PRIMARY",
-              style4: "PRIMARY",
-              style5: "SUCCESS",
-              disable1: false,
-              disable2: false,
-              disable3: false,
-              disable4: false,
-              disable5: true,
-            })
-          })
-          collected.deferUpdate()
-
       }
     })
 
