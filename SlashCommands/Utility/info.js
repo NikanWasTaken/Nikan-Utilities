@@ -167,6 +167,7 @@ module.exports = {
         member.presence &&
         ["dnd", "online", "idle"].includes(member.presence?.status)
       ) {
+        const devices = member.presence?.clientStatus || {};
         embed.addFields(
           [
             {
