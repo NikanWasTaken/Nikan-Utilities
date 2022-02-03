@@ -86,7 +86,7 @@ client.on('messageReactionAdd', async (reaction) => {
                 .setColor(`${client.color.botBlue} `)
 
             await hook.send({
-                content: `: star: ** ${reaction?.count}** ● ${reaction?.message?.channel} `,
+                content: `:star: ** ${reaction?.count}** ● ${reaction?.message?.channel} `,
                 embeds: [embed],
                 components: [jumprow]
             })
