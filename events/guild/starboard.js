@@ -1,11 +1,44 @@
 const client = require("../../index.js");
 const { MessageEmbed, MessageActionRow, MessageButton, WebhookClient } = require("discord.js");
 const starCount = 3;
+const edited = " (edited)"
 const SBchannelId = "868358834052296724";
 const hook = new WebhookClient({
     id: '932867412460716062',
     token: 'vQS935IoFwVo2FxLk7Ku5y0NnNeXC0zZIr3IbJOzKmkdQoha-YDgS1Y4B_bpxzbifHj9'
 });
+
+function splitText(text) {
+    if (text.length > 1000) text = text.slice(0, 1000) + '...';
+    return text;
+}
+
+client.on("messageUpdate", async (oldMessage, newMessage) => {
+
+    const starBoardChannel = client.channels.cache.get(SBchannelId)
+    const msgs = await starBoardChannel.messages.fetch({ limit: 30 })
+
+    const SentMessage = msgs?.find(msg =>
+        msg?.embeds?.length === 1 &&
+            msg?.author?.id === hook.id ?
+            (msg.embeds[0]?.footer?.text?.endsWith(oldMessage?.id) ? true : false) : false
+    );
+
+    if (!SentMessage) return;
+
+    const embed = new MessageEmbed()
+        .setAuthor({ name: `${oldMessage?.member.displayName}`, iconURL: oldMessage.author.displayAvatarURL({ dynamic: true }) })
+        .addField("Content", `${splitText(newMessage.content) + `${edited}` || "There is no content is this message!"}`)
+        .setFooter({ text: `ID: ${newMessage?.id}` })
+        .setTimestamp()
+        .setImage(newMessage?.attachments.first()?.proxyURL || null)
+        .setColor(`${client.color.botBlue}`)
+
+    hook.editMessage(
+        SentMessage.id,
+        { embeds: [embed] }
+    )
+})
 
 client.on('messageReactionAdd', async (reaction) => {
 
@@ -46,14 +79,14 @@ client.on('messageReactionAdd', async (reaction) => {
 
             const embed = new MessageEmbed()
                 .setAuthor({ name: `${reaction?.message?.member.displayName}`, iconURL: reaction?.message?.author.displayAvatarURL({ dynamic: true }) })
-                .addField("Content", `${reaction?.message?.content || "There is no content is this message!"}`)
-                .setFooter({ text: `ID: ${reaction?.message?.id}` })
+                .addField("Content", `${splitText(reaction?.message?.content) || "There is no content is this message!"} `)
+                .setFooter({ text: `ID: ${reaction?.message?.id} ` })
                 .setTimestamp()
                 .setImage(reaction?.message?.attachments.first()?.proxyURL || null)
-                .setColor(`${client.color.botBlue}`)
+                .setColor(`${client.color.botBlue} `)
 
             await hook.send({
-                content: `:star: **${reaction?.count}** ● ${reaction?.message?.channel}`,
+                content: `: star: ** ${reaction?.count}** ● ${reaction?.message?.channel} `,
                 embeds: [embed],
                 components: [jumprow]
             })
@@ -83,7 +116,7 @@ client.on('messageReactionRemove', async (reaction) => {
         if (SentMessage) {
 
             if (reaction?.count >= starCount) {
-                await hook.editMessage(SentMessage.id, { content: `:star: **${reaction?.count}** ● ${reaction?.message?.channel}` });
+                await hook.editMessage(SentMessage.id, { content: `: star: ** ${reaction?.count}** ● ${reaction?.message?.channel} ` });
 
             } else {
                 await hook.deleteMessage(SentMessage.id)
