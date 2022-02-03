@@ -32,6 +32,9 @@ module.exports = async (client) => {
 
             cannotPerform: new MessageEmbed()
                 ?.setDescription(`You don't have permissions to perform that action!`)
+                ?.setColor("RED"),
+            cannotUse: new MessageEmbed()
+                ?.setDescription("Whoops, but you can't use this command in this server.")
                 ?.setColor("RED")
         },
         delete: {

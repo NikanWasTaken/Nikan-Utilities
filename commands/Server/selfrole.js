@@ -2,7 +2,7 @@ const { MessageEmbed, MessageActionRow, MessageButton, WebhookClient, Client, Me
 
 module.exports = {
     name: 'selfrole',
-    category: 'Secret',
+    category: 'server',
     cooldown: 5000,
     visible: false,
 

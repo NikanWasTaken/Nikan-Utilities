@@ -26,6 +26,20 @@ client.on("messageCreate", async (message) => {
         client.commands.find(c => c.aliases?.includes(cmd.toLowerCase()));
     if (!command) return;
 
+    // Guild Checking
+    if (
+        message.guild.id !== `${client.server.id}` &&
+        command.category == "moderation" &&
+        !client.config.developers.includes(message.author.id) &&
+        message.author.id !== client.config.ower
+    ) return message.reply({ embeds: [client.util.embed.cannotUse] })
+        .then((msg) => {
+            setTimeout(() => {
+                msg?.delete()
+                message?.delete()
+            }, 5000)
+        });
+
 
     // developer commands check
     if (
