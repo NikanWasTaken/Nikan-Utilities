@@ -65,7 +65,7 @@ module.exports = {
 
                     const embed = new MessageEmbed()
                         .setAuthor({ name: `${client.user.username}`, iconURL: client.user.displayAvatarURL() })
-                        .setTitle(`Evolution Succeded`).setURL(`${client.server.invite}`)
+                        .setTitle(`Evaluation Succeded`).setURL(`${client.server.invite}`)
                         .setColor(`${client.color.success}`)
                         .addField("Code", `\`\`\`js\n${code}\n\`\`\``)
                         .setTimestamp()
@@ -85,7 +85,7 @@ module.exports = {
                 const embedDanger = new MessageEmbed()
                     .setAuthor({ name: `${client.user.username}`, iconURL: `${client.user.displayAvatarURL()}` })
                     .setColor("RED")
-                    .addField("Are you sure?", "Are you sure that you want to do this evolution? This action has triggered the bot's secrets reveal system")
+                    .addField("Are you sure?", "Are you sure that you want to do this evaluation? This action has triggered the bot's secrets reveal system")
                     .setFooter({ text: "Choose your action using the buttons!" })
 
                 let msg = await message.reply({
@@ -112,7 +112,7 @@ module.exports = {
 
                             const embed = new MessageEmbed()
                                 .setAuthor({ name: `${client.user.username}`, iconURL: client.user.displayAvatarURL() })
-                                .setTitle(`Evolution Succeded`).setURL(`${client.server.invite}`)
+                                .setTitle(`Evaluation Succeded`).setURL(`${client.server.invite}`)
                                 .setColor(`${client.color.success}`)
                                 .addField("Code", `\`\`\`js\n${code}\n\`\`\``)
                                 .setTimestamp()
