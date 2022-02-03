@@ -1,7 +1,8 @@
-const { Client, MessageEmbed, MessageActionRow, MessageButton, CommandInteraction } = require("discord.js");
+const { Client, MessageEmbed, CommandInteraction } = require("discord.js");
 const warnModel = require("../../models/Punishments.js")
 const ms = require("ms")
-
+require("../../structures/User/ban")
+require("../../structures/GuildMember/ban")
 
 
 module.exports = {
@@ -54,7 +55,6 @@ module.exports = {
           type: "STRING",
         }
       ]
-
     },
   ],
 
@@ -75,59 +75,34 @@ module.exports = {
 
       if (!user) {
 
-        try {
+        const userString = interaction.options.getString("user-id")
 
-          const userstring = interaction.options.getString("user-id")
-          const user2 = await interaction.guild.members.ban(`${userstring}`, { reason: reason })
+        interaction.guild.bans.fetch()
+          .then(async (bans) => {
+            let BannedUser = bans.find(b => b.user.id == userString)
 
-
-          const embed = new MessageEmbed()
-            .setDescription(`This user doesn't exist!`)
-            .setColor("RED")
-
-          if (!user2)
-            return interaction.followUp({ embeds: [embed] }).then((msg) => {
-              client.util.delete.interaction(interaction);
-            })
-
-          const data = new warnModel({
-            type: "Ban",
-            userId: user2?.id,
-            guildId: interaction.guildId,
-            moderatorId: interaction.user.id,
-            reason,
-            timestamp: Date.now(),
-            systemExpire: Date.now() + ms("26 weeks")
-          })
-          data.save()
-
-          var hmm = new MessageEmbed()
-            .setDescription(`**${user2?.tag}** has been **banned** | \`${data._id}\``)
-            .setColor(`${client.color.moderationRed}`)
-          await interaction.deleteReply()
-          let msg = await interaction.channel.send({ embeds: [hmm] })
-
-          client.log.action({
-            type: "Ban",
-            color: "BAN",
-            user: `${user.user.id}`,
-            moderator: `${interaction.user.id}`,
-            reason: `${reason}`,
-            id: `${data._id}`,
-            url: `https://discord.com/channels/${interaction.guildId}/${interaction.channelId}/${msg.id}`
+            if (BannedUser) {
+              const alreadyBanned = new MessageEmbed()
+                .setDescription("This user is aready banned from the server!")
+                .setColor("RED")
+              return interaction.followUp({
+                embeds: [alreadyBanned]
+              }).then(() => client.util.delete.interaction(interaction))
+            }
           })
 
-        } catch (error) {
+        var userFetch = await client.users.fetch(`${userString}`).catch(() => { })
+        const embed = new MessageEmbed()
+          .setDescription("This user doesn't exist")
+          .setColor("RED")
+        if (!userFetch) return message.reply({ embeds: [embed] })
+          .then(() => client.util.delete.interaction(interaction))
 
-          const embed = new MessageEmbed()
-            .setDescription(`This user doesn't exist!`)
-            .setColor(`${client.color.moderationRed}`)
-          interaction.followUp({ embeds: [embed] })
-            .then(() => {
-              client.util.delete.interaction(interaction);
-            })
-
-        }
+        userFetch.Ban({
+          auto: false,
+          reason: reason,
+          msg: interaction
+        })
 
       } else if (user) {
 
@@ -137,55 +112,12 @@ module.exports = {
           user.user.id === client.config.owner ||
           user.user.bot
         ) return interaction.followUp({ embeds: [client.util.embed.cannotPerform] })
+          .then(() => client.util.delete.interaction(interaction))
 
-        const data = new warnModel({
-          type: "Ban",
-          userId: user.user.id,
-          guildId: interaction.guildId,
-          moderatorId: interaction.user.id,
-          reason,
-          timestamp: Date.now(),
-          systemExpire: Date.now() + ms("26 weeks")
-        })
-        data.save()
-
-        var hmm = new MessageEmbed()
-          .setDescription(`${user.user} has been **banned** | \`${data._id}\``)
-          .setColor(`${client.color.moderationRed}`)
-        await interaction.deleteReply()
-        let msg = await interaction.channel.send({ embeds: [hmm] })
-
-        const row1 = new MessageActionRow().addComponents(
-          new MessageButton()
-            .setLabel("Appeal")
-            .setStyle("LINK")
-            .setURL(`${client.server.appeal}`)
-        )
-
-        var dmyes = new MessageEmbed()
-          .setAuthor({ name: `${client.user.username}`, iconURL: `${client.user.displayAvatarURL()}` })
-          .setTitle(`You've been banned from ${interaction.guild.name}`)
-          .setColor(`${client.color.modDm}`)
-          .setTimestamp()
-          .addField("Punishment ID", `${data._id}`, true)
-          .addField("Reason", reason, false)
-        user.send({
-          embeds: [dmyes],
-          components: [row1]
-        }).catch(() => { })
-
-        user.ban({
+        user.Ban({
+          auto: false,
           reason: reason,
-        })
-
-        client.log.action({
-          type: "Ban",
-          color: "BAN",
-          user: `${user.user.id}`,
-          moderator: `${interaction.user.id}`,
-          reason: `${reason}`,
-          id: `${data._id}`,
-          url: `https://discord.com/channels/${interaction.guildId}/${interaction.channelId}/${msg.id}`
+          msg: interaction
         })
 
       } else if (!user && !interaction.options.getString("user-id")) {

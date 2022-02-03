@@ -167,44 +167,11 @@ module.exports = {
 
             } else if (numberofwarns.length == 6) {
 
-                const data2 = new warnModel({
-                    type: "Ban",
-                    userId: user.user.id,
-                    guildId: interaction.guild.id,
-                    moderatorId: `${client.user.id}`,
-                    reason: "Reaching 6 Strikes",
-                    timestamp: Date.now(),
-                    systemExpire: Date.now() + ms("26 weeks"),
+                await user.Ban({
+                    msg: interaction,
+                    reason: "Reaching 6 strikes",
+                    auto: true
                 })
-
-                data2.save()
-
-                const row2 = new MessageActionRow().addComponents(
-                    new MessageButton()
-                        .setLabel("Appeal")
-                        .setStyle("LINK")
-                        .setURL(`${client.server.appeal}`)
-                )
-
-                let warndm = new MessageEmbed()
-                    .setAuthor({ name: `${client.user.username}`, iconURL: client.user.displayAvatarURL() })
-                    .setTitle(`You've been Banned from ${interaction.guild.name}`)
-                    .addField("Punishment ID", `${data2._id}`, true)
-                    .addField("Reason", "Reaching 6 strikes", false)
-                    .setColor(`${client.color.modDm}`)
-                    .setTimestamp()
-                user.send({ embeds: [warndm], components: [row2] }).catch(() => { return })
-
-                user.ban({
-                    reason: "Reaching 6 stikes!"
-                })
-
-                client.log.autoAction({
-                    type: "Ban",
-                    color: "BAN",
-                    user: `${user.user.id}`,
-                    reason: `Reaching 6 normal warnings`
-                });
 
             }
 
