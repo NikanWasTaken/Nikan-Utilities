@@ -1,4 +1,5 @@
 const { MessageEmbed, Message, Client } = require('discord.js');
+let isBanned = false;
 require("../../structures/User/ban")
 require("../../structures/GuildMember/ban")
 
@@ -24,19 +25,21 @@ module.exports = {
 
     if (!user) {
 
-      message.guild.bans.fetch()
+      await message.guild.bans.fetch()
         .then(async (bans) => {
-          let BannedUser = bans.find(b => b.user.id == args[0])
-
+          const BannedUser = bans.find(b => b.user.id === `${args[0]}`)
           if (BannedUser) {
-            const alreadyBanned = new MessageEmbed()
-              .setDescription("This user is aready banned from the server!")
-              .setColor("RED")
-            return message.reply({
-              embeds: [alreadyBanned]
-            }).then((msg) => client.util.delete.message(message, msg))
+            isBanned = true;
           }
         })
+
+      const alreadyBanned = new MessageEmbed()
+        .setDescription("This user is aready banned from the server!")
+        .setColor("RED")
+      if (isBanned !== false)
+        return message.reply({
+          embeds: [alreadyBanned]
+        }).then((msg) => client.util.delete.message(message, msg))
 
       var userFetch = await client.users.fetch(`${args[0]}`).catch(() => { })
       const embed = new MessageEmbed()

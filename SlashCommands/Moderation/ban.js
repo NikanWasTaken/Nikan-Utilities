@@ -1,6 +1,7 @@
 const { Client, MessageEmbed, CommandInteraction } = require("discord.js");
 const warnModel = require("../../models/Punishments.js")
 const ms = require("ms")
+let isBanned = false;
 require("../../structures/User/ban")
 require("../../structures/GuildMember/ban")
 
@@ -77,19 +78,21 @@ module.exports = {
 
         const userString = interaction.options.getString("user-id")
 
-        interaction.guild.bans.fetch()
+        await interaction.guild.bans.fetch()
           .then(async (bans) => {
-            let BannedUser = bans.find(b => b.user.id == userString)
-
+            const BannedUser = bans.find(b => b.user.id === `${userString}`)
             if (BannedUser) {
-              const alreadyBanned = new MessageEmbed()
-                .setDescription("This user is aready banned from the server!")
-                .setColor("RED")
-              return interaction.followUp({
-                embeds: [alreadyBanned]
-              }).then(() => client.util.delete.interaction(interaction))
+              isBanned = true;
             }
           })
+
+        const alreadyBanned = new MessageEmbed()
+          .setDescription("This user is aready banned from the server!")
+          .setColor("RED")
+        if (isBanned !== false)
+          return interaction.followUp({
+            embeds: [alreadyBanned]
+          }).then(() => client.util.delete.interaction(interaction))
 
         var userFetch = await client.users.fetch(`${userString}`).catch(() => { })
         const embed = new MessageEmbed()
