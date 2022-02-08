@@ -1,5 +1,5 @@
 const client = require("../../index.js")
-const { MessageEmbed } = require("discord.js")
+const { MessageEmbed, Role } = require("discord.js")
 const memberRoles = require("../../models/LeftMembers.js")
 const ms = require("ms")
 
@@ -78,19 +78,18 @@ client.on("guildMemberRemove", async member => {
 
     if (member.guild.id !== `${client.server.id}`) return
 
-    const Roles = member.roles.cache.sort((a, b) => b.position - a.position).filter(r => r.id !== member.guild.id).map(role => role.id)
-    if (Roles != []) {
+    const Roles = member.roles.cache.filter(r => r.id !== member.guild.id).map(role => role.id)
+    if (Roles != Array.length === 0) {
         const data = new memberRoles({
             guildId: member.guild.id,
             userId: member.user.id,
-            roles: [member.roles.cache.sort((a, b) => b.position - a.position).filter(r => r.id !== member.guild.id).map(role => role.id)],
+            roles: [member.roles.cache.filter(r => r.id !== member.guild.id).map(role => role.id)],
             expires: Date.now() + ms('2 weeks')
         })
         data.save();
     }
 
     const welcomeChannel = member.guild.channels.cache.get('791152934045614121');
-
     const embed = new MessageEmbed()
         .setAuthor({ name: `Member Left!`, iconURL: member.user.displayAvatarURL({ dynamic: true }) })
         .setColor("RED")
