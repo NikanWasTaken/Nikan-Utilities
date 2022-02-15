@@ -79,7 +79,7 @@ client.on("guildMemberRemove", async member => {
     if (member.guild.id !== `${client.server.id}`) return
 
     const Roles = member.roles.cache.filter(r => r.id !== member.guild.id).map(role => role.id)
-    if (Roles != Array.length === 0) {
+    if (Roles.length !== 0) {
         const data = new memberRoles({
             guildId: member.guild.id,
             userId: member.user.id,
