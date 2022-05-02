@@ -1,5 +1,4 @@
-const { Client, CommandInteraction, MessageEmbed, MessageAttachment, MessageActionRow, MessageButton } = require("discord.js");
-const { Captcha } = require("captcha-canvas");
+const { Client, CommandInteraction } = require("discord.js");
 
 module.exports = {
     name: "verify",
@@ -54,97 +53,14 @@ module.exports = {
 
 
         if (interaction.member.roles.cache.get("793410990535999508"))
-            return interaction.followUp({ content: "You're already verified!" })
-
-        const captcha = new Captcha();
-        captcha.async = true;
-        captcha.addDecoy();
-        captcha.drawTrace();
-        captcha.drawCaptcha();
-
-        var attachment = new MessageAttachment(await captcha.png, "captcha.png")
-
-        let embed = new MessageEmbed()
-            .setAuthor({ name: `${interaction.guild.name}`, iconURL: interaction.guild.iconURL({ dynamic: true }) })
-            .setTitle(`Solve the captcha!`).setURL(`${client.server.invite}`)
-            .setDescription("Please solve the captcha that you see below! Send the letters you see in the currect channel!")
-            .setColor(`${client.color.botBlue}`)
-            .setImage("attachment://captcha.png")
-            .setFooter({ text: `You have 20 seconds to solve this captcha!`, iconURL: `${client.user.displayAvatarURL()}` })
-
-        await interaction.followUp({ embeds: [embed], files: [attachment] })
-
-        const collector = interaction.channel.createMessageCollector({
-            filter: (m) =>
-                m.author.id === interaction.user.id,
-            max: 1,
-            time: 20000,
-        });
-
-        collector.on("collect", async (m) => {
-
-            if (m.author.id !== interaction.user.id) return;
-            const verified = (m.content === captcha.text)
-
-            if (verified) {
-
-                const row = new MessageActionRow().addComponents(
-
-                    new MessageButton()
-                        .setLabel("General Channel")
-                        .setStyle("LINK")
-                        .setURL(`https://discord.com/channels/${client.server.id}/782837655082631229`)
-                )
-
-                m.delete()
-
-                let channel = interaction.guild.channels.cache.get("782837655082631229")
-
-                await interaction.member.roles.add("793410990535999508")
-                await channel.send({ content: `${randomemojis} ${randomtexts} \`[#${interaction.guild.memberCount}]\``, allowedMentions: { parse: ["users"] } })
-
-                let embedcorrect = new MessageEmbed()
-                    .setAuthor({ name: `${interaction.guild.name}`, iconURL: interaction.guild.iconURL({ dynamic: true }) })
-                    .setTitle("Answer was correct!").setURL(`${client.server.invite}`)
-                    .setColor(`${client.color.success}`)
-                    .setDescription("Congratulation! You have solved the captcha and entered the server!")
-                    .addField(`Correct Answer`, `➜ **${captcha.text}**`)
-                    .setImage("attachment://captcha.png")
-
-                await interaction.editReply({ embeds: [embedcorrect], components: [row] })
+            return interaction.followUp({ content: "You're already verified!" });
 
 
-            } else if (!verified) {
 
+        let channel = interaction.guild.channels.cache.get("782837655082631229");
 
-                m.delete()
-
-                let embedwrong = new MessageEmbed()
-                    .setAuthor({ name: `${interaction.guild.name}`, iconURL: interaction.guild.iconURL({ dynamic: true }) })
-                    .setTitle("Answer was wrong!").setURL(`${client.server.invite}`)
-                    .setColor(`${client.color.fail}`)
-                    .setDescription("You've answered the captcha wrong! Please run \`/verify\` and try again!")
-                    .addField(`Correct Answer`, `➜ **${captcha.text}**`)
-                    .setImage("attachment://captcha.png")
-
-                await interaction.editReply({ embeds: [embedwrong], files: [attachment] })
-
-            }
-
-        });
-
-        collector.on("end", async () => {
-
-            const emo = new MessageEmbed()
-                .setAuthor({ name: `${interaction.guild.name}`, iconURL: interaction.guild.iconURL({ dynamic: true }) })
-                .setTitle(`Verification Timed Out!`).setURL(`${client.server.invite}`)
-                .setDescription("The verificaton timed out due to your late respond! Please run \`/verify\` again to start the verification.")
-                .setColor(`RED`)
-                .addField(`Correct Answer`, `➜ **${captcha.text}**`)
-                .setImage("attachment://captcha.png")
-                .setFooter({ text: `Captcha Timed Out`, iconURL: `${client.user.displayAvatarURL()}` })
-
-            await interaction.editReply({ embeds: [emo], components: [] })
-        })
+        await interaction.member.roles.add("793410990535999508");
+        await channel.send({ content: `${randomemojis} ${randomtexts} \`[#${interaction.guild.memberCount}]\``, allowedMentions: { parse: ["users"] } });
+        interaction.editReply({ content: 'You have been verified!' });
     }
-}
+};
