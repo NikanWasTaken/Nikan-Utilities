@@ -1,9 +1,9 @@
 const { glob } = require("glob");
 const { promisify } = require("util");
 const globPromise = promisify(glob);
-require("dotenv").config()
+require("dotenv").config();
 const mongooseConnectionString = process.env.MONGOOSE;
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
 /**
  * @param {Client} client
@@ -40,48 +40,14 @@ module.exports = async (client) => {
     client.slashCommands.set(file.name, file);
 
     if (["MESSAGE", "USER"].includes(file.type)) delete file.description;
-    if (file.permissions) file.defaultPermission = false
+    if (file.permissions) file.defaultPermission = false;
     arrayOfSlashCommands.push(file);
   });
 
   client.on("ready", async () => {
 
-    const guild = client.guilds.cache.get(`${client.server.id}`)
-    await guild.commands.set(arrayOfSlashCommands)
-
-      .then((cmd) => {
-        const getRoles = (commandName) => {
-          const permissions = arrayOfSlashCommands.find(x => x.name === commandName).permissions;
-          if (!permissions) return null;
-          return guild.roles.cache.filter(x => x.permissions.has(permissions) && !x.managed)
-        }
-        const fullPermissions = cmd.reduce((accumulator, x) => {
-          const roles = getRoles(x.name)
-          if (!roles) return accumulator
-
-          const permissions = roles.reduce((a, v) => {
-            return [
-              ...a, {
-                id: v.id,
-                type: "ROLE",
-                permission: true
-              }
-            ]
-          }, [])
-          return [
-            ...accumulator,
-            {
-              id: x.id,
-              permissions,
-            }
-          ]
-        }, [])
-
-        guild.commands.permissions.set({
-          fullPermissions
-        })
-
-      })
+    const guild = client.guilds.cache.get(`${client.server.id}`);
+    await guild.commands.set(arrayOfSlashCommands);
   });
 
 
@@ -91,5 +57,5 @@ module.exports = async (client) => {
   mongoose.connect(mongooseConnectionString, {
     useUnifiedTopology: true,
     useNewUrlParser: true,
-  }).then(console.log("MongoDB connected!"))
+  }).then(console.log("MongoDB connected!"));
 };

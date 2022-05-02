@@ -15,8 +15,14 @@ client.on("interactionCreate", async (interaction) => {
     if (
       cmd.developer &&
       !client.config.developers.includes(interaction.user.id)
-    ) return interaction.reply({ embeds: [client.util.embed.noPermissions], ephemeral: true })
+    ) return interaction.reply({ embeds: [client.util.embed.noPermissions], ephemeral: true });
 
+
+    // staff commands check
+    if (
+      !interaction.member.permissions.has(cmd.permissions || []) &&
+      interaction.user.id !== client.config.owner
+    ) return interaction.reply({ embeds: [client.util.embed.noPermissions], ephemeral: true });
 
     // bot command check
     function channelCheck(message) {
@@ -39,7 +45,7 @@ client.on("interactionCreate", async (interaction) => {
       !interaction.member?.permissions?.has("ADMINISTRATOR") &&
       !client.config.developers.includes(interaction?.user?.id) &&
       interaction.user.id !== client.config.owner
-    ) return interaction.reply({ embeds: [client.util.embed.botCommand], ephemeral: true })
+    ) return interaction.reply({ embeds: [client.util.embed.botCommand], ephemeral: true });
 
 
     if (
@@ -48,16 +54,16 @@ client.on("interactionCreate", async (interaction) => {
       interaction.user.id !== client.config.owner
     ) {
 
-      let cooldownRemaining = `${~~(Timeout.get(`${cmd.name}${interaction.user.id}`) - Date.now())}`
+      let cooldownRemaining = `${~~(Timeout.get(`${cmd.name}${interaction.user.id}`) - Date.now())}`;
 
       let cooldownEmbed = new MessageEmbed()
         .setColor(`${client.color.invisible}`)
         .setDescription(`You need to wait \`${client.convert.time(parseInt(~~(cooldownRemaining / 1000)))}\` to use this command again.`);
 
       if (Timeout.has(`${cmd.name}${interaction.member.user.id}`))
-        return interaction.reply({ embeds: [cooldownEmbed], ephemeral: true })
+        return interaction.reply({ embeds: [cooldownEmbed], ephemeral: true });
 
-      await interaction.deferReply({ ephemeral: false || cmd.ephemeral })
+      await interaction.deferReply({ ephemeral: false || cmd.ephemeral });
 
       cmd.run(client, interaction, args);
       Timeout.set(
@@ -71,7 +77,7 @@ client.on("interactionCreate", async (interaction) => {
     } else {
 
       // deffering the reply
-      await interaction.deferReply({ ephemeral: false || cmd.ephemeral })
+      await interaction.deferReply({ ephemeral: false || cmd.ephemeral });
 
       // installing the sub commands
       for (let option of interaction.options.data) {
@@ -111,7 +117,7 @@ client.on("interactionCreate", async (interaction) => {
       if (focused?.name === "command") {
         choices = [
           ...new Set(client.commands.filter(c => c.visible !== false).map((cmd) => cmd.name))
-        ]
+        ];
       }
 
       const filtered = choices.filter((choice) => choice.startsWith(focused.value)).slice(0, 24).sort();
