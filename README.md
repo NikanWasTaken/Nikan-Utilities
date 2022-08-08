@@ -26,7 +26,7 @@ const guildInfo = {
 };
 ```
 
-<h2><img src="https://cdn.discordapp.com/emojis/899171458444578836" width="20"/> My developer team</h2>
+<h2><img src="https://cdn.discordapp.com/emojis/899171458444578836" width="20"/> Developer team</h2>
 
 - [Nikan#6387](https://discord.com/users/757268659239518329)
 - [pogchampy#3412](https://discord.com/users/837306535813054464)
